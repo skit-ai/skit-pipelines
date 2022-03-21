@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skit-kfp-components"
-version = "0.1.0"
+version = "0.1.1"
 description = "Kubeflow components for ml workflows at skit.ai."
 authors = ["ltbringer <amresh.venugopal@gmail.com>"]
 license = "MIT"

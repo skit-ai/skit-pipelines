@@ -1,3 +1,7 @@
+# 0.1.1
+
+- [x] add: boto3 for s3 upload/download.
+
 # 0.1.0
 
 - [x] add: calls dataset component.
