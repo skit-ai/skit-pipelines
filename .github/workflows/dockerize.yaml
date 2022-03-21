@@ -30,17 +30,17 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: docker_nodejs_demo
-        secrets: "DB_HOST=${{ secrets.DB_HOST }},\
-          DB_PORT=${{ secrets.DB_PORT }},\
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }},\
-          DB_NAME=${{ secrets.DB_NAME }},\
-          DB_USER=${{ secrets.DB_USER }},\
-          RANDOM_CALL_DATA_QUERY=${{ secrets.RANDOM_CALL_DATA_QUERY }},\
-          RANDOM_CALL_ID_QUERY=${{ secrets.RANDOM_CALL_ID_QUERY }},\
-          CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }},\
-          BUCKET=${{ secrets.BUCKET }},\
-          DATA_UPLOAD_PATH=${{ secrets.DATA_UPLOAD_PATH }}"
+          ECR_REPOSITORY: vernacular-voice-services/ai/kubeflow/ml-pipeline .
+          SECRETS: "DB_HOST=${{ secrets.DB_HOST }},\
+            DB_PORT=${{ secrets.DB_PORT }},\
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }},\
+            DB_NAME=${{ secrets.DB_NAME }},\
+            DB_USER=${{ secrets.DB_USER }},\
+            RANDOM_CALL_DATA_QUERY=${{ secrets.RANDOM_CALL_DATA_QUERY }},\
+            RANDOM_CALL_ID_QUERY=${{ secrets.RANDOM_CALL_ID_QUERY }},\
+            CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }},\
+            BUCKET=${{ secrets.BUCKET }},\
+            DATA_UPLOAD_PATH=${{ secrets.DATA_UPLOAD_PATH }}"
         run: |
-          docker build --secret $secrets -t $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION .
+          docker build --secret $SECRETS -t $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
