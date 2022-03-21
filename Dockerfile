@@ -37,6 +37,4 @@ ENV CDN_RECORDINGS_BASE_PATH=$CDN_RECORDINGS_BASE_PATH
 ENV BUCKET=$BUCKET
 ENV DATA_UPLOAD_PATH=$DATA_UPLOAD_PATH
 
-RUN printenv
-
 CMD ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
