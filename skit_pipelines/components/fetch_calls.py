@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def fetch_calls(
-    org_id: str,
+    org_id: int,
     start_date: str,
     lang: str,
     end_date: Optional[str] = None,
