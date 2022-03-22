@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "skit-kfp-components"
+name = "skit-pipelines"
 version = "0.1.1"
 description = "Kubeflow components for ml workflows at skit.ai."
 authors = ["ltbringer <amresh.venugopal@gmail.com>"]
