@@ -4,7 +4,7 @@ from kfp.components import InputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def slack_notification(message: str, channel: str | None = None) -> None:
+def slack_notification(message: str, file_path: str, channel: str | None = None) -> None:
     """
     Send a message on any channel.
     """
