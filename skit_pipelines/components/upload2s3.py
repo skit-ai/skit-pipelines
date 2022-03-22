@@ -10,7 +10,7 @@ def upload2s3(
     bucket: str,
     path_on_disk: InputPath(),
     ext: str = ".csv",
-):
+) -> str:
     import boto3
     from loguru import logger
 
@@ -20,6 +20,8 @@ def upload2s3(
     upload_path = create_file_name(org_id, file_type, ext)
     s3_resource.upload_file(path_on_disk, bucket, upload_path)
     logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
+    s3_path = f"s3://{bucket}/{upload_path}"
+    return s3_path
 
 
 upload2s3_op = kfp.components.create_component_from_func(
