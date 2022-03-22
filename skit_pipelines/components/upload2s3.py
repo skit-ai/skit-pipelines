@@ -2,7 +2,6 @@ import kfp
 from kfp.components import InputPath
 
 from skit_pipelines import constants as pipeline_constants
-from skit_pipelines.utils import create_file_name
 
 
 def upload2s3(
@@ -14,7 +13,6 @@ def upload2s3(
 ):
     import boto3
     from loguru import logger
-
     from skit_pipelines.utils import create_file_name
 
     s3_resource = boto3.client("s3")

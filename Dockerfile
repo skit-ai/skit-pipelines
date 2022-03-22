@@ -9,8 +9,7 @@ RUN apt-get update \
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
-COPY ./pyproject.toml ./pyproject.toml
-COPY ./poetry.lock ./poetry.lock
+COPY . .
 RUN poetry install --no-dev
 
 ARG BASE_IMAGE
