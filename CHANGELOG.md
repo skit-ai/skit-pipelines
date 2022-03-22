@@ -1,3 +1,7 @@
+# 0.1.7
+
+- [x] fix: Slack notification component -- Slack token constant.
+
 # 0.1.6
 
 - [x] update: link slack component with fetch data pipeline.
