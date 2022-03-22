@@ -11,7 +11,7 @@ RUN poetry config virtualenvs.create false
 
 COPY ./pyproject.toml ./pyproject.toml
 COPY ./poetry.lock ./poetry.lock
-RUN poetry install
+RUN poetry install --no-dev
 
 ARG BASE_IMAGE
 ARG DB_HOST

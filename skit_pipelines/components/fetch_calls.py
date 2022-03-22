@@ -1,29 +1,8 @@
-from typing import Optional
 import os
+from typing import Optional
 import kfp
-import kfp.components as comp
 from kfp.components import InputPath
-
-
-BASE_IMAGE = os.environ["BASE_IMAGE"]
-
-
-def upload2s3(org_id: str, file_type: str, path_on_disk: InputPath(), ext: str = ".csv"):
-    import os
-    import boto3
-    from datetime import datetime
-    from loguru import logger
-
-    s3_resource = boto3.client('s3')
-    bucket = os.environ["BUCKET"]
-    upload_path = os.path.join(
-        "project",
-        str(org_id),
-        datetime.now().strftime("%Y-%m-%d"),
-        f"{org_id}-{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
-    )
-    s3_resource.upload_file(path_on_disk, bucket, upload_path)
-    logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
+from skit_pipelines import constants as pipeline_constants
 
 
 def fetch_calls(
@@ -66,7 +45,7 @@ def fetch_calls(
         call_type = const.INBOUND
     if not ignore_callers:
         ignore_callers = const.DEFAULT_IGNORE_CALLERS_LIST
-    
+
     start = time.time()
     maybe_df = calls.sample(
         org_id,
@@ -92,41 +71,6 @@ def fetch_calls(
         return file_path
 
 
-fetch_calls_op = kfp.components.create_component_from_func(fetch_calls, base_image=BASE_IMAGE) 
-upload2s3_op = kfp.components.create_component_from_func(upload2s3, base_image=BASE_IMAGE)
-
-
-@kfp.dsl.pipeline(
-    name='Fetch Calls Pipeline',
-    description='fetches calls from production db with respective arguments'
+fetch_calls_op = kfp.components.create_component_from_func(
+    fetch_calls, base_image=pipeline_constants.BASE_IMAGE
 )
-def run_fetch_calls(
-    org_id: str,
-    start_date: str,
-    lang: str,
-    end_date: Optional[str],
-    call_quantity: int,
-    call_type: Optional[str],
-    ignore_callers: Optional[str],
-    reported: Optional[str],
-    use_case: Optional[str],
-    flow_name: Optional[str],
-    min_duration: Optional[str],
-    asr_provider: Optional[str],
-):
-
-    calls = fetch_calls_op(
-        org_id=org_id,
-        start_date=start_date,
-        end_date=end_date,
-        lang=lang,
-        call_quantity=call_quantity,
-        call_type=call_type,
-        ignore_callers=ignore_callers,
-        reported=reported,
-        use_case=use_case,
-        flow_name=flow_name,
-        min_duration=min_duration,
-        asr_provider=asr_provider
-    )
-    upload2s3_op(org_id, "untagged", ext=".csv", path_on_disk=calls.output)

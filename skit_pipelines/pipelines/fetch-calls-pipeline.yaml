@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: fetch-calls-pipeline-
-  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.11, pipelines.kubeflow.org/pipeline_compilation_time: '2022-03-22T14:19:22.949891',
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.11, pipelines.kubeflow.org/pipeline_compilation_time: '2022-03-22T15:06:41.320281',
     pipelines.kubeflow.org/pipeline_spec: '{"description": "fetches calls from production
       db with respective arguments", "inputs": [{"name": "org_id", "type": "String"},
       {"name": "start_date", "type": "String"}, {"name": "lang", "type": "String"},
@@ -254,7 +254,7 @@ spec:
           "String"}, {"name": "asr_provider", "optional": true, "type": "String"},
           {"default": "False", "name": "on_disk", "optional": true, "type": "Boolean"}],
           "name": "Fetch calls", "outputs": [{"name": "Output", "type": "<kfp.components._python_op.InputPath
-          object at 0x7f8f0fd4cb80>"}]}', pipelines.kubeflow.org/component_ref: '{}',
+          object at 0x7f815f9a6bc0>"}]}', pipelines.kubeflow.org/component_ref: '{}',
         pipelines.kubeflow.org/arguments.parameters: '{"asr_provider": "{{inputs.parameters.asr_provider}}",
           "call_quantity": "{{inputs.parameters.call_quantity}}", "call_type": "{{inputs.parameters.call_type}}",
           "end_date": "{{inputs.parameters.end_date}}", "flow_name": "{{inputs.parameters.flow_name}}",
@@ -305,8 +305,8 @@ spec:
           - {name: fetch-calls-Output, from: '{{tasks.fetch-calls.outputs.artifacts.fetch-calls-Output}}'}
   - name: upload2s3
     container:
-      args: [--org-id, '{{inputs.parameters.org_id}}', --file-type, untagged, --path-on-disk,
-        /tmp/inputs/path_on_disk/data, --ext, .csv]
+      args: [--org-id, '{{inputs.parameters.org_id}}', --file-type, untagged, --bucket,
+        vernacular-ml, --path-on-disk, /tmp/inputs/path_on_disk/data, --ext, .csv]
       command:
       - sh
       - -ec
@@ -315,20 +315,12 @@ spec:
         printf "%s" "$0" > "$program_path"
         python3 -u "$program_path" "$@"
       - |
-        def upload2s3(org_id, file_type, path_on_disk, ext = ".csv"):
-            import os
+        def upload2s3(org_id, file_type, bucket, path_on_disk, ext = ".csv"):
             import boto3
-            from datetime import datetime
             from loguru import logger
 
             s3_resource = boto3.client('s3')
-            bucket = os.environ["BUCKET"]
-            upload_path = os.path.join(
-                "project",
-                str(org_id),
-                datetime.now().strftime("%Y-%m-%d"),
-                f"{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
-            )
+            upload_path = create_file_name(org_id, file_type, ext)
             s3_resource.upload_file(path_on_disk, bucket, upload_path)
             logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
 
@@ -336,6 +328,7 @@ spec:
         _parser = argparse.ArgumentParser(prog='Upload2s3', description='')
         _parser.add_argument("--org-id", dest="org_id", type=str, required=True, default=argparse.SUPPRESS)
         _parser.add_argument("--file-type", dest="file_type", type=str, required=True, default=argparse.SUPPRESS)
+        _parser.add_argument("--bucket", dest="bucket", type=str, required=True, default=argparse.SUPPRESS)
         _parser.add_argument("--path-on-disk", dest="path_on_disk", type=str, required=True, default=argparse.SUPPRESS)
         _parser.add_argument("--ext", dest="ext", type=str, required=False, default=argparse.SUPPRESS)
         _parsed_args = vars(_parser.parse_args())
@@ -354,26 +347,27 @@ spec:
         pipelines.kubeflow.org/enable_caching: "true"
       annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
           {"args": ["--org-id", {"inputValue": "org_id"}, "--file-type", {"inputValue":
-          "file_type"}, "--path-on-disk", {"inputPath": "path_on_disk"}, {"if": {"cond":
-          {"isPresent": "ext"}, "then": ["--ext", {"inputValue": "ext"}]}}], "command":
-          ["sh", "-ec", "program_path=$(mktemp)\nprintf \"%s\" \"$0\" > \"$program_path\"\npython3
-          -u \"$program_path\" \"$@\"\n", "def upload2s3(org_id, file_type, path_on_disk,
-          ext = \".csv\"):\n    import os\n    import boto3\n    from datetime import
-          datetime\n    from loguru import logger\n\n    s3_resource = boto3.client(''s3'')\n    bucket
-          = os.environ[\"BUCKET\"]\n    upload_path = os.path.join(\n        \"project\",\n        str(org_id),\n        datetime.now().strftime(\"%Y-%m-%d\"),\n        f\"{datetime.now().strftime(''%Y-%m-%d'')}-{file_type}{ext}\",\n    )\n    s3_resource.upload_file(path_on_disk,
+          "file_type"}, "--bucket", {"inputValue": "bucket"}, "--path-on-disk", {"inputPath":
+          "path_on_disk"}, {"if": {"cond": {"isPresent": "ext"}, "then": ["--ext",
+          {"inputValue": "ext"}]}}], "command": ["sh", "-ec", "program_path=$(mktemp)\nprintf
+          \"%s\" \"$0\" > \"$program_path\"\npython3 -u \"$program_path\" \"$@\"\n",
+          "def upload2s3(org_id, file_type, bucket, path_on_disk, ext = \".csv\"):\n    import
+          boto3\n    from loguru import logger\n\n    s3_resource = boto3.client(''s3'')\n    upload_path
+          = create_file_name(org_id, file_type, ext)\n    s3_resource.upload_file(path_on_disk,
           bucket, upload_path)\n    logger.debug(f\"Uploaded {path_on_disk} to {upload_path}\")\n\nimport
           argparse\n_parser = argparse.ArgumentParser(prog=''Upload2s3'', description='''')\n_parser.add_argument(\"--org-id\",
           dest=\"org_id\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--file-type\",
-          dest=\"file_type\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--path-on-disk\",
+          dest=\"file_type\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--bucket\",
+          dest=\"bucket\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--path-on-disk\",
           dest=\"path_on_disk\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--ext\",
           dest=\"ext\", type=str, required=False, default=argparse.SUPPRESS)\n_parsed_args
           = vars(_parser.parse_args())\n\n_outputs = upload2s3(**_parsed_args)\n"],
           "image": "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:0.1.1"}},
           "inputs": [{"name": "org_id", "type": "String"}, {"name": "file_type", "type":
-          "String"}, {"name": "path_on_disk"}, {"default": ".csv", "name": "ext",
-          "optional": true, "type": "String"}], "name": "Upload2s3"}', pipelines.kubeflow.org/component_ref: '{}',
-        pipelines.kubeflow.org/arguments.parameters: '{"ext": ".csv", "file_type":
-          "untagged", "org_id": "{{inputs.parameters.org_id}}"}'}
+          "String"}, {"name": "bucket", "type": "String"}, {"name": "path_on_disk"},
+          {"default": ".csv", "name": "ext", "optional": true, "type": "String"}],
+          "name": "Upload2s3"}', pipelines.kubeflow.org/component_ref: '{}', pipelines.kubeflow.org/arguments.parameters: '{"bucket":
+          "vernacular-ml", "ext": ".csv", "file_type": "untagged", "org_id": "{{inputs.parameters.org_id}}"}'}
   arguments:
     parameters:
     - {name: org_id}
