@@ -11,20 +11,19 @@ from skit_pipelines.components import fetch_calls_op, upload2s3_op
     description="fetches calls from production db with respective arguments",
 )
 def run_fetch_calls(
-    org_id: str,
+    org_id: int,
     start_date: str,
     lang: str,
-    end_date: Optional[str],
+    end_date: str,
     call_quantity: int,
-    call_type: Optional[str],
-    ignore_callers: Optional[str],
-    reported: Optional[str],
-    use_case: Optional[str],
-    flow_name: Optional[str],
-    min_duration: Optional[str],
-    asr_provider: Optional[str],
+    call_type: str,
+    ignore_callers: str,
+    reported: str,
+    use_case: str,
+    flow_name: str,
+    min_duration: str,
+    asr_provider: str,
 ):
-
     calls = fetch_calls_op(
         org_id=org_id,
         start_date=start_date,
