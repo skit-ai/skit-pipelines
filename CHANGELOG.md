@@ -1,3 +1,7 @@
+# 0.1.4
+
+- [x] update: skit-pipelines is available within docker image.
+
 # 0.1.3
 
 - [x] update: build pipeline yamls via `make`.
