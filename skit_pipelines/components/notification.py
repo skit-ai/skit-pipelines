@@ -1,10 +1,9 @@
 import kfp
-from kfp.components import InputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
-def slack_notification(message: str, file_path: str, channel: str | None = None) -> None:
+def slack_notification(message: str, s3_path: str, channel: str | None = None) -> None:
     """
     Send a message on any channel.
     """
@@ -15,13 +14,19 @@ def slack_notification(message: str, file_path: str, channel: str | None = None)
     from slack_sdk.errors import SlackApiError
 
     from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.utils import SlackBlockFactory
 
-    if channel is None:
-        channel = pipeline_constants.SLACK_CHANNEL
+    channel = channel or pipeline_constants.DEFAULT_CHANNEL
+
+    slack_message_blocks = SlackBlockFactory()\
+        .text(message)\
+        .text_block(message)\
+        .code_block(f"aws s3 cp {s3_path}" if s3_path else None)\
+        .build()
 
     try:
         client = WebClient(token=pipeline_constants.SLACK_TOKEN)
-        client.chat_postMessage(channel=channel, text=message)
+        client.chat_postMessage(channel=channel, **slack_message_blocks)
     except SlackApiError as error:
         logger.error(error)
         logger.error(traceback.format_exc())
