@@ -44,11 +44,10 @@ def run_fetch_calls(
     )
     s3_upload = upload2s3_op(
         org_id,
-        "untagged",
+        f"{lang}-untagged",
         pipeline_constants.BUCKET,
         ext=".csv",
         path_on_disk=calls.output,
     )
-    notification_text = f"Finished a request for {call_quantity} calls fetched "
-    f"from {start_date} to {end_date} for {org_id=}."
+    notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {org_id=}."
     slack_notification_op(notification_text, s3_path=s3_upload.output)
