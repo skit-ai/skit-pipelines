@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: fetch-calls-pipeline-
-  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.11, pipelines.kubeflow.org/pipeline_compilation_time: '2022-03-21T23:56:06.322560',
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.11, pipelines.kubeflow.org/pipeline_compilation_time: '2022-03-22T14:19:22.949891',
     pipelines.kubeflow.org/pipeline_spec: '{"description": "fetches calls from production
       db with respective arguments", "inputs": [{"name": "org_id", "type": "String"},
       {"name": "start_date", "type": "String"}, {"name": "lang", "type": "String"},
@@ -124,12 +124,6 @@ spec:
             from distutils.util import strtobool
             return strtobool(s) == 1
 
-        def _serialize_str(str_value: str) -> str:
-            if not isinstance(str_value, str):
-                raise TypeError('Value "{}" has type "{}" instead of str.'.format(
-                    str(str_value), str(type(str_value))))
-            return str_value
-
         import argparse
         _parser = argparse.ArgumentParser(prog='Fetch calls', description='')
         _parser.add_argument("--org-id", dest="org_id", type=str, required=True, default=argparse.SUPPRESS)
@@ -154,7 +148,7 @@ spec:
         _outputs = [_outputs]
 
         _output_serializers = [
-            _serialize_str,
+            str,
 
         ]
 
@@ -166,7 +160,7 @@ spec:
                 pass
             with open(output_file, 'w') as f:
                 f.write(_output_serializers[idx](_outputs[idx]))
-      image: 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:master
+      image: 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:0.1.1
     inputs:
       parameters:
       - {name: asr_provider}
@@ -182,9 +176,6 @@ spec:
       - {name: start_date}
       - {name: use_case}
     outputs:
-      parameters:
-      - name: fetch-calls-Output
-        valueFrom: {path: /tmp/outputs/Output/data}
       artifacts:
       - {name: fetch-calls-Output, path: /tmp/outputs/Output/data}
     metadata:
@@ -231,11 +222,8 @@ spec:
           in {time.time() - start:.2f} seconds\")\n    if on_disk:\n        return
           maybe_df\n    else:\n        _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)\n        maybe_df.to_csv(file_path,
           index=False)\n        return file_path\n\ndef _deserialize_bool(s) -> bool:\n    from
-          distutils.util import strtobool\n    return strtobool(s) == 1\n\ndef _serialize_str(str_value:
-          str) -> str:\n    if not isinstance(str_value, str):\n        raise TypeError(''Value
-          \"{}\" has type \"{}\" instead of str.''.format(\n            str(str_value),
-          str(type(str_value))))\n    return str_value\n\nimport argparse\n_parser
-          = argparse.ArgumentParser(prog=''Fetch calls'', description='''')\n_parser.add_argument(\"--org-id\",
+          distutils.util import strtobool\n    return strtobool(s) == 1\n\nimport
+          argparse\n_parser = argparse.ArgumentParser(prog=''Fetch calls'', description='''')\n_parser.add_argument(\"--org-id\",
           dest=\"org_id\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--start-date\",
           dest=\"start_date\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--lang\",
           dest=\"lang\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--end-date\",
@@ -251,10 +239,10 @@ spec:
           dest=\"on_disk\", type=_deserialize_bool, required=False, default=argparse.SUPPRESS)\n_parser.add_argument(\"----output-paths\",
           dest=\"_output_paths\", type=str, nargs=1)\n_parsed_args = vars(_parser.parse_args())\n_output_files
           = _parsed_args.pop(\"_output_paths\", [])\n\n_outputs = fetch_calls(**_parsed_args)\n\n_outputs
-          = [_outputs]\n\n_output_serializers = [\n    _serialize_str,\n\n]\n\nimport
-          os\nfor idx, output_file in enumerate(_output_files):\n    try:\n        os.makedirs(os.path.dirname(output_file))\n    except
+          = [_outputs]\n\n_output_serializers = [\n    str,\n\n]\n\nimport os\nfor
+          idx, output_file in enumerate(_output_files):\n    try:\n        os.makedirs(os.path.dirname(output_file))\n    except
           OSError:\n        pass\n    with open(output_file, ''w'') as f:\n        f.write(_output_serializers[idx](_outputs[idx]))\n"],
-          "image": "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:master"}},
+          "image": "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:0.1.1"}},
           "inputs": [{"name": "org_id", "type": "String"}, {"name": "start_date",
           "type": "String"}, {"name": "lang", "type": "String"}, {"name": "end_date",
           "optional": true, "type": "String"}, {"default": "200", "name": "call_quantity",
@@ -265,15 +253,15 @@ spec:
           true, "type": "String"}, {"name": "min_duration", "optional": true, "type":
           "String"}, {"name": "asr_provider", "optional": true, "type": "String"},
           {"default": "False", "name": "on_disk", "optional": true, "type": "Boolean"}],
-          "name": "Fetch calls", "outputs": [{"name": "Output", "type": "String"}]}',
-        pipelines.kubeflow.org/component_ref: '{}', pipelines.kubeflow.org/arguments.parameters: '{"asr_provider":
-          "{{inputs.parameters.asr_provider}}", "call_quantity": "{{inputs.parameters.call_quantity}}",
-          "call_type": "{{inputs.parameters.call_type}}", "end_date": "{{inputs.parameters.end_date}}",
-          "flow_name": "{{inputs.parameters.flow_name}}", "ignore_callers": "{{inputs.parameters.ignore_callers}}",
-          "lang": "{{inputs.parameters.lang}}", "min_duration": "{{inputs.parameters.min_duration}}",
-          "on_disk": "False", "org_id": "{{inputs.parameters.org_id}}", "reported":
-          "{{inputs.parameters.reported}}", "start_date": "{{inputs.parameters.start_date}}",
-          "use_case": "{{inputs.parameters.use_case}}"}'}
+          "name": "Fetch calls", "outputs": [{"name": "Output", "type": "<kfp.components._python_op.InputPath
+          object at 0x7f8f0fd4cb80>"}]}', pipelines.kubeflow.org/component_ref: '{}',
+        pipelines.kubeflow.org/arguments.parameters: '{"asr_provider": "{{inputs.parameters.asr_provider}}",
+          "call_quantity": "{{inputs.parameters.call_quantity}}", "call_type": "{{inputs.parameters.call_type}}",
+          "end_date": "{{inputs.parameters.end_date}}", "flow_name": "{{inputs.parameters.flow_name}}",
+          "ignore_callers": "{{inputs.parameters.ignore_callers}}", "lang": "{{inputs.parameters.lang}}",
+          "min_duration": "{{inputs.parameters.min_duration}}", "on_disk": "False",
+          "org_id": "{{inputs.parameters.org_id}}", "reported": "{{inputs.parameters.reported}}",
+          "start_date": "{{inputs.parameters.start_date}}", "use_case": "{{inputs.parameters.use_case}}"}'}
   - name: fetch-calls-pipeline
     inputs:
       parameters:
@@ -312,12 +300,13 @@ spec:
         dependencies: [fetch-calls]
         arguments:
           parameters:
-          - {name: fetch-calls-Output, value: '{{tasks.fetch-calls.outputs.parameters.fetch-calls-Output}}'}
           - {name: org_id, value: '{{inputs.parameters.org_id}}'}
+          artifacts:
+          - {name: fetch-calls-Output, from: '{{tasks.fetch-calls.outputs.artifacts.fetch-calls-Output}}'}
   - name: upload2s3
     container:
       args: [--org-id, '{{inputs.parameters.org_id}}', --file-type, untagged, --path-on-disk,
-        '{{inputs.parameters.fetch-calls-Output}}']
+        /tmp/inputs/path_on_disk/data, --ext, .csv]
       command:
       - sh
       - -ec
@@ -326,7 +315,7 @@ spec:
         printf "%s" "$0" > "$program_path"
         python3 -u "$program_path" "$@"
       - |
-        def upload2s3(org_id, file_type, path_on_disk):
+        def upload2s3(org_id, file_type, path_on_disk, ext = ".csv"):
             import os
             import boto3
             from datetime import datetime
@@ -334,7 +323,6 @@ spec:
 
             s3_resource = boto3.client('s3')
             bucket = os.environ["BUCKET"]
-            _, ext = os.path.splitext(os.path.basename(path_on_disk))
             upload_path = os.path.join(
                 "project",
                 str(org_id),
@@ -349,14 +337,16 @@ spec:
         _parser.add_argument("--org-id", dest="org_id", type=str, required=True, default=argparse.SUPPRESS)
         _parser.add_argument("--file-type", dest="file_type", type=str, required=True, default=argparse.SUPPRESS)
         _parser.add_argument("--path-on-disk", dest="path_on_disk", type=str, required=True, default=argparse.SUPPRESS)
+        _parser.add_argument("--ext", dest="ext", type=str, required=False, default=argparse.SUPPRESS)
         _parsed_args = vars(_parser.parse_args())
 
         _outputs = upload2s3(**_parsed_args)
-      image: 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:master
+      image: 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:0.1.1
     inputs:
       parameters:
-      - {name: fetch-calls-Output}
       - {name: org_id}
+      artifacts:
+      - {name: fetch-calls-Output, path: /tmp/inputs/path_on_disk/data}
     metadata:
       labels:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.11
@@ -364,24 +354,26 @@ spec:
         pipelines.kubeflow.org/enable_caching: "true"
       annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
           {"args": ["--org-id", {"inputValue": "org_id"}, "--file-type", {"inputValue":
-          "file_type"}, "--path-on-disk", {"inputValue": "path_on_disk"}], "command":
+          "file_type"}, "--path-on-disk", {"inputPath": "path_on_disk"}, {"if": {"cond":
+          {"isPresent": "ext"}, "then": ["--ext", {"inputValue": "ext"}]}}], "command":
           ["sh", "-ec", "program_path=$(mktemp)\nprintf \"%s\" \"$0\" > \"$program_path\"\npython3
-          -u \"$program_path\" \"$@\"\n", "def upload2s3(org_id, file_type, path_on_disk):\n    import
-          os\n    import boto3\n    from datetime import datetime\n    from loguru
-          import logger\n\n    s3_resource = boto3.client(''s3'')\n    bucket = os.environ[\"BUCKET\"]\n    _,
-          ext = os.path.splitext(os.path.basename(path_on_disk))\n    upload_path
-          = os.path.join(\n        \"project\",\n        str(org_id),\n        datetime.now().strftime(\"%Y-%m-%d\"),\n        f\"{datetime.now().strftime(''%Y-%m-%d'')}-{file_type}{ext}\",\n    )\n    s3_resource.upload_file(path_on_disk,
+          -u \"$program_path\" \"$@\"\n", "def upload2s3(org_id, file_type, path_on_disk,
+          ext = \".csv\"):\n    import os\n    import boto3\n    from datetime import
+          datetime\n    from loguru import logger\n\n    s3_resource = boto3.client(''s3'')\n    bucket
+          = os.environ[\"BUCKET\"]\n    upload_path = os.path.join(\n        \"project\",\n        str(org_id),\n        datetime.now().strftime(\"%Y-%m-%d\"),\n        f\"{datetime.now().strftime(''%Y-%m-%d'')}-{file_type}{ext}\",\n    )\n    s3_resource.upload_file(path_on_disk,
           bucket, upload_path)\n    logger.debug(f\"Uploaded {path_on_disk} to {upload_path}\")\n\nimport
           argparse\n_parser = argparse.ArgumentParser(prog=''Upload2s3'', description='''')\n_parser.add_argument(\"--org-id\",
           dest=\"org_id\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--file-type\",
           dest=\"file_type\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--path-on-disk\",
-          dest=\"path_on_disk\", type=str, required=True, default=argparse.SUPPRESS)\n_parsed_args
+          dest=\"path_on_disk\", type=str, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--ext\",
+          dest=\"ext\", type=str, required=False, default=argparse.SUPPRESS)\n_parsed_args
           = vars(_parser.parse_args())\n\n_outputs = upload2s3(**_parsed_args)\n"],
-          "image": "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:master"}},
+          "image": "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:0.1.1"}},
           "inputs": [{"name": "org_id", "type": "String"}, {"name": "file_type", "type":
-          "String"}, {"name": "path_on_disk", "type": "String"}], "name": "Upload2s3"}',
-        pipelines.kubeflow.org/component_ref: '{}', pipelines.kubeflow.org/arguments.parameters: '{"file_type":
-          "untagged", "org_id": "{{inputs.parameters.org_id}}", "path_on_disk": "{{inputs.parameters.fetch-calls-Output}}"}'}
+          "String"}, {"name": "path_on_disk"}, {"default": ".csv", "name": "ext",
+          "optional": true, "type": "String"}], "name": "Upload2s3"}', pipelines.kubeflow.org/component_ref: '{}',
+        pipelines.kubeflow.org/arguments.parameters: '{"ext": ".csv", "file_type":
+          "untagged", "org_id": "{{inputs.parameters.org_id}}"}'}
   arguments:
     parameters:
     - {name: org_id}

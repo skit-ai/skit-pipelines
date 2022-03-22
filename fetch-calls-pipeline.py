@@ -2,12 +2,13 @@ from typing import Optional
 import os
 import kfp
 import kfp.components as comp
+from kfp.components import InputPath
 
 
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 
 
-def upload2s3(org_id: str, file_type: str, path_on_disk: str):
+def upload2s3(org_id: str, file_type: str, path_on_disk: InputPath(), ext: str = ".csv"):
     import os
     import boto3
     from datetime import datetime
@@ -15,12 +16,11 @@ def upload2s3(org_id: str, file_type: str, path_on_disk: str):
 
     s3_resource = boto3.client('s3')
     bucket = os.environ["BUCKET"]
-    _, ext = os.path.splitext(os.path.basename(path_on_disk))
     upload_path = os.path.join(
         "project",
         str(org_id),
         datetime.now().strftime("%Y-%m-%d"),
-        f"{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
+        f"{org_id}-{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
     )
     s3_resource.upload_file(path_on_disk, bucket, upload_path)
     logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
@@ -40,7 +40,7 @@ def fetch_calls(
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
     on_disk: bool = False,
-) -> str:
+) -> InputPath():
     import time
     import tempfile
     from datetime import datetime
@@ -129,4 +129,4 @@ def run_fetch_calls(
         min_duration=min_duration,
         asr_provider=asr_provider
     )
-    upload2s3_op(org_id=org_id, file_type="untagged", path_on_disk=calls.output)
+    upload2s3_op(org_id, "untagged", ext=".csv", path_on_disk=calls.output)
