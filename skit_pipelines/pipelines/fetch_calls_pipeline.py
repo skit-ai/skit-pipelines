@@ -50,5 +50,5 @@ def run_fetch_calls(
         path_on_disk=calls.output,
     )
     notification_text = f"Finished a request for {call_quantity} calls fetched "
-    f"from {start_date} to {end_date} for {org_id=}. Saved to {s3_upload.output}"
-    slack_notification_op(notification_text, file_path=s3_upload.output)
+    f"from {start_date} to {end_date} for {org_id=}."
+    slack_notification_op(notification_text, connect=s3_upload.output)
