@@ -1,4 +1,5 @@
 import os
+from typing import List, Dict
 from datetime import datetime
 
 
@@ -11,10 +12,43 @@ def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
     )
 
 
-def help_aws_s3_cp(s3_path: str) -> None:
-    return f"""
-```
-aws s3 cp {s3_path} .
-```
-"""
+class SlackBlockFactory:
+    def __init__(self) -> None:
+        self.message = {
+            "text": "",
+            "blocks": []
+        }
 
+    def code_block(self, content):
+        if not content:
+            return self
+        content = f"""
+```
+{content}
+```
+""".strip()
+        self.message["blocks"].append(
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": content},
+            }
+        )
+        return self
+
+    def text_block(self, content):
+        if not content:
+            return self
+        self.message["blocks"].append(
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": content},
+            }
+        )
+        return self
+
+    def text(self, content):
+        self.message["text"] = content
+        return self
+
+    def build(self) -> Dict:
+        return self.message
