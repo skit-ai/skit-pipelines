@@ -1,4 +1,7 @@
-.PHONY: all test
+SHELL := /bin/bash
+.PHONY: all test build
+
+SOURCE_FILES := $(shell find skit_pipelines/pipelines ! -name "__init__.py" -name "*.py" -execdir basename {} .py ';')
 
 lint:
 	@echo -e "Running linter"
@@ -8,10 +11,13 @@ lint:
 	@black tests
 	@echo -e "Running type checker"
 
-typecheck:
-	@mypy -p skit_pipelines
-
 test: ## Run the tests.conf
 	@pytest --cov=skit_pipelines --cov-report html --durations=5 --cov-report term:skip-covered tests/
 
-all: lint typecheck test docs
+build:
+	for file in $(SOURCE_FILES); do \
+		touch build/$$file.yaml; \
+		dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
+	done
+
+all: lint test build
