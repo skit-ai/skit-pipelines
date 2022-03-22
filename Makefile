@@ -20,4 +20,4 @@ build:
 		dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
 
-all: lint test build
+all: lint build
