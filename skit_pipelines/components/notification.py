@@ -1,5 +1,6 @@
 import kfp
 from kfp.components import InputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -8,10 +9,12 @@ def slack_notification(message: str, channel: str | None = None) -> None:
     Send a message on any channel.
     """
     import traceback
+
+    from loguru import logger
     from slack_sdk import WebClient
     from slack_sdk.errors import SlackApiError
+
     from skit_pipelines import constants as pipeline_constants
-    from loguru import logger
 
     if channel is None:
         channel = pipeline_constants.SLACK_CHANNEL
