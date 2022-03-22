@@ -1,3 +1,7 @@
+# 0.1.5
+
+- [x] feat: slack integration.
+
 # 0.1.4
 
 - [x] update: skit-pipelines is available within docker image.
