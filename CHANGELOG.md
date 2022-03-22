@@ -1,3 +1,7 @@
+# 0.1.3
+
+- [x] update: build pipeline yamls via `make`.
+
 # 0.1.2
 
 - [x] refactor: modularize project.
