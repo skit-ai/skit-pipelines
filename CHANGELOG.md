@@ -1,3 +1,7 @@
+# 0.1.2
+
+- [x] refactor: modularize project.
+
 # 0.1.1
 
 - [x] add: boto3 for s3 upload/download.

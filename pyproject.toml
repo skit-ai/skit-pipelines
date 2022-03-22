@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skit-pipelines"
-version = "0.1.1"
+version = "0.1.2"
 description = "Kubeflow components for ml workflows at skit.ai."
 authors = ["ltbringer <amresh.venugopal@gmail.com>"]
 license = "MIT"
