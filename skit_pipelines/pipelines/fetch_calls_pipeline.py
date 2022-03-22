@@ -3,7 +3,7 @@ from typing import Optional
 import kfp
 
 from skit_pipelines import constants as pipeline_constants
-from skit_pipelines.components import fetch_calls_op, upload2s3_op
+from skit_pipelines.components import fetch_calls_op, upload2s3_op, slack_notification_op
 
 
 @kfp.dsl.pipeline(
@@ -38,10 +38,13 @@ def run_fetch_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
     )
-    upload2s3_op(
+    s3_upload = upload2s3_op(
         org_id,
         "untagged",
         pipeline_constants.BUCKET,
         ext=".csv",
         path_on_disk=calls.output,
     )
+    notification_text = f"Finished a request for {call_quantity} calls fetched "
+    f"from {start_date} to {end_date} for {org_id=}. Saved to {s3_upload.output}"
+    slack_notification_op(notification_text)
