@@ -451,6 +451,18 @@ toml = ">=0.10.2,<0.11.0"
 tqdm = ">=4.62.3,<5.0.0"
 
 [[package]]
+name = "slack-sdk"
+version = "3.15.2"
+description = "The Slack API Platform SDK for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.extras]
+optional = ["aiodns (>1.0)", "aiohttp (>=3.7.3,<4)", "boto3 (<=2)", "SQLAlchemy (>=1,<2)", "websockets (>=10,<11)", "websocket-client (>=1,<2)"]
+testing = ["pytest (>=6.2.5,<7)", "pytest-asyncio (<1)", "Flask-Sockets (>=0.2,<1)", "Flask (>=1,<2)", "Werkzeug (<2)", "itsdangerous (==2.0.1)", "pytest-cov (>=2,<3)", "codecov (>=2,<3)", "flake8 (>=4,<5)", "black (==22.1.0)", "psutil (>=5,<6)", "databases (>=0.5)", "boto3 (<=2)", "moto (>=3,<4)"]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -521,7 +533,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "5ecc34f4c4532c04b65d7b994def434e9a1254748e4c6d9236f689f31bcf9b2b"
+content-hash = "38bf169fa10c97ad6a665a806c12aaa9f5c8180ff046987aa381335dd2e14bcd"
 
 [metadata.files]
 aiofiles = [
@@ -1000,6 +1012,10 @@ six = [
 skit-calls = [
     {file = "skit-calls-0.2.1.tar.gz", hash = "sha256:141810822785db34aaebd5ca62865baa9c524d366527aa63d01ea3a6814bb6cc"},
     {file = "skit_calls-0.2.1-py3-none-any.whl", hash = "sha256:c5aa9b50ed8da4a8e404921bdb725d166ac99232402eda23f2cc42fdddacc57f"},
+]
+slack-sdk = [
+    {file = "slack_sdk-3.15.2-py2.py3-none-any.whl", hash = "sha256:e1fa26786169176e707676decc287fd9d3d547bbc43c0a1a4f99eb373b07da94"},
+    {file = "slack_sdk-3.15.2.tar.gz", hash = "sha256:128f3bb0b5b91454a3d5f140a61f3db370a0e1b50ffe0a8d9e9ebe0e894faed7"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
