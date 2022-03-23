@@ -132,3 +132,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.json
+
+# environment variables used by tools
+env.sh

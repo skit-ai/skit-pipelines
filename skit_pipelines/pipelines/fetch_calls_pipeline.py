@@ -3,11 +3,8 @@ from typing import Optional
 import kfp
 
 from skit_pipelines import constants as pipeline_constants
-from skit_pipelines.components import (
-    fetch_calls_op,
-    slack_notification_op,
-    upload2s3_op,
-)
+from skit_pipelines.components import (fetch_calls_op, slack_notification_op,
+                                       upload2s3_op)
 
 
 @kfp.dsl.pipeline(
