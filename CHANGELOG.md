@@ -1,3 +1,11 @@
+# 0.1.9
+
+- [x] update: skit-calls 0.2.3
+
+# 0.1.8
+
+- [x] fix: Slack notification component -- Slack token constant.
+
 # 0.1.7
 
 - [x] fix: Slack notification component -- Slack token constant.
