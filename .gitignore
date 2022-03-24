@@ -135,3 +135,6 @@ dmypy.json
 
 # environment variables used by tools
 env.sh
+
+# query files
+*.sql
