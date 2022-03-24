@@ -1,5 +1,5 @@
 import kfp
-from kfp.components import InputPath
+from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -7,7 +7,7 @@ from skit_pipelines import constants as pipeline_constants
 def org_auth_token(
     org_id: int,
     url: str | None = None
-) -> InputPath():
+) -> str:
     from skit_auth import auth, utils
     from skit_pipelines import constants as const
     utils.configure_logger(7)
