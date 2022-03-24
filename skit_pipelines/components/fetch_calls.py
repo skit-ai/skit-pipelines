@@ -30,8 +30,7 @@ def fetch_calls(
     from skit_calls import calls
     from skit_calls import constants as const
     from skit_calls import utils
-    from skit_calls.cli import (process_date_filters, to_datetime,
-                                validate_date_ranges)
+    from skit_calls.cli import process_date_filters, to_datetime, validate_date_ranges
 
     utils.configure_logger(7)
 

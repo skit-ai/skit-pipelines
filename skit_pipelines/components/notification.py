@@ -18,11 +18,13 @@ def slack_notification(message: str, s3_path: str, channel: str | None = None) -
 
     channel = channel or pipeline_constants.DEFAULT_CHANNEL
 
-    slack_message_blocks = SlackBlockFactory()\
-        .text(message)\
-        .text_block(message)\
-        .code_block(f"aws s3 cp {s3_path}" if s3_path else None)\
+    slack_message_blocks = (
+        SlackBlockFactory()
+        .text(message)
+        .text_block(message)
+        .code_block(f"aws s3 cp {s3_path}" if s3_path else None)
         .build()
+    )
 
     try:
         client = WebClient(token=pipeline_constants.SLACK_TOKEN)

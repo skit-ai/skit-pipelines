@@ -14,10 +14,7 @@ def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
 
 class SlackBlockFactory:
     def __init__(self) -> None:
-        self.message = {
-            "text": "",
-            "blocks": []
-        }
+        self.message = {"text": "", "blocks": []}
 
     def code_block(self, content):
         if not content:
