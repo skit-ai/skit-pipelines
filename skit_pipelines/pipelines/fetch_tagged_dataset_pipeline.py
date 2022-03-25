@@ -7,7 +7,7 @@ from skit_pipelines.components import (
     slack_notification_op,
     upload2s3_op,
 )
-
+from skit_pipelines import constants as pipeline_constants
 
 @kfp.dsl.pipeline(
     name="Fetch Tagged Dataset Pipeline",
