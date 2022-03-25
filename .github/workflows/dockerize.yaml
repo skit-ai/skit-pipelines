@@ -45,7 +45,6 @@ jobs:
           --build-arg BUCKET=${{ secrets.BUCKET }} \
           --build-arg SLACK_TOKEN=${{ secrets.SLACK_TOKEN }} \
           --build-arg DEFAULT_SLACK_CHANNEL=${{ secrets.DEFAULT_SLACK_CHANNEL }} \
-          --build-arg DATA_UPLOAD_PATH=${{ secrets.DATA_UPLOAD_PATH }} \
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }} \
           --build-arg SKIT_API_GATEWAY_EMAIL=${{ secrets.SKIT_API_GATEWAY_EMAIL }} \
           --build-arg SKIT_API_GATEWAY_PASSWORD=${{ secrets.SKIT_API_GATEWAY_PASSWORD }} \
