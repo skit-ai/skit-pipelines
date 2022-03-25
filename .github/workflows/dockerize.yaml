@@ -32,21 +32,23 @@ jobs:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: >
-          docker build
-            --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
-            --build-arg DB_HOST=${{ secrets.DB_HOST }}
-            --build-arg DB_PORT=${{ secrets.DB_PORT }}
-            --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            --build-arg DB_NAME=${{ secrets.DB_NAME }}
-            --build-arg DB_USER=${{ secrets.DB_USER }}
-            --build-arg RANDOM_CALL_DATA_QUERY=${{ secrets.RANDOM_CALL_DATA_QUERY }}
-            --build-arg RANDOM_CALL_ID_QUERY=${{ secrets.RANDOM_CALL_ID_QUERY }}
-            --build-arg CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }}
-            --build-arg BUCKET=${{ secrets.BUCKET }}
-            --build-arg SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}
-            --build-arg DEFAULT_SLACK_CHANNEL=${{ secrets.DEFAULT_SLACK_CHANNEL }}
-            --build-arg DATA_UPLOAD_PATH=${{ secrets.DATA_UPLOAD_PATH }} -t $ECR_REPOSITORY ."
+        run: docker build
+          --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
+          --build-arg DB_HOST=${{ secrets.DB_HOST }}
+          --build-arg DB_PORT=${{ secrets.DB_PORT }}
+          --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          --build-arg DB_NAME=${{ secrets.DB_NAME }}
+          --build-arg DB_USER=${{ secrets.DB_USER }}
+          --build-arg RANDOM_CALL_DATA_QUERY=${{ secrets.RANDOM_CALL_DATA_QUERY }}
+          --build-arg RANDOM_CALL_ID_QUERY=${{ secrets.RANDOM_CALL_ID_QUERY }}
+          --build-arg CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }}
+          --build-arg BUCKET=${{ secrets.BUCKET }}
+          --build-arg SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}
+          --build-arg DEFAULT_SLACK_CHANNEL=${{ secrets.DEFAULT_SLACK_CHANNEL }}
+          --build-arg TOG_TASK_URL=${{ secrets.TOG_TASK_URL }}
+          --build-arg SKIT_API_GATEWAY_PASSWORD=${{ secrets.SKIT_API_GATEWAY_PASSWORD }}
+          --build-arg SKIT_API_GATEWAY_EMAIL=${{ secrets.SKIT_API_GATEWAY_EMAIL }}
+          --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }} -t $ECR_REPOSITORY .
 
       - name: Tag and push images
         env: 
