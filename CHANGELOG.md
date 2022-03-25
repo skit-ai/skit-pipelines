@@ -1,3 +1,7 @@
+# 0.1.10
+- [x] created a component that fetches tagged datasets.
+- [x] a kubeflow pipeline utilizing the above component.
+
 # 0.1.9
 
 - [x] update: skit-calls 0.2.3
