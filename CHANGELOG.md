@@ -1,6 +1,6 @@
 # 0.1.10
-- [x] created a component that fetches tagged datasets.
-- [x] a kubeflow pipeline utilizing the above component.
+- [x] add: component that fetches tagged datasets.
+- [x] add: kubeflow pipeline utilizing the above component.
 
 # 0.1.9
 
