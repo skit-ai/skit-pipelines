@@ -2,12 +2,12 @@ import os
 from typing import Optional
 
 import kfp
-from kfp.components import InputPath
+from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
-def fetch_calls(
+def fetch_calls(*,
     org_id: int,
     start_date: str,
     lang: str,
@@ -20,9 +20,8 @@ def fetch_calls(
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
-    on_disk: bool = False,
-) -> InputPath():
-    import tempfile
+    output_string: OutputPath(str)
+):
     import time
     from datetime import datetime
 
@@ -64,17 +63,11 @@ def fetch_calls(
         flow_name=flow_name or None,
         min_duration=min_duration or None,
         asr_provider=asr_provider or None,
-        on_disk=on_disk or False,
+        on_disk=False,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
-    if on_disk:
-        return maybe_df
-    else:
-        _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
-        maybe_df.to_csv(file_path, index=False)
-        return file_path
-
-
+    maybe_df.to_csv(output_string, index=False)
+    
 fetch_calls_op = kfp.components.create_component_from_func(
     fetch_calls, base_image=pipeline_constants.BASE_IMAGE
 )
