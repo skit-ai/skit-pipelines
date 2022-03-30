@@ -7,7 +7,8 @@ from kfp.components import OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def fetch_calls(*,
+def fetch_calls(
+    *,
     org_id: int,
     start_date: str,
     lang: str,
@@ -20,7 +21,7 @@ def fetch_calls(*,
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
-    output_string: OutputPath(str)
+    output_string: OutputPath(str),
 ):
     import time
     from datetime import datetime
@@ -67,7 +68,8 @@ def fetch_calls(*,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     maybe_df.to_csv(output_string, index=False)
-    
+
+
 fetch_calls_op = kfp.components.create_component_from_func(
     fetch_calls, base_image=pipeline_constants.BASE_IMAGE
 )

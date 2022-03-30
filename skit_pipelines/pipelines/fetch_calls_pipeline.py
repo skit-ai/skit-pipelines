@@ -49,7 +49,11 @@ def run_fetch_calls(
         bucket=pipeline_constants.BUCKET,
         ext=".csv",
     )
-    s3_upload.execution_options.caching_strategy.max_cache_staleness = "P0D" # disables caching
+    s3_upload.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
     notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {org_id=}."
     task_no_cache = slack_notification_op(notification_text, s3_path=s3_upload.output)
-    task_no_cache.execution_options.caching_strategy.max_cache_staleness = "P0D" # disables caching
+    task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
