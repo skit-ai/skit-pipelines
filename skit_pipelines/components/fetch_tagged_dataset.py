@@ -2,12 +2,13 @@ import os
 from typing import Optional
 
 import kfp
-from kfp.components import InputPath
+from kfp.components import InputPath, OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
 def fetch_tagged_dataset(
+    *,
     job_id: str,
     task_type: Optional[str] = None,
     timezone: Optional[str] = None,
@@ -17,16 +18,19 @@ def fetch_tagged_dataset(
     password: Optional[str] = None,
     host: Optional[str] = None,
     port: Optional[int | str] = None,
-) -> InputPath():
+    output_string: OutputPath(str),
+):
     import tempfile
     import time
-    import pytz
 
+    import pandas as pd
+    import pytz
     from loguru import logger
-    from skit_labels import utils
     from skit_labels import constants as const
-    from skit_pipelines import constants as pipeline_constants
+    from skit_labels import utils
     from skit_labels.commands import download_dataset_from_db
+
+    from skit_pipelines import constants as pipeline_constants
 
     utils.configure_logger(7)
 
@@ -34,7 +38,6 @@ def fetch_tagged_dataset(
     port = port or pipeline_constants.DB_PORT
     password = password or pipeline_constants.DB_PASSWORD
     user = user or pipeline_constants.DB_USER
-
 
     if not timezone:
         timezone = pytz.UTC
@@ -54,11 +57,11 @@ def fetch_tagged_dataset(
         port=port,
         password=password,
         user=user,
-        )
-    
+    )
 
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
-    return df_path
+    df = pd.read_csv(df_path)
+    df.to_csv(output_string, index=False)
 
 
 fetch_tagged_dataset_op = kfp.components.create_component_from_func(

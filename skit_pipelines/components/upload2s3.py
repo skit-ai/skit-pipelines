@@ -1,14 +1,14 @@
 import kfp
-from kfp.components import InputPath
+from kfp.components import InputPath, OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
 def upload2s3(
+    path_on_disk: InputPath(str),
     org_id: int,
     file_type: str,
     bucket: str,
-    path_on_disk: InputPath(),
     ext: str = ".csv",
 ) -> str:
     import boto3
