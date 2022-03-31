@@ -1,3 +1,6 @@
+# 0.1.11
+- [x] add: placeholder component to train xlmr intent classifier.
+
 # 0.1.10
 - [x] add: component that fetches tagged datasets.
 - [x] add: kubeflow pipeline utilizing the above component.
