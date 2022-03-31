@@ -17,7 +17,7 @@ test: ## Run the tests.conf
 build:
 	for file in $(SOURCE_FILES); do \
 		touch build/$$file.yaml; \
-		dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
+		source env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
 
 all: lint build
