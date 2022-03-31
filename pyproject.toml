@@ -14,12 +14,14 @@ requests = "^2.27.1"
 boto3 = "^1.20.24"
 skit-labels = "^0.3.12"
 skit-auth = "^0.1.3"
+simpletransformers = "^0.63.6"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
 pytest = "^7.1.1"
 pytest-cov = "^3.0.0"
 isort = "^5.10.1"
+skit-auth = "^0.1.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
