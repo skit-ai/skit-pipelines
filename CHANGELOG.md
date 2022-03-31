@@ -1,3 +1,7 @@
+# 0.1.12
+
+- [x] update: skit-labels 0.3.13, values for db creds resolved.
+
 # 0.1.11
 - [x] add: placeholder component to train xlmr intent classifier.
 
