@@ -15,7 +15,8 @@ test: ## Run the tests.conf
 	@pytest --cov=skit_pipelines --cov-report html --durations=5 --cov-report term:skip-covered tests/
 
 build:
-	for file in $(SOURCE_FILES); do \
+	@for file in $(SOURCE_FILES); do \
+		echo "Building skit_pipelines/pipelines/$$file.py"; \
 		touch build/$$file.yaml; \
 		source env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
