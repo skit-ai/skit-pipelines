@@ -1,5 +1,4 @@
 import kfp
-from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 

@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict
 
 
 def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
