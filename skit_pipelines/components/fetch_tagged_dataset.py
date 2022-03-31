@@ -7,17 +7,12 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def fetch_tagged_dataset(
-    *,
-    job_id: str,
-    task_type: Optional[str] = None,
-    timezone: Optional[str] = None,
+    output_path: OutputPath(str),
+    job_id: int,
+    task_type: str = "conversation",
+    timezone: str = "Asia/Kolkata",
     start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    host: Optional[str] = None,
-    port: Optional[int | str] = None,
-    output_string: OutputPath(str),
+    end_date: Optional[str] = None
 ):
     import time
 
@@ -32,10 +27,10 @@ def fetch_tagged_dataset(
 
     utils.configure_logger(7)
 
-    host = host or pipeline_constants.DB_HOST
-    port = port or pipeline_constants.DB_PORT
-    password = password or pipeline_constants.DB_PASSWORD
-    user = user or pipeline_constants.DB_USER
+    host = pipeline_constants.DB_HOST
+    port = pipeline_constants.DB_PORT
+    password = pipeline_constants.DB_PASSWORD
+    user = pipeline_constants.DB_USER
 
     if not timezone:
         timezone = pytz.UTC
@@ -59,7 +54,7 @@ def fetch_tagged_dataset(
 
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     df = pd.read_csv(df_path)
-    df.to_csv(output_string, index=False)
+    df.to_csv(output_path, index=False)
 
 
 fetch_tagged_dataset_op = kfp.components.create_component_from_func(

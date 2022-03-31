@@ -16,3 +16,4 @@ DB_USER = os.environ["DB_USER"]
 VOICE_BOT_XLMR_LABEL_COL = ""
 TEXT = ""
 LABELS = ""
+CSV_FILE = ".csv"
