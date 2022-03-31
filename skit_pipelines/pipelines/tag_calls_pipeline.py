@@ -2,9 +2,7 @@ import kfp
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
-    auth,
     org_auth_token_op,
-    slack_notification_op,
     tag_calls_op,
 )
 

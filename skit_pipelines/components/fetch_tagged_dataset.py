@@ -1,7 +1,7 @@
 from typing import Optional
 
 import kfp
-from kfp.components import InputPath, OutputPath
+from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -19,7 +19,6 @@ def fetch_tagged_dataset(
     port: Optional[int | str] = None,
     output_string: OutputPath(str),
 ):
-    import tempfile
     import time
 
     import pandas as pd
