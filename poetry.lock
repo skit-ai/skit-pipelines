@@ -1196,7 +1196,7 @@ tqdm = ">=4.62.3,<5.0.0"
 
 [[package]]
 name = "skit-labels"
-version = "0.3.15"
+version = "0.3.17"
 description = "Command line tool for interacting with labelled datasets at skit.ai."
 category = "main"
 optional = false
@@ -1382,7 +1382,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2cdbf23cba842c2e77e721ee46d0fc28fba6a9094e183d82a0dc5b398c54449d"
+content-hash = "608a517e9006c991e72f60492d2cc38eae2419e9a98e0741dc16aab4e82ab699"
 
 [metadata.files]
 aiobotocore = [
@@ -2328,8 +2328,8 @@ skit-fixdf = [
     {file = "skit_fixdf-0.1.12-py3-none-any.whl", hash = "sha256:67424820d6a3507e023277a7a9bff049993f54c650b56d0e75e9352753f6b0aa"},
 ]
 skit-labels = [
-    {file = "skit-labels-0.3.15.tar.gz", hash = "sha256:b76aabc1d9e9eeba04c3d6aaee75ff82e74e37947f046cf3c46b73c11c90f519"},
-    {file = "skit_labels-0.3.15-py3-none-any.whl", hash = "sha256:ccd7269e9cf698e35bb0546224d874a9363c77c243f05ce63ada950865d9535b"},
+    {file = "skit-labels-0.3.17.tar.gz", hash = "sha256:d4fd515acfb06cda52b5f52296f02ed5eb54432307563834339b3b94ffd31ca5"},
+    {file = "skit_labels-0.3.17-py3-none-any.whl", hash = "sha256:cfc1f608ddc2f7fd70a1d6021dc0a87d8a3e03b3328fe7dc8cd9fc9ec7086f6c"},
 ]
 slack-sdk = [
     {file = "slack_sdk-3.15.2-py2.py3-none-any.whl", hash = "sha256:e1fa26786169176e707676decc287fd9d3d547bbc43c0a1a4f99eb373b07da94"},

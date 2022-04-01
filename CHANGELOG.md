@@ -1,3 +1,7 @@
+# 0.1.14
+
+- [x] update: skit-labels 0.3.17 with higher tolerance for utterance structures.
+
 # 0.1.13
 
 - [x] update: skit-labels skit-calls for serialized json fields.
