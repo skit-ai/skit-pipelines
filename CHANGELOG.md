@@ -1,3 +1,7 @@
+# 0.1.16
+
+- [x] add: torch = "^1.11.0" for cuda 10.2
+
 # 0.1.15
 
 - [x] add: preprocessing module for specialized components.
