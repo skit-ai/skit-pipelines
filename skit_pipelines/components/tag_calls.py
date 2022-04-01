@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import kfp
 from kfp.components import InputPath
@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def tag_calls(
     input_file: str, job_id: int, token: InputPath(str), url: str = None
-) -> List:
+) -> Tuple[int, List[str]]:
 
     import time
 
@@ -27,7 +27,7 @@ def tag_calls(
     errors, df_size = upload_dataset(input_file, url, token, job_id)
     logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
     logger.info(f"{df_size=} rows in the dataset")
-    return errors
+    return df_size, errors
 
 
 tag_calls_op = kfp.components.create_component_from_func(
