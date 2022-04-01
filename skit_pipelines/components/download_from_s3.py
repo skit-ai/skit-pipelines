@@ -6,7 +6,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def download_from_s3(
     s3_path: str,
-    path_on_disk: OutputPath(str)
+    output_path: OutputPath(str)
 ) -> None:
     import re
     import boto3
@@ -18,7 +18,7 @@ def download_from_s3(
     logger.debug(f"{bucket=} {key=}")
 
     s3_resource = boto3.client("s3")
-    s3_resource.download_file(bucket, key, path_on_disk)
+    s3_resource.download_file(bucket, key, output_path)
 
 
 download_from_s3_op = kfp.components.create_component_from_func(
