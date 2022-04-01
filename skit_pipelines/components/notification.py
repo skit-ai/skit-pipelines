@@ -22,7 +22,7 @@ def slack_notification(message: str, s3_path: str, channel: str | None = None) -
         SlackBlockFactory()
         .text(message)
         .text_block(message)
-        .code_block(f"aws s3 cp {s3_path}" if s3_path else None)
+        .code_block(f"aws s3 cp {s3_path} ." if s3_path else None)
         .build()
     )
 
