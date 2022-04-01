@@ -1,3 +1,7 @@
+# 0.1.15
+
+- [x] add: preprocessing module for specialized components.
+
 # 0.1.14
 
 - [x] update: skit-labels 0.3.17 with higher tolerance for utterance structures.
