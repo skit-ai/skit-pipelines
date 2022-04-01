@@ -4,3 +4,6 @@ from skit_pipelines.components.fetch_tagged_dataset import fetch_tagged_dataset_
 from skit_pipelines.components.notification import slack_notification_op
 from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.upload2s3 import upload2s3_op
+from skit_pipelines.components.download_from_s3 import download_from_s3_op
+from skit_pipelines.components.train_voicebot_xlmr import train_xlmr_voicebot_op
+from skit_pipelines.components.preprocess.normalize_utterance import normalize_df_utterances_op
