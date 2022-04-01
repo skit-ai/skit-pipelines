@@ -21,7 +21,7 @@ def run_fetch_tagged_dataset(
     start_date: str,
     end_date: str,
 ):
-    calls = fetch_tagged_dataset_op(
+    tagged_df = fetch_tagged_dataset_op(
         job_id,
         task_type=task_type,
         timezone=timezone,
@@ -29,7 +29,7 @@ def run_fetch_tagged_dataset(
         end_date=end_date,
     )
     s3_upload = upload2s3_op(
-        path_on_disk=calls.outputs["output"],
+        path_on_disk=tagged_df.outputs["output"],
         org_id=org_id,
         file_type=f"tagged",
         bucket=pipeline_constants.BUCKET,
