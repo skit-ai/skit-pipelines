@@ -1,10 +1,10 @@
 import kfp
-from kfp.components import InputPath
+from kfp.components import InputPath, OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
 def train_xlmr_voicebot(
-    data_path: InputPath,
+    data_path: InputPath(str),
     utterance_column: str,
     label_column: str,
     model_type: str = "xlmroberta",
