@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.17
+
+- [x] add: component to create utterance column `utterances`.
+- [x] add: component to create true intent column `intent_y`.
+- [x] add: component to add state and utterances as features for intent classifer (xlmr).
+- [x] update: model training pipeline with train set only.
+
 ## 0.1.16
 
 - [x] add: torch = "^1.11.0" for cuda 10.2
