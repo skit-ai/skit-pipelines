@@ -1,8 +1,6 @@
 import json
 
-import kfp
-from kfp.components import InputPath, OutputPath
-from pydash import py_
+import pydash as py_
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -40,25 +38,3 @@ def row2features(use_state: bool):
         feat_state      = featurize_state(data.get(STATE))
         return f"{feat_utterance} {feat_state}" if use_state else f"{feat_utterance}"
     return featurize
-
-
-def create_features(
-    data_path: InputPath,
-    use_state: bool,
-    output_path: OutputPath,
-    mode: str = TRAIN
-):
-    import pandas as pd
-
-    df = pd.read_csv(data_path)
-    subset = (UTTERANCES, TAG) if mode == TRAIN else (TAG,)
-
-    df.dropna(subset=subset, inplace=True, axis=1)
-    df.utterances = df.apply(row2features(use_state, mode))
-    df.to_csv(output_path, index=False)
-
-
-create_features_op = kfp.components.create_component_from_func(
-    create_features,
-    base_image=pipeline_constants.BASE_IMAGE
-)
