@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.19
+
+- [x] update: kfp installed within container.
+
 ## 0.1.18
 
 - [x] update: components isolated from helper functions.
