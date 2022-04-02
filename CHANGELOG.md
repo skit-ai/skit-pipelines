@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.20
+
+- [x] fix: intent classifier featurizer fixed to apply row-wise transformation.
+- [x] fix: hacky solution for https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
+
 ## 0.1.19
 
 - [x] update: kfp installed within container.
