@@ -22,7 +22,7 @@ def create_features(
     subset = (UTTERANCES, TAG) if mode == TRAIN else (TAG,)
 
     df.dropna(subset=subset, inplace=True, axis=1)
-    df.utterances = df.apply(row2features(use_state, mode))
+    df.utterances = df.apply(row2features(use_state, mode), axis=1)
     logger.debug(df.utterances[:10])
 
     df.to_csv(output_path, index=False)
