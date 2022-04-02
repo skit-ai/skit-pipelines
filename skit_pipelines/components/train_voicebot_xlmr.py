@@ -1,5 +1,5 @@
 import kfp
-from kfp.components import InputPath, OutputPath
+from kfp.components import InputPath
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -11,6 +11,15 @@ def train_xlmr_voicebot(
     model_name: str = "xlm-roberta-base",
 ):
     import pandas as pd
+
+    # HACK: This code should go as soon as this issue is fixed:
+    # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
+    import collections
+    from collections.abc import Iterable
+
+    setattr(collections, "Iterable", Iterable)
+    # ----------------------------------------------
+
     from simpletransformers.classification import (
         ClassificationArgs,
         ClassificationModel,
