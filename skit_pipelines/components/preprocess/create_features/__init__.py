@@ -4,12 +4,13 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def create_features(
-    data_path: InputPath,
+    data_path: InputPath(str),
     use_state: bool,
-    output_path: OutputPath,
+    output_path: OutputPath(str),
     mode: str = pipeline_constants.TRAIN
 ):
     import pandas as pd
+    from loguru import logger
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_features.utils import row2features
 
@@ -22,6 +23,8 @@ def create_features(
 
     df.dropna(subset=subset, inplace=True, axis=1)
     df.utterances = df.apply(row2features(use_state, mode))
+    logger.debug(df.utterances[:10])
+
     df.to_csv(output_path, index=False)
 
 
