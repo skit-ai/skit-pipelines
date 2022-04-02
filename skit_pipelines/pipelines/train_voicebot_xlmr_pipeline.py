@@ -31,14 +31,13 @@ def run_fetch_tagged_dataset(
     model_name: str = "xlm-roberta-base",
 ):
     df = download_from_s3_op(s3_path)
-
     # preprocess the file
 
     # Create true label column
     df = create_utterances_op(df.outputs["output"])
 
     # Create utterance column
-    df = create_utterances_op(df.outputs["output"])
+    df = create_true_intent_labels_op(df.outputs["output"])
 
     # Create train and test splits
 
