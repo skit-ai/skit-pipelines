@@ -17,14 +17,14 @@ def run_fetch_calls(
     start_date: str,
     lang: str,
     end_date: str,
-    call_quantity: int,
-    call_type: str,
     ignore_callers: str,
     reported: str,
     use_case: str,
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    call_quantity: int = 200,
+    call_type: str = "inbound",
 ):
     calls = fetch_calls_op(
         org_id=org_id,

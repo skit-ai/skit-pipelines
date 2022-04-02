@@ -16,10 +16,10 @@ from skit_pipelines.components import (
 def run_fetch_tagged_dataset(
     org_id: int,
     job_id: int,
-    task_type: str,
-    timezone: str,
     start_date: str,
     end_date: str,
+    timezone: str = "Asia/Kolkata",
+    task_type: str = "conversation",
 ):
     tagged_df = fetch_tagged_dataset_op(
         job_id,
