@@ -1,13 +1,17 @@
 import kfp
 from kfp.components import InputPath, OutputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
 def create_utterances(data_path: InputPath(str), output_path: OutputPath(str)):
     import pandas as pd
     from loguru import logger
+
     from skit_pipelines import constants as pipeline_constants
-    from skit_pipelines.components.preprocess.create_utterance_column.utils import build_utterance
+    from skit_pipelines.components.preprocess.create_utterance_column.utils import (
+        build_utterance,
+    )
 
     UTTERANCES = pipeline_constants.UTTERANCES
 
@@ -18,6 +22,5 @@ def create_utterances(data_path: InputPath(str), output_path: OutputPath(str)):
 
 
 create_utterances_op = kfp.components.create_component_from_func(
-    create_utterances,
-    base_image=pipeline_constants.BASE_IMAGE
+    create_utterances, base_image=pipeline_constants.BASE_IMAGE
 )

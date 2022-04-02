@@ -4,11 +4,9 @@ from kfp.components import OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def download_from_s3(
-    s3_path: str,
-    output_path: OutputPath(str)
-) -> None:
+def download_from_s3(s3_path: str, output_path: OutputPath(str)) -> None:
     import re
+
     import boto3
     from loguru import logger
 

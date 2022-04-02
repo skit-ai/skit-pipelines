@@ -1,5 +1,6 @@
 import kfp
 from kfp.components import InputPath, OutputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -8,7 +9,9 @@ def create_intent_labels(data_path: InputPath(str), output_path: OutputPath(str)
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
-    from skit_pipelines.components.preprocess.create_true_intent_column.utils import pick_1st_tag
+    from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
+        pick_1st_tag,
+    )
 
     INTENT_Y = pipeline_constants.INTENT_Y
 
@@ -20,6 +23,5 @@ def create_intent_labels(data_path: InputPath(str), output_path: OutputPath(str)
 
 
 create_true_intent_labels_op = kfp.components.create_component_from_func(
-    create_intent_labels,
-    base_image=pipeline_constants.BASE_IMAGE
+    create_intent_labels, base_image=pipeline_constants.BASE_IMAGE
 )

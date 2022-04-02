@@ -1,5 +1,6 @@
 import kfp
 from kfp.components import InputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -10,12 +11,12 @@ def train_xlmr_voicebot(
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
 ):
-    import pandas as pd
-
     # HACK: This code should go as soon as this issue is fixed:
     # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
     import collections
     from collections.abc import Iterable
+
+    import pandas as pd
 
     setattr(collections, "Iterable", Iterable)
     # ----------------------------------------------
@@ -25,6 +26,7 @@ def train_xlmr_voicebot(
         ClassificationModel,
     )
     from sklearn import preprocessing
+
     from skit_pipelines import constants as pipeline_constants
 
     label_column = pipeline_constants.VOICE_BOT_XLMR_LABEL_COL
@@ -35,7 +37,10 @@ def train_xlmr_voicebot(
 
     train_df[:, label_column] = encoder.transform(train_df[label_column])
     train_df.rename(
-        columns={utterance_column: pipeline_constants.TEXT, label_column: pipeline_constants.LABELS},
+        columns={
+            utterance_column: pipeline_constants.TEXT,
+            label_column: pipeline_constants.LABELS,
+        },
         inplace=True,
     )
     model = ClassificationModel(

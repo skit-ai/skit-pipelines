@@ -1,5 +1,6 @@
 import kfp
 from kfp.components import InputPath, OutputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -7,10 +8,11 @@ def create_features(
     data_path: InputPath(str),
     use_state: bool,
     output_path: OutputPath(str),
-    mode: str = pipeline_constants.TRAIN
+    mode: str = pipeline_constants.TRAIN,
 ):
     import pandas as pd
     from loguru import logger
+
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_features.utils import row2features
 
@@ -29,6 +31,5 @@ def create_features(
 
 
 create_features_op = kfp.components.create_component_from_func(
-    create_features,
-    base_image=pipeline_constants.BASE_IMAGE
+    create_features, base_image=pipeline_constants.BASE_IMAGE
 )

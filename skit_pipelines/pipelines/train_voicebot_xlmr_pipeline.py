@@ -2,14 +2,13 @@ import kfp
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
-    fetch_tagged_dataset_op,
-    download_from_s3_op,
-    train_xlmr_voicebot_op,
     create_features_op,
+    create_true_intent_labels_op,
     create_utterances_op,
-    create_true_intent_labels_op
+    download_from_s3_op,
+    fetch_tagged_dataset_op,
+    train_xlmr_voicebot_op,
 )
-
 
 UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -38,13 +37,13 @@ def run_fetch_tagged_dataset(
 
     # Normalize utterance column
     df = create_features_op(df.outputs["output"], use_state)
- 
+
     # train model
     train_xlmr_voicebot_op(
         df.outputs["output"],
         utterance_column=UTTERANCES,
         label_column=INTENT_Y,
         model_type=model_type,
-        model_name=model_name
+        model_name=model_name,
     )
     # produce test set metrics.

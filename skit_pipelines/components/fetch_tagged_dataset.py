@@ -12,7 +12,7 @@ def fetch_tagged_dataset(
     task_type: str = "conversation",
     timezone: str = "Asia/Kolkata",
     start_date: Optional[str] = None,
-    end_date: Optional[str] = None
+    end_date: Optional[str] = None,
 ):
     import time
 

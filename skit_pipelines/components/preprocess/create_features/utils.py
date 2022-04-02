@@ -4,7 +4,6 @@ import pydash as py_
 
 from skit_pipelines import constants as pipeline_constants
 
-
 UTTERANCES = pipeline_constants.UTTERANCES
 ALTERNATIVES = pipeline_constants.ALTERNATIVES
 STATE = pipeline_constants.STATE
@@ -31,10 +30,13 @@ def featurize_state(state):
 
 def row2features(use_state: bool):
     def featurize(row):
-        data            = json.loads(row.data)
-        utterances      = data.get(UTTERANCES) or data.get(ALTERNATIVES)
-        utterances      = json.loads(utterances) if isinstance(utterances, str) else utterances
-        feat_utterance  = featurize_utterances(utterances)
-        feat_state      = featurize_state(data.get(STATE))
+        data = json.loads(row.data)
+        utterances = data.get(UTTERANCES) or data.get(ALTERNATIVES)
+        utterances = (
+            json.loads(utterances) if isinstance(utterances, str) else utterances
+        )
+        feat_utterance = featurize_utterances(utterances)
+        feat_state = featurize_state(data.get(STATE))
         return f"{feat_utterance} {feat_state}" if use_state else f"{feat_utterance}"
+
     return featurize

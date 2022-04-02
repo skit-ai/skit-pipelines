@@ -1,6 +1,6 @@
 import json
-from skit_pipelines import constants as pipeline_constants
 
+from skit_pipelines import constants as pipeline_constants
 
 UTTERANCES = pipeline_constants.UTTERANCES
 ALTERNATIVES = pipeline_constants.ALTERNATIVES
