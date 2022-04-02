@@ -15,5 +15,18 @@ DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
 VOICE_BOT_XLMR_LABEL_COL = ""
 TEXT = "text"
+
+TRAIN = "train"
+TEST = "test"
 LABELS = "labels"
 CSV_FILE = ".csv"
+UTTERANCES = "utterances"
+ALTERNATIVES = "alternatives"
+TAG = "tag"
+INTENT_X = "intent_x"
+INTENT_Y = "intent_y"
+STATE = "state"
+
+START_TOKEN = "<s>"
+END_TOKEN = "</s>"
+TRANSCRIPT = "transcript"
