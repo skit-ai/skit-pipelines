@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.18
+
+- [x] update: components isolated from helper functions.
+
 ## 0.1.17
 
 - [x] add: component to create utterance column `utterances`.
