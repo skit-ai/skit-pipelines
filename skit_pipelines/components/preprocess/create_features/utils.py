@@ -21,7 +21,7 @@ def get_transcript(utterance):
 
 def featurize_utterances(utterances):
     transcripts = map(get_transcript, py_.flatten(utterances))
-    feature_as_str = " {END_TOKEN} {START_TOKEN} ".join(transcripts)
+    feature_as_str = f" {END_TOKEN} {START_TOKEN} ".join(transcripts)
     return f"{START_TOKEN} {feature_as_str} {END_TOKEN}"
 
 
