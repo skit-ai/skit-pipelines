@@ -20,11 +20,6 @@ INTENT_Y = pipeline_constants.INTENT_Y
     description="fetches tagged dataset from tog with respective arguments",
 )
 def run_fetch_tagged_dataset(
-    job_id: int,
-    task_type: str,
-    timezone: str,
-    start_date: str,
-    end_date: str,
     s3_path: str,
     use_state: bool = True,
     model_type: str = "xlmroberta",
