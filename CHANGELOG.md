@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.22
+
+- [x] add: Conda and Cuda within base docker image.
+
 ## 0.1.21
 
 - [x] add: Cuda installation within Dockerfile.
