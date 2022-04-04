@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: all test build
+.PHONY: all test pipes
 
 SOURCE_FILES := $(shell find skit_pipelines/pipelines ! -name "__init__.py" -name "*.py" -execdir basename {} .py ';')
 
@@ -14,11 +14,11 @@ lint:
 test: ## Run the tests.conf
 	@pytest --cov=skit_pipelines --cov-report html --durations=5 --cov-report term:skip-covered tests/
 
-build:
+pipes:
 	@for file in $(SOURCE_FILES); do \
 		echo "Building skit_pipelines/pipelines/$$file.py"; \
 		touch build/$$file.yaml; \
 		source env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
 
-all: lint build
+all: lint pipes
