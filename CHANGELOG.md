@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.23
+
+- [x] update: trained models upload to s3.
+
 ## 0.1.22
 
 - [x] add: Conda and Cuda within base docker image.
