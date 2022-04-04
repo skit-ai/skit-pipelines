@@ -1,12 +1,12 @@
-FROM 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/base-py:master
+ARG PROJECT_ID
+FROM ${PROJECT_ID}.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/base-py:master
 
 WORKDIR /home/kfp
 
 RUN apt-get update \
-    && apt-get install -y wget gcc libpq-dev nvidia-cuda-toolkit \
+    && apt-get install -y wget gcc libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo nvcc --version
 RUN pip install poetry simpletransformers==0.63.6 kfp==1.8.11
 RUN poetry config virtualenvs.create false
 
