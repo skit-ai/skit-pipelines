@@ -7,6 +7,8 @@ RUN apt-get update \
     && apt-get install -y wget gcc libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+RUN conda activate trainer
+
 RUN pip install poetry simpletransformers==0.63.6 kfp==1.8.11
 RUN poetry config virtualenvs.create false
 
