@@ -24,26 +24,26 @@ def run_fetch_tagged_dataset(
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
 ):
-    df = download_from_s3_op(s3_path)
+    tagged_data_op = download_from_s3_op(s3_path)
     # preprocess the file
 
     # Create true label column
-    df = create_utterances_op(df.outputs["output"])
+    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"])
 
     # Create utterance column
-    df = create_true_intent_labels_op(df.outputs["output"])
+    preprocess_data_op = create_true_intent_labels_op(preprocess_data_op.outputs["output"])
 
     # Create train and test splits
 
     # Normalize utterance column
-    df = create_features_op(df.outputs["output"], use_state)
+    preprocess_data_op = create_features_op(preprocess_data_op.outputs["output"], use_state)
 
-    # train model
-    train_xlmr_voicebot_op(
-        df.outputs["output"],
+    train_op = train_xlmr_voicebot_op(
+        preprocess_data_op.outputs["output"],
         utterance_column=UTTERANCES,
         label_column=INTENT_Y,
         model_type=model_type,
         model_name=model_name,
     )
     # produce test set metrics.
+    train_op.set_gpu_limit(1)
