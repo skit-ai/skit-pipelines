@@ -6,12 +6,13 @@ from skit_pipelines.components import (
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
-    fetch_tagged_dataset_op,
+    upload2s3_op,
     train_xlmr_voicebot_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
+BUCKET = pipeline_constants.BUCKET
 
 
 @kfp.dsl.pipeline(
@@ -20,9 +21,15 @@ INTENT_Y = pipeline_constants.INTENT_Y
 )
 def run_fetch_tagged_dataset(
     s3_path: str,
+    org_id: int,
     use_state: bool = True,
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
+    num_train_epochs: int = 1,
+    use_early_stopping: bool = False,
+    early_stopping_patience: int = 3,
+    early_stopping_delta: float = 0,
+    max_seq_length: int = 128
 ):
     tagged_data_op = download_from_s3_op(s3_path)
     # preprocess the file
@@ -44,6 +51,12 @@ def run_fetch_tagged_dataset(
         label_column=INTENT_Y,
         model_type=model_type,
         model_name=model_name,
+        num_train_epochs=num_train_epochs,
+        use_early_stopping=use_early_stopping,
+        early_stopping_patience=early_stopping_patience,
+        early_stopping_delta=early_stopping_delta,
+        max_seq_length=max_seq_length,
     )
     # produce test set metrics.
     train_op.set_gpu_limit(1)
+    upload2s3_op(train_op.outputs["output"], org_id, "intent_classifier_xlmr", BUCKET)
