@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.21
+
+- [x] add: Cuda installation within Dockerfile.
+- [x] fix: Intent classifier training component.
+
 ## 0.1.20
 
 - [x] fix: intent classifier featurizer fixed to apply row-wise transformation.
