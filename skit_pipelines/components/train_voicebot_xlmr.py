@@ -1,15 +1,21 @@
 import kfp
-from kfp.components import InputPath
+from kfp.components import InputPath, OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
 def train_xlmr_voicebot(
     data_path: InputPath(str),
+    model_path: OutputPath(str),
     utterance_column: str,
     label_column: str,
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
+    num_train_epochs: int = 1,
+    use_early_stopping: bool = False,
+    early_stopping_patience: int = 3,
+    early_stopping_delta: float = 0,
+    max_seq_length: int = 128
 ):
     # HACK: This code should go as soon as this issue is fixed:
     # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
@@ -20,7 +26,6 @@ def train_xlmr_voicebot(
 
     setattr(collections, "Iterable", Iterable)
     # ----------------------------------------------
-
     from simpletransformers.classification import (
         ClassificationArgs,
         ClassificationModel,
@@ -28,12 +33,22 @@ def train_xlmr_voicebot(
     from sklearn import preprocessing
 
     from skit_pipelines import constants as pipeline_constants
-    # train model
 
     train_df = pd.read_csv(data_path)
     labelencoder = preprocessing.LabelEncoder()
     encoder = labelencoder.fit(train_df[label_column])
-    model_args = ClassificationArgs(num_train_epochs=1)
+    model_args = ClassificationArgs(
+        num_train_epochs=num_train_epochs,
+        save_best_model=True,
+        use_multiprocessing=False,
+        max_seq_length=max_seq_length,
+        output_dir=model_path,
+        best_model_dir=f"{model_path}/best",
+        overwrite_output_dir=True,
+        use_early_stopping=use_early_stopping,
+        early_stopping_patience=early_stopping_patience,
+        early_stopping_delta=early_stopping_delta,
+    )
 
     train_df[pipeline_constants.LABELS] = encoder.transform(train_df[label_column])
     train_df.rename(
