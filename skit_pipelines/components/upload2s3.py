@@ -1,6 +1,5 @@
 import kfp
 from kfp.components import InputPath
-from numpy import full
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -23,7 +22,7 @@ def upload2s3(
 
     if os.path.isfile(path_on_disk):
         upload_path = create_file_name(org_id, file_type, ext)
-        s3_resource.upload_file(path_on_disk, bucket, )
+        s3_resource.upload_file(path_on_disk, bucket, upload_path)
     elif os.path.isdir(path_on_disk):
         upload_path = create_dir_name(org_id, file_type)
         for full_file_path in glob(f"{path_on_disk}/**", recursive=True):

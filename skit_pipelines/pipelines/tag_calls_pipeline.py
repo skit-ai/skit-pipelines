@@ -5,6 +5,7 @@ from skit_pipelines.components import (
     org_auth_token_op,
     slack_notification_op,
     tag_calls_op,
+    get_value_op
 )
 
 
@@ -19,7 +20,9 @@ def run_tag_calls(org_id: int, job_id: int, s3_path: str):
         job_id=job_id,
         token=auth_token.output,
     )
-    df_size, errors = tag_calls_output.outputs
+    df_size = get_value_op('df_size', tag_calls_output.outputs["output_json"])
+    errors = get_value_op('errors', tag_calls_output.outputs["output_json"])
+    
     notification_text = (
         f"Uploaded {s3_path} ({df_size}, {org_id=}) for tagging to {job_id=}."
     )

@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def fetch_calls(
     *,
-    org_id: int,
+    client_id: int,
     start_date: str,
     lang: str,
     end_date: Optional[str] = None,
@@ -51,7 +51,7 @@ def fetch_calls(
 
     start = time.time()
     maybe_df = calls.sample(
-        org_id,
+        client_id,
         start_date,
         end_date,
         lang,
