@@ -36,7 +36,6 @@ def upload2s3(
     return s3_path
 
 
-
 upload2s3_op = kfp.components.create_component_from_func(
     upload2s3, base_image=pipeline_constants.BASE_IMAGE
 )
