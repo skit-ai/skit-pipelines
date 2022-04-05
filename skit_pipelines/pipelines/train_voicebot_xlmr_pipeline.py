@@ -59,4 +59,4 @@ def run_fetch_tagged_dataset(
     )
     # produce test set metrics.
     train_op.set_gpu_limit(1)
-    upload2s3_op(train_op.outputs["output"], org_id, "intent_classifier_xlmr", BUCKET)
+    upload2s3_op(train_op.outputs["model"], org_id, "intent_classifier_xlmr", BUCKET)
