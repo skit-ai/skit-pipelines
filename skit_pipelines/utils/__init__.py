@@ -2,8 +2,6 @@ import os
 from datetime import datetime
 from typing import Dict
 
-from isort import file
-
 
 def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
     return os.path.join(
