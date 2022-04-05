@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.24
+
+- [x] update: XLMR intent classifier training pipeline pushes models to s3.
+
 ## 0.1.23
 
 - [x] update: trained models upload to s3.
