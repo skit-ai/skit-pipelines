@@ -6,7 +6,7 @@ from kfp.components import InputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def get_value(
+def read_json_key(
     req_value: str, input_file: InputPath(str)
 ) -> Any:
 
@@ -20,8 +20,10 @@ def get_value(
             serialized_obj = json.load(j_read)
     
     logger.info(f"{serialized_obj=}")
-    return serialized_obj.get(req_value)
+    val = serialized_obj.get(req_value)
+    logger.info(f"requested key: {req_value} = {val}")
+    return val
 
-get_value_op = kfp.components.create_component_from_func(
-    get_value, base_image=pipeline_constants.BASE_IMAGE
+read_json_key_op = kfp.components.create_component_from_func(
+    read_json_key, base_image=pipeline_constants.BASE_IMAGE
 )
