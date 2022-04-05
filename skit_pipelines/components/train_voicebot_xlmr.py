@@ -45,6 +45,8 @@ def train_xlmr_voicebot(
         output_dir=model_path,
         best_model_dir=f"{model_path}/best",
         overwrite_output_dir=True,
+        save_eval_checkpoints=False,
+        save_model_every_epoch=False,
         use_early_stopping=use_early_stopping,
         early_stopping_patience=early_stopping_patience,
         early_stopping_delta=early_stopping_delta,
