@@ -7,6 +7,7 @@ from skit_pipelines.components import (
     upload2s3_op,
     org_auth_token_op,
     tag_calls_op,
+    get_value_op
 )
 
 
@@ -61,17 +62,18 @@ def run_fetch_n_tag_calls(
         job_id=job_id,
         token=auth_token.output,
     )
-    df_size, errors = tag_calls_output.outputs
+    df_size = get_value_op('df_size', tag_calls_output.outputs["output_json"])
+    errors = get_value_op('errors', tag_calls_output.outputs["output_json"])
     
-    notification_text = (
+    
+    with kfp.dsl.Condition(errors.output != [], "errors") as check1:
+        notification_text = f" Errors: {errors=}"
+    with kfp.dsl.Condition(errors.output == [], "errors") as check2:
+        notification_text = (
         f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
         Uploaded {s3_upload} ({df_size}, {org_id=}) for tagging to {job_id=}."""
     )
-    print(tag_calls_output.output)
-    with kfp.dsl.Condition(tag_calls_output.output):
-        notification_text += f" Errors: {errors=}"
-        
-    task_no_cache = slack_notification_op(notification_text, "").after(tag_calls_output)
+    task_no_cache = slack_notification_op(notification_text, "").after(check1, check2)
     task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
