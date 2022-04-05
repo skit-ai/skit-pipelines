@@ -14,10 +14,7 @@ def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
 
 def create_dir_name(org_id: int, dir_type: str) -> str:
     return os.path.join(
-        "project",
-        str(org_id),
-        datetime.now().strftime("%Y-%m-%d"),
-        dir_type
+        "project", str(org_id), datetime.now().strftime("%Y-%m-%d"), dir_type
     )
 
 

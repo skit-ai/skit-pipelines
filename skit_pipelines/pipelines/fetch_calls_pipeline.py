@@ -1,9 +1,6 @@
 import kfp
 
-from skit_pipelines.components import (
-    fetch_calls_op,
-    slack_notification_op,
-)
+from skit_pipelines.components import fetch_calls_op, slack_notification_op
 
 
 @kfp.dsl.pipeline(
@@ -38,7 +35,7 @@ def run_fetch_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
     )
-    
+
     notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}."
     task_no_cache = slack_notification_op(notification_text, s3_path=calls.output)
     task_no_cache.execution_options.caching_strategy.max_cache_staleness = (

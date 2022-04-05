@@ -2,10 +2,10 @@ import kfp
 
 from skit_pipelines.components import (
     fetch_calls_op,
-    slack_notification_op,
     org_auth_token_op,
+    read_json_key_op,
+    slack_notification_op,
     tag_calls_op,
-    read_json_key_op
 )
 
 
@@ -50,16 +50,16 @@ def run_fetch_n_tag_calls(
         job_id=job_id,
         token=auth_token.output,
     )
-    df_size = read_json_key_op('df_size', tag_calls_output.outputs["output_json"])
+    df_size = read_json_key_op("df_size", tag_calls_output.outputs["output_json"])
     df_size.display_name = "get-df-size"
-    errors = read_json_key_op('errors', tag_calls_output.outputs["output_json"])
+    errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
     errors.display_name = "get-any-errors"
-    
-    notification_text = (
-        f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
+
+    notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
         Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}."""
-    )
-    with kfp.dsl.Condition(errors.output != [], "check_any_errors").after(errors) as check1:
+    with kfp.dsl.Condition(errors.output != [], "check_any_errors").after(
+        errors
+    ) as check1:
         notification_text += f" Errors: {errors=}"
 
     task_no_cache = slack_notification_op(notification_text, "").after(check1)

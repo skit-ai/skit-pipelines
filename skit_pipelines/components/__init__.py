@@ -10,7 +10,7 @@ from skit_pipelines.components.preprocess.create_true_intent_column import (
 from skit_pipelines.components.preprocess.create_utterance_column import (
     create_utterances_op,
 )
+from skit_pipelines.components.read_json_key import read_json_key_op
 from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_xlmr_voicebot_op
-from skit_pipelines.components.upload2s3 import upload2s3_op, upload2s3
-from skit_pipelines.components.read_json_key import read_json_key_op
+from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op

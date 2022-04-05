@@ -19,10 +19,10 @@ def fetch_calls(
     use_case: Optional[str] = None,
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
-    asr_provider: Optional[str] = None
+    asr_provider: Optional[str] = None,
 ) -> str:
-    import time
     import tempfile
+    import time
     from datetime import datetime
 
     from loguru import logger
@@ -30,9 +30,9 @@ def fetch_calls(
     from skit_calls import constants as const
     from skit_calls import utils
     from skit_calls.cli import process_date_filters, to_datetime, validate_date_ranges
-    
-    from skit_pipelines.components import upload2s3
+
     from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.components import upload2s3
 
     utils.configure_logger(7)
 
@@ -71,7 +71,7 @@ def fetch_calls(
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
-    
+
     s3_path = upload2s3(
         file_path,
         org_id=client_id,

@@ -16,8 +16,9 @@ def upload2s3(
 
     import boto3
     from loguru import logger
-    from skit_pipelines.utils import create_file_name, create_dir_name
-    
+
+    from skit_pipelines.utils import create_dir_name, create_file_name
+
     s3_resource = boto3.client("s3")
 
     if os.path.isfile(path_on_disk):
@@ -29,7 +30,9 @@ def upload2s3(
             if not os.path.isfile(full_file_path):
                 continue
             _, file_path = os.path.split(full_file_path)
-            s3_resource.upload_file(full_file_path, bucket, os.path.join(upload_path, file_path))
+            s3_resource.upload_file(
+                full_file_path, bucket, os.path.join(upload_path, file_path)
+            )
 
     s3_path = f"s3://{bucket}/{upload_path}"
     logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
