@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import kfp
 from kfp.components import InputPath, OutputPath
 
@@ -26,7 +24,7 @@ def tag_calls(
     
     if os.path.isfile(input_file):
         with open(input_file, "r") as f:
-            input_file = f.read(input_file)
+            input_file = f.read()
             
     with open(token, "r") as reader:
         token = reader.read()

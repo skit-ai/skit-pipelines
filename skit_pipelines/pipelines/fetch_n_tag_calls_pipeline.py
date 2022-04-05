@@ -1,13 +1,11 @@
 import kfp
 
-from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_calls_op,
     slack_notification_op,
-    upload2s3_op,
     org_auth_token_op,
     tag_calls_op,
-    get_value_op
+    read_json_key_op
 )
 
 
@@ -45,35 +43,26 @@ def run_fetch_n_tag_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
     )
-    s3_upload = upload2s3_op(
-        calls.outputs["output_string"],
-        org_id=client_id,
-        file_type=f"{lang}-untagged",
-        bucket=pipeline_constants.BUCKET,
-        ext=".csv",
-    )
-    s3_upload.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-    
+
     auth_token = org_auth_token_op(org_id)
     tag_calls_output = tag_calls_op(
-        input_file=s3_upload.output,
+        input_file=calls.output,
         job_id=job_id,
         token=auth_token.output,
     )
-    df_size = get_value_op('df_size', tag_calls_output.outputs["output_json"])
-    errors = get_value_op('errors', tag_calls_output.outputs["output_json"])
+    df_size = read_json_key_op('df_size', tag_calls_output.outputs["output_json"])
+    df_size.display_name = "get-df-size"
+    errors = read_json_key_op('errors', tag_calls_output.outputs["output_json"])
+    errors.display_name = "get-any-errors"
     
-    
-    with kfp.dsl.Condition(errors.output != [], "errors") as check1:
-        notification_text = f" Errors: {errors=}"
-    with kfp.dsl.Condition(errors.output == [], "errors") as check2:
-        notification_text = (
+    notification_text = (
         f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {s3_upload} ({df_size}, {org_id=}) for tagging to {job_id=}."""
+        Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}."""
     )
-    task_no_cache = slack_notification_op(notification_text, "").after(check1, check2)
+    with kfp.dsl.Condition(errors.output != [], "check_any_errors").after(errors) as check1:
+        notification_text += f" Errors: {errors=}"
+
+    task_no_cache = slack_notification_op(notification_text, "").after(check1)
     task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
