@@ -33,7 +33,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: docker build
-          --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }}
+          --build-arg ECR_REGISTRY=$ECR_REGISTRY
+          --build-arg ECR_REPOSITORY_ROOT=${{ secrets.ECR_REPOSITORY_ROOT }}
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
           --build-arg DB_HOST=${{ secrets.DB_HOST }}
           --build-arg DB_PORT=${{ secrets.DB_PORT }}
