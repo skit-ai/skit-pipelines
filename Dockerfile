@@ -1,6 +1,6 @@
 ARG ECR_REGISTRY
 ARG ECR_REPOSITORY_ROOT
-FROM ${ECR_REGISTRY}/${ECR_REPOSITORY_ROOT}}/ai/kubeflow/base-py:master
+FROM "${ECR_REGISTRY}/${ECR_REPOSITORY_ROOT}/ai/kubeflow/base-py:master"
 
 WORKDIR /home/kfp
 
