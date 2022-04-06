@@ -6,8 +6,8 @@ from skit_pipelines.components import (
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
-    upload2s3_op,
     train_xlmr_voicebot_op,
+    upload2s3_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -29,7 +29,7 @@ def run_fetch_tagged_dataset(
     use_early_stopping: bool = False,
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,
-    max_seq_length: int = 128
+    max_seq_length: int = 128,
 ):
     tagged_data_op = download_from_s3_op(s3_path)
     # preprocess the file
@@ -38,12 +38,16 @@ def run_fetch_tagged_dataset(
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"])
 
     # Create utterance column
-    preprocess_data_op = create_true_intent_labels_op(preprocess_data_op.outputs["output"])
+    preprocess_data_op = create_true_intent_labels_op(
+        preprocess_data_op.outputs["output"]
+    )
 
     # Create train and test splits
 
     # Normalize utterance column
-    preprocess_data_op = create_features_op(preprocess_data_op.outputs["output"], use_state)
+    preprocess_data_op = create_features_op(
+        preprocess_data_op.outputs["output"], use_state
+    )
 
     train_op = train_xlmr_voicebot_op(
         preprocess_data_op.outputs["output"],

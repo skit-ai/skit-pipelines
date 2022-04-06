@@ -15,7 +15,7 @@ def train_xlmr_voicebot(
     use_early_stopping: bool = False,
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,
-    max_seq_length: int = 128
+    max_seq_length: int = 128,
 ):
     # HACK: This code should go as soon as this issue is fixed:
     # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386

@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def fetch_calls(
     *,
-    org_id: int,
+    client_id: int,
     start_date: str,
     lang: str,
     end_date: Optional[str] = None,
@@ -20,8 +20,8 @@ def fetch_calls(
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
-    output_string: OutputPath(str),
-):
+) -> str:
+    import tempfile
     import time
     from datetime import datetime
 
@@ -30,6 +30,9 @@ def fetch_calls(
     from skit_calls import constants as const
     from skit_calls import utils
     from skit_calls.cli import process_date_filters, to_datetime, validate_date_ranges
+
+    from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.components import upload2s3
 
     utils.configure_logger(7)
 
@@ -51,7 +54,7 @@ def fetch_calls(
 
     start = time.time()
     maybe_df = calls.sample(
-        org_id,
+        client_id,
         start_date,
         end_date,
         lang,
@@ -66,7 +69,17 @@ def fetch_calls(
         on_disk=False,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
-    maybe_df.to_csv(output_string, index=False)
+    _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
+    maybe_df.to_csv(file_path, index=False)
+
+    s3_path = upload2s3(
+        file_path,
+        org_id=client_id,
+        file_type=f"{lang}-untagged",
+        bucket=pipeline_constants.BUCKET,
+        ext=".csv",
+    )
+    return s3_path
 
 
 fetch_calls_op = kfp.components.create_component_from_func(
