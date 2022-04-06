@@ -1,5 +1,6 @@
-ARG PROJECT_ID
-FROM ${PROJECT_ID}.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/base-py:master
+ARG ECR_REGISTRY
+ARG ECR_REPOSITORY_ROOT
+FROM ${ECR_REGISTRY}/${ECR_REPOSITORY_ROOT}}/ai/kubeflow/base-py:master
 
 WORKDIR /home/kfp
 
