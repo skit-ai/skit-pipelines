@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.25
+
+- [x] add: pipeline to fetch and tag a dataset.
+- [x] fix: support legacy dataframes missing utterance columns.
+
 ## 0.1.24
 
 - [x] update: XLMR intent classifier training pipeline pushes models to s3.
