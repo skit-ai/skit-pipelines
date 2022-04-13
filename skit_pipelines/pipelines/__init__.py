@@ -1,0 +1,1 @@
+from skit_pipelines.pipelines.fetch_calls_pipeline import run_fetch_calls

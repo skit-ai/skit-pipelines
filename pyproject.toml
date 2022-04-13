@@ -15,6 +15,10 @@ skit-auth = "^0.1.3"
 skit-calls = "0.2.7"
 skit-labels = "0.3.18"
 torch = "^1.11.0"
+fastapi = "^0.75.1"
+uvicorn = {extras = ["standard"], version = "^0.17.6"}
+selenium = "^4.1.3"
+webdriver-manager = "^3.5.4"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"

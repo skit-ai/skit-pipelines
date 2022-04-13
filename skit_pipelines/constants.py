@@ -30,3 +30,36 @@ STATE = "state"
 START_TOKEN = "<s>"
 END_TOKEN = "</s>"
 TRANSCRIPT = "transcript"
+
+FETCH_CALLS_NAME = "fetch-calls"
+DEFAULT_FETCH_CALLS_API_RUN = "default-fetch-calls-run"
+
+TAG_CALLS_NAME = "tag-calls"
+
+
+KF_USERNAME = os.environ["KF_USERNAME"]
+KF_PASSWORD = os.environ["KF_PASSWORD"]
+
+USERNAME_ELEMENT_ID = 'signInFormUsername'
+PASSWORD_ELEMENT_ID = 'signInFormPassword'
+SUBMIT_BUTTON_ID = 'signInSubmitButton'
+
+USERNAME_XPATH = f"(//input[@id='{USERNAME_ELEMENT_ID}'])[2]"
+PASSWORD_XPATH = f"(//input[@id='{PASSWORD_ELEMENT_ID}'])[2]"
+SUBMIT_XPATH = f"(//input[@name='{SUBMIT_BUTTON_ID}'])[2]"
+
+NAME = "name"
+VALUE = "value"
+DOMAIN = "domain"
+COOKIES_PATH = "/tmp/kf_cookies.json"
+KUBEFLOW_GATEWAY_ENDPOINT = os.environ["KUBEFLOW_GATEWAY_ENDPOINT"]
+COOKIE_0="AWSELBAuthSessionCookie-0"
+COOKIE_1="AWSELBAuthSessionCookie-1"
+COOKIE_DICT = {
+    COOKIE_0: None,
+    COOKIE_1: None
+}
+PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
+
+def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
+    return f"{COOKIE_0}={cookie_dict.get(COOKIE_0)};{COOKIE_1}={cookie_dict.get(COOKIE_1)}"
