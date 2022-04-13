@@ -17,7 +17,9 @@ def simulate_selenium_connection(username, password) -> List[Dict[str, Any]]:
 
     options = ChromeOptions()
     options.add_argument('--window-size=1920,1080')
+    options.add_argument('--no-sandbox')
     options.add_argument('--headless')
+    options.add_argument('--disable-dev-shm-usage')
 
     driver = webdriver.Chrome(service=s, options=options)
     driver.maximize_window()
