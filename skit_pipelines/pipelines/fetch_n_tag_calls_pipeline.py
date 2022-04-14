@@ -28,6 +28,7 @@ def run_fetch_n_tag_calls(
     asr_provider: str,
     call_quantity: int = 200,
     call_type: str = "inbound",
+    notify: bool = False
 ):
     calls = fetch_calls_op(
         client_id=client_id,
@@ -56,13 +57,10 @@ def run_fetch_n_tag_calls(
     errors.display_name = "get-any-errors"
 
     notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}."""
-    with kfp.dsl.Condition(errors.output != [], "check_any_errors").after(
-        errors
-    ) as check1:
-        notification_text += f" Errors: {errors=}"
-
-    task_no_cache = slack_notification_op(notification_text, "").after(check1)
-    task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
+        Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}.\nErrors: {getattr(errors, 'output')}"""
+    
+    with kfp.dsl.Condition(notify == True, "notify").after(errors) as check1:
+        task_no_cache = slack_notification_op(notification_text, "")
+        task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )

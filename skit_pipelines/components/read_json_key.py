@@ -21,7 +21,7 @@ def read_json_key(req_value: str, input_file: InputPath(str)) -> Any:
     logger.info(f"{serialized_obj=}")
     val = serialized_obj.get(req_value)
     logger.info(f"requested key: {req_value} = {val}")
-    return val
+    return val if val else None
 
 
 read_json_key_op = kfp.components.create_component_from_func(

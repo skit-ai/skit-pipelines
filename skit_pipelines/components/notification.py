@@ -16,6 +16,7 @@ def slack_notification(message: str, s3_path: str, channel: str | None = None) -
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.utils import SlackBlockFactory
 
+    logger.info(f"{message=}")
     channel = channel or pipeline_constants.DEFAULT_CHANNEL
 
     slack_message_blocks = (

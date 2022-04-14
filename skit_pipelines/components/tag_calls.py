@@ -1,3 +1,4 @@
+from typing import List, Any
 import kfp
 from kfp.components import InputPath, OutputPath
 
@@ -40,6 +41,7 @@ def tag_calls(
         json.dump({"errors": errors, "df_size": df_size}, writer, indent=4)
     logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
     logger.info(f"{df_size=} rows in the dataset")
+    logger.info(f"{errors=}")
 
 
 tag_calls_op = kfp.components.create_component_from_func(
