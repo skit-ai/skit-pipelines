@@ -35,6 +35,7 @@ FETCH_CALLS_NAME = "fetch-calls"
 DEFAULT_FETCH_CALLS_API_RUN = "default-fetch-calls-run"
 
 TAG_CALLS_NAME = "tag-calls"
+DEFAULT_TAG_CALLS_API_RUN = "default-tag-calls-run"
 
 
 KF_USERNAME = os.environ["KF_USERNAME"]

@@ -1,29 +1,46 @@
 import json
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel
+from typing import Any, Dict, List
+from pydantic import BaseModel, validator
 
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 import skit_pipelines.constants as const
 
 
-class FetchCallSchema(BaseModel):
+class BasePayloadSchema(BaseModel):
+    @validator('*', pre=True)
+    def transform_none(cls, value):
+        if value is None:
+            return ""
+        return value
+        
+
+class FetchCallSchema(BasePayloadSchema):
     """
     Fetch Calls schema
     """
     client_id: int
     start_date: str
     lang: str
-    end_date: Optional[str] = None
+    end_date: str | None = ""
     call_quantity: int = 200
     call_type: str = "inbound"
-    ignore_callers: Optional[str] = None
-    reported: Optional[str] = None
-    use_case: Optional[str] = None
-    flow_name: Optional[str] = None
-    min_duration: Optional[str] = None
-    asr_provider: Optional[str] = None
-    notify: Optional[bool] = False
+    ignore_callers: str | None = ""
+    reported: str | None = ""
+    use_case: str | None = ""
+    flow_name: str | None = ""
+    min_duration: str | None = ""
+    asr_provider: str | None = ""
+    notify: bool | None = False
     
+
+class TagCallSchema(BasePayloadSchema):
+    """
+    Tag Calls Schema
+    """
+    org_id: int
+    job_id: int
+    s3_path: str
+    notify: str | None = False
     
 class ParseRunResponse:
     """
@@ -41,7 +58,7 @@ class ParseRunResponse:
         meta: Dict[str, Any] = workflow_nodes["metadata"]
         name: str = meta["name"]
         self.namespace: str = meta['namespace']
-        success: bool = workflow_nodes["status"]["phase"] == "Succeeded"
+        self.success: bool = workflow_nodes["status"]["phase"] == "Succeeded"
         status_nodes: Dict[str, Dict[str, Any]] = workflow_nodes["status"]["nodes"]
         
         target_node: Dict[str, Any] = [node for node in status_nodes.values() if node["displayName"] == self.display_name][0]
