@@ -31,6 +31,9 @@ START_TOKEN = "<s>"
 END_TOKEN = "</s>"
 TRANSCRIPT = "transcript"
 
+MULTI_USER = "multi_user"
+KFP_RUN_FN = "create_run_from_pipeline_func"
+
 FETCH_CALLS_NAME = "fetch-calls"
 DEFAULT_FETCH_CALLS_API_RUN = "default-fetch-calls-run"
 
@@ -64,3 +67,6 @@ PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
 
 def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
     return f"{COOKIE_0}={cookie_dict.get(COOKIE_0)};{COOKIE_1}={cookie_dict.get(COOKIE_1)}"
+
+def GET_RUN_URL(namespace, id):
+    return f"{PIPELINE_HOST_URL}/?ns={namespace}#/runs/details/{id}"
