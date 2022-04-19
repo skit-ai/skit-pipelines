@@ -1,14 +1,12 @@
 import kfp
 import kfp_server_api
 from loguru import logger
+import asyncio
+from aiokafka import AIOKafkaProducer
 
-from skit_pipelines.api import app
-from skit_pipelines.api.models import (
-    FetchCallSchema,
-    TagCallSchema,
-    ParseRunResponse
-)
-from skit_pipelines.api.custom_responses import basic_response, custom_response
+from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
+
+from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
 from skit_pipelines.pipelines import (
     run_fetch_calls,
     run_tag_calls
@@ -19,13 +17,10 @@ import skit_pipelines.constants as const
 
 KF_CLIENT: kfp.Client
 
-@app.exception_handler(kfp_server_api.ApiException)
-async def kfp_api_exception_handler(request, exc):
-    return custom_response(
-        status_code=exc.status,
-        message_dict=f"{exc}",
-        status="error",
-    )
+loop = asyncio.get_event_loop()
+aioproducer = AIOKafkaProducer(
+    loop=loop, client_id=const.PROJECT_NAME, bootstrap_servers=const.KAFKA_INSTANCE
+)
 
 
 def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
@@ -38,14 +33,35 @@ def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
     return client_run
 
 
+async def schedule_run_completion(
+    client_resp,
+    namespace: str,
+    component_name: str,
+    payload: models.BaseRequestSchema
+):
+    run_resp: kfp_ApiRunDetail  = await run_in_threadpool(client_resp.wait_for_run_completion)
+    logger.info(f"Pipeline run for {component_name} finished!")
+    parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=component_name)
+    msg = models.statusWiseResponse(parsed_resp)
+    await aioproducer.send(const.KAFKA_TOPIC_MAP[component_name], msg.body)
+    logger.info((f"Results sent to queue."))
+
+
 @app.on_event("startup")
-def startup_event():
+async def startup_event():
     logger.info("Starting Up...")
     logger.info("Initializing kubeflow client.")
     global KF_CLIENT
     KF_CLIENT = kubeflow_login()
+    await aioproducer.start()
     logger.info("Kubeflow client initialized.")
 
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await aioproducer.stop()
+    logger.info("Stopping server...")
+    
 
 @app.get("/")
 def health_check():
@@ -53,7 +69,14 @@ def health_check():
     Get server status health.
     The purpose of this API is to help other people/machines know liveness of the application.
     """
-    return basic_response("Kubeflow pipeline server is up.")
+    KF_CLIENT = kubeflow_login()
+    if KF_CLIENT.get_kfp_healthz().multi_user:
+        return models.customResponse("Kubeflow server communication is up!")
+    else:
+        raise kfp_server_api.ApiException(
+            status=503,
+            reason="Unable to communicate with Kubeflow server..."
+        )
 
 
 @app.get("/{namespace}/pipelines/{pipeline_name}/runs/")
@@ -67,35 +90,17 @@ def get_run_info(
         run_id=run_id
     )
     
-    parsed_resp = ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
-    if parsed_resp.success:
-        return custom_response({
-            "message": "Run completed successfully.",
-            "run_url": parsed_resp.url,
-            "file_path": parsed_resp.data_path,
-            "s3_path": parsed_resp.s3_uri
-        })
-    elif parsed_resp.pending:
-        return custom_response({
-            "message": "Run in progress.",
-            "run_url": parsed_resp.url,
-            "file_path": None,
-            "s3_path": None
-        }, status="pending")
-    else:
-        return custom_response({
-            "message": "Run Failed.",
-            "run_url": parsed_resp.url,
-            "file_path": None,
-            "s3_path": None
-        }, status_code=500, status="error")
+    parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
+    return models.statusWiseResponse(parsed_resp)
 
 
 @app.post("/{namespace}/pipelines/run/fetch-calls/")
-def fetch_calls_req(
+def fetch_calls_req(*,
     namespace: str,
-    payload: FetchCallSchema,
-    run_name: str = const.DEFAULT_FETCH_CALLS_API_RUN
+    payload: models.FetchCallSchema,
+    run_name: str = const.DEFAULT_FETCH_CALLS_API_RUN,
+    component_name: str = const.FETCH_CALLS_NAME,
+    background_tasks: BackgroundTasks
 ):
     run = call_kfp_method(
         pipeline_func=run_fetch_calls,
@@ -103,20 +108,27 @@ def fetch_calls_req(
         namespace=namespace,
         arguments=payload.dict()
     )
-
-    return custom_response({
-        "message": f"{const.FETCH_CALLS_NAME} pipeline run created successfully.",
-        "name": f"{const.FETCH_CALLS_NAME}",
-        "run_id": run.run_id,
-        "run_url": const.GET_RUN_URL(namespace, run.run_id)
-    })
+    background_tasks.add_task(
+        schedule_run_completion,
+        client_resp=run,
+        namespace=namespace,
+        component_name=component_name,
+        payload=payload
+    )
+    return models.successfulCreationResponse(
+        run_id=run.run_id,
+        name=const.FETCH_CALLS_NAME,
+        namespace=namespace
+    )
     
 
 @app.post("/{namespace}/pipelines/run/tag-calls/")
-def tag_calls_req(
+def tag_calls_req(*,
     namespace: str,
-    payload: TagCallSchema,
-    run_name: str = const.DEFAULT_TAG_CALLS_API_RUN
+    payload: models.TagCallSchema,
+    run_name: str = const.DEFAULT_TAG_CALLS_API_RUN,
+    component_name: str = const.FETCH_CALLS_NAME,
+    background_tasks: BackgroundTasks
 ):
     run = call_kfp_method(
         pipeline_func=run_tag_calls,
@@ -124,16 +136,29 @@ def tag_calls_req(
         namespace=namespace,
         arguments=payload.dict()
     )
+    background_tasks.add_task(
+        schedule_run_completion,
+        client_resp=run,
+        namespace=namespace,
+        component_name=component_name,
+        payload=payload
+    )
+    return models.successfulCreationResponse(
+        run_id=run.run_id,
+        name=const.TAG_CALLS_NAME,
+        namespace=namespace
+    )
 
-    return custom_response({
-        "message": f"{const.TAG_CALLS_NAME} pipeline run created successfully.",
-        "name": f"{const.TAG_CALLS_NAME}",
-        "run_id": run.run_id,
-        "run_url": const.GET_RUN_URL(namespace, run.run_id)
-    })
+
+@app.exception_handler(kfp_server_api.ApiException)
+async def kfp_api_exception_handler(request, exc):
+    return models.customResponse(
+        status_code=exc.status,
+        message_dict=f"{exc}",
+        status="error",
+    )
 
 
-#TODO: make a response model schema, refactor failures
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

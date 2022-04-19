@@ -13,6 +13,10 @@ DB_HOST = os.environ["DB_HOST"]
 DB_PORT = os.environ["DB_PORT"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
+
+PROJECT_NAME = "skit-pipelines"
+KAFKA_INSTANCE = os.environ["KAFKA_INSTANCE"]
+
 VOICE_BOT_XLMR_LABEL_COL = ""
 TEXT = "text"
 
@@ -70,3 +74,8 @@ def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
 
 def GET_RUN_URL(namespace, id):
     return f"{PIPELINE_HOST_URL}/?ns={namespace}#/runs/details/{id}"
+
+KAFKA_TOPIC_MAP = {
+ FETCH_CALLS_NAME: "data-pipeline",
+ TAG_CALLS_NAME: "data-pipeline"  
+}
