@@ -73,3 +73,17 @@ Once a new pipeline and its pre-requisite components are ready.
 - This project is based on `python 3.10`. You would require an environment setup for the same. Using [miniconda](https://docs.conda.io/en/latest/miniconda.html) is recommended.
 - make [mac](https://formulae.brew.sh/formula/make)
 - [poetry](https://python-poetry.org/docs/#installation)
+
+
+## Pipelines API Server
+![Architecture](images/kfp-server-api.jpg)
+
+### Start the server
+- Create a file named `env.sh` which will contain all required environment variables and correct `$BASE_IMAGE` configs. Then -
+    ```bash
+    source env.sh
+    ```
+- Run -
+  ```bash
+  docker-compose up
+  ```
