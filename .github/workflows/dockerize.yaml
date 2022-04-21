@@ -50,7 +50,11 @@ jobs:
           --build-arg TOG_TASK_URL=${{ secrets.TOG_TASK_URL }}
           --build-arg SKIT_API_GATEWAY_PASSWORD=${{ secrets.SKIT_API_GATEWAY_PASSWORD }}
           --build-arg SKIT_API_GATEWAY_EMAIL=${{ secrets.SKIT_API_GATEWAY_EMAIL }}
-          --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }} -t $ECR_REPOSITORY .
+          --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
+          --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.KUBEFLOW_GATEWAY_ENDPOINT }}
+          --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
+          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }}
+          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY .
 
       - name: Tag and push images
         env: 

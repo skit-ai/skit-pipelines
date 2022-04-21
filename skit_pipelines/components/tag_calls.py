@@ -1,3 +1,4 @@
+from typing import List, Dict, Any
 import kfp
 from kfp.components import InputPath, OutputPath
 
@@ -11,7 +12,7 @@ def tag_calls(
     token: InputPath(str),
     url: str = None,
     output_json: OutputPath(str),
-):
+) -> Dict[str, Any]:
 
     import json
     import os
@@ -36,10 +37,13 @@ def tag_calls(
     start = time.time()
     errors, df_size = upload_dataset(input_file, url, token, job_id)
     # write to json
+    output_dict = {"errors": errors, "df_size": df_size}
     with open(output_json, "w") as writer:
-        json.dump({"errors": errors, "df_size": df_size}, writer, indent=4)
+        json.dump(output_dict, writer, indent=4)
     logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
     logger.info(f"{df_size=} rows in the dataset")
+    logger.info(f"{errors=}")
+    return output_dict
 
 
 tag_calls_op = kfp.components.create_component_from_func(
