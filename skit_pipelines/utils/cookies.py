@@ -55,7 +55,7 @@ def load_cookies(COOKIES_PATH: str = const.COOKIES_PATH) -> Dict[str, str]:
 
 
 def fetch_latest_cookies(cookie_save_path: str = const.COOKIES_PATH) -> Dict[str, str]:
-    logger.error("Fetching latest cookies...")
+    logger.info("Fetching latest cookies...")
     cookies_resp = simulate_selenium_connection(const.KF_USERNAME, const.KF_PASSWORD)
     cookies = construct_cookie_dict(cookies_resp)
     save_cookies(cookies, cookie_save_path)
