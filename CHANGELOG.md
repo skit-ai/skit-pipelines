@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 0.1.26
+
+- [x] feat: APIs for pipelines.
+- [x] add: secrets via dvc.
+
 ## 0.1.25
 
 - [x] add: pipeline to fetch and tag a dataset.
