@@ -15,7 +15,7 @@ DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
 
 PROJECT_NAME = "skit-pipelines"
-KAFKA_INSTANCE = os.environ["KAFKA_INSTANCE"]
+KAFKA_INSTANCE = os.environ.get("KAFKA_INSTANCE", "kafka:9092")
 
 VOICE_BOT_XLMR_LABEL_COL = ""
 TEXT = "text"
