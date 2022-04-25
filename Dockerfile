@@ -1,6 +1,11 @@
-ARG ECR_REGISTRY
-ARG ECR_REPOSITORY_ROOT
-FROM "${ECR_REGISTRY}/${ECR_REPOSITORY_ROOT}/ai/kubeflow/base-py:master"
+FROM gpuci/miniconda-cuda:11.3-devel-ubuntu20.04
+
+RUN apt-get update \
+    && apt-get install -y wget gcc libpq-dev\
+    && rm -rf /var/lib/apt/lists/*
+
+RUN conda install python=3.10 -y
+RUN conda install pip
 
 WORKDIR /home/kfp
 
@@ -28,6 +33,10 @@ RUN poetry config virtualenvs.create false
 
 COPY . .
 RUN poetry install --no-dev
+RUN dvc pull
+
+COPY ./secrets/random_call_ids.sql /home/random_call_ids.sql
+COPY ./secrets/random_calls_data.sql /home/random_calls_data.sql
 
 ARG BASE_IMAGE
 
