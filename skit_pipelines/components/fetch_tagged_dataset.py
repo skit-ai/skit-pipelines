@@ -43,7 +43,7 @@ def fetch_tagged_dataset(
     df_path, _ = download_dataset_from_db(
         job_id=job_id,
         task_type=task_type or None,
-        timezone=timezone or None,
+        timezone=pytz.timezone(timezone) if timezone else None,
         start_date=start_date or None,
         end_date=end_date or None,
         host=host,
