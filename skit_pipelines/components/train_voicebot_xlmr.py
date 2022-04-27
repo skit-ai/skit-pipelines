@@ -4,7 +4,7 @@ from kfp.components import InputPath, OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def train_xlmr_voicebot(
+def train_voicebot_xlmr(
     data_path: InputPath(str),
     model_path: OutputPath(str),
     utterance_column: str,
@@ -68,6 +68,6 @@ def train_xlmr_voicebot(
     model.train_model(train_df)
 
 
-train_xlmr_voicebot_op = kfp.components.create_component_from_func(
-    train_xlmr_voicebot, base_image=pipeline_constants.BASE_IMAGE
+train_voicebot_xlmr_op = kfp.components.create_component_from_func(
+    train_voicebot_xlmr, base_image=pipeline_constants.BASE_IMAGE
 )
