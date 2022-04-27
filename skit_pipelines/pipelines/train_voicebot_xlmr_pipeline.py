@@ -6,7 +6,7 @@ from skit_pipelines.components import (
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
-    train_xlmr_voicebot_op,
+    train_voicebot_xlmr_op,
     upload2s3_op,
 )
 
@@ -16,10 +16,10 @@ BUCKET = pipeline_constants.BUCKET
 
 
 @kfp.dsl.pipeline(
-    name="Fetch Tagged Dataset Pipeline",
-    description="fetches tagged dataset from tog with respective arguments",
+    name="XLMR Voicebot Training Pipeline",
+    description="Trains an XLM Roberta model on given dataset.",
 )
-def run_fetch_tagged_dataset(
+def run_xlmr_train(
     s3_path: str,
     org_id: int,
     use_state: bool = True,
@@ -42,14 +42,14 @@ def run_fetch_tagged_dataset(
         preprocess_data_op.outputs["output"]
     )
 
-    # Create train and test splits
+    #TODO: Create train and test splits - keep only valid utterances
 
     # Normalize utterance column
     preprocess_data_op = create_features_op(
         preprocess_data_op.outputs["output"], use_state
     )
 
-    train_op = train_xlmr_voicebot_op(
+    train_op = train_voicebot_xlmr_op(
         preprocess_data_op.outputs["output"],
         utterance_column=UTTERANCES,
         label_column=INTENT_Y,

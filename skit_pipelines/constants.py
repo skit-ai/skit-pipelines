@@ -44,6 +44,8 @@ DEFAULT_FETCH_CALLS_API_RUN = "default-fetch-calls-run"
 TAG_CALLS_NAME = "tag-calls"
 DEFAULT_TAG_CALLS_API_RUN = "default-tag-calls-run"
 
+TRAIN_XLMR_NAME = "train-voicebot-xlmr"
+DEFAULT_XLMR_MODEL_API_RUN = "default-train-voicebot-xlmr-run"
 
 KF_USERNAME = os.environ["KF_USERNAME"]
 KF_PASSWORD = os.environ["KF_PASSWORD"]
@@ -77,5 +79,7 @@ def GET_RUN_URL(namespace, id):
 
 KAFKA_TOPIC_MAP = {
  FETCH_CALLS_NAME: "data-pipeline",
- TAG_CALLS_NAME: "data-pipeline"  
+ TAG_CALLS_NAME: "data-pipeline",
+ 
+ TRAIN_XLMR_NAME: "model-train-pipeline"  
 }
