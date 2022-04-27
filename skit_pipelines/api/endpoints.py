@@ -9,7 +9,8 @@ from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetai
 from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
 from skit_pipelines.pipelines import (
     run_fetch_calls,
-    run_tag_calls
+    run_tag_calls,
+    run_xlmr_train
 )
 from skit_pipelines.utils import kubeflow_login
 import skit_pipelines.constants as const
@@ -69,6 +70,7 @@ def health_check():
     Get server status health.
     The purpose of this API is to help other people/machines know liveness of the application.
     """
+    logger.info("Health check pinged!")
     KF_CLIENT = kubeflow_login()
     if KF_CLIENT.get_kfp_healthz().multi_user:
         return models.customResponse("Kubeflow server communication is up!")
@@ -127,7 +129,7 @@ def tag_calls_req(*,
     namespace: str,
     payload: models.TagCallSchema,
     run_name: str = const.DEFAULT_TAG_CALLS_API_RUN,
-    component_name: str = const.FETCH_CALLS_NAME,
+    component_name: str = const.TAG_CALLS_NAME,
     background_tasks: BackgroundTasks
 ):
     run = call_kfp_method(
@@ -146,6 +148,34 @@ def tag_calls_req(*,
     return models.successfulCreationResponse(
         run_id=run.run_id,
         name=const.TAG_CALLS_NAME,
+        namespace=namespace
+    )
+
+
+@app.post("/{namespace}/pipelines/run/train-voicebot-xlmr/")
+def xlmr_train_req(*,
+    namespace: str,
+    payload: models.TrainModelSchema,
+    run_name: str = const.DEFAULT_XLMR_MODEL_API_RUN,
+    component_name: str = const.TRAIN_XLMR_NAME,
+    background_tasks: BackgroundTasks
+):
+    run = call_kfp_method(
+        pipeline_func=run_xlmr_train,
+        run_name=run_name,
+        namespace=namespace,
+        arguments=payload.dict()
+    )
+    background_tasks.add_task(
+        schedule_run_completion,
+        client_resp=run,
+        namespace=namespace,
+        component_name=component_name,
+        payload=payload
+    )
+    return models.successfulCreationResponse(
+        run_id=run.run_id,
+        name=const.TRAIN_XLMR_NAME,
         namespace=namespace
     )
 
