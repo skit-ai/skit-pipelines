@@ -30,8 +30,8 @@ RUN poetry config virtualenvs.create false
 COPY . .
 RUN poetry install --no-dev
 
-COPY ./secrets/random_call_ids.sql /home/kfp/random_call_ids.sql
-COPY ./secrets/random_calls_data.sql /home/kfp/random_calls_data.sql
+COPY ./secrets/random_call_ids.sql /home/random_call_ids.sql
+COPY ./secrets/random_calls_data.sql /home/random_calls_data.sql
 
 ARG BASE_IMAGE
 
