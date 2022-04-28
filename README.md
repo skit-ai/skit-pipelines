@@ -79,9 +79,9 @@ Once a new pipeline and its pre-requisite components are ready.
 ![Architecture](images/kfp-server-api.jpg)
 
 ### Start the server
-- Create a file named `env.sh` which will contain all required environment variables and correct `$BASE_IMAGE` configs. Then -
+- Pull the secrets directory and set correct env vars -
     ```bash
-    source env.sh
+    dvc pull && source secrets/env.sh
     ```
 - Run -
   ```bash

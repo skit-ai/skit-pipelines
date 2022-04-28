@@ -56,7 +56,8 @@ jobs:
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
           --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.KUBEFLOW_GATEWAY_ENDPOINT }}
           --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
-          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }}  -t $ECR_REPOSITORY .
+          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
+          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY .
 
       - name: Tag and push images
         env: 
