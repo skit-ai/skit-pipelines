@@ -7,11 +7,7 @@ from aiokafka import AIOKafkaProducer
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 
 from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
-from skit_pipelines.pipelines import (
-    run_fetch_calls,
-    run_tag_calls,
-    run_xlmr_train
-)
+import skit_pipelines.utils.config as config
 from skit_pipelines.utils import kubeflow_login
 import skit_pipelines.constants as const
 
@@ -95,45 +91,24 @@ def get_run_info(
     parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
     return models.statusWiseResponse(parsed_resp)
 
-
-@app.post("/{namespace}/pipelines/run/fetch-calls/")
-def fetch_calls_req(*,
+@app.post("/{namespace}/pipelines/run/{pipeline_name}/")
+def pipeline_run_req(*,
     namespace: str,
-    payload: models.FetchCallSchema,
-    run_name: str = const.DEFAULT_FETCH_CALLS_API_RUN,
-    component_name: str = const.FETCH_CALLS_NAME,
+    pipeline_name: str,
+    run_name: str | None = None,
+    component_name: str | None = None,
+    payload: models.ValidRequestSchemas,
     background_tasks: BackgroundTasks
 ):
-    run = call_kfp_method(
-        pipeline_func=run_fetch_calls,
-        run_name=run_name,
-        namespace=namespace,
-        arguments=payload.dict()
-    )
-    background_tasks.add_task(
-        schedule_run_completion,
-        client_resp=run,
-        namespace=namespace,
-        component_name=component_name,
-        payload=payload
-    )
-    return models.successfulCreationResponse(
-        run_id=run.run_id,
-        name=const.FETCH_CALLS_NAME,
-        namespace=namespace
-    )
+    if not config.valid_pipeline(pipeline_name):
+        raise models.errors.kfp_invalid_name(
+            f"Invalid pipeline requested, check if it exists: {pipeline_name}"
+        )
     
-
-@app.post("/{namespace}/pipelines/run/tag-calls/")
-def tag_calls_req(*,
-    namespace: str,
-    payload: models.TagCallSchema,
-    run_name: str = const.DEFAULT_TAG_CALLS_API_RUN,
-    component_name: str = const.TAG_CALLS_NAME,
-    background_tasks: BackgroundTasks
-):
+    run_name = run_name if run_name else config.RUN_NAME_MAP[pipeline_name]
+    component_name = component_name if component_name else pipeline_name
     run = call_kfp_method(
-        pipeline_func=run_tag_calls,
+        pipeline_func=config.PIPELINE_FN_MAP[pipeline_name],
         run_name=run_name,
         namespace=namespace,
         arguments=payload.dict()
@@ -147,44 +122,17 @@ def tag_calls_req(*,
     )
     return models.successfulCreationResponse(
         run_id=run.run_id,
-        name=const.TAG_CALLS_NAME,
+        name=pipeline_name,
         namespace=namespace
     )
 
-
-@app.post("/{namespace}/pipelines/run/train-voicebot-xlmr/")
-def xlmr_train_req(*,
-    namespace: str,
-    payload: models.TrainModelSchema,
-    run_name: str = const.DEFAULT_XLMR_MODEL_API_RUN,
-    component_name: str = const.TRAIN_XLMR_NAME,
-    background_tasks: BackgroundTasks
-):
-    run = call_kfp_method(
-        pipeline_func=run_xlmr_train,
-        run_name=run_name,
-        namespace=namespace,
-        arguments=payload.dict()
-    )
-    background_tasks.add_task(
-        schedule_run_completion,
-        client_resp=run,
-        namespace=namespace,
-        component_name=component_name,
-        payload=payload
-    )
-    return models.successfulCreationResponse(
-        run_id=run.run_id,
-        name=const.TRAIN_XLMR_NAME,
-        namespace=namespace
-    )
 
 
 @app.exception_handler(kfp_server_api.ApiException)
 async def kfp_api_exception_handler(request, exc):
     return models.customResponse(
         status_code=exc.status,
-        message_dict=f"{exc}",
+        message=f"{exc}",
         status="error",
     )
 
