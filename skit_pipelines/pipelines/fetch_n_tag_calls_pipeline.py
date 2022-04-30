@@ -57,7 +57,7 @@ def run_fetch_n_tag_calls(
     errors.display_name = "get-any-errors"
 
     notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}.\nErrors: {getattr(errors, 'output')}"""
+    Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}.\nErrors: {getattr(errors, 'output')}"""
     
     with kfp.dsl.Condition(notify == True, "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "")
