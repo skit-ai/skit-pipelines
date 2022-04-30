@@ -71,8 +71,7 @@ def health_check():
     if KF_CLIENT.get_kfp_healthz().multi_user:
         return models.customResponse("Kubeflow server communication is up!")
     else:
-        raise kfp_server_api.ApiException(
-            status=503,
+        raise models.errors.kfp_api_error(
             reason="Unable to communicate with Kubeflow server..."
         )
 
@@ -101,8 +100,9 @@ def pipeline_run_req(*,
     background_tasks: BackgroundTasks
 ):
     if not config.valid_pipeline(pipeline_name):
-        raise models.errors.kfp_invalid_name(
-            f"Invalid pipeline requested, check if it exists: {pipeline_name}"
+        raise models.errors.kfp_api_error(
+            reason=f"Invalid pipeline requested, check if it exists: {pipeline_name}",
+            status=400
         )
     
     run_name = run_name if run_name else config.RUN_NAME_MAP[pipeline_name]
