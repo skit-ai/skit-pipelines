@@ -40,7 +40,7 @@ async def schedule_run_completion(
     logger.info(f"Pipeline run for {component_name} finished!")
     parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=component_name)
     msg = models.statusWiseResponse(parsed_resp)
-    await aioproducer.send(const.KAFKA_TOPIC_MAP[component_name], msg.body)
+    await aioproducer.send(config.KAFKA_TOPIC_MAP[component_name], msg.body)
     logger.info((f"Results sent to queue."))
 
 

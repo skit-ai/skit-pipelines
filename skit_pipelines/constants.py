@@ -15,6 +15,9 @@ DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
 
 PROJECT_NAME = "skit-pipelines"
+CONFIG_DIR = "config/"
+CONFIG_FILE = "config.yaml"
+CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, CONFIG_FILE)
 KAFKA_INSTANCE = os.environ.get("KAFKA_INSTANCE", "kafka:9092")
 
 VOICE_BOT_XLMR_LABEL_COL = ""
@@ -38,14 +41,6 @@ TRANSCRIPT = "transcript"
 MULTI_USER = "multi_user"
 KFP_RUN_FN = "create_run_from_pipeline_func"
 
-FETCH_CALLS_NAME = "fetch-calls"
-DEFAULT_FETCH_CALLS_API_RUN = "default-fetch-calls-run"
-
-TAG_CALLS_NAME = "tag-calls"
-DEFAULT_TAG_CALLS_API_RUN = "default-tag-calls-run"
-
-TRAIN_XLMR_NAME = "train-voicebot-xlmr"
-DEFAULT_XLMR_MODEL_API_RUN = "default-train-voicebot-xlmr-run"
 
 KF_USERNAME = os.environ["KF_USERNAME"]
 KF_PASSWORD = os.environ["KF_PASSWORD"]
@@ -76,10 +71,3 @@ def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
 
 def GET_RUN_URL(namespace, id):
     return f"{PIPELINE_HOST_URL}/?ns={namespace}#/runs/details/{id}"
-
-KAFKA_TOPIC_MAP = {
- FETCH_CALLS_NAME: "data-pipeline",
- TAG_CALLS_NAME: "data-pipeline",
- 
- TRAIN_XLMR_NAME: "model-train-pipeline"  
-}
