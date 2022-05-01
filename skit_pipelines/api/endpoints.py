@@ -7,7 +7,7 @@ from aiokafka import AIOKafkaProducer
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 
 from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
-import skit_pipelines.utils.config as config
+from skit_pipelines.utils.config import config
 from skit_pipelines.utils import kubeflow_login
 import skit_pipelines.constants as const
 
