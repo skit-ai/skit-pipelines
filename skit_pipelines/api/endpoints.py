@@ -1,3 +1,4 @@
+from typing import Dict
 import kfp
 import kfp_server_api
 from loguru import logger
@@ -8,7 +9,7 @@ from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetai
 
 from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
 from skit_pipelines.utils.config import config
-from skit_pipelines.utils import kubeflow_login
+from skit_pipelines.utils import kubeflow_login, webhook_utils
 import skit_pipelines.constants as const
 
 
@@ -34,14 +35,19 @@ async def schedule_run_completion(
     client_resp,
     namespace: str,
     component_name: str,
-    payload: models.BaseRequestSchema
+    payload: models.BaseRequestSchema,
+    webhook_url: str | None
 ):
+    webhook_req = True if webhook_url else False
     run_resp: kfp_ApiRunDetail  = await run_in_threadpool(client_resp.wait_for_run_completion)
     logger.info(f"Pipeline run for {component_name} finished!")
     parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=component_name)
-    msg = models.statusWiseResponse(parsed_resp)
+    msg = models.statusWiseResponse(parsed_resp, webhook=webhook_req)
     await aioproducer.send(config.KAFKA_TOPIC_MAP[component_name], msg.body)
     logger.info((f"Results sent to queue."))
+    if webhook_req:
+        webhook_utils.send_webhook_request(url=webhook_url, data=msg.body)
+        
 
 
 @app.on_event("startup")
@@ -96,6 +102,7 @@ def pipeline_run_req(*,
     pipeline_name: str,
     run_name: str | None = None,
     component_name: str | None = None,
+    webhook: str | None = None,
     payload: models.ValidRequestSchemas,
     background_tasks: BackgroundTasks
 ):
@@ -118,7 +125,8 @@ def pipeline_run_req(*,
         client_resp=run,
         namespace=namespace,
         component_name=component_name,
-        payload=payload
+        payload=payload,
+        webhook_url=webhook
     )
     return models.successfulCreationResponse(
         run_id=run.run_id,
