@@ -141,3 +141,5 @@ test_auth_kf.py
 *.csv
 /sql
 /secrets
+
+.history

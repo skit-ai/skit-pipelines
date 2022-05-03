@@ -1,0 +1,25 @@
+
+pipelines:
+
+    fetch-calls:
+        default_run: "default-fetch-calls-run"
+        output_component: "fetch-calls"
+        main_function: "run_fetch_calls"
+        topic: "data-pipeline"
+
+    tag-calls:
+        default_run: "default-tag-calls-run"
+        output_component: "tag-calls"
+        main_function: "run_tag_calls"
+        topic: "data-pipeline"
+    
+    train-voicebot-xlmr:
+        default_run: "default-train-voicebot-xlmr-run"
+        output_component: "train-voicebot-xlmr"
+        main_function: "run_xlmr_train"
+        topic: "model-train-pipeline"
+
+
+publisher_topics:
+    - "data-pipeline"
+    - "model-train-pipeline"
