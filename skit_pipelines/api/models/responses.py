@@ -12,6 +12,7 @@ class StatusResponseModel(BaseModel):
     run_url: str
     file_path: str | None = None
     s3_path: str | None = None
+    webhook: bool = False
 
 def customResponse(message: str | Dict[Any, Any], status_code: int = 200, status: str = "ok") -> JSONResponse:
     return JSONResponse(dict(
@@ -19,8 +20,8 @@ def customResponse(message: str | Dict[Any, Any], status_code: int = 200, status
         response={"message": message} if isinstance(message, str) else message,
     ), status_code=status_code)
     
-def statusWiseResponse(run_response: ParseRunResponse):
-    _message = StatusResponseModel(message="", run_url=run_response.url)
+def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
+    _message = StatusResponseModel(message="", run_url=run_response.url, webhook=webhook)
     status = 'ok'
     status_code = 200
     
