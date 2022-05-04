@@ -20,10 +20,11 @@ def fetch_calls(
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
+    recurring: bool = False,
 ) -> str:
     import tempfile
     import time
-    from datetime import datetime
+    from datetime import datetime, timedelta
 
     from loguru import logger
     from skit_calls import calls
@@ -36,11 +37,20 @@ def fetch_calls(
 
     utils.configure_logger(7)
 
-    start_date = to_datetime(start_date)
-    if end_date:
-        end_date = to_datetime(end_date)
+    if recurring:
+        # take yesterday's start as start_time and
+        # end as end_time and keep repeating every day.
+        yesterday = datetime.now() - timedelta(days=1)
+        start_date = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = yesterday.replace(
+                        hour=datetime.max.hour,
+                        minute=datetime.max.minute,
+                        second=datetime.max.second,
+                        microsecond=datetime.max.microsecond
+                    )
     else:
-        end_date = datetime.now()
+        start_date = to_datetime(start_date)
+        end_date = to_datetime(end_date) if end_date else datetime.now()
 
     validate_date_ranges(start_date, end_date)
     start_date, end_date = process_date_filters(start_date, end_date)
