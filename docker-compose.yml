@@ -4,43 +4,43 @@ version: '3'
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.1
-    container_name: zookeeper
+    image: docker.io/bitnami/zookeeper:3.8
     ports:
       - "2181:2181"
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - TICK_TIME=2000
 
-  broker:
-    image: confluentinc/cp-kafka:7.0.1
-    container_name: broker
+  kafka:
+    image: docker.io/bitnami/kafka:3.1
     ports:
-      # - "9092:9092"
+      - "9092:9092"
       - "19092:19092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:19092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:19092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
     depends_on:
       - zookeeper
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,PLAINTEXT_INTERNAL://broker:29092,CONNECTIONS_FROM_HOST://localhost:19092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   kfp-server:
     image: $BASE_IMAGE
-    container_name: skit-kfp-server
+    container_name: kfp-server
     ports:
       - "9991:9991"
     depends_on: 
-      - broker
+      - kafka
     entrypoint: 
       - bash 
       - -c 
       - |
         echo 'Giving Kafka a bit of time to start up…'
-        sleep 30
+        sleep 20
         # Run the server code
         uvicorn skit_pipelines.api.endpoints:app --proxy-headers --host 0.0.0.0 --port 9991 --workers 1

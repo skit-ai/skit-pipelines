@@ -1,29 +1,25 @@
 FROM gpuci/miniconda-cuda:11.3-devel-ubuntu20.04
 
-RUN apt-get update \
-    && apt-get install -y wget gcc libpq-dev\
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get -y update \
+    && apt-get install -y wget gcc libpq-dev
 
-RUN conda install python=3.10 -y
-RUN conda install pip
+RUN conda install python=3.10 -y\ 
+    && conda install pip\
+    && conda init bash
 
 WORKDIR /home/kfp
 
-RUN apt-get update \
-    && apt-get install -y wget gcc libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN conda init bash
-
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-RUN apt-get -y update
-RUN apt-get install -y google-chrome-stable
+RUN apt-get -y update\
+    && apt-get -y install google-chrome-stable
 
 # install chromedriver
 RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
+    && rm /tmp/chromedriver.zip\
+    rm -rf /var/lib/apt/lists/*
 
 # set display port to avoid crash
 ENV DISPLAY=:99
@@ -90,6 +86,7 @@ ENV TOG_TASK_URL=$TOG_TASK_URL
 ENV KUBEFLOW_GATEWAY_ENDPOINT=$KUBEFLOW_GATEWAY_ENDPOINT
 ENV KF_USERNAME=$KF_USERNAME
 ENV KF_PASSWORD=$KF_PASSWORD
+
 ENV KAFKA_INSTANCE=$KAFKA_INSTANCE
 
 CMD ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]

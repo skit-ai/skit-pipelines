@@ -8,5 +8,6 @@ ALTERNATIVES = pipeline_constants.ALTERNATIVES
 
 def build_utterance(data: str):
     data = json.loads(data)
+    data = json.loads(data) if isinstance(data, str) else data
     utterances = data.get(UTTERANCES) or data.get(ALTERNATIVES)
     return utterances if isinstance(utterances, str) else json.dumps(utterances)

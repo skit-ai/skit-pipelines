@@ -58,14 +58,14 @@ Understand the directory strucuture.
 
 It is necessary to understand the anatomy of a kubeflow [component](https://www.kubeflow.org/docs/components/pipelines/sdk/component-development/) and [pipeline](https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/) before contributing to this project.
 
-## Making a new pipelines
+## Making new pipelines
 
 Once a new pipeline and its pre-requisite components are ready.
 
 1. Add an entry to the `CHANGELOG.md`.
 2. Create a new tag with updated semver and push, our github actions take care of pushing the image to our private ECR.
 3. Run `source env.sh` You may not have this if you aren't part of skit.ai.
-4. Run `make build`. This will rebuild all the pipeline yamls.
+4. Run `make pipes`. This will rebuild all the pipeline yamls.
 5. Upload the yamls to [kubeflow ui](https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-1-compile-and-then-upload-in-ui) or [use it via the sdk](https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-2-run-the-pipeline-using-kubeflow-pipelines-sdk-client).
 
 ## Pre-requisites
@@ -79,9 +79,9 @@ Once a new pipeline and its pre-requisite components are ready.
 ![Architecture](images/kfp-server-api.jpg)
 
 ### Start the server
-- Create a file named `env.sh` which will contain all required environment variables and correct `$BASE_IMAGE` configs. Then -
+- Pull the secrets directory and set correct env vars -
     ```bash
-    source env.sh
+    dvc pull && source secrets/env.sh
     ```
 - Run -
   ```bash

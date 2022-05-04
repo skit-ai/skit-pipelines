@@ -4,9 +4,7 @@ from pydantic import BaseModel, validator
 class BaseRequestSchema(BaseModel):
     @validator('*', pre=True)
     def transform_none(cls, value):
-        if value is None:
-            return ""
-        return value
+        return "" if value is None else value
 
 
 class FetchCallSchema(BaseRequestSchema):
@@ -36,3 +34,19 @@ class TagCallSchema(BaseRequestSchema):
     job_id: int
     s3_path: str
     notify: str | None = False
+    
+
+class TrainModelSchema(BaseRequestSchema):
+    """
+    Train Models Schema
+    """
+    s3_path: str
+    org_id: int
+    use_state: bool = False
+    model_type: str = "xlmroberta"
+    model_name: str = "xlm-roberta-base"
+    num_train_epochs: int
+    use_early_stopping: bool = False
+    early_stopping_patience: int = 3
+    early_stopping_delta: float = 0.0
+    max_seq_length: int = 128

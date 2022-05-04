@@ -31,6 +31,7 @@ def featurize_state(state):
 def row2features(use_state: bool):
     def featurize(row):
         data = json.loads(row.data)
+        data = json.loads(data) if isinstance(data, str) else data
         utterances = data.get(UTTERANCES) or data.get(ALTERNATIVES)
         utterances = (
             json.loads(utterances) if isinstance(utterances, str) else utterances

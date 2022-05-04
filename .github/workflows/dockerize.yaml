@@ -27,12 +27,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build image
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Pull secrets & Build image
         env:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: docker build
+        run: dvc pull && docker build
           --build-arg ECR_REGISTRY=$ECR_REGISTRY
           --build-arg ECR_REPOSITORY_ROOT=${{ secrets.ECR_REPOSITORY_ROOT }}
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
@@ -53,7 +56,7 @@ jobs:
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
           --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.KUBEFLOW_GATEWAY_ENDPOINT }}
           --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
-          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }}
+          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
           --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY .
 
       - name: Tag and push images
