@@ -64,4 +64,4 @@ def run_xlmr_eval(
     )
     
     # produce test set metrics.
-    upload2s3_op(pred_op.outputs["output"], org_id, "intent_classifier_xlmr", BUCKET)
+    upload2s3_op(pred_op.outputs["output"], org_id, "xlmr_irr_metrics", BUCKET, ".txt")
