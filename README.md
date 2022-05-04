@@ -64,8 +64,8 @@ Once a new pipeline and its pre-requisite components are ready.
 
 1. Add an entry to the `CHANGELOG.md`.
 2. Create a new tag with updated semver and push, our github actions take care of pushing the image to our private ECR.
-3. Run `source env.sh` You may not have this if you aren't part of skit.ai.
-4. Run `make pipes`. This will rebuild all the pipeline yamls.
+3. Run `make all`. This will rebuild all the pipeline yamls. This will create a secrets dir. Doesn't work if you don't have s3 credentials.
+4. Run `source secrets/env.sh` You may not have this if you aren't part of skit.ai.
 5. Upload the yamls to [kubeflow ui](https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-1-compile-and-then-upload-in-ui) or [use it via the sdk](https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-2-run-the-pipeline-using-kubeflow-pipelines-sdk-client).
 
 ## Pre-requisites

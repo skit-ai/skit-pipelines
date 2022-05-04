@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.32
+
+- [x] update: remove dvc link for pipelines.
+- [x] add: makefile downloads secrets from skit-calls.
 
 ## 0.1.26
 
