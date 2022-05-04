@@ -35,7 +35,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: dvc pull && docker build
+        run: dvc get https://github.com/skit-ai/skit-calls secrets && docker build
           --build-arg ECR_REGISTRY=$ECR_REGISTRY
           --build-arg ECR_REPOSITORY_ROOT=${{ secrets.ECR_REPOSITORY_ROOT }}
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
