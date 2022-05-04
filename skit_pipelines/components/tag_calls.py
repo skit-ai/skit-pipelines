@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 def tag_calls(
     *,
     input_file: str,
-    job_id: int,
+    job_ids: str,
     token: InputPath(str),
     url: str = None,
     output_json: OutputPath(str),
@@ -27,6 +27,7 @@ def tag_calls(
     utils.configure_logger(7)
 
     url = pipeline_constants.CONSOLE_API_URL if url is None else url
+    job_ids = job_ids.replace(" ", "").split(',')
 
     if os.path.isfile(input_file):
         with open(input_file, "r") as f:
@@ -34,15 +35,22 @@ def tag_calls(
 
     with open(token, "r") as reader:
         token = reader.read()
-    start = time.time()
-    errors, df_size = upload_dataset(input_file, url, token, job_id)
-    # write to json
-    output_dict = {"errors": errors, "df_size": df_size}
+        
+    all_errors, df_sizes = [], []
+    for job_id in job_ids:
+        start = time.time()
+        
+        errors, df_size = upload_dataset(input_file, url, token, int(job_id))
+        all_errors.append(errors)
+        df_sizes.append(df_size)
+        
+        logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
+        logger.info(f"{df_size=} rows in the dataset")
+        logger.info(f"{errors=}")
+
+    output_dict = {"errors": all_errors, "df_sizes": df_sizes}
     with open(output_json, "w") as writer:
         json.dump(output_dict, writer, indent=4)
-    logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
-    logger.info(f"{df_size=} rows in the dataset")
-    logger.info(f"{errors=}")
     return output_dict
 
 
