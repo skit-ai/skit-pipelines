@@ -29,8 +29,8 @@ def upload2s3(
 
     if storage_options:
         storage_options = StorageOptions(**json.loads(storage_options))
-        output_path = create_storage_path(storage_options, output_path)
-    
+        bucket = storage_options.bucket
+
     if os.path.isfile(path_on_disk):
         upload_path = output_path or create_file_name(org_id, file_type, ext)
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
