@@ -87,3 +87,58 @@ Once a new pipeline and its pre-requisite components are ready.
   ```bash
   docker-compose up
   ```
+
+## Responses
+
+### Endpoint responses
+
+```bash
+{
+  "status":"ok",
+  "response":{
+    "message":"Pipeline run created successfully.",
+    "name":"train-voicebot-xlmr",
+    "run_id":"e33879a1-xxxxx",
+    "run_url":"https://kubeflow.skit.ai/pipeline/?ns=..."
+  }
+}
+```
+### Webhook responses
+```bash
+{
+  "status": "ok",
+  "response": {
+    "message": "Run completed successfully.",
+    "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
+    "file_path": "/tmp/outputs/Output/data",
+    "s3_path": "<s3_path>",
+    "webhook": true
+  }
+}
+```
+
+```bash
+{
+  "status": "error",
+  "response": {
+    "message": "Run failed.",
+    "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
+    "file_path": null,
+    "s3_path": null,
+    "webhook": true
+  }
+}
+```
+
+```bash
+{
+  "status": "pending",
+  "response": {
+    "message": "Run in progress.",
+    "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
+    "file_path": null,
+    "s3_path": null,
+    "webhook": true
+  }
+}
+```

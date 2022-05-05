@@ -1,12 +1,13 @@
-from typing import Dict
+from typing import Dict, Any
 import os
 from datetime import datetime
 
 import skit_pipelines.utils.cookies as cookie_utils
 from skit_pipelines.utils.login import kubeflow_login
 import skit_pipelines.utils.webhook as webhook_utils
+from skit_pipelines.utils.storage import create_storage_path
 
-def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
+def create_file_name(org_id: str, file_type: str, ext=".csv") -> str:
     return os.path.join(
         "project",
         str(org_id),
@@ -15,7 +16,7 @@ def create_file_name(org_id: int, file_type: str, ext=".csv") -> str:
     )
 
 
-def create_dir_name(org_id: int, dir_type: str) -> str:
+def create_dir_name(org_id: str, dir_type: str) -> str:
     return os.path.join(
         "project", str(org_id), datetime.now().strftime("%Y-%m-%d"), dir_type
     )
@@ -58,3 +59,11 @@ class SlackBlockFactory:
 
     def build(self) -> Dict:
         return self.message
+
+
+def filter_schema(schema: Dict[str, Any], filter_list: list) -> Dict[str, Any]:
+    return {
+        k: v
+        for k, v in schema.items()
+        if k not in filter_list
+    }

@@ -11,7 +11,7 @@ def train_voicebot_xlmr(
     label_column: str,
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
-    num_train_epochs: int = 1,
+    num_train_epochs: int = 10,
     use_early_stopping: bool = False,
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,

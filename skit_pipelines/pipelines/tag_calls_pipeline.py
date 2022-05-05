@@ -12,7 +12,7 @@ from skit_pipelines.components import (
     name="Tag Calls Pipeline",
     description="Uploads calls to database for tagging",
 )
-def run_tag_calls(org_id: int, job_ids: str, s3_path: str, notify: bool = False):
+def run_tag_calls(org_id: str, job_ids: str, s3_path: str, notify: bool = False):
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
