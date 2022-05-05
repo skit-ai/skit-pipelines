@@ -10,7 +10,8 @@ from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
 from skit_pipelines.pipelines import (
     run_fetch_calls,
     run_tag_calls,
-    run_xlmr_train
+    run_xlmr_train,
+    run_xlmr_eval
 )
 from skit_pipelines.utils import kubeflow_login
 import skit_pipelines.constants as const
@@ -156,7 +157,7 @@ def tag_calls_req(*,
 def xlmr_train_req(*,
     namespace: str,
     payload: models.TrainModelSchema,
-    run_name: str = const.DEFAULT_XLMR_MODEL_API_RUN,
+    run_name: str = const.DEFAULT_TRAIN_XLMR_MODEL_API_RUN,
     component_name: str = const.TRAIN_XLMR_NAME,
     background_tasks: BackgroundTasks
 ):
@@ -176,6 +177,33 @@ def xlmr_train_req(*,
     return models.successfulCreationResponse(
         run_id=run.run_id,
         name=const.TRAIN_XLMR_NAME,
+        namespace=namespace
+    )
+
+@app.post("/{namespace}/pipelines/run/eval-voicebot-xlmr/")
+def xlmr_eval_req(*,
+    namespace: str,
+    payload: models.EvalModelSchema,
+    run_name: str = const.DEFAULT_EVAL_XLMR_MODEL_API_RUN,
+    component_name: str = const.EVAL_XLMR_NAME,
+    background_tasks: BackgroundTasks
+):
+    run = call_kfp_method(
+        pipeline_func=run_xlmr_eval,
+        run_name=run_name,
+        namespace=namespace,
+        arguments=payload.dict()
+    )
+    background_tasks.add_task(
+        schedule_run_completion,
+        client_resp=run,
+        namespace=namespace,
+        component_name=component_name,
+        payload=payload
+    )
+    return models.successfulCreationResponse(
+        run_id=run.run_id,
+        name=const.EVAL_XLMR_NAME,
         namespace=namespace
     )
 

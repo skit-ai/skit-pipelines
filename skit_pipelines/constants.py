@@ -46,7 +46,9 @@ TAG_CALLS_NAME = "tag-calls"
 DEFAULT_TAG_CALLS_API_RUN = "default-tag-calls-run"
 
 TRAIN_XLMR_NAME = "train-voicebot-xlmr"
-DEFAULT_XLMR_MODEL_API_RUN = "default-train-voicebot-xlmr-run"
+EVAL_XLMR_NAME = "eval-voicebot-xlmr"
+DEFAULT_TRAIN_XLMR_MODEL_API_RUN = "default-train-voicebot-xlmr-run"
+DEFAULT_EVAL_XLMR_MODEL_API_RUN = "default-eval-voicebot-xlmr-run"
 
 KF_USERNAME = os.environ["KF_USERNAME"]
 KF_PASSWORD = os.environ["KF_PASSWORD"]
