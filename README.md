@@ -109,9 +109,10 @@ Once a new pipeline and its pre-requisite components are ready.
   "status": "ok",
   "response": {
     "message": "Run completed successfully.",
+    "run_id": "662b9909-d251-45f8-a8xxxxx",
     "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
     "file_path": "/tmp/outputs/Output/data",
-    "s3_path": "<s3_path>",
+    "s3_path": "<artifact s3_path tar file>",
     "webhook": true
   }
 }
@@ -122,6 +123,7 @@ Once a new pipeline and its pre-requisite components are ready.
   "status": "error",
   "response": {
     "message": "Run failed.",
+    "run_id": "662b9909-d251-45f8xxxxxxxx",
     "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
     "file_path": null,
     "s3_path": null,
@@ -135,6 +137,7 @@ Once a new pipeline and its pre-requisite components are ready.
   "status": "pending",
   "response": {
     "message": "Run in progress.",
+    "run_id": "662b9909-d251-45f8-axxxxxxxxx",
     "run_url": "https://kubeflow.skit.ai/pipeline/?ns=...",
     "file_path": null,
     "s3_path": null,

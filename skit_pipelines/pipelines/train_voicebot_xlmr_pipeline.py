@@ -75,7 +75,7 @@ def run_xlmr_train(*,
         max_seq_length=max_seq_length,
     )
     # produce test set metrics.
-    # train_op.set_gpu_limit(1)
+    train_op.set_gpu_limit(1)
     upload = upload2s3_op(
         train_op.outputs["model"],
         org_id,

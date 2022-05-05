@@ -9,6 +9,7 @@ import skit_pipelines.constants as const
 
 class StatusResponseModel(BaseModel):
     message: str
+    run_id: str
     run_url: str
     file_path: str | None = None
     s3_path: str | None = None
@@ -21,7 +22,12 @@ def customResponse(message: str | Dict[Any, Any], status_code: int = 200, status
     ), status_code=status_code)
     
 def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
-    _message = StatusResponseModel(message="", run_url=run_response.url, webhook=webhook)
+    _message = StatusResponseModel(
+        message="",
+        run_id=run_response.id,
+        run_url=run_response.url,
+        webhook=webhook
+    )
     status = 'ok'
     status_code = 200
     
