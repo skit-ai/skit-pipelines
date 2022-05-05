@@ -9,7 +9,7 @@ from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetai
 
 from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
 from skit_pipelines.utils.config import config
-from skit_pipelines.utils import kubeflow_login, webhook_utils
+from skit_pipelines.utils import kubeflow_login, webhook_utils, filter_schema
 import skit_pipelines.constants as const
 
 
@@ -36,7 +36,7 @@ async def schedule_run_completion(
     namespace: str,
     component_name: str,
     payload: models.BaseRequestSchema,
-    webhook_url: str | None
+    webhook_url: str
 ):
     webhook_req = True if webhook_url else False
     run_resp: kfp_ApiRunDetail  = await run_in_threadpool(client_resp.wait_for_run_completion)
@@ -102,7 +102,6 @@ def pipeline_run_req(*,
     pipeline_name: str,
     run_name: str | None = None,
     component_name: str | None = None,
-    webhook: str | None = None,
     payload: models.ValidRequestSchemas,
     background_tasks: BackgroundTasks
 ):
@@ -118,7 +117,7 @@ def pipeline_run_req(*,
         pipeline_func=config.PIPELINE_FN_MAP[pipeline_name],
         run_name=run_name,
         namespace=namespace,
-        arguments=payload.dict()
+        arguments=filter_schema(payload.dict(), const.FILTER_LIST)
     )
     background_tasks.add_task(
         schedule_run_completion,
@@ -126,7 +125,7 @@ def pipeline_run_req(*,
         namespace=namespace,
         component_name=component_name,
         payload=payload,
-        webhook_url=webhook
+        webhook_url=payload.webhook_uri
     )
     return models.successfulCreationResponse(
         run_id=run.run_id,
