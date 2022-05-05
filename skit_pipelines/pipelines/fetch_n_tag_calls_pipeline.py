@@ -15,7 +15,7 @@ from skit_pipelines.components import (
 )
 def run_fetch_n_tag_calls(
     client_id: int,
-    org_id: int,
+    org_id: str,
     job_ids: str,
     start_date: str,
     lang: str,

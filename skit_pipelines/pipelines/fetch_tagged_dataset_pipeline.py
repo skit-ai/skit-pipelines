@@ -15,7 +15,7 @@ from skit_pipelines.components import (
     description="fetches tagged dataset from tog with respective arguments",
 )
 def run_fetch_tagged_dataset(
-    org_id: int,
+    org_id: str,
     job_id: int,
     start_date: str,
     end_date: str,
