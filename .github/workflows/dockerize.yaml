@@ -35,7 +35,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: dvc pull && docker build
+        run: dvc get https://github.com/skit-ai/skit-calls secrets && docker build
           --build-arg ECR_REGISTRY=$ECR_REGISTRY
           --build-arg ECR_REPOSITORY_ROOT=${{ secrets.ECR_REPOSITORY_ROOT }}
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
@@ -44,8 +44,6 @@ jobs:
           --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           --build-arg DB_NAME=${{ secrets.DB_NAME }}
           --build-arg DB_USER=${{ secrets.DB_USER }}
-          --build-arg RANDOM_CALL_DATA_QUERY=${{ secrets.RANDOM_CALL_DATA_QUERY }}
-          --build-arg RANDOM_CALL_ID_QUERY=${{ secrets.RANDOM_CALL_ID_QUERY }}
           --build-arg CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }}
           --build-arg BUCKET=${{ secrets.BUCKET }}
           --build-arg SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}

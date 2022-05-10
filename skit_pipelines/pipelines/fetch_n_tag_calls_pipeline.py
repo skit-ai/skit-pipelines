@@ -15,8 +15,8 @@ from skit_pipelines.components import (
 )
 def run_fetch_n_tag_calls(
     client_id: int,
-    org_id: int,
-    job_id: int,
+    org_id: str,
+    job_ids: str,
     start_date: str,
     lang: str,
     end_date: str,
@@ -27,8 +27,9 @@ def run_fetch_n_tag_calls(
     min_duration: str,
     asr_provider: str,
     call_quantity: int = 200,
-    call_type: str = "inbound",
-    notify: bool = False
+    call_type: str = "INBOUND",
+    notify: bool = False,
+    recurring: bool = False
 ):
     calls = fetch_calls_op(
         client_id=client_id,
@@ -43,21 +44,28 @@ def run_fetch_n_tag_calls(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
+        recurring=recurring
+    )
+    calls.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
     )
 
     auth_token = org_auth_token_op(org_id)
+    auth_token.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+    )
     tag_calls_output = tag_calls_op(
         input_file=calls.output,
-        job_id=job_id,
+        job_ids=job_ids,
         token=auth_token.output,
     )
-    df_size = read_json_key_op("df_size", tag_calls_output.outputs["output_json"])
-    df_size.display_name = "get-df-size"
+    df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
+    df_sizes.display_name = "get-df-size"
     errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
     errors.display_name = "get-any-errors"
 
     notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-    Uploaded {getattr(calls, 'output')} ({getattr(df_size, 'output')}, {org_id=}) for tagging to {job_id=}.\nErrors: {getattr(errors, 'output')}"""
+    Uploaded {getattr(calls, 'output')} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"""
     
     with kfp.dsl.Condition(notify == True, "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "")

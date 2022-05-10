@@ -11,7 +11,7 @@ def train_voicebot_xlmr(
     label_column: str,
     model_type: str = "xlmroberta",
     model_name: str = "xlm-roberta-base",
-    num_train_epochs: int = 1,
+    num_train_epochs: int = 10,
     use_early_stopping: bool = False,
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,
@@ -22,6 +22,8 @@ def train_voicebot_xlmr(
     import collections
     from collections.abc import Iterable
 
+    import os
+    import pickle
     import pandas as pd
 
     setattr(collections, "Iterable", Iterable)
@@ -36,6 +38,7 @@ def train_voicebot_xlmr(
 
     train_df = pd.read_csv(data_path)
     labelencoder = preprocessing.LabelEncoder()
+    labelencoder_file_path = os.path.join(model_path, "labelencoder.pkl")
     encoder = labelencoder.fit(train_df[label_column])
     model_args = ClassificationArgs(
         num_train_epochs=num_train_epochs,
@@ -66,6 +69,8 @@ def train_voicebot_xlmr(
         args=model_args,
     )
     model.train_model(train_df)
+    with open(labelencoder_file_path, "wb") as file:
+            _ = pickle.dump(labelencoder, file)
 
 
 train_voicebot_xlmr_op = kfp.components.create_component_from_func(

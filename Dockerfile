@@ -1,6 +1,7 @@
 FROM gpuci/miniconda-cuda:11.3-devel-ubuntu20.04
 
-RUN apt-get -y update \
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub \
+    && apt-get -y update \
     && apt-get install -y wget gcc libpq-dev
 
 RUN conda install python=3.10 -y\ 
@@ -29,10 +30,6 @@ RUN poetry config virtualenvs.create false
 
 COPY . .
 RUN poetry install --no-dev
-RUN dvc get https://github.com/skit-ai/skit-calls secrets
-
-COPY ./secrets/random_call_ids.sql /home/random_call_ids.sql
-COPY ./secrets/random_calls_data.sql /home/random_calls_data.sql
 
 ARG BASE_IMAGE
 
@@ -42,8 +39,6 @@ ARG DB_NAME
 ARG DB_PASSWORD
 ARG DB_USER
 
-ARG RANDOM_CALL_DATA_QUERY
-ARG RANDOM_CALL_ID_QUERY
 
 ARG CDN_RECORDINGS_BASE_PATH
 ARG BUCKET
@@ -69,8 +64,9 @@ ENV DB_PASSWORD=$DB_PASSWORD
 ENV DB_NAME=$DB_NAME
 ENV DB_USER=$DB_USER
 
-ENV RANDOM_CALL_DATA_QUERY=$RANDOM_CALL_DATA_QUERY
-ENV RANDOM_CALL_ID_QUERY=$RANDOM_CALL_ID_QUERY
+ENV RANDOM_CALL_DATA_QUERY=secrets/random_calls_data.sql
+ENV RANDOM_CALL_ID_QUERY=secrets/random_call_ids.sql
+ENV CALL_IDS_FROM_UUIDS_QUERY=secrets/call_ids_from_uuids.sql
 
 ENV CDN_RECORDINGS_BASE_PATH=$CDN_RECORDINGS_BASE_PATH
 ENV BUCKET=$BUCKET

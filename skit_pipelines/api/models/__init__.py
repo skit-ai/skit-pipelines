@@ -1,5 +1,5 @@
 from skit_pipelines.api.models.requests import (
-    BaseRequestSchema, FetchCallSchema, TagCallSchema, TrainModelSchema
+    BaseRequestSchema, FetchCallSchema, TagCallSchema, TrainModelSchema, StorageOptions
 )
 from skit_pipelines.api.models.responses import customResponse, statusWiseResponse, successfulCreationResponse
 from skit_pipelines.api.models.custom_models import ParseRunResponse
@@ -11,5 +11,5 @@ from typing import Union
 ValidRequestSchemas = Union[
     FetchCallSchema,
     TagCallSchema,
-    TrainModelSchema
+    TrainModelSchema,
 ]

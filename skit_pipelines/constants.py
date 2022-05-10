@@ -71,3 +71,7 @@ def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
 
 def GET_RUN_URL(namespace, id):
     return f"{PIPELINE_HOST_URL}/?ns={namespace}#/runs/details/{id}"
+
+FILTER_LIST = [
+    "webhook_uri",
+]
