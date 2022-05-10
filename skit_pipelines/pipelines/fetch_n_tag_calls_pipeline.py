@@ -44,14 +44,16 @@ def run_fetch_n_tag_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
     )
+
     calls.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
     )
 
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
+        "P0D"  # disables caching
     )
+
     tag_calls_output = tag_calls_op(
         input_file=calls.output,
         job_ids=job_ids,
