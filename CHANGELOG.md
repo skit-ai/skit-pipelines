@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.39
+
+- [x] update: skit-calls==0.2.12
+- [x] update: remove recurrent from fetch-n-tag pipeline and start_date, end_date logic moved to skit-calls instead.
+
 ## 0.1.38
 
 - [x] update: skit-calls==0.2.11
