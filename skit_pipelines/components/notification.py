@@ -3,7 +3,7 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 
 
-def slack_notification(message: str, s3_path: str, channel: str | None = None) -> None:
+def slack_notification(message: str, s3_path: str, channel: str = "", cc: str = "") -> None:
     """
     Send a message on any channel.
     """
@@ -20,16 +20,17 @@ def slack_notification(message: str, s3_path: str, channel: str | None = None) -
     channel = channel or pipeline_constants.DEFAULT_CHANNEL
 
     slack_message_blocks = (
-        SlackBlockFactory()
-        .text(message)
-        .text_block(message)
+        SlackBlockFactory(message)
+        .ping(cc)
+        .text()
+        .text_block()
         .code_block(f"aws s3 cp {s3_path} ." if s3_path else None)
         .build()
     )
 
     try:
         client = WebClient(token=pipeline_constants.SLACK_TOKEN)
-        client.chat_postMessage(channel=channel, **slack_message_blocks)
+        client.chat_postMessage(channel=channel, **slack_message_blocks, link_names=1, parse="full")
     except SlackApiError as error:
         logger.error(error)
         logger.error(traceback.format_exc())
