@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.38
+
+- [x] update: skit-calls==0.2.11
+- [x] update: skit-labels==0.3.20
+- [x] fix: save labelencoder pickle while running the train xlmr pipeline.
+
 ## 0.1.32
 
 - [x] update: remove dvc link for pipelines.
