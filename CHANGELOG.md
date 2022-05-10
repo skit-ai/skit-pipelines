@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.1.39
+
+- [x] update: skit-calls==0.2.13
+
 ## 0.1.40
 
-- [x] update: skit-calls==0.3.21
+- [x] update: skit-labels==0.3.21
 - [x] update: ping users on slack channels.
 
 ## 0.1.39
