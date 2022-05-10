@@ -25,11 +25,16 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
 # set display port to avoid crash
 ENV DISPLAY=:99
 
-RUN pip install poetry simpletransformers==0.63.6 kfp==1.8.11
+RUN pip install -U poetry simpletransformers==0.63.6 kfp==1.8.11
 RUN poetry config virtualenvs.create false
+
+RUN apt-get -y update\
+    && apt-get -y install libblas-dev liblapack-dev gfortran
 
 COPY . .
 RUN poetry install --no-dev
+
+RUN conda install scipy
 
 ARG BASE_IMAGE
 
