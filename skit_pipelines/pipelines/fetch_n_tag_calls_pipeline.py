@@ -29,7 +29,6 @@ def run_fetch_n_tag_calls(
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     notify: bool = False,
-    recurring: bool = False
 ):
     calls = fetch_calls_op(
         client_id=client_id,
@@ -44,7 +43,6 @@ def run_fetch_n_tag_calls(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
-        recurring=recurring
     )
     calls.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
@@ -59,6 +57,7 @@ def run_fetch_n_tag_calls(
         job_ids=job_ids,
         token=auth_token.output,
     )
+
     df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
     df_sizes.display_name = "get-df-size"
     errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
@@ -66,7 +65,7 @@ def run_fetch_n_tag_calls(
 
     notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
     Uploaded {getattr(calls, 'output')} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"""
-    
+
     with kfp.dsl.Condition(notify == True, "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "")
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
