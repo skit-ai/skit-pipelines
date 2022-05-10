@@ -32,6 +32,7 @@ ALTERNATIVES = "alternatives"
 TAG = "tag"
 INTENT_X = "intent_x"
 INTENT_Y = "intent_y"
+INTENT_PRED = "intent_pred"
 STATE = "state"
 
 START_TOKEN = "<s>"
