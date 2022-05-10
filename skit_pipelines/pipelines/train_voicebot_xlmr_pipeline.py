@@ -37,8 +37,6 @@ def run_xlmr_train(*,
     early_stopping_delta: float = 0,
     max_seq_length: int = 128,
 ):
-
-
     with kfp.dsl.Condition(s3_path != "", "s3_path_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path)
     
