@@ -2,6 +2,11 @@
 
 ## 0.1.39
 
+- [x] update: skit-calls==0.3.21
+- [x] update: ping users on slack channels.
+
+## 0.1.39
+
 - [x] update: skit-calls==0.2.12
 - [x] update: remove recurrent from fetch-n-tag pipeline and start_date, end_date logic moved to skit-calls instead.
 
