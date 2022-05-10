@@ -28,6 +28,8 @@ ENV DISPLAY=:99
 RUN pip install poetry simpletransformers==0.63.6 kfp==1.8.11
 RUN poetry config virtualenvs.create false
 
+RUN apt-get install libatlas-base-dev
+
 COPY . .
 RUN poetry install --no-dev
 
