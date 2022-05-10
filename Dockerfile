@@ -26,6 +26,7 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
 ENV DISPLAY=:99
 
 RUN pip install poetry simpletransformers==0.63.6 kfp==1.8.11
+RUN pip install https://github.com/skit-ai/eevee/releases/download/1.2.0/eevee-1.2.0-py3-none-any.whl
 RUN poetry config virtualenvs.create false
 
 COPY . .
