@@ -23,42 +23,59 @@ def create_dir_name(org_id: str, dir_type: str) -> str:
 
 
 class SlackBlockFactory:
-    def __init__(self) -> None:
-        self.message = {"text": "", "blocks": []}
+    def __init__(self, content) -> None:
+        self.body = {"text": "", "blocks": []}
+        self.content = content
 
     def code_block(self, content):
         if not content:
             return self
-        content = f"""
+        format_content = f"""
 ```
 {content}
 ```
 """.strip()
-        self.message["blocks"].append(
+        self.body["blocks"].append(
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": content},
+                "text": {"type": "mrkdwn", "text": format_content},
             }
         )
         return self
 
-    def text_block(self, content):
-        if not content:
+    def text_block(self):
+        if not self.content:
             return self
-        self.message["blocks"].append(
+        self.body["blocks"].append(
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": content},
+                "text": {"type": "mrkdwn", "text": self.content},
             }
         )
         return self
 
-    def text(self, content):
-        self.message["text"] = content
+    def ping(self, cc):
+        if not cc:
+            return self
+
+        names = []
+        for name in cc.split(","):
+            name = name.strip()
+            if name[0] != '@':
+                name = f"<@{name}>"
+            if not name:
+                continue
+            names.append(name)
+        cc_group = " ".join(names)
+        self.content = f"{self.content}\ncc: {cc_group}"
+        return self
+
+    def text(self):
+        self.body["text"] = self.content
         return self
 
     def build(self) -> Dict:
-        return self.message
+        return self.body
 
 
 def filter_schema(schema: Dict[str, Any], filter_list: list) -> Dict[str, Any]:
