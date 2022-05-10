@@ -18,8 +18,15 @@ pipelines:
         output_component: "train-voicebot-xlmr"
         main_function: "run_xlmr_train"
         topic: "model-train-pipeline"
+    
+    eval-voicebot-xlmr:
+        default_run: "default-eval-voicebot-xlmr-run"
+        output_component: "eval-voicebot-xlmr"
+        main_function: "run_xlmr_eval"
+        topic: "model-eval-pipeline"
 
 
 publisher_topics:
     - "data-pipeline"
     - "model-train-pipeline"
+    - "model-eval-pipeline"
