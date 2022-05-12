@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.42
+
+- [x] update: XLMR training supports lr parameter.
+
 ## 0.1.41
 
 - [x] update: skit-calls==0.2.13
