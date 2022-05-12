@@ -36,6 +36,7 @@ def run_xlmr_train(*,
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,
     max_seq_length: int = 128,
+    learning_rate: float = 4e-5,
 ):
     with kfp.dsl.Condition(s3_path != "", "s3_path_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path)
@@ -71,6 +72,7 @@ def run_xlmr_train(*,
         early_stopping_patience=early_stopping_patience,
         early_stopping_delta=early_stopping_delta,
         max_seq_length=max_seq_length,
+        learning_rate=learning_rate,
     )
     # produce test set metrics.
     train_op.set_gpu_limit(1)
