@@ -62,3 +62,4 @@ class TrainModelSchema(BaseRequestSchema):
     early_stopping_patience: int = 3
     early_stopping_delta: float = 0.0
     max_seq_length: int = 128
+    learning_rate: float = 4e-5
