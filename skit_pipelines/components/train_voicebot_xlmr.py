@@ -16,6 +16,7 @@ def train_voicebot_xlmr(
     early_stopping_patience: int = 3,
     early_stopping_delta: float = 0,
     max_seq_length: int = 128,
+    learning_rate: float = 4e-5,
 ):
     # HACK: This code should go as soon as this issue is fixed:
     # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
@@ -53,6 +54,7 @@ def train_voicebot_xlmr(
         use_early_stopping=use_early_stopping,
         early_stopping_patience=early_stopping_patience,
         early_stopping_delta=early_stopping_delta,
+        learning_rate=learning_rate,
     )
 
     train_df[pipeline_constants.LABELS] = encoder.transform(train_df[label_column])
