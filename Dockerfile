@@ -68,6 +68,8 @@ ENV RANDOM_CALL_DATA_QUERY=secrets/random_calls_data.sql
 ENV RANDOM_CALL_ID_QUERY=secrets/random_call_ids.sql
 ENV CALL_IDS_FROM_UUIDS_QUERY=secrets/call_ids_from_uuids.sql
 
+ENV GOOGLE_CLIENT_SECRET_PATH=secrets/google_client_secret.json
+
 ENV CDN_RECORDINGS_BASE_PATH=$CDN_RECORDINGS_BASE_PATH
 ENV BUCKET=$BUCKET
 

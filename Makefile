@@ -25,4 +25,11 @@ pipes:
 		source secrets/env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
 
+temp_pipes:
+	@for file in $(SOURCE_FILES); do \
+		echo "Building skit_pipelines/pipelines/$$file.py"; \
+		touch build/$$file.yaml; \
+		source secrets/env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
+	done
+	
 all: clean pipes
