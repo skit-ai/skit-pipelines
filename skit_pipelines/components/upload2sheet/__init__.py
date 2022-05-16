@@ -18,12 +18,17 @@ def upload2sheet(
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
     import json
+    from skit_pipelines.components.upload2sheet.utils import prepare_crr_df
     
     
     scopes = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+    
+    json_dict = json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"), strict=False)
+    json_dict["private_key"] = json_dict["private_key"].encode('utf-8').decode('unicode_escape')    
+    
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-        json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"), strict=False), scopes=scopes
+        json_dict, scopes=scopes
     )
     client = gspread.authorize(credentials)
     
@@ -37,28 +42,6 @@ def upload2sheet(
     worksheet.update([df_crr.columns.values.tolist()] + df_crr.values.tolist())
     logger.debug(f"Uploaded {untagged_records_path_on_disk} to google sheet {sheet_id}")
     
-
-def prepare_crr_df(untagged_records_path_on_disk, org_id, given_comma_seperated_columns):
-    import pandas as pd
-    
-    df = pd.read_csv(untagged_records_path_on_disk)
-    uuids = df.call_uuid.unique()
-    console_links = [
-        f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={i}"
-        for i in uuids
-    ]
-    
-    df_crr = pd.DataFrame(columns= ["call_url"])
-    if given_comma_seperated_columns:
-        columns = given_comma_seperated_columns.split(",")
-        if "call_url" not in columns:
-            columns.insert(0, "call_url")
-        
-    df_crr.columns = columns
-    df_crr["call_url"] = console_links
-
-    return df_crr
-
 upload2sheet_op = kfp.components.create_component_from_func(
     upload2sheet, base_image=pipeline_constants.BASE_IMAGE
 )
