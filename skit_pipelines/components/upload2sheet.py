@@ -2,7 +2,6 @@ import kfp
 from kfp.components import InputPath
 
 from skit_pipelines import constants as pipeline_constants
-import json
 
 def upload2sheet(
     untagged_records_path_on_disk: InputPath(str),
@@ -18,6 +17,8 @@ def upload2sheet(
     from datetime import date, timedelta
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
+    import json
+    
     
     scopes = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
