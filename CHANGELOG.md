@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.48
+- [x] update: skit-calls==0.2.14
+
 ## 0.1.45
 - [x] fix: to make Docker file and github actions yaml to use google secrets
 

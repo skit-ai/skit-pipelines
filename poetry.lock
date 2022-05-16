@@ -1480,7 +1480,7 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.13"
+version = "0.2.14"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
@@ -1858,7 +1858,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "191e5e5d6c7a1ae22fc50aa2332df567f2189d9c6a406fc10520fa11540c85a7"
+content-hash = "b4bb276c2e018160bbd994dc889bac2d197f9ec30f3170ee018827710190fa5d"
 
 [metadata.files]
 aiobotocore = [
@@ -2987,8 +2987,8 @@ skit-auth = [
     {file = "skit_auth-0.1.3-py3-none-any.whl", hash = "sha256:caa9dcd2ef8c82454096ba872d4de00bf5c56de0837db9f2d13c83634b8fe74f"},
 ]
 skit-calls = [
-    {file = "skit-calls-0.2.13.tar.gz", hash = "sha256:4df52aa9dd88681a3032d4d42b11906f037c3702d955bb9db74c3eb4f0247988"},
-    {file = "skit_calls-0.2.13-py3-none-any.whl", hash = "sha256:2074ade30e482221bd9646bc02f44c780d79c7ecd2d0b4f520907c960631a03c"},
+    {file = "skit-calls-0.2.14.tar.gz", hash = "sha256:cc5dc9268dce439c7cbb3a8dbf2dd12c9a5cc947750f6ab44df1b92a2b548f18"},
+    {file = "skit_calls-0.2.14-py3-none-any.whl", hash = "sha256:de3649fde624389276ba42182e25c19b41794427a1545c49a6c7c27b5ae9b954"},
 ]
 skit-fixdf = [
     {file = "skit-fixdf-0.1.12.tar.gz", hash = "sha256:b5d48a93bf542eded9ab8210be0301e30544ad963f71fe0b8ba90beba16f44e5"},
