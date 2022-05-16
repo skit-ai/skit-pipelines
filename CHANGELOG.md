@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.44
+- [x] update: component to push CSV to a google sheet. Load google secrets from a Github secrets
+
+## 0.1.43
+- [x] add: component to push CSV to a google sheet.
+- [x] add: pipeline to fetch calls and push to google sheet.
+
 ## 0.1.42
 
 - [x] update: XLMR training supports lr parameter.

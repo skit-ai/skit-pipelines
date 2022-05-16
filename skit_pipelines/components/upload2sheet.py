@@ -2,6 +2,7 @@ import kfp
 from kfp.components import InputPath
 
 from skit_pipelines import constants as pipeline_constants
+import json
 
 def upload2sheet(
     untagged_records_path_on_disk: InputPath(str),
@@ -18,10 +19,10 @@ def upload2sheet(
     import gspread
     from oauth2client.service_account import ServiceAccountCredentials
     
-    scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
+    scopes = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-       os.getenv("GOOGLE_CLIENT_SECRET_PATH", "secrets/google_client_secret.json") , scope
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"), strict=False), scopes=scopes
     )
     client = gspread.authorize(credentials)
     
@@ -46,9 +47,7 @@ def prepare_crr_df(untagged_records_path_on_disk, org_id, given_comma_seperated_
         for i in uuids
     ]
     
-    df_crr = pd.DataFrame()
-    columns = ["call_url"]
-    
+    df_crr = pd.DataFrame(columns= ["call_url"])
     if given_comma_seperated_columns:
         columns = given_comma_seperated_columns.split(",")
         if "call_url" not in columns:
