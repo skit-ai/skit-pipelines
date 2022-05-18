@@ -3,7 +3,9 @@ import kfp
 from skit_pipelines.components import (
     fetch_calls_op,
     download_from_s3_op,
-    upload2sheet_op
+    upload2sheet_op,
+    read_json_key_op,
+    slack_notification_op,
 )
 
 @kfp.dsl.pipeline(
@@ -25,7 +27,8 @@ def run_fetch_n_tag_calls(
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     sheet_id: str = "",
-    sheet_column_names = "",
+    notify: str = "",
+    channel: str = "",
 ):
     untagged_records_s3_path = fetch_calls_op(
         client_id=client_id,
@@ -46,18 +49,32 @@ def run_fetch_n_tag_calls(
         "P0D" # disables caching
     )
     
-    untagged_records_op = download_from_s3_op(storage_path=untagged_records_s3_path.outputs["output"])
+    untagged_records = download_from_s3_op(storage_path=untagged_records_s3_path.outputs["output"])
+    
+    untagged_records.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
     
     upload = upload2sheet_op(
-        untagged_records_op.outputs["output"],
+        untagged_records.outputs["output"],
         org_id=org_id,
         sheet_id=sheet_id,
         language_code=lang,
-        num_rows=call_quantity,
-        given_comma_seperated_columns=sheet_column_names
     )
     
     upload.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
     )
     
+    num_calls_uploaded = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
+    num_calls_uploaded.display_name = "get-num-calls-uploaded"
+    spread_sheet_url = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
+    spread_sheet_url.display_name = "get-spread-sheet-url"
+    
+    notification_text = f"""Uploaded {getattr(num_calls_uploaded, 'output')} calls to {getattr(spread_sheet_url, 'output')}"""
+    
+    with kfp.dsl.Condition(notify != "", "notify").after(upload) as check1:
+        task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
+        task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )

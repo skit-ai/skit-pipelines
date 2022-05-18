@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.62
+- [x] update: remove helper function for upload2sheet
+- [x] update: sheet duplication and row logic while pushing calls to google sheet
+
 ## 0.1.53
 - [x] update: move helper functions of upload2sheet into a folder
 
