@@ -18,6 +18,7 @@ def run_fetch_calls(
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    states: str,
     call_quantity: int = 200,
     call_type: str = "inbound",
     notify: bool = False,
@@ -35,6 +36,7 @@ def run_fetch_calls(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
+        states=states,
     )
 
     with kfp.dsl.Condition(notify == True, "notify").after(

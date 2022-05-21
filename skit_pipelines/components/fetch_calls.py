@@ -20,6 +20,7 @@ def fetch_calls(
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
+    states: Optional[str] = None,
 ) -> str:
     import tempfile
     import time
@@ -62,6 +63,7 @@ def fetch_calls(
         flow_name=flow_name or None,
         min_duration=min_duration or None,
         asr_provider=asr_provider or None,
+        states = states or None,
         on_disk=False,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
