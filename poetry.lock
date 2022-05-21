@@ -1342,7 +1342,7 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.13"
+version = "0.2.15"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
@@ -1720,7 +1720,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1f2a0df05b94d9d8ddbc85837e5abc52dbbe16799d09a10337090237a1d594ad"
+content-hash = "ccb5ab28e5b77706d4b6231e218a0a8baa22a5428d6a55999324dab9a1664491"
 
 [metadata.files]
 aiobotocore = [
@@ -2730,10 +2730,6 @@ rich = [
     {file = "ruamel.yaml-0.17.21.tar.gz", hash = "sha256:8b7ce697a2f212752a35c1ac414471dc16c424c9573be4926b56ff3f5d23b7af"},
 ]
 "ruamel.yaml.clib" = [
-    {file = "ruamel.yaml.clib-0.2.6-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:6e7be2c5bcb297f5b82fee9c665eb2eb7001d1050deaba8471842979293a80b0"},
-    {file = "ruamel.yaml.clib-0.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl", hash = "sha256:221eca6f35076c6ae472a531afa1c223b9c29377e62936f61bc8e6e8bdc5f9e7"},
-    {file = "ruamel.yaml.clib-0.2.6-cp310-cp310-win32.whl", hash = "sha256:1070ba9dd7f9370d0513d649420c3b362ac2d687fe78c6e888f5b12bf8bc7bee"},
-    {file = "ruamel.yaml.clib-0.2.6-cp310-cp310-win_amd64.whl", hash = "sha256:77df077d32921ad46f34816a9a16e6356d8100374579bc35e15bab5d4e9377de"},
     {file = "ruamel.yaml.clib-0.2.6-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:cfdb9389d888c5b74af297e51ce357b800dd844898af9d4a547ffc143fa56751"},
     {file = "ruamel.yaml.clib-0.2.6-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:7b2927e92feb51d830f531de4ccb11b320255ee95e791022555971c466af4527"},
     {file = "ruamel.yaml.clib-0.2.6-cp35-cp35m-win32.whl", hash = "sha256:ada3f400d9923a190ea8b59c8f60680c4ef8a4b0dfae134d2f2ff68429adfab5"},
@@ -2788,8 +2784,8 @@ skit-auth = [
     {file = "skit_auth-0.1.3-py3-none-any.whl", hash = "sha256:caa9dcd2ef8c82454096ba872d4de00bf5c56de0837db9f2d13c83634b8fe74f"},
 ]
 skit-calls = [
-    {file = "skit-calls-0.2.13.tar.gz", hash = "sha256:4df52aa9dd88681a3032d4d42b11906f037c3702d955bb9db74c3eb4f0247988"},
-    {file = "skit_calls-0.2.13-py3-none-any.whl", hash = "sha256:2074ade30e482221bd9646bc02f44c780d79c7ecd2d0b4f520907c960631a03c"},
+    {file = "skit-calls-0.2.15.tar.gz", hash = "sha256:c1c7b24d8ed9124139db73d6434f5c572914b65476958e32ef999eaf9717c06f"},
+    {file = "skit_calls-0.2.15-py3-none-any.whl", hash = "sha256:836f8a740cdbdf93775f125ed763dd558ebeee9522a34a0e4f0ab3cdbb5d3854"},
 ]
 skit-fixdf = [
     {file = "skit-fixdf-0.1.12.tar.gz", hash = "sha256:b5d48a93bf542eded9ab8210be0301e30544ad963f71fe0b8ba90beba16f44e5"},

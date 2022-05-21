@@ -26,6 +26,7 @@ def run_fetch_n_tag_calls(
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    states: str,
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     notify: str = "",
@@ -44,6 +45,7 @@ def run_fetch_n_tag_calls(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
+        states=states,
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (
