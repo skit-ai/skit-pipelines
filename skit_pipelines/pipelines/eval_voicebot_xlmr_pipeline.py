@@ -8,6 +8,7 @@ from skit_pipelines.components import (
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
+    gen_confusion_matrix_op,
     gen_irr_metrics_op,
     get_preds_voicebot_xlmr_op,
     upload2s3_op,
@@ -21,7 +22,7 @@ INTENT = pipeline_constants.INTENT
 
 @kfp.dsl.pipeline(
     name="XLMR Voicebot Eval Pipeline",
-    description="Produces IRR metrics for an XLM Roberta model on given dataset.",
+    description="Produces intent metrics for an XLM Roberta model on given dataset.",
 )
 def run_xlmr_eval(
     *,
@@ -71,9 +72,26 @@ def run_xlmr_eval(
     )
 
     # produce test set metrics.
-    upload = upload2s3_op(
+    upload_irr = upload2s3_op(
         irr_op.outputs["output"], org_id, "xlmr-irr-metrics", BUCKET, ".txt"
     )
-    upload.execution_options.caching_strategy.max_cache_staleness = (
+    upload_irr.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    confusion_matrix_op = gen_confusion_matrix_op(
+        pred_op.outputs["output"],
+        true_label_column=INTENT_Y,
+        pred_label_column=INTENT,
+    )
+
+    upload_cm = upload2s3_op(
+        confusion_matrix_op.outputs["output"],
+        org_id,
+        "xlmr-confusion-matrix",
+        BUCKET,
+        ".txt",
+    )
+    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
