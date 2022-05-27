@@ -92,7 +92,7 @@ def get_run_info(
         method_fn="get_run",
         run_id=run_id
     )
-    
+
     parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
     return models.statusWiseResponse(parsed_resp)
 
