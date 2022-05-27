@@ -12,7 +12,7 @@ from skit_pipelines.components import (
     name="Fetch and push for calls to gogole sheets pipeline",
     description="fetches calls from production db with respective arguments and uploads calls to google sheets for CRR tagging",
 )
-def run_fetch_n_tag_calls(
+def run_fetch_calls_n_push_to_sheets(
     client_id: int,
     org_id: str,
     start_date: str,
@@ -60,20 +60,37 @@ def run_fetch_n_tag_calls(
         org_id=org_id,
         sheet_id=sheet_id,
         language_code=lang,
+        flow_name=flow_name,
     )
     
     upload.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
     )
-    
-    num_calls_uploaded = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
-    num_calls_uploaded.display_name = "get-num-calls-uploaded"
-    spread_sheet_url = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
-    spread_sheet_url.display_name = "get-spread-sheet-url"
-    
-    notification_text = f"""Uploaded {getattr(num_calls_uploaded, 'output')} calls to {getattr(spread_sheet_url, 'output')}"""
-    
-    with kfp.dsl.Condition(notify != "", "notify").after(upload) as check1:
+
+    spread_sheet_url_op = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
+    spread_sheet_url_op.display_name = "get-spread-sheet-url"
+
+    spread_sheet_url_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
+
+    num_calls_uploaded_op = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
+    num_calls_uploaded_op.display_name = "get-num-calls-uploaded"
+
+    num_calls_uploaded_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
+
+    notification_text_op: str = read_json_key_op("notification_text", upload.outputs["output_json"])
+    notification_text_op.display_name = "get-num-calls-uploaded"
+
+    notification_text_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
+
+    notification_text = f"{getattr(notification_text_op, 'output')}"
+
+    with kfp.dsl.Condition(notify != "", "notify").after(upload) as check3:
         task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

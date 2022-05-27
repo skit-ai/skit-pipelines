@@ -10,6 +10,7 @@ def upload2sheet(
     org_id: str = "",
     sheet_id = "",
     language_code = "",
+    flow_name = "",
 ) -> Dict[str, Any]:
     
     from loguru import logger
@@ -19,6 +20,20 @@ def upload2sheet(
     from oauth2client.service_account import ServiceAccountCredentials
     import json
     import pandas as pd
+
+    today_str = date.today().strftime('%d-%m-%Y')
+
+    try:
+        df = pd.read_csv(untagged_records_path_on_disk)
+    except pd.errors.EmptyDataError:
+        output_dict = {
+            "num_calls_uploaded": 0,
+            "spread_sheet_url": f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit",
+            "notification_text": f"No {language_code} language calls found to be uploaded to google sheets for {flow_name} flow on {today_str}"
+        }
+        with open(output_json, "w") as writer:
+            json.dump(output_dict, writer, indent=4)
+        return output_dict
     
     scopes = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
@@ -31,7 +46,7 @@ def upload2sheet(
     spreadsheet = client.open_by_key(sheet_id)
     
     
-    target_worksheet_title = f"{language_code}-{date.today().strftime('%d-%m-%Y')}"
+    target_worksheet_title = f"{language_code}-{today_str}"
     source_worksheet_title = spreadsheet.worksheet("DD-MM-YYYY")
     duplicate_worksheet_request = {
         "duplicateSheet":{
@@ -74,7 +89,6 @@ def upload2sheet(
     
     main_analysis_worksheet.update_cell(main_analysis_worksheet_last_row+1, 1, target_worksheet_title)
     
-    df = pd.read_csv(untagged_records_path_on_disk)
     unique_uuids = df.call_uuid.unique()
     console_links = [
         f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={i}"
@@ -86,10 +100,14 @@ def upload2sheet(
     console_cell_values = [[console_link] for console_link in console_links]
     target_worksheet.update(update_range, console_cell_values)
     logger.debug(f"Uploaded {untagged_records_path_on_disk} to google sheet {sheet_id}")
+
+    num_calls_uploaded = len(console_links)
+    spread_sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit#gid={target_worksheet.id}"
     
     output_dict = {
         "num_calls_uploaded": len(console_links),
-        "spread_sheet_url": f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit#gid={target_worksheet.id}"
+        "spread_sheet_url": f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit#gid={target_worksheet.id}",
+        "notification_text":  f"""Uploaded {num_calls_uploaded} {language_code} language calls to {spread_sheet_url} for {flow_name} flow on {today_str}"""
     }
     with open(output_json, "w") as writer:
         json.dump(output_dict, writer, indent=4)
