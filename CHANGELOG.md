@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.78
+## 0.1.79
 
 - [x] add: intent evaluation pipeline.
 - [x] add: crr evaluation pipeline.
