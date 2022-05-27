@@ -9,7 +9,7 @@ from slack_bolt import App
 from skit_pipelines import constants as const
 
 
-app = App(token=os.environ[const.SLACK_TOKEN])
+app = App(token=os.environ["SLACK_TOKEN"])
 
 
 def get_reply_metadata(body):
@@ -19,26 +19,26 @@ def get_reply_metadata(body):
     return channel, ts, text
 
 
-async def run_pipeline(pipeline_name, payload, message_ts, channel_id, say):
+async def run_pipeline(pipeline_name, payload):
     async with aiohttp.ClientSession() as session:
         async with session.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload) as resp:
             response_message = await resp.text()
-            run_url = response_message.get("run_url")
-            name = response_message.get("name")
-            message = f"Pipeline <{run_url}|{name}> started."
+            status_code = resp.status
+    if status_code != 200:
+        return f"""
+Failed to create pipeline:
+```
+{response_message}
+```
+""".strip()
+    success_message = response_message.get("response")
+    run_url = success_message.get("run_url")
+    name = success_message.get("name")
+    return f"Running <{run_url}|{name}> pipeline."
 
-            say(
-                thread_ts=message_ts,
-                channel=channel_id,
-                link_names=True,
-                unfurl_link=True,
-                unfurl_media=True,
-                text=message,
-            )
 
-
-def help(message_ts, channel_id, say):
-    message = """
+def help():
+    return """
 Currently supported commands are:
 
 @charon run *pipeline-name*
@@ -51,14 +51,6 @@ Currently supported commands are:
 
 <https://github.com/skit-ai/skit-pipelines | List of pipelines and there documentation>
 """
-    say(
-        thread_ts=message_ts,
-        channel=channel_id,
-        link_names=True,
-        unfurl_link=True,
-        unfurl_media=True,
-        text=message,
-    )
 
 
 def command_parser(text):
@@ -91,5 +83,11 @@ async def handle_app_mention_events(body, say, logger):
     channel_id, message_ts, text = get_reply_metadata(body)
     command, pipeline_name, payload = command_parser(text)
     match command:
-        case "run": await run_pipeline(pipeline_name, payload, message_ts, channel_id, say)
-        case _: help(message_ts, channel_id, say)
+        case "run"  : response = await run_pipeline(pipeline_name, payload)
+        case _      : response = help()
+    say(
+        thread_ts=message_ts,
+        channel=channel_id,
+        unfurl_link=True,
+        text=response,
+    )
