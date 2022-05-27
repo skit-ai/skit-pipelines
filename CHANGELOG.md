@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.78
+
+- [x] add: intent evaluation pipeline.
+- [x] add: crr evaluation pipeline.
+- [x] add: slack-bot integration.
+
 ## 0.1.42
 
 - [x] update: XLMR training supports lr parameter.
