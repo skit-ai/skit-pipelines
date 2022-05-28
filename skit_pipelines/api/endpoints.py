@@ -115,13 +115,12 @@ def get_run_info(
     parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
     return models.statusWiseResponse(parsed_resp)
 
+
 @app.post("/{namespace}/pipelines/run/{pipeline_name}/")
 def pipeline_run_req(*,
     namespace: str,
     pipeline_name: str,
-    run_name: str | None = None,
-    component_name: str | None = None,
-    payload: models.ValidRequestSchemas,
+    payload: Dict[str, Any],
     background_tasks: BackgroundTasks
 ):
     kf_client = kubeflow_login()
