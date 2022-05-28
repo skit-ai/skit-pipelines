@@ -51,7 +51,7 @@ class Config:
             pipeline_name: pipeline_config['topic'] \
                 for pipeline_name, pipeline_config in self.get_pipeline_configs().items()
         }
-    
+
     def valid_pipeline(self, name: str) -> bool:
         return name in self.get_pipeline_names()
         
