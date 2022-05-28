@@ -35,12 +35,11 @@ class RunPipelineResult:
 
 
 def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
-    global KF_CLIENT
-    KF_CLIENT = kubeflow_login()
-    if not KF_CLIENT.get_kfp_healthz().multi_user:
-        KF_CLIENT = kubeflow_login(force=True)
+    kf_client = kubeflow_login()
+    if not kf_client.get_kfp_healthz().multi_user:
+        kf_client = kubeflow_login(force=True)
 
-    client_run = getattr(KF_CLIENT, method_fn)(*args, **kwargs)
+    client_run = getattr(kf_client, method_fn)(*args, **kwargs)
     return client_run
 
 
