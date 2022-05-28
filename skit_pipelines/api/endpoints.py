@@ -74,8 +74,7 @@ async def schedule_run_completion(
 async def startup_event():
     logger.info("Starting Up...")
     logger.info("Initializing kubeflow client.")
-    global KF_CLIENT
-    KF_CLIENT = kubeflow_login()
+    kf_client = kubeflow_login()
     await aioproducer.start()
     logger.info("Kubeflow client initialized.")
 
@@ -84,7 +83,7 @@ async def startup_event():
 async def shutdown_event():
     await aioproducer.stop()
     logger.info("Stopping server...")
-    
+
 
 @app.get("/")
 def health_check():
@@ -93,9 +92,9 @@ def health_check():
     The purpose of this API is to help other people/machines know liveness of the application.
     """
     logger.info("Health check pinged!")
-    KF_CLIENT = kubeflow_login()
-    if KF_CLIENT.get_kfp_healthz().multi_user:
-        return models.customResponse("Kubeflow server communication is up!")
+    kf_client = kubeflow_login()
+    if kf_client.get_kfp_healthz().multi_user:
+        return models.customResponse({"message": "Kubeflow server communication is up!"})
     else:
         raise models.errors.kfp_api_error(
             reason="Unable to communicate with Kubeflow server..."
