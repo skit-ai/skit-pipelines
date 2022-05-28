@@ -9,14 +9,14 @@ def validate_request_success(resp: requests.Response | str):
     Validate the response from the webhook request
     """
     return not isinstance(resp, str) and resp.status_code in [200, 201]
-    
-    
+
+
 def send_webhook_request(url: str, data: Dict[str, Any]):
     """
     Send finished runs to the webhook url
     """
     try:
-        response = requests.post(url, data=data)
+        response = requests.post(url, json=data)
         if validate_request_success(response):
             logger.info(f"Successfully sent webhook request to {url=} and {response.text=}")
         else:
