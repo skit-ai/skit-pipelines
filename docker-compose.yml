@@ -30,17 +30,17 @@ services:
       - zookeeper
 
   kfp-server:
-    image: $BASE_IMAGE
+    build: .
     container_name: kfp-server
     ports:
       - "9991:9991"
-    depends_on: 
+    depends_on:
       - kafka
-    entrypoint: 
-      - bash 
-      - -c 
+    entrypoint:
+      - bash
+      - -c
       - |
         echo 'Giving Kafka a bit of time to start up…'
         sleep 20
         # Run the server code
-        uvicorn skit_pipelines.api.endpoints:app --proxy-headers --host 0.0.0.0 --port 9991 --workers 1
+        source /home/kfp/secrets/env.sh && uvicorn skit_pipelines.api.endpoints:app --proxy-headers --host 0.0.0.0 --port 9991 --workers 1
