@@ -146,7 +146,7 @@ If your pipeline is present, it is not supported in the official release.""",
         payload = Schema.parse_obj(payload)
     except pydantic.error_wrappers.ValidationError as e:
         raise models.errors.kfp_api_error(
-            reason=str(e).errors(),
+            reason=str(e),
             status=400
         ) from e
 
