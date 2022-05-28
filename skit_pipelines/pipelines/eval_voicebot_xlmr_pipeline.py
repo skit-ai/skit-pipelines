@@ -5,6 +5,7 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     create_features_op,
+    create_pred_intent_labels_op,
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
@@ -18,6 +19,7 @@ UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
 BUCKET = pipeline_constants.BUCKET
 INTENT = pipeline_constants.INTENT
+TAG = pipeline_constants.INTENT
 
 
 @kfp.dsl.pipeline(
@@ -56,15 +58,19 @@ def eval_voicebot_xlmr_pipeline(
 
     # get predictions from the model
     # TODO: make s3_path_model optional, without which predictions already present in the csv to be used.
-    pred_op = get_preds_voicebot_xlmr_op(
-        preprocess_data_op.outputs["output"],
-        loaded_model_op.outputs["output"],
-        utterance_column=UTTERANCES,
-        output_pred_label_column=INTENT,
-    )
-
-    pred_op.set_gpu_limit(1)
-
+    with kfp.dsl.Condition(s3_path_model != "", "s3_path_model_check") as check2:
+        pred_op = get_preds_voicebot_xlmr_op(
+            preprocess_data_op.outputs["output"],
+            loaded_model_op.outputs["output"],
+            utterance_column=UTTERANCES,
+            output_pred_label_column=INTENT,
+        )
+        pred_op.set_gpu_limit(1)
+    with kfp.dsl.Condition(s3_path_model == "", "s3_path_model_check") as check3:
+        pred_op = create_pred_intent_labels_op(
+            preprocess_data_op.outputs["output"]
+        )
+    
     irr_op = gen_irr_metrics_op(
         pred_op.outputs["output"],
         true_label_column=INTENT_Y,
