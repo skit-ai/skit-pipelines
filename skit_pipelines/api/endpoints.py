@@ -58,22 +58,16 @@ def run_kfp(kf_client: kfp.Client, pipeline_id: str, pipeline_name: str, params:
 
 
 async def schedule_run_completion(
-    client_resp,
+    client_resp: RunPipelineResult,
     namespace: str,
-    component_name: str,
-    payload: models.BaseRequestSchema,
     webhook_url: str
 ):
-    webhook_req = True if webhook_url else False
-    run_resp: kfp_ApiRunDetail  = await run_in_threadpool(client_resp.wait_for_run_completion)
-    logger.info(f"Pipeline run for {component_name} finished!")
-    parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=component_name)
-    msg = models.statusWiseResponse(parsed_resp, webhook=webhook_req)
-    await aioproducer.send(config.KAFKA_TOPIC_MAP[component_name], msg.body)
-    logger.info((f"Results sent to queue."))
-    if webhook_req:
+    run_resp: kfp_ApiRunDetail = await run_in_threadpool(client_resp.wait_for_run_completion)
+    logger.info(f"Pipeline run finished!")
+    parsed_resp = models.ParseRunResponse(run=run_resp, namespace=namespace)
+    msg = models.statusWiseResponse(parsed_resp, webhook=bool(webhook_url))
+    if webhook_url:
         webhook_utils.send_webhook_request(url=webhook_url, data=msg.body)
-        
 
 
 @app.on_event("startup")
