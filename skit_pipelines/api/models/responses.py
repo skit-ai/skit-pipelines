@@ -14,12 +14,13 @@ class StatusResponseModel(BaseModel):
     uris: List[str] | None = None
     webhook: bool = False
 
-def customResponse(message: str | Dict[Any, Any], status_code: int = 200, status: str = "ok") -> JSONResponse:
+
+def customResponse(message: Dict[Any, Any], status_code: int = 200, status: str = "ok") -> JSONResponse:
     return JSONResponse(dict(
         status=status,
-        response={"message": message} if isinstance(message, str) else message,
+        response=message,
     ), status_code=status_code)
-    
+
 def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
     _message = StatusResponseModel(
         message="",
