@@ -170,15 +170,13 @@ If your pipeline is present, it is not supported in the official release.""",
     )
 
 
-
 @app.exception_handler(kfp_server_api.ApiException)
 async def kfp_api_exception_handler(request, exc):
     return models.customResponse(
+        {"message": f"{exc}"},
         status_code=exc.status,
-        message=f"{exc}",
         status="error",
     )
-
 
 
 if __name__ == "__main__":
