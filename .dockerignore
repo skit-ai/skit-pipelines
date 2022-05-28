@@ -69,8 +69,6 @@ instance/
 .scrapy
 
 # Shell
-*.sh
-
 
 # Sphinx documentation
 docs/_build/
