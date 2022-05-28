@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 0.1.80
+
+- [x] add: slack-bot integration. Invoke pipelines via slackbot.
+- [x] refactor: Automatic generation of pydantic models using kfp signature.
+
 ## 0.1.79
 
 - [x] add: intent evaluation pipeline.
