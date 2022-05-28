@@ -43,6 +43,13 @@ def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
     return client_run
 
 
+def get_default_experiment_id(kf_client: kfp.Client):
+    experiments = kf_client.list_experiments(namespace=const.KF_NAMESPACE).experiments
+    for experiment in experiments:
+        if experiment.name == const.DEFAULT_EXPERIMENT_NAME:
+            return experiment.id
+    raise ValueError(f"No experiment named {const.DEFAULT_EXPERIMENT_NAME} found in namespace {const.KF_NAMESPACE}.")
+
 async def schedule_run_completion(
     client_resp,
     namespace: str,
