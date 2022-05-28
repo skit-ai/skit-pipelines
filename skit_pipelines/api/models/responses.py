@@ -11,8 +11,7 @@ class StatusResponseModel(BaseModel):
     message: str
     run_id: str
     run_url: str
-    file_path: str | None = None
-    s3_path: str | None = None
+    uris: List[str] | None = None
     webhook: bool = False
 
 def customResponse(message: str | Dict[Any, Any], status_code: int = 200, status: str = "ok") -> JSONResponse:
