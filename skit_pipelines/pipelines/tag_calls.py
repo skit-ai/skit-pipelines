@@ -12,7 +12,7 @@ from skit_pipelines.components import (
     name="Tag Calls Pipeline",
     description="Uploads calls to database for tagging",
 )
-def run_tag_calls(org_id: str, job_ids: str, s3_path: str, notify: bool = False):
+def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -31,7 +31,7 @@ def run_tag_calls(org_id: str, job_ids: str, s3_path: str, notify: bool = False)
         f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
     )
     
-    with kfp.dsl.Condition(notify == True, "notify").after(errors) as check1:
+    with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "")
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

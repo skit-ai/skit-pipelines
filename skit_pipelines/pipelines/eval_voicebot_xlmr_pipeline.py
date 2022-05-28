@@ -24,7 +24,7 @@ INTENT = pipeline_constants.INTENT
     name="XLMR Voicebot Eval Pipeline",
     description="Produces intent metrics for an XLM Roberta model on given dataset.",
 )
-def run_xlmr_eval(
+def eval_voicebot_xlmr_pipeline(
     *,
     s3_path_data: str,
     s3_path_model: str,

@@ -13,7 +13,7 @@ from skit_pipelines.components import (
     name="Fetch and push for tagging calls pipeline",
     description="fetches calls from production db with respective arguments and uploads calls to database for tagging",
 )
-def run_fetch_n_tag_calls(
+def fetch_n_tag_calls(
     client_id: int,
     org_id: str,
     job_ids: str,

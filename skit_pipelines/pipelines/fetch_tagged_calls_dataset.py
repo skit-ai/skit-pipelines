@@ -14,14 +14,14 @@ from skit_pipelines.components import (
     name="Fetch Tagged Dataset Pipeline",
     description="fetches tagged dataset from tog with respective arguments",
 )
-def run_fetch_tagged_dataset(
+def fetch_tagged_calls_dataset(
     org_id: str,
     job_id: int,
     start_date: str,
     end_date: str,
     timezone: str = "Asia/Kolkata",
     task_type: str = "conversation",
-    notify: bool = False
+    notify: str = ""
 ):
     tagged_df = fetch_tagged_dataset_op(
         job_id,
@@ -29,6 +29,9 @@ def run_fetch_tagged_dataset(
         timezone=timezone,
         start_date=start_date,
         end_date=end_date,
+    )
+    tagged_df.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
     )
     s3_upload = upload2s3_op(
         path_on_disk=tagged_df.outputs["output"],

@@ -21,7 +21,7 @@ BUCKET = pipeline_constants.BUCKET
     name="XLMR Voicebot Training Pipeline",
     description="Trains an XLM Roberta model on given dataset.",
 )
-def run_xlmr_train(*,
+def train_voicebot_intent_model_xlmr(*,
     s3_path: str = "",
     dataset_path: str = "",
     model_path: str,
