@@ -1,7 +1,29 @@
-from typing import Any, Dict, List
-from pydantic import BaseModel, validator
+import inspect
+from typing import Optional
+from pydantic import BaseModel, validator, create_model
 
 import skit_pipelines.constants as const
+from skit_pipelines import pipelines
+from skit_pipelines.utils.normalize import to_camel_case
+
+
+def get_all_pipelines_fn():
+    return {
+        pipeline_name: pipeline_fn
+        for pipeline_name, pipeline_fn in pipelines.__dict__.items()
+        if not pipeline_name.startswith("__") and callable(pipeline_fn)
+    }
+
+
+def generate_schema(pipeline_name, pipeline_fn):
+    signature = inspect.signature(pipeline_fn)
+    params = {
+        param_name: (param.annotation, param.default if param.default is not inspect.Parameter.empty else ...)
+        for param_name, param in signature.parameters.items()
+    }
+    params = {"webhook_uri": (Optional[str], None), **params}
+    return create_model(to_camel_case(pipeline_name), **params, __base__=BaseRequestSchema)
+
 
 class BaseRequestSchema(BaseModel):
     @validator('*', pre=True)
@@ -12,6 +34,7 @@ class BaseRequestSchema(BaseModel):
 class StorageOptions(BaseRequestSchema):
     type: str = "s3"
     bucket: str = const.BUCKET
+
 
 class FetchCallSchema(BaseRequestSchema):
     """
@@ -42,7 +65,6 @@ class TagCallSchema(BaseRequestSchema):
     job_id: int
     s3_path: str
     notify: str | None = False
-    
 
 class TrainModelSchema(BaseRequestSchema):
     """
