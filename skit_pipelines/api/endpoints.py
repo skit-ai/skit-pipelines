@@ -50,6 +50,13 @@ def get_default_experiment_id(kf_client: kfp.Client):
             return experiment.id
     raise ValueError(f"No experiment named {const.DEFAULT_EXPERIMENT_NAME} found in namespace {const.KF_NAMESPACE}.")
 
+
+def run_kfp(kf_client: kfp.Client, pipeline_id: str, pipeline_name: str, params: Dict[str, Any]):
+    experiment_id = get_default_experiment_id(kf_client)
+    run_info = kf_client.run_pipeline(experiment_id, pipeline_name, pipeline_id=pipeline_id, params=params, enable_caching=False)
+    return RunPipelineResult(kf_client, run_info)
+
+
 async def schedule_run_completion(
     client_resp,
     namespace: str,
