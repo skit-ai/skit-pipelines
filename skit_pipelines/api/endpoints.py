@@ -124,26 +124,44 @@ def pipeline_run_req(*,
     payload: models.ValidRequestSchemas,
     background_tasks: BackgroundTasks
 ):
-    if not config.valid_pipeline(pipeline_name):
+    kf_client = kubeflow_login()
+    if not kf_client.get_kfp_healthz().multi_user:
+        kf_client = kubeflow_login(force=True)
+    pipeline_name = normalize.to_snake_case(pipeline_name)
+
+    pipelines = {
+        normalize.to_snake_case(pipeline.name): pipeline.id
+        for pipeline in kf_client.list_pipelines().pipelines
+    }
+
+    pipeline_names = "\n".join(pipelines.keys())
+    if pipeline_name not in pipelines and pipeline_name not in models.RequestSchemas:
         raise models.errors.kfp_api_error(
-            reason=f"Invalid pipeline requested, check if it exists: {pipeline_name}",
+            reason=f"""Pipeline should be one of: {pipeline_names}.
+If your pipeline is present, it is not supported in the official release.""",
             status=400
         )
-    
-    run_name = run_name if run_name else config.RUN_NAME_MAP[pipeline_name]
-    component_name = component_name if component_name else pipeline_name
-    run = call_kfp_method(
-        pipeline_func=config.PIPELINE_FN_MAP[pipeline_name],
-        run_name=run_name,
-        namespace=namespace,
-        arguments=filter_schema(payload.dict(), const.FILTER_LIST)
+
+    Schema = models.RequestSchemas[pipeline_name]
+
+    try:
+        payload = Schema.parse_obj(payload)
+    except pydantic.error_wrappers.ValidationError as e:
+        raise models.errors.kfp_api_error(
+            reason=str(e).errors(),
+            status=400
+        ) from e
+
+    run = run_kfp(
+        kf_client,
+        pipeline_id=pipelines[pipeline_name],
+        pipeline_name=pipeline_name,
+        params=filter_schema(payload.dict(), const.FILTER_LIST)
     )
     background_tasks.add_task(
         schedule_run_completion,
         client_resp=run,
         namespace=namespace,
-        component_name=component_name,
-        payload=payload,
         webhook_url=payload.webhook_uri
     )
     return models.successfulCreationResponse(
