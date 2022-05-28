@@ -21,6 +21,7 @@ def customResponse(message: Dict[Any, Any], status_code: int = 200, status: str 
         response=message,
     ), status_code=status_code)
 
+
 def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
     _message = StatusResponseModel(
         message="",
@@ -30,21 +31,18 @@ def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
     )
     status = 'ok'
     status_code = 200
-    
+
     if run_response.success:
         _message.message = "Run completed successfully."
-        _message.file_path = run_response.data_path
-        _message.s3_path = run_response.s3_uri
-        
+        _message.uris = run_response.uris
     elif run_response.pending:
         _message.message = "Run in progress."
         status = 'pending'
-    
     else:
         _message.message = "Run failed."
         status = 'error'
         status_code = 500
-    
+
     return customResponse(
         message=_message.dict(),
         status=status,
