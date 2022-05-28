@@ -16,7 +16,7 @@ def kubeflow_login(force: bool = False) -> kfp.Client:
             cookie_dict = cookie_utils.fetch_latest_cookies()
 
     client = kfp.Client(
-            host=const.PIPELINE_HOST_URL,
-            cookies=const.CONSTRUCT_COOKIE_TOKEN(cookie_dict)
-        )
+        host=const.PIPELINE_HOST_URL,
+        cookies=const.CONSTRUCT_COOKIE_TOKEN(cookie_dict)
+    )
     return client
