@@ -20,6 +20,19 @@ aioproducer = AIOKafkaProducer(
     loop=loop, client_id=const.PROJECT_NAME, bootstrap_servers=const.KAFKA_INSTANCE
 )
 
+class RunPipelineResult:
+    def __init__(self, client, run_info):
+        self._client: kfp.Client = client
+        self.run_info = run_info
+        self.run_id = run_info.id
+
+    def wait_for_run_completion(self, timeout=None):
+        timeout = timeout or timedelta.max
+        return self._client.wait_for_run_completion(self.run_id, timeout)
+
+    def __repr__(self):
+        return 'RunPipelineResult(run_id={})'.format(self.run_id)
+
 
 def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
     global KF_CLIENT
