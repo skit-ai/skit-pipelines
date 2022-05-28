@@ -14,6 +14,9 @@ DB_PORT = os.environ["DB_PORT"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
 
+KF_NAMESPACE = "skit"
+DEFAULT_EXPERIMENT_NAME = "Default"
+
 PROJECT_NAME = "skit-pipelines"
 CONFIG_DIR = "config/"
 CONFIG_FILE = "config.yaml"
@@ -55,6 +58,13 @@ SUBMIT_BUTTON_ID = 'signInSubmitButton'
 USERNAME_XPATH = f"(//input[@id='{USERNAME_ELEMENT_ID}'])[2]"
 PASSWORD_XPATH = f"(//input[@id='{PASSWORD_ELEMENT_ID}'])[2]"
 SUBMIT_XPATH = f"(//input[@name='{SUBMIT_BUTTON_ID}'])[2]"
+
+NODE_TYPE = "type"
+NODE_TYPE_POD = "Pod"
+NODE_OUTPUT = "outputs"
+NODE_ARTIFACTS = "artifacts"
+ARTIFACT_URI_KEY = "key"
+OBJECT_BUCKET = "bucket"
 
 NAME = "name"
 VALUE = "value"
