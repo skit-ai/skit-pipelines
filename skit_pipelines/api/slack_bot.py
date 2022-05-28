@@ -22,19 +22,19 @@ def get_reply_metadata(body):
 async def run_pipeline(pipeline_name, payload):
     async with aiohttp.ClientSession() as session:
         async with session.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload) as resp:
-            response_message = await resp.text()
+            response_message = await resp.json()
             status_code = resp.status
     if status_code != 200:
         return f"""
 Failed to create pipeline:
 ```
-{response_message}
+{json.dumps(response_message, indent=2)}
 ```
 """.strip()
     success_message = response_message.get("response")
     run_url = success_message.get("run_url")
     name = success_message.get("name")
-    return f"Running <{run_url}|{name}> pipeline."
+    return f"Running <{run_url} | {name}> pipeline."
 
 
 def help():
