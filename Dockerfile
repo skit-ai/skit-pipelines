@@ -35,9 +35,11 @@ RUN poetry config virtualenvs.create false
 
 RUN conda install scipy
 
-COPY . .
+COPY pyproject.toml .
+
 RUN poetry install --no-dev
 
+COPY . .
 
 ARG BASE_IMAGE
 
