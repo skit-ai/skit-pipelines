@@ -1,19 +1,18 @@
-from typing import Dict
+from typing import Any, Dict
 import kfp
 import kfp_server_api
 from loguru import logger
 import asyncio
 from aiokafka import AIOKafkaProducer
+from datetime import timedelta
 
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
+import pydantic
 
-from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
-from skit_pipelines.utils.config import config
-from skit_pipelines.utils import kubeflow_login, webhook_utils, filter_schema
 import skit_pipelines.constants as const
+from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
+from skit_pipelines.utils import kubeflow_login, webhook_utils, filter_schema, normalize
 
-
-KF_CLIENT: kfp.Client
 
 loop = asyncio.get_event_loop()
 aioproducer = AIOKafkaProducer(
