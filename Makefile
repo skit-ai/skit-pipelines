@@ -17,12 +17,14 @@ test: ## Run the tests.conf
 clean:
 	@if [ -d "secrets" ]; then rm -rf secrets; fi
 
-pipes:
+update_secrets:
 	@dvc get https://github.com/skit-ai/skit-calls secrets
+
+pipes:
 	@for file in $(SOURCE_FILES); do \
 		echo "Building skit_pipelines/pipelines/$$file.py"; \
 		touch build/$$file.yaml; \
 		source secrets/env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
 
-all: clean pipes
+all: clean update_secrets pipes
