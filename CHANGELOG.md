@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.82
+
+- [x] fix: No module named 'skit_pipelines' caused by installing before copy source in dockerfile.
+- [x] refactor: makefile for building pipelines is leaner.
 
 ## 0.1.80
 
