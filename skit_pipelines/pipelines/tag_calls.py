@@ -15,7 +15,7 @@ from skit_pipelines.components import (
 def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
+        "P0D"  # disables caching
     )
     tag_calls_output = tag_calls_op(
         input_file=s3_path,
@@ -27,10 +27,8 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
     errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
     errors.display_name = "get-any-errors"
 
-    notification_text = (
-        f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
-    )
-    
+    notification_text = f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
+
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "")
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (

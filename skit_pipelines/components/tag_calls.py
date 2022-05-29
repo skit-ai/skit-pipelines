@@ -1,4 +1,5 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 import kfp
 from kfp.components import InputPath, OutputPath
 
@@ -27,7 +28,7 @@ def tag_calls(
     utils.configure_logger(7)
 
     url = pipeline_constants.CONSOLE_API_URL if url is None else url
-    job_ids = job_ids.replace(" ", "").split(',')
+    job_ids = job_ids.replace(" ", "").split(",")
 
     if os.path.isfile(input_file):
         with open(input_file, "r") as f:
@@ -35,15 +36,15 @@ def tag_calls(
 
     with open(token, "r") as reader:
         token = reader.read()
-        
+
     all_errors, df_sizes = [], []
     for job_id in job_ids:
         start = time.time()
-        
+
         errors, df_size = upload_dataset(input_file, url, token, int(job_id))
         all_errors.append(errors)
         df_sizes.append(df_size)
-        
+
         logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
         logger.info(f"{df_size=} rows in the dataset")
         logger.info(f"{errors=}")

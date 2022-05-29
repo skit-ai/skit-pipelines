@@ -21,7 +21,7 @@ def fetch_tagged_calls_dataset(
     end_date: str,
     timezone: str = "Asia/Kolkata",
     task_type: str = "conversation",
-    notify: str = ""
+    notify: str = "",
 ):
     tagged_df = fetch_tagged_dataset_op(
         job_id,
@@ -43,7 +43,9 @@ def fetch_tagged_calls_dataset(
 
     notification_text = f"Here is your data for {org_id=} and {job_id=}."
     with kfp.dsl.Condition(notify == True, "notify").after(s3_upload) as check1:
-        task_no_cache = slack_notification_op(notification_text, s3_path=s3_upload.output)
+        task_no_cache = slack_notification_op(
+            notification_text, s3_path=s3_upload.output
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )

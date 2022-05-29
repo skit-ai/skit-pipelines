@@ -1,23 +1,23 @@
+import asyncio
+from datetime import timedelta
 from typing import Any, Dict
+
 import kfp
 import kfp_server_api
-from loguru import logger
-import asyncio
-from aiokafka import AIOKafkaProducer
-from datetime import timedelta
-
-from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 import pydantic
+from aiokafka import AIOKafkaProducer
+from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
+from loguru import logger
 
 import skit_pipelines.constants as const
-from skit_pipelines.api import app, models, BackgroundTasks, run_in_threadpool
-from skit_pipelines.utils import kubeflow_login, webhook_utils, filter_schema, normalize
-
+from skit_pipelines.api import BackgroundTasks, app, models, run_in_threadpool
+from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
 
 loop = asyncio.get_event_loop()
 aioproducer = AIOKafkaProducer(
     loop=loop, client_id=const.PROJECT_NAME, bootstrap_servers=const.KAFKA_INSTANCE
 )
+
 
 class RunPipelineResult:
     def __init__(self, client, run_info):
@@ -30,7 +30,7 @@ class RunPipelineResult:
         return self._client.wait_for_run_completion(self.run_id, timeout)
 
     def __repr__(self):
-        return 'RunPipelineResult(run_id={})'.format(self.run_id)
+        return "RunPipelineResult(run_id={})".format(self.run_id)
 
 
 def call_kfp_method(method_fn: str = const.KFP_RUN_FN, *args, **kwargs):
@@ -47,21 +47,31 @@ def get_default_experiment_id(kf_client: kfp.Client):
     for experiment in experiments:
         if experiment.name == const.DEFAULT_EXPERIMENT_NAME:
             return experiment.id
-    raise ValueError(f"No experiment named {const.DEFAULT_EXPERIMENT_NAME} found in namespace {const.KF_NAMESPACE}.")
+    raise ValueError(
+        f"No experiment named {const.DEFAULT_EXPERIMENT_NAME} found in namespace {const.KF_NAMESPACE}."
+    )
 
 
-def run_kfp(kf_client: kfp.Client, pipeline_id: str, pipeline_name: str, params: Dict[str, Any]):
+def run_kfp(
+    kf_client: kfp.Client, pipeline_id: str, pipeline_name: str, params: Dict[str, Any]
+):
     experiment_id = get_default_experiment_id(kf_client)
-    run_info = kf_client.run_pipeline(experiment_id, pipeline_name, pipeline_id=pipeline_id, params=params, enable_caching=False)
+    run_info = kf_client.run_pipeline(
+        experiment_id,
+        pipeline_name,
+        pipeline_id=pipeline_id,
+        params=params,
+        enable_caching=False,
+    )
     return RunPipelineResult(kf_client, run_info)
 
 
 async def schedule_run_completion(
-    client_resp: RunPipelineResult,
-    namespace: str,
-    webhook_url: str
+    client_resp: RunPipelineResult, namespace: str, webhook_url: str
 ):
-    run_resp: kfp_ApiRunDetail = await run_in_threadpool(client_resp.wait_for_run_completion)
+    run_resp: kfp_ApiRunDetail = await run_in_threadpool(
+        client_resp.wait_for_run_completion
+    )
     logger.info(f"Pipeline run finished!")
     parsed_resp = models.ParseRunResponse(run=run_resp, namespace=namespace)
     msg = models.statusWiseResponse(parsed_resp, webhook=bool(webhook_url))
@@ -93,7 +103,9 @@ def health_check():
     logger.info("Health check pinged!")
     kf_client = kubeflow_login()
     if kf_client.get_kfp_healthz().multi_user:
-        return models.customResponse({"message": "Kubeflow server communication is up!"})
+        return models.customResponse(
+            {"message": "Kubeflow server communication is up!"}
+        )
     else:
         raise models.errors.kfp_api_error(
             reason="Unable to communicate with Kubeflow server..."
@@ -101,26 +113,22 @@ def health_check():
 
 
 @app.get("/{namespace}/pipelines/{pipeline_name}/runs/")
-def get_run_info(
-    namespace: str,
-    pipeline_name: str,
-    run_id: str
-):
-    run_resp = call_kfp_method(
-        method_fn="get_run",
-        run_id=run_id
-    )
+def get_run_info(namespace: str, pipeline_name: str, run_id: str):
+    run_resp = call_kfp_method(method_fn="get_run", run_id=run_id)
 
-    parsed_resp = models.ParseRunResponse(run=run_resp, component_display_name=pipeline_name)
+    parsed_resp = models.ParseRunResponse(
+        run=run_resp, component_display_name=pipeline_name
+    )
     return models.statusWiseResponse(parsed_resp)
 
 
 @app.post("/{namespace}/pipelines/run/{pipeline_name}/")
-def pipeline_run_req(*,
+def pipeline_run_req(
+    *,
     namespace: str,
     pipeline_name: str,
     payload: Dict[str, Any],
-    background_tasks: BackgroundTasks
+    background_tasks: BackgroundTasks,
 ):
     kf_client = kubeflow_login()
     if not kf_client.get_kfp_healthz().multi_user:
@@ -137,7 +145,7 @@ def pipeline_run_req(*,
         raise models.errors.kfp_api_error(
             reason=f"""Pipeline should be one of: {pipeline_names}.
 If your pipeline is present, it is not supported in the official release.""",
-            status=400
+            status=400,
         )
 
     Schema = models.RequestSchemas[pipeline_name]
@@ -145,27 +153,22 @@ If your pipeline is present, it is not supported in the official release.""",
     try:
         payload = Schema.parse_obj(payload)
     except pydantic.error_wrappers.ValidationError as e:
-        raise models.errors.kfp_api_error(
-            reason=str(e),
-            status=400
-        ) from e
+        raise models.errors.kfp_api_error(reason=str(e), status=400) from e
 
     run = run_kfp(
         kf_client,
         pipeline_id=pipelines[pipeline_name],
         pipeline_name=pipeline_name,
-        params=filter_schema(payload.dict(), const.FILTER_LIST)
+        params=filter_schema(payload.dict(), const.FILTER_LIST),
     )
     background_tasks.add_task(
         schedule_run_completion,
         client_resp=run,
         namespace=namespace,
-        webhook_url=payload.webhook_uri
+        webhook_url=payload.webhook_uri,
     )
     return models.successfulCreationResponse(
-        run_id=run.run_id,
-        name=pipeline_name,
-        namespace=namespace
+        run_id=run.run_id, name=pipeline_name, namespace=namespace
     )
 
 

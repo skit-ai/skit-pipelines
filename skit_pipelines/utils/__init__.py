@@ -1,10 +1,10 @@
-from typing import Dict, Any
 import os
 from datetime import datetime
+from typing import Any, Dict
 
 import skit_pipelines.utils.cookies as cookie_utils
-from skit_pipelines.utils.login import kubeflow_login
 import skit_pipelines.utils.webhook as webhook_utils
+from skit_pipelines.utils.login import kubeflow_login
 from skit_pipelines.utils.storage import create_storage_path
 
 
@@ -62,7 +62,7 @@ class SlackBlockFactory:
         names = []
         for name in cc.split(","):
             name = name.strip()
-            if name[0] != '@':
+            if name[0] != "@":
                 name = f"<@{name}>"
             if not name:
                 continue
@@ -80,8 +80,4 @@ class SlackBlockFactory:
 
 
 def filter_schema(schema: Dict[str, Any], filter_list: list) -> Dict[str, Any]:
-    return {
-        k: v
-        for k, v in schema.items()
-        if k not in filter_list
-    }
+    return {k: v for k, v in schema.items() if k not in filter_list}

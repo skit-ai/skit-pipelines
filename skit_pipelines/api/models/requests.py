@@ -1,6 +1,7 @@
 import inspect
 from typing import Optional
-from pydantic import BaseModel, validator, create_model
+
+from pydantic import BaseModel, create_model, validator
 
 import skit_pipelines.constants as const
 from skit_pipelines import pipelines
@@ -18,15 +19,20 @@ def get_all_pipelines_fn():
 def generate_schema(pipeline_name, pipeline_fn):
     signature = inspect.signature(pipeline_fn)
     params = {
-        param_name: (param.annotation, param.default if param.default is not inspect.Parameter.empty else ...)
+        param_name: (
+            param.annotation,
+            param.default if param.default is not inspect.Parameter.empty else ...,
+        )
         for param_name, param in signature.parameters.items()
     }
     params = {"webhook_uri": (Optional[str], None), **params}
-    return create_model(to_camel_case(pipeline_name), **params, __base__=BaseRequestSchema)
+    return create_model(
+        to_camel_case(pipeline_name), **params, __base__=BaseRequestSchema
+    )
 
 
 class BaseRequestSchema(BaseModel):
-    @validator('*', pre=True)
+    @validator("*", pre=True)
     def transform_none(cls, value):
         return "" if value is None else value
 
@@ -40,6 +46,7 @@ class FetchCallSchema(BaseRequestSchema):
     """
     Fetch Calls schema
     """
+
     webhook_uri: str | None = None
     client_id: int
     start_date: str
@@ -60,16 +67,19 @@ class TagCallSchema(BaseRequestSchema):
     """
     Tag Calls Schema
     """
+
     webhook_uri: str | None = None
     org_id: str
     job_id: int
     s3_path: str
     notify: str | None = False
 
+
 class TrainModelSchema(BaseRequestSchema):
     """
     Train Models Schema
     """
+
     webhook_uri: str | None = None
     dataset_path: str
     model_path: str

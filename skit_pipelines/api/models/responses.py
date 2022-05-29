@@ -1,10 +1,10 @@
 from typing import Any, Dict, List
-from pydantic import BaseModel, validator
 
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, validator
 
-from skit_pipelines.api.models.custom_models import ParseRunResponse
 import skit_pipelines.constants as const
+from skit_pipelines.api.models.custom_models import ParseRunResponse
 
 
 class StatusResponseModel(BaseModel):
@@ -15,21 +15,23 @@ class StatusResponseModel(BaseModel):
     webhook: bool = False
 
 
-def customResponse(message: Dict[Any, Any], status_code: int = 200, status: str = "ok") -> JSONResponse:
-    return JSONResponse(dict(
-        status=status,
-        response=message,
-    ), status_code=status_code)
+def customResponse(
+    message: Dict[Any, Any], status_code: int = 200, status: str = "ok"
+) -> JSONResponse:
+    return JSONResponse(
+        dict(
+            status=status,
+            response=message,
+        ),
+        status_code=status_code,
+    )
 
 
 def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
     _message = StatusResponseModel(
-        message="",
-        run_id=run_response.id,
-        run_url=run_response.url,
-        webhook=webhook
+        message="", run_id=run_response.id, run_url=run_response.url, webhook=webhook
     )
-    status = 'ok'
+    status = "ok"
     status_code = 200
 
     if run_response.success:
@@ -37,22 +39,23 @@ def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
         _message.uris = run_response.uris
     elif run_response.pending:
         _message.message = "Run in progress."
-        status = 'pending'
+        status = "pending"
     else:
         _message.message = "Run failed."
-        status = 'error'
+        status = "error"
         status_code = 500
 
     return customResponse(
-        message=_message.dict(),
-        status=status,
-        status_code=status_code
+        message=_message.dict(), status=status, status_code=status_code
     )
 
+
 def successfulCreationResponse(run_id: str, name: str, namespace: str):
-    return customResponse({
-        "message": "Pipeline run created successfully.",
-        "name": name,
-        "run_id": run_id,
-        "run_url": const.GET_RUN_URL(namespace, run_id)
-    })
+    return customResponse(
+        {
+            "message": "Pipeline run created successfully.",
+            "name": name,
+            "run_id": run_id,
+            "run_url": const.GET_RUN_URL(namespace, run_id),
+        }
+    )

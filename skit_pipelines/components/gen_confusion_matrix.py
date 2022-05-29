@@ -24,10 +24,7 @@ def gen_confusion_matrix(
         f"Generating confusion matrix on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
     )
 
-    cm_df = pd.crosstab(
-        pred_df[true_label_column],
-        pred_df[pred_label_column]
-    )
+    cm_df = pd.crosstab(pred_df[true_label_column], pred_df[pred_label_column])
     cm_df.to_csv(output_path)
     logger.debug(f"Generated confusion matrix:")
     logger.debug(tabulate(cm_df, headers="keys", tablefmt="github"))

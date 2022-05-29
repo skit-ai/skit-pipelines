@@ -51,9 +51,9 @@ KFP_RUN_FN = "create_run_from_pipeline_func"
 KF_USERNAME = os.environ["KF_USERNAME"]
 KF_PASSWORD = os.environ["KF_PASSWORD"]
 
-USERNAME_ELEMENT_ID = 'signInFormUsername'
-PASSWORD_ELEMENT_ID = 'signInFormPassword'
-SUBMIT_BUTTON_ID = 'signInSubmitButton'
+USERNAME_ELEMENT_ID = "signInFormUsername"
+PASSWORD_ELEMENT_ID = "signInFormPassword"
+SUBMIT_BUTTON_ID = "signInSubmitButton"
 
 USERNAME_XPATH = f"(//input[@id='{USERNAME_ELEMENT_ID}'])[2]"
 PASSWORD_XPATH = f"(//input[@id='{PASSWORD_ELEMENT_ID}'])[2]"
@@ -71,19 +71,21 @@ VALUE = "value"
 DOMAIN = "domain"
 COOKIES_PATH = "/tmp/kf_cookies.json"
 KUBEFLOW_GATEWAY_ENDPOINT = os.environ["KUBEFLOW_GATEWAY_ENDPOINT"]
-COOKIE_0="AWSELBAuthSessionCookie-0"
-COOKIE_1="AWSELBAuthSessionCookie-1"
-COOKIE_DICT = {
-    COOKIE_0: None,
-    COOKIE_1: None
-}
+COOKIE_0 = "AWSELBAuthSessionCookie-0"
+COOKIE_1 = "AWSELBAuthSessionCookie-1"
+COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
 PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
 
+
 def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
-    return f"{COOKIE_0}={cookie_dict.get(COOKIE_0)};{COOKIE_1}={cookie_dict.get(COOKIE_1)}"
+    return (
+        f"{COOKIE_0}={cookie_dict.get(COOKIE_0)};{COOKIE_1}={cookie_dict.get(COOKIE_1)}"
+    )
+
 
 def GET_RUN_URL(namespace, id):
     return f"{PIPELINE_HOST_URL}/?ns={namespace}#/runs/details/{id}"
+
 
 FILTER_LIST = [
     "webhook_uri",

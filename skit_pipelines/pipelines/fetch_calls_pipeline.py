@@ -42,9 +42,7 @@ def fetch_calls_pipeline(
         "P0D"  # disables caching
     )
 
-    with kfp.dsl.Condition(notify != "", "notify").after(
-        calls
-    ) as check1:
+    with kfp.dsl.Condition(notify != "", "notify").after(calls) as check1:
         notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}."
         task_no_cache = slack_notification_op(notification_text, s3_path=calls.output)
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (

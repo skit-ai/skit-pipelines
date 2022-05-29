@@ -1,4 +1,5 @@
 from typing import Union
+
 import kfp
 from kfp.components import InputPath
 
@@ -12,18 +13,21 @@ def upload2s3(
     bucket: str = "",
     ext: str = ".csv",
     output_path: str = "",
-    storage_options: str = ""
+    storage_options: str = "",
 ) -> str:
-    import os
     import json
+    import os
     from glob import glob
 
     import boto3
     from loguru import logger
 
-    from skit_pipelines.utils import create_dir_name, create_file_name
     from skit_pipelines.api.models import StorageOptions
-    from skit_pipelines.utils import create_storage_path
+    from skit_pipelines.utils import (
+        create_dir_name,
+        create_file_name,
+        create_storage_path,
+    )
 
     s3_resource = boto3.client("s3")
 

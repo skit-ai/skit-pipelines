@@ -1,5 +1,6 @@
-import kfp
 import json
+
+import kfp
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
@@ -11,7 +12,6 @@ from skit_pipelines.components import (
     upload2s3_op,
 )
 
-
 UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
 BUCKET = pipeline_constants.BUCKET
@@ -21,7 +21,8 @@ BUCKET = pipeline_constants.BUCKET
     name="XLMR Voicebot Training Pipeline",
     description="Trains an XLM Roberta model on given dataset.",
 )
-def train_voicebot_intent_model_xlmr(*,
+def train_voicebot_intent_model_xlmr(
+    *,
     s3_path: str = "",
     dataset_path: str = "",
     model_path: str,
@@ -40,21 +41,25 @@ def train_voicebot_intent_model_xlmr(*,
 ):
     with kfp.dsl.Condition(s3_path != "", "s3_path_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path)
-    
+
     with kfp.dsl.Condition(dataset_path != "", "dataset_path_check") as check2:
-        tagged_data_op = download_from_s3_op(storage_path=dataset_path, storage_options=storage_options)
+        tagged_data_op = download_from_s3_op(
+            storage_path=dataset_path, storage_options=storage_options
+        )
 
     # preprocess the file
 
     # Create true label column
-    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(check1, check2)
+    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
+        check1, check2
+    )
 
     # Create utterance column
     preprocess_data_op = create_true_intent_labels_op(
         preprocess_data_op.outputs["output"]
     )
 
-    #TODO: Create train and test splits - keep only valid utterances
+    # TODO: Create train and test splits - keep only valid utterances
 
     # Normalize utterance column
     preprocess_data_op = create_features_op(
@@ -82,7 +87,7 @@ def train_voicebot_intent_model_xlmr(*,
         "intent_classifier_xlmr",
         BUCKET,
         output_path=model_path,
-        storage_options=storage_options
+        storage_options=storage_options,
     )
     upload.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

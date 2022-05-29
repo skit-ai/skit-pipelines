@@ -16,6 +16,7 @@ def gen_irr_metrics(
     import pandas as pd
     from eevee.metrics import intent_report
     from loguru import logger
+
     from skit_pipelines import constants as pipeline_constants
 
     pred_df = pd.read_csv(data_path)

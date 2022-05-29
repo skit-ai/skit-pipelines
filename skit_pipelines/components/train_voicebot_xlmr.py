@@ -21,10 +21,10 @@ def train_voicebot_xlmr(
     # HACK: This code should go as soon as this issue is fixed:
     # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
     import collections
-    from collections.abc import Iterable
-
     import os
     import pickle
+    from collections.abc import Iterable
+
     import pandas as pd
 
     setattr(collections, "Iterable", Iterable)
@@ -72,7 +72,7 @@ def train_voicebot_xlmr(
     )
     model.train_model(train_df)
     with open(labelencoder_file_path, "wb") as file:
-            _ = pickle.dump(labelencoder, file)
+        _ = pickle.dump(labelencoder, file)
 
 
 train_voicebot_xlmr_op = kfp.components.create_component_from_func(

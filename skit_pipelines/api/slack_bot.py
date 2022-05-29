@@ -1,13 +1,12 @@
-import os
-import re
 import ast
 import json
+import os
+import re
 
 import aiohttp
 from slack_bolt import App
 
 from skit_pipelines import constants as const
-
 
 app = App(token=os.environ["SLACK_TOKEN"])
 
@@ -21,7 +20,9 @@ def get_reply_metadata(body):
 
 async def run_pipeline(pipeline_name, payload):
     async with aiohttp.ClientSession() as session:
-        async with session.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload) as resp:
+        async with session.post(
+            f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
+        ) as resp:
             response_message = await resp.json()
             status_code = resp.status
     if status_code != 200:
@@ -83,8 +84,10 @@ async def handle_app_mention_events(body, say, logger):
     channel_id, message_ts, text = get_reply_metadata(body)
     command, pipeline_name, payload = command_parser(text)
     match command:
-        case "run"  : response = await run_pipeline(pipeline_name, payload)
-        case _      : response = help()
+        case "run":
+            response = await run_pipeline(pipeline_name, payload)
+        case _:
+            response = help()
     say(
         thread_ts=message_ts,
         channel=channel_id,

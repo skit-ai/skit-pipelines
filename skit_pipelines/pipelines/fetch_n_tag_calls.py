@@ -49,7 +49,7 @@ def fetch_n_tag_calls(
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
     auth_token = org_auth_token_op(org_id)
@@ -72,7 +72,9 @@ def fetch_n_tag_calls(
     Uploaded {getattr(calls, 'output')} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"""
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
-        task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
+        task_no_cache = slack_notification_op(
+            notification_text, "", channel=channel, cc=notify
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )

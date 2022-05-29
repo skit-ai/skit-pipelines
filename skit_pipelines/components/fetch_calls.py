@@ -51,7 +51,7 @@ def fetch_calls(
 
     start = time.time()
     states = states.replace(" ", "")
-    states = states.split(',') if states else states
+    states = states.split(",") if states else states
 
     maybe_df = calls.sample(
         client_id,
@@ -66,7 +66,7 @@ def fetch_calls(
         flow_name=flow_name or None,
         min_duration=min_duration or None,
         asr_provider=asr_provider or None,
-        states = states or None,
+        states=states or None,
         on_disk=False,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
