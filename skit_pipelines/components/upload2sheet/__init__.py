@@ -23,15 +23,22 @@ def upload2sheet(
 
     today_str = date.today().strftime('%d-%m-%Y')
     output_dict = {
-        "num_calls_uploaded": 0,
+        "actual_num_calls_fetched": '0',
+        "num_calls_uploaded": '0',
         "sheet_id": sheet_id,
         "spread_sheet_url": f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit",
         "notification_text": f"No calls found for language: {language_code} for flow_name: {flow_name} on date: {today_str} to be uploaded to google sheets",
-        "errors": "no error",
+        "errors": ["no errors"],
     }
 
     try:
         df = pd.read_csv(untagged_records_path_on_disk)
+        unique_uuids = df.call_uuid.unique()
+        console_links = [
+            f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={i}"
+            for i in unique_uuids
+        ]
+        output_dict["actual_num_calls_fetched"] = len(console_links)
 
         scopes = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
             "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
@@ -86,11 +93,6 @@ def upload2sheet(
         response = spreadsheet.batch_update(body=request)
         main_analysis_worksheet.update_cell(main_analysis_worksheet_last_row+1, 1, target_worksheet_title)
         
-        unique_uuids = df.call_uuid.unique()
-        console_links = [
-            f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={i}"
-            for i in unique_uuids
-        ]
         target_worksheet = spreadsheet.worksheet(target_worksheet_title)
         range_end_row_number = len(console_links)+3
         update_range = f"A3:A{range_end_row_number}"
@@ -105,7 +107,7 @@ def upload2sheet(
     except pd.errors.EmptyDataError:
         logger.error("empty dataframe")
     except Exception as e:
-        output_dict["errors"] = str(e)
+        output_dict["errors"] = [str(e)]
         logger.error(str(e))
         output_dict["notification_text"] = f"An error occured while trying to push {language_code} language calls to google sheets for flow_name: {flow_name} on date: {today_str}:"
 

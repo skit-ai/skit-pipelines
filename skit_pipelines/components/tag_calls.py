@@ -17,6 +17,7 @@ def tag_calls(
     import json
     import os
     import time
+    import pandas as pd
 
     from loguru import logger
     from skit_labels import utils
@@ -26,29 +27,37 @@ def tag_calls(
 
     utils.configure_logger(7)
 
-    url = pipeline_constants.CONSOLE_API_URL if url is None else url
-    job_ids = job_ids.replace(" ", "").split(',')
-
-    if os.path.isfile(input_file):
-        with open(input_file, "r") as f:
-            input_file = f.read()
-
-    with open(token, "r") as reader:
-        token = reader.read()
-        
-    all_errors, df_sizes = [], []
-    for job_id in job_ids:
-        start = time.time()
-        
-        errors, df_size = upload_dataset(input_file, url, token, int(job_id))
-        all_errors.append(errors)
-        df_sizes.append(df_size)
-        
-        logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
-        logger.info(f"{df_size=} rows in the dataset")
-        logger.info(f"{errors=}")
-
+    all_errors, df_sizes = ["no errors"], [0,0,0]
     output_dict = {"errors": all_errors, "df_sizes": df_sizes}
+    try:
+        df = pd.read_csv(input_file)
+        url = pipeline_constants.CONSOLE_API_URL if url is None else url
+        job_ids = job_ids.replace(" ", "").split(',')
+
+        if os.path.isfile(input_file):
+            with open(input_file, "r") as f:
+                input_file = f.read()
+
+        with open(token, "r") as reader:
+            token = reader.read()
+            
+        output_dict["all_errors"], output_dict["df_sizes"] = [], []
+        for job_id in job_ids:
+            start = time.time()
+            
+            errors, df_size = upload_dataset(input_file, url, token, int(job_id))
+            output_dict["all_errors"].append(errors)
+            output_dict["df_sizes"].append(df_size)
+            
+            logger.info(f"Uploaded in {time.time() - start:.2f} seconds to {job_id=}")
+            logger.info(f"{df_size=} rows in the dataset")
+            logger.info(f"{errors=}")
+    except pd.errors.EmptyDataError:
+        logger.error("empty dataframe")
+    except Exception as e:
+        logger.error(e)
+        output_dict["all_errors"] = [e]
+        
     with open(output_json, "w") as writer:
         json.dump(output_dict, writer, indent=4)
     return output_dict

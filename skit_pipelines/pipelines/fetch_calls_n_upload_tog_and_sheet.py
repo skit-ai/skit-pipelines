@@ -33,8 +33,6 @@ def fetch_calls_n_upload_tog_and_sheet(
     notify: str = "",
     channel: str = "",
 ):
-    from datetime import date
-
     calls = fetch_calls_op(
         client_id=client_id,
         start_date=start_date,
@@ -81,24 +79,44 @@ def fetch_calls_n_upload_tog_and_sheet(
     errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
     errors.display_name = "get-any-errors"
 
-    upload_sheets_notification_text_op: str = read_json_key_op("notification_text", upload.outputs["output_json"])
-    upload_sheets_notification_text_op.display_name = "get-upload2sheet-notification-text"
-    upload_sheets_notification_text_op.execution_options.caching_strategy.max_cache_staleness = (
+    actual_num_calls_fetched_op = read_json_key_op("actual_num_calls_fetched", upload.outputs["output_json"])
+    actual_num_calls_fetched_op.display_name = "get-actual-num-calls-fetched"
+    actual_num_calls_fetched_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
     )
 
-    upload_to_sheet_errors: str = read_json_key_op("errors", upload.outputs["output_json"])
-    upload_to_sheet_errors.display_name = "get-upload-to-sheet-errors"
-    upload_to_sheet_errors.execution_options.caching_strategy.max_cache_staleness = (
+    num_calls_uploaded_to_sheet_op = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
+    num_calls_uploaded_to_sheet_op.display_name = "get-num-calls-uploaded-to-sheet"
+    num_calls_uploaded_to_sheet_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
+
+    spread_sheet_url_op = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
+    spread_sheet_url_op.display_name = "get-spread-sheet-url"
+    spread_sheet_url_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D" # disables caching
+    )
+
+    upload_to_sheet_errors_op = read_json_key_op("errors", upload.outputs["output_json"])
+    upload_to_sheet_errors_op.display_name = "get-upload-to-sheet-errors"
+    upload_to_sheet_errors_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
     )
 
     notification_text = f"""
-        Finished a request for {call_quantity} calls. Fetched for date: {date.today().strftime('%d-%m-%Y')} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}
-
-        \n{getattr(upload_sheets_notification_text_op, 'output')}\nErrors while uploading to sheet: {getattr(upload_to_sheet_errors, 'output')}
-    """
+*Made a request for:* {call_quantity} calls
+*For the client id:* {client_id}
+*For language code:* {lang}
+*For flow name*: {flow_name}\n
+*Fetched CSV s3 url:* <{getattr(calls, 'output')}|s3 link>
+*Number of calls actually fetched:* {getattr(actual_num_calls_fetched_op, 'output')} (this is the number of unique calls present in above fetchd CSV)
+*Number of calls pushed for CRR tagging:* {getattr(num_calls_uploaded_to_sheet_op, 'output')}
+*Google sheet url:* <{getattr(spread_sheet_url_op, 'output')}|link>
+*Number of user turns pushed to each of the tog job ids ({job_ids}):* {getattr(df_sizes, 'output')} respectively. (these are the number of user turns present in the {getattr(actual_num_calls_fetched_op, 'output')} fetched calls)\n
+*Note:* If there are 0 calls fetched, no new worksheet will be created in your google spreadsheet. No data will be uploaded to the tog jobs as well.\n
+*Errors while uploading to tog:* {getattr(errors, 'output')}
+*Errors while uploading to sheet:* {getattr(upload_to_sheet_errors_op, 'output')}
+"""
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
