@@ -2,7 +2,6 @@ import kfp
 
 from skit_pipelines.components import (
     fetch_calls_op,
-    download_from_s3_op,
     upload2sheet_op,
     read_json_key_op,
     slack_notification_op,
@@ -49,14 +48,8 @@ def run_fetch_calls_n_push_to_sheets(
         "P0D" # disables caching
     )
     
-    untagged_records = download_from_s3_op(storage_path=untagged_records_s3_path.outputs["output"])
-    
-    untagged_records.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
-    )
-    
     upload = upload2sheet_op(
-        untagged_records.outputs["output"],
+        untagged_records_s3_path.output,
         org_id=org_id,
         sheet_id=sheet_id,
         language_code=lang,
@@ -67,22 +60,8 @@ def run_fetch_calls_n_push_to_sheets(
         "P0D" # disables caching
     )
 
-    spread_sheet_url_op = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
-    spread_sheet_url_op.display_name = "get-spread-sheet-url"
-
-    spread_sheet_url_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
-    )
-
-    num_calls_uploaded_op = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
-    num_calls_uploaded_op.display_name = "get-num-calls-uploaded"
-
-    num_calls_uploaded_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
-    )
-
     notification_text_op: str = read_json_key_op("notification_text", upload.outputs["output_json"])
-    notification_text_op.display_name = "get-num-calls-uploaded"
+    notification_text_op.display_name = "get-upload2sheet-notification-text"
 
     notification_text_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D" # disables caching
