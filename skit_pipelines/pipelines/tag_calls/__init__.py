@@ -13,6 +13,20 @@ from skit_pipelines.components import (
     description="Uploads calls to database for tagging",
 )
 def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
+    """
+    A pipeline to upload a dataset for annotation.
+
+    .. _p_tag_calls:
+
+    :param org_id: The organization id as per api-gateway.
+    :type org_id: str
+    :param job_ids: Comma separated list of job ids. 
+    :type job_ids: str
+    :param s3_path: The s3 path to the dataset.
+    :type s3_path: str
+    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
+    :type notify: str, optional
+    """
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

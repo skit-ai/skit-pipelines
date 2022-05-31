@@ -32,7 +32,33 @@ def eval_voicebot_xlmr_pipeline(
     use_state: bool = True,
     model_name: str = "xlm-roberta-base",
 ):
+    """
+    Evaluates an XLM Roberta model on given dataset.
 
+    .. _p_eval_voicebot_xlmr_pipeline:
+
+    Example
+
+    .. code-block:: json
+
+        {
+            "s3_path_data": "s3://bucket-name/data/",
+            "s3_path_model": "s3://bucket-name/model/",
+            "org_id": "org",
+            "use_state": false
+        }
+
+    :param s3_path_data: S3 path to a tagged dataset (.csv).
+    :type s3_path_data: str
+    :param s3_path_model: S3 path to a trained model. Optional.
+    :type s3_path_model: str
+    :param org_id: reference path to save the metrics.
+    :type org_id: str
+    :param use_state: Use the XLMR model with state encoding?, defaults to True
+    :type use_state: bool, optional
+    :param model_name: The flavour of the BERT model, defaults to "xlm-roberta-base"
+    :type model_name: str, optional
+    """
     with kfp.dsl.Condition(s3_path_data != "", "s3_path_data_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
 

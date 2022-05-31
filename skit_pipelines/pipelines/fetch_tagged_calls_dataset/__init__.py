@@ -23,6 +23,26 @@ def fetch_tagged_calls_dataset(
     task_type: str = "conversation",
     notify: str = "",
 ):
+    """
+    A pipeline to fetch tagged dataset.
+
+    .. _p_fetch_tagged_calls_dataset:
+
+    :param org_id: reference path to save the metrics.
+    :type org_id: str
+    :param job_id: The annotation dataset id.
+    :type job_id: int
+    :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.
+    :type start_date: str
+    :param end_date: The end date range (YYYY-MM-DD) to filter tagged data
+    :type end_date: str
+    :param timezone: The timezone to apply for multi-region datasets, defaults to "Asia/Kolkata"
+    :type timezone: str, optional
+    :param task_type: https://github.com/skit-ai/skit-labels#task-types, defaults to "conversation"
+    :type task_type: str, optional
+    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
+    :type notify: str, optional
+    """
     tagged_df = fetch_tagged_dataset_op(
         job_id,
         task_type=task_type,
