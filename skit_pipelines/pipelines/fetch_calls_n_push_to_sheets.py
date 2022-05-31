@@ -9,7 +9,7 @@ from skit_pipelines.components import (
 
 @kfp.dsl.pipeline(
     name="Fetch and push for calls to gogole sheets pipeline",
-    description="fetches calls from production db with respective arguments and uploads calls to google sheets for CRR tagging",
+    description="fetches calls from production db with respective arguments and uploads calls to google sheets for Call tagging",
 )
 def run_fetch_calls_n_push_to_sheets(
     client_id: int,

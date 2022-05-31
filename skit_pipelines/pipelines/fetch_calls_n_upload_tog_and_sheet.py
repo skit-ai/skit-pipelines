@@ -12,7 +12,7 @@ from skit_pipelines.components import (
 
 @kfp.dsl.pipeline(
     name="Fetch calls and push to tog and sheet",
-    description="fetches calls from production db with respective arguments and uploads the same set of calls to both tog (for intent, region, and transcription tagging) and a google sheet (for CRR tagging and SCR analysis)",
+    description="fetches calls from production db with respective arguments and uploads the same set of calls to both tog (for intent, region, and transcription tagging) and a google sheet (for Call tagging and SCR analysis)",
 )
 def fetch_calls_n_upload_tog_and_sheet(
     client_id: int,
@@ -110,7 +110,7 @@ def fetch_calls_n_upload_tog_and_sheet(
 *For flow name*: {flow_name}\n
 *Fetched CSV s3 url:* <{getattr(calls, 'output')}|s3 link>
 *Number of calls actually fetched:* {getattr(actual_num_calls_fetched_op, 'output')} (this is the number of unique calls present in above fetchd CSV)
-*Number of calls pushed for CRR tagging:* {getattr(num_calls_uploaded_to_sheet_op, 'output')}
+*Number of calls pushed for Call tagging:* {getattr(num_calls_uploaded_to_sheet_op, 'output')}
 *Google sheet url:* <{getattr(spread_sheet_url_op, 'output')}|link>
 *Number of user turns pushed to each of the tog job ids ({job_ids}):* {getattr(df_sizes, 'output')} respectively. (these are the number of user turns present in the {getattr(actual_num_calls_fetched_op, 'output')} fetched calls)\n
 *Note:* If there are 0 calls fetched, no new worksheet will be created in your google spreadsheet. No data will be uploaded to the tog jobs as well.\n
