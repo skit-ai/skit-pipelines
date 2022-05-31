@@ -9,7 +9,7 @@ CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]
 CONSOLE_IAM_EMAIL = os.environ["SKIT_API_GATEWAY_EMAIL"]
 CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
-DB_HOST = os.environ["DB_HOST"]
+DB_HOST = "production-postgres-slave.default"
 DB_PORT = os.environ["DB_PORT"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
