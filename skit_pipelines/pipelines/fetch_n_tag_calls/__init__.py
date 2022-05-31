@@ -41,7 +41,7 @@ def fetch_n_tag_calls(
 
     .. code-block:: markdown
 
-        @slackbot run fetch_calls_pipeline
+        @slackbot run fetch_n_tag_calls
         ```
         {
             "client_id": 1,

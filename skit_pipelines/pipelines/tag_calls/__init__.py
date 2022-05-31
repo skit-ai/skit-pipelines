@@ -28,7 +28,7 @@ def tag_calls(
 
     .. code-block:: markdown
 
-        @slackbot run fetch_calls_pipeline
+        @slackbot run tag_calls
         ```
         {
             "org_id": 23,

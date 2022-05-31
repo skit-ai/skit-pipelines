@@ -51,7 +51,7 @@ def train_voicebot_intent_model_xlmr(
 
     .. code-block:: markdown
 
-        @slackbot run fetch_calls_pipeline
+        @slackbot run train_voicebot_intent_model_xlmr
         ```
         {
             "model_path": "s3://bucket-name/model/",
@@ -68,7 +68,7 @@ def train_voicebot_intent_model_xlmr(
 
     .. code-block:: markdown
 
-        @slackbot run fetch_calls_pipeline
+        @slackbot run train_voicebot_intent_model_xlmr
         ```
         {
             "model_path": "s3://bucket-name/model/",

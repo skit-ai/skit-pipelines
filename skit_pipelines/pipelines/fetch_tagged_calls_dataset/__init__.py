@@ -33,7 +33,7 @@ def fetch_tagged_calls_dataset(
 
     .. code-block:: markdown
 
-        @slackbot run fetch_calls_pipeline
+        @slackbot run fetch_tagged_calls_dataset
         ```
         {
             "client_id": 1,
