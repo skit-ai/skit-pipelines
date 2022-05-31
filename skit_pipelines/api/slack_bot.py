@@ -1,17 +1,18 @@
-import ast
 import json
 import os
 import re
+import traceback
+from urllib import response
 
-import aiohttp
+import requests
 from slack_bolt import App
-
-from skit_pipelines import constants as const
+from slack_bolt.adapter.fastapi import SlackRequestHandler
 
 app = App(token=os.environ["SLACK_TOKEN"])
+slack_handler = SlackRequestHandler(app)
 
 
-def get_reply_metadata(body):
+def get_message_data(body):
     channel = body.get("event", {}).get("channel")
     ts = body.get("event", {}).get("ts")
     text = body.get("event", {}).get("text")
@@ -19,26 +20,21 @@ def get_reply_metadata(body):
 
 
 async def run_pipeline(pipeline_name, payload):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(
-            f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
-        ) as resp:
-            response_message = await resp.json()
-            status_code = resp.status
-    if status_code != 200:
+    res = requests.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload)
+    if res.status_code != 200:
         return f"""
 Failed to create pipeline:
 ```
-{json.dumps(response_message, indent=2)}
+{json.dumps(res.json(), indent=2)}
 ```
 """.strip()
-    success_message = response_message.get("response")
+    success_message = res.json().get("response")
     run_url = success_message.get("run_url")
     name = success_message.get("name")
     return f"Running <{run_url} | {name}> pipeline."
 
 
-def help():
+def help_message():
     return """
 Currently supported commands are:
 
@@ -46,33 +42,41 @@ Currently supported commands are:
 ```
 {
 \t"arg1": "val1",
-\t"arg2": "val2"
+\t"arg2": "val2",
+\t...
 }
 ```
 
-<https://github.com/skit-ai/skit-pipelines | List of pipelines and there documentation>
+<https://github.com/skit-ai/skit-pipelines | Click here> to read about pipelines and their documentation.
 """
 
 
 def command_parser(text):
-    match = re.match(r"@<[a-zA-Z0-9]+> (run) (.+)", text).group(1)
-    if match:
-        try:
-            payload_idx = text.index("```")
-            code_block = text[payload_idx:].replace("`", "")
-            payload = ast.literal_eval(code_block)
-            return match.group(1), match.group(2), payload
-        except ValueError:
-            return None, None, None
+    match = re.match(r"<@[a-zA-Z0-9]+> (run) (.*)", text, re.DOTALL)
+    if match and match.group(1) and match.group(2):
+        pipeline_name, code_block = [m.strip() for m in match.group(2).split("```")][:2]
+        payload = json.loads(code_block)
+        return match.group(1), pipeline_name, payload
     return None, None, None
 
 
+def make_response(text):
+    try:
+        command, pipeline_name, payload = command_parser(text)
+        match command:
+            case "run": return run_pipeline(pipeline_name, payload)
+            case _: return help_message()
+    except Exception as e:
+        response = help_message()
+        response += f"\n\nError: {e}"
+        response += f"\n\n```\n{traceback.format_exc()}\n```"
+    return response
+
+
 @app.event("app_mention")
-async def handle_app_mention_events(body, say, logger):
+def handle_app_mention_events(body, say, logger):
     """
     This function is called when the bot (@charon) is called in any slack channel.
-    If the query made by the bot is a command for fsm/tog-{push|pull},
-    it pings apigateway server with a dictionary of parsed arguments, and the original request body.
 
     :param body: [description]
     :type body: [type]
@@ -81,13 +85,8 @@ async def handle_app_mention_events(body, say, logger):
     :param _: [description]
     :type _: [type]
     """
-    channel_id, message_ts, text = get_reply_metadata(body)
-    command, pipeline_name, payload = command_parser(text)
-    match command:
-        case "run":
-            response = await run_pipeline(pipeline_name, payload)
-        case _:
-            response = help()
+    channel_id, message_ts, text = get_message_data(body)
+    response = make_response(text)
     say(
         thread_ts=message_ts,
         channel=channel_id,
