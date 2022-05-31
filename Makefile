@@ -23,6 +23,7 @@ update_secrets:
 	@dvc get https://github.com/skit-ai/skit-calls secrets
 
 pipes:
+	@if [ -d "build" ]; then rm -rf build/**; fi
 	@for file in $(SOURCE_FILES); do \
 		# echo "Building $$file"; \
 		pipeline_file=$${file/skit_pipelines\/pipelines\//}; \
