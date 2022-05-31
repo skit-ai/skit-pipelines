@@ -5,7 +5,6 @@ from typing import Any, Dict
 import kfp
 import kfp_server_api
 import pydantic
-from aiokafka import AIOKafkaProducer
 from fastapi import Request
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 from loguru import logger
