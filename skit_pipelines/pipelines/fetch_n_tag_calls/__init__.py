@@ -21,12 +21,12 @@ def fetch_n_tag_calls(
     lang: str,
     end_date: str,
     ignore_callers: str,
-    reported: str,
     use_case: str,
     flow_name: str,
     min_duration: str,
     asr_provider: str,
     states: str,
+    reported: bool = False,
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     notify: str = "",
@@ -69,8 +69,8 @@ def fetch_n_tag_calls(
     :type end_date: str
     :param ignore_callers: Comma separated list of callers to ignore, defaults to ""
     :type ignore_callers: str, optional
-    :param reported: Pick only reported calls, defaults to ""
-    :type reported: str, optional
+    :param reported: Pick only reported calls, defaults to False
+    :type reported: bool
     :param use_case: Voice bot project's use-case, defaults to ""
     :type use_case: str, optional
     :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to ""

@@ -15,7 +15,7 @@ def fetch_calls(
     call_quantity: int = 200,
     call_type: Optional[str] = None,
     ignore_callers: Optional[str] = None,
-    reported: Optional[str] = None,
+    reported: bool = False,
     use_case: Optional[str] = None,
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,

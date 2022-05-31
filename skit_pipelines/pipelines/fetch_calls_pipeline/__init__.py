@@ -57,8 +57,8 @@ def fetch_calls_pipeline(
     :type end_date: str
     :param ignore_callers: Comma separated list of callers to ignore, defaults to ""
     :type ignore_callers: str, optional
-    :param reported: Pick only reported calls, defaults to ""
-    :type reported: str, optional
+    :param reported: Pick only reported calls, defaults to False
+    :type reported: bool
     :param use_case: Voice bot project's use-case, defaults to ""
     :type use_case: str, optional
     :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to ""
