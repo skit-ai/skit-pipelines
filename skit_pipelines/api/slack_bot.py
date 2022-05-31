@@ -12,7 +12,7 @@ def get_message_data(body):
     return channel, ts, text
 
 
-async def run_pipeline(pipeline_name, payload):
+def run_pipeline(pipeline_name, payload):
     res = requests.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload)
     if res.status_code != 200:
         return f"""
@@ -24,7 +24,7 @@ Failed to create pipeline:
     success_message = res.json().get("response")
     run_url = success_message.get("run_url")
     name = success_message.get("name")
-    return f"Running <{run_url} | {name}> pipeline."
+    return f"Running <{run_url}|{name}>."
 
 
 def help_message():
@@ -40,7 +40,7 @@ Currently supported commands are:
 }
 ```
 
-<https://github.com/skit-ai/skit-pipelines#pipelines | Click here> to read about pipelines and their documentation.
+<https://skit-ai.github.io/skit-pipelines/#pipelines|Click here> to read about pipelines and their documentation.
 """
 
 
