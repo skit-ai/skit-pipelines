@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: all test pipes
+.PHONY: all test pipes docs
 
 SOURCE_FILES := $(shell find skit_pipelines/pipelines ! -name "__init__.py" -name "*.py" -execdir basename {} .py ';')
 
@@ -26,5 +26,10 @@ pipes:
 		touch build/$$file.yaml; \
 		source secrets/env.sh && dsl-compile --py skit_pipelines/pipelines/$$file.py --output build/$$file.yaml; \
 	done
+
+docs:
+	sphinx-apidoc -f -o source ./skit_pipelines
+	sphinx-build -b html source docs
+	cp source/index.rst README.rst
 
 all: clean update_secrets pipes
