@@ -41,7 +41,7 @@ def tag_calls(
 
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
-    :param job_ids: Comma separated list of job ids. 
+    :param job_ids: Comma separated list of job ids.
     :type job_ids: str
     :param s3_path: The s3 path to the dataset.
     :type s3_path: str
@@ -67,9 +67,12 @@ def tag_calls(
     notification_text = f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
-        task_no_cache = slack_notification_op(notification_text, "", cc=notify, channel=channel)
+        task_no_cache = slack_notification_op(
+            notification_text, "", cc=notify, channel=channel
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["tag_calls"]

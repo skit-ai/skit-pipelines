@@ -5,15 +5,22 @@ from typing import Any, Dict
 import kfp
 import kfp_server_api
 import pydantic
-from fastapi import Request
 from aiokafka import AIOKafkaProducer
+from fastapi import Request
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 from loguru import logger
 
 import skit_pipelines.constants as const
-from skit_pipelines.api import BackgroundTasks, app, slack_app, slack_handler, models, run_in_threadpool
+from skit_pipelines.api import (
+    BackgroundTasks,
+    app,
+    models,
+    run_in_threadpool,
+    slack_app,
+    slack_handler,
+)
+from skit_pipelines.api.slack_bot import get_message_data, make_response
 from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
-from skit_pipelines.api.slack_bot import make_response, get_message_data
 
 loop = asyncio.get_event_loop()
 
@@ -190,6 +197,7 @@ def handle_app_mention_events(body, say, logger):
         unfurl_link=True,
         text=response,
     )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

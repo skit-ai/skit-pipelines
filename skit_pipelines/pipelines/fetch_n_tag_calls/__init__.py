@@ -137,4 +137,5 @@ def fetch_n_tag_calls(
             "P0D"  # disables caching
         )
 
+
 __all__ = ["fetch_n_tag_calls"]

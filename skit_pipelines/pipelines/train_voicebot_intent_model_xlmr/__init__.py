@@ -8,9 +8,9 @@ from skit_pipelines.components import (
     create_true_intent_labels_op,
     create_utterances_op,
     download_from_s3_op,
+    slack_notification_op,
     train_voicebot_xlmr_op,
     upload2s3_op,
-    slack_notification_op
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -40,7 +40,7 @@ def train_voicebot_intent_model_xlmr(
     max_seq_length: int = 128,
     learning_rate: float = 4e-5,
     notify: str = "",
-    channel: str = ""
+    channel: str = "",
 ):
     """
     A pipeline to train an XLMR model on given dataset.
@@ -114,11 +114,11 @@ def train_voicebot_intent_model_xlmr(
     :param max_seq_length: Truncate an input after these many characters, defaults to 128
     :type max_seq_length: int, optional
     :param learning_rate: A multiplier to control weight updates, defaults to 4e-5
-    :type learning_rate: float, 
+    :type learning_rate: float,
     :param notify: Whether to send a slack notification, defaults to ""
     :type notify: str, optional
     :param channel: The slack channel to send the notification, defaults to ""
-    :type channel: str, optional    
+    :type channel: str, optional
     """
     with kfp.dsl.Condition(s3_path != "", "s3_path_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path)

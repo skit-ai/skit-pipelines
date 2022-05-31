@@ -13,7 +13,9 @@ def get_message_data(body):
 
 
 def run_pipeline(pipeline_name, payload):
-    res = requests.post(f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload)
+    res = requests.post(
+        f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
+    )
     if res.status_code != 200:
         return f"""
 Failed to create pipeline:
@@ -57,8 +59,10 @@ def make_response(text):
     try:
         command, pipeline_name, payload = command_parser(text)
         match command:
-            case "run": return run_pipeline(pipeline_name, payload)
-            case _: return help_message()
+            case "run":
+                return run_pipeline(pipeline_name, payload)
+            case _:
+                return help_message()
     except Exception as e:
         response = help_message()
         response += f"\n\nError: {e}"

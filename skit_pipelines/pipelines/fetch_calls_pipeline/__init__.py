@@ -22,7 +22,7 @@ def fetch_calls_pipeline(
     call_quantity: int = 200,
     call_type: str = "inbound",
     notify: str = "",
-    channel: str = ""
+    channel: str = "",
 ):
     """
     A pipeline to randomly sample calls for a given voice-bot project.
@@ -99,7 +99,9 @@ def fetch_calls_pipeline(
 
     with kfp.dsl.Condition(notify != "", "notify").after(calls) as check1:
         notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}."
-        task_no_cache = slack_notification_op(notification_text, channel=channel, cc=notify, s3_path=calls.output)
+        task_no_cache = slack_notification_op(
+            notification_text, channel=channel, cc=notify, s3_path=calls.output
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
