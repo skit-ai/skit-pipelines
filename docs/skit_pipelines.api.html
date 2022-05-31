@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.api.models package" href="skit_pipelines.api.models.html" /><link rel="prev" title="skit_pipelines package" href="skit_pipelines.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.api package - skit-pipelines 0.1.82 documentation</title>
+        <title>skit_pipelines.api package - skit-pipelines 0.1.84 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.1.82 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.1.84 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.82 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.84 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -277,6 +277,20 @@
 <span class="sig-name descname"><span class="pre">get_run_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#get_run_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.get_run_info" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.endpoints.handle_app_mention_events">
+<span class="sig-name descname"><span class="pre">handle_app_mention_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">say</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#handle_app_mention_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.handle_app_mention_events" title="Permalink to this definition">#</a></dt>
+<dd><p>This function is called when the bot (@charon) is called in any slack channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>say</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+<li><p><strong>_</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.endpoints.health_check">
 <span class="sig-name descname"><span class="pre">health_check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#health_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.health_check" title="Permalink to this definition">#</a></dt>
 <dd><p>Get server status health.
@@ -310,20 +324,6 @@ The purpose of this API is to help other people/machines know liveness of the ap
 <span class="sig-name descname"><span class="pre">get_message_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#get_message_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.get_message_data" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.handle_app_mention_events">
-<span class="sig-name descname"><span class="pre">handle_app_mention_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">say</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#handle_app_mention_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.handle_app_mention_events" title="Permalink to this definition">#</a></dt>
-<dd><p>This function is called when the bot (@charon) is called in any slack channel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
-<li><p><strong>say</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
-<li><p><strong>_</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.help_message">
 <span class="sig-name descname"><span class="pre">help_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#help_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.help_message" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -333,7 +333,7 @@ The purpose of this API is to help other people/machines know liveness of the ap
 <dd></dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.run_pipeline">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#run_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.run_pipeline" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#run_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.run_pipeline" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 </section>
 <section id="module-skit_pipelines.api">

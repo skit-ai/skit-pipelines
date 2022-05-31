@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.tag_calls package" href="skit_pipelines.pipelines.tag_calls.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_n_tag_calls package" href="skit_pipelines.pipelines.fetch_n_tag_calls.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.pipelines.fetch_tagged_calls_dataset package - skit-pipelines 0.1.82 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_tagged_calls_dataset package - skit-pipelines 0.1.84 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.1.82 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.1.84 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.82 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.84 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -234,7 +234,7 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.fetch_tagged_calls_dataset" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_tagged_calls_dataset.fetch_tagged_calls_dataset">
-<span class="sig-name descname"><span class="pre">fetch_tagged_calls_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'conversation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_tagged_calls_dataset.html#fetch_tagged_calls_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_tagged_calls_dataset.fetch_tagged_calls_dataset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_tagged_calls_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'conversation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_tagged_calls_dataset.html#fetch_tagged_calls_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_tagged_calls_dataset.fetch_tagged_calls_dataset" title="Permalink to this definition">#</a></dt>
 <dd><p>A pipeline to fetch tagged dataset.</p>
 <p id="p-fetch-tagged-calls-dataset">Example payload to invoke via slack integrations:</p>
 <div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run fetch_calls_pipeline
@@ -262,6 +262,7 @@
 <li><p><strong>timezone</strong> (<em>str</em><em>, </em><em>optional</em>) – The timezone to apply for multi-region datasets, defaults to “Asia/Kolkata”</p></li>
 <li><p><strong>task_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <a class="reference external" href="https://github.com/skit-ai/skit-labels#task-types">https://github.com/skit-ai/skit-labels#task-types</a>, defaults to “conversation”</p></li>
 <li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – A comma separated list of slack ids: “@apples, @orange.fruit” etc, defaults to “”</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
 </ul>
 </dd>
 </dl>
