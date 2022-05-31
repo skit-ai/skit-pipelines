@@ -45,16 +45,20 @@ A component does *one thing really well*. As an example, if you want to download
 8. Persist the best model on the cloud.
 9. Persist the best results on the cloud.
 
-Each step here, is a component. As long as components ensure single responsibility. It is very easy to build complex pipelines using them.
-As a negative example, if a component would query the database and upload it to the cloud, you would always need to provide an upload path even
-if you only wanted a cursory look at the data.
+Each step here is a component. As long as components ensure single responsibility we can build complex pipelines conveniently.
+
+.. attention::
+
+   If a component trains a model after performing a 70-30 split on a given dataset. 
+   It would be very difficult to train if we have a dataset that should be used entirely for training.
+   The component will helplessly reduce 30% of the data **always**.
 
 Pipelines
 ---------
 
 Pipelines are complex ML workflows that are required regularly like: training a model, sampling data, getting data annotated, producing metrics, etc.
 
-Here's a list of official pipelines:
+Here's a list of official pipelines, within these docs we share snippets for slack-bot invocations:
 
 +--+----------------------------------------------------------------------------------+
 |   | Pipelines                                                                       |

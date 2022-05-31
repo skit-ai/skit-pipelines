@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.fetch_calls_pipeline package" href="skit_pipelines.pipelines.fetch_calls_pipeline.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit-pipelines 0.1.84 documentation</title>
+        <title>skit-pipelines 0.1.85 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">skit-pipelines 0.1.84 documentation</div></a>
+      <a href="#"><div class="brand">skit-pipelines 0.1.85 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.84 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.85 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -250,14 +250,18 @@
 <li><p>Persist the best model on the cloud.</p></li>
 <li><p>Persist the best results on the cloud.</p></li>
 </ol>
-<p>Each step here, is a component. As long as components ensure single responsibility. It is very easy to build complex pipelines using them.
-As a negative example, if a component would query the database and upload it to the cloud, you would always need to provide an upload path even
-if you only wanted a cursory look at the data.</p>
+<p>Each step here is a component. As long as components ensure single responsibility we can build complex pipelines conveniently.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If a component trains a model after performing a 70-30 split on a given dataset.
+It would be very difficult to train if we have a dataset that should be used entirely for training.
+The component will helplessly reduce 30% of the data <strong>always</strong>.</p>
+</div>
 </section>
 <section id="pipelines">
 <h2>Pipelines<a class="headerlink" href="#pipelines" title="Permalink to this headline">#</a></h2>
 <p>Pipelines are complex ML workflows that are required regularly like: training a model, sampling data, getting data annotated, producing metrics, etc.</p>
-<p>Here’s a list of official pipelines:</p>
+<p>Here’s a list of official pipelines, within these docs we share snippets for slack-bot invocations:</p>
 <div class="table-wrapper"><table class="docutils align-default">
 <colgroup>
 <col style="width: 2%"/>

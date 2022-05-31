@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline - skit-pipelines 0.1.84 documentation</title>
+        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline - skit-pipelines 0.1.85 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.84 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.85 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.84 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.85 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -347,11 +347,12 @@
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"notify"</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_irr</span><span class="p">)</span> <span class="k">as</span> <span class="n">irr_check</span><span class="p">:</span>
         <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Here's the IRR report."</span>
-        <span class="n">irr_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span><span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">irr_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span>
+        <span class="p">)</span>
         <span class="n">irr_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
-
 
     <span class="n">confusion_matrix_op</span> <span class="o">=</span> <span class="n">gen_confusion_matrix_op</span><span class="p">(</span>
         <span class="n">pred_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
@@ -372,11 +373,12 @@
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"notify"</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_cm</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm_check</span><span class="p">:</span>
         <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Here's the confusion matrix."</span>
-        <span class="n">cm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span><span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">cm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span>
+        <span class="p">)</span>
         <span class="n">cm_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
-
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"eval_voicebot_xlmr_pipeline"</span><span class="p">]</span>

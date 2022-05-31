@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.api.endpoints - skit-pipelines 0.1.84 documentation</title>
+        <title>skit_pipelines.api.endpoints - skit-pipelines 0.1.85 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.84 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.85 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.84 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.85 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -236,14 +236,20 @@
 <span class="kn">import</span> <span class="nn">kfp_server_api</span>
 <span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">aiokafka</span> <span class="kn">import</span> <span class="n">AIOKafkaProducer</span>
 <span class="kn">from</span> <span class="nn">kfp_server_api.models.api_run_detail</span> <span class="kn">import</span> <span class="n">ApiRunDetail</span> <span class="k">as</span> <span class="n">kfp_ApiRunDetail</span>
 <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
 
 <span class="kn">import</span> <span class="nn">skit_pipelines.constants</span> <span class="k">as</span> <span class="nn">const</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines.api</span> <span class="kn">import</span> <span class="n">BackgroundTasks</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">slack_app</span><span class="p">,</span> <span class="n">slack_handler</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">run_in_threadpool</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.api</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BackgroundTasks</span><span class="p">,</span>
+    <span class="n">app</span><span class="p">,</span>
+    <span class="n">models</span><span class="p">,</span>
+    <span class="n">run_in_threadpool</span><span class="p">,</span>
+    <span class="n">slack_app</span><span class="p">,</span>
+    <span class="n">slack_handler</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.api.slack_bot</span> <span class="kn">import</span> <span class="n">get_message_data</span><span class="p">,</span> <span class="n">make_response</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.utils</span> <span class="kn">import</span> <span class="n">filter_schema</span><span class="p">,</span> <span class="n">kubeflow_login</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">webhook_utils</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines.api.slack_bot</span> <span class="kn">import</span> <span class="n">make_response</span><span class="p">,</span> <span class="n">get_message_data</span>
 
 <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 
@@ -420,6 +426,7 @@
         <span class="n">unfurl_link</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">text</span><span class="o">=</span><span class="n">response</span><span class="p">,</span>
     <span class="p">)</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">)</span>
