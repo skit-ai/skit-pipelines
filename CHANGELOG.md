@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.84
+
+- [x] add: slack signing secret.
+
 ## 0.1.83
 
 - [x] docs: Pipeline and payload docs added.
