@@ -39,7 +39,7 @@ def fetch_n_tag_calls(
 
     Example payload to invoke via slack integrations:
 
-        @slackbot run fetch_n_tag_calls
+        @charon run fetch_n_tag_calls
 
         .. code-block:: json
 

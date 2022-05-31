@@ -31,7 +31,7 @@ def fetch_tagged_calls_dataset(
 
     Example payload to invoke via slack integrations:
 
-        @slackbot run fetch_tagged_calls_dataset
+        @charon run fetch_tagged_calls_dataset
 
         .. code-block:: json
 

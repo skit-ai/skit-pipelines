@@ -49,7 +49,7 @@ def train_voicebot_intent_model_xlmr(
 
     Example payload to invoke via slack integrations:
 
-        @slackbot run train_voicebot_intent_model_xlmr
+        @charon run train_voicebot_intent_model_xlmr
 
         .. code-block:: json
 
@@ -65,7 +65,7 @@ def train_voicebot_intent_model_xlmr(
 
     We use the following payload to use via studio.
 
-        @slackbot run train_voicebot_intent_model_xlmr
+        @charon run train_voicebot_intent_model_xlmr
 
         .. code-block:: json
 

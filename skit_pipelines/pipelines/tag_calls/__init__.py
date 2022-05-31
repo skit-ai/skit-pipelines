@@ -26,7 +26,7 @@ def tag_calls(
 
     Example payload to invoke via slack integrations:
 
-        @slackbot run tag_calls
+        @charon run tag_calls
 
         .. code-block:: json
 
