@@ -28,7 +28,7 @@ skit-pipelines
 
 Reusable workflows for ml teams at skit.ai. Built using `kubeflow components <https://pypi.org/project/kfp/>`_. 
 
-[`Contribution guide <https://github.com/skit-ai/dialogy/blob/master/CONTRIBUTING.md>`_]
+[`Contribution guide <https://github.com/skit-ai/skit-pipelines/blob/main/CONTRIBUTING.md>`_]
 
 Components
 ----------
