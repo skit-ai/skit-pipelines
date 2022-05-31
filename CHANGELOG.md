@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.83
+
+- [x] docs: Pipeline and payload docs added.
+- [x] update: slackbot command parser responds with stacktrace.
+
 ## 0.1.82
 
 - [x] fix: No module named 'skit_pipelines' caused by installing before copy source in dockerfile.
