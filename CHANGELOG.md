@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.85
+
+- [x] fix: slack urls.
+- [x] add: slack notifications to all components.
+
 ## 0.1.84
 
 - [x] add: slack signing secret.
