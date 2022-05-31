@@ -12,7 +12,13 @@ from skit_pipelines.components import (
     name="Tag Calls Pipeline",
     description="Uploads calls to database for tagging",
 )
-def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
+def tag_calls(
+    org_id: str,
+    job_ids: str,
+    s3_path: str,
+    notify: str = "",
+    channel: str = "",
+):
     """
     A pipeline to upload a dataset for annotation.
 
@@ -28,7 +34,8 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
             "org_id": 23,
             "job_ids": "1,2,3",
             "s3_path": "s3://bucket/path/to/file.csv",
-            "notify": "@person, @personwith.spacedname"
+            "notify": "@person, @personwith.spacedname",
+            "channel": "#some-public-channel"
         }
         ```
 
@@ -40,6 +47,8 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
     :type s3_path: str
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
     """
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
@@ -58,7 +67,7 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
     notification_text = f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
-        task_no_cache = slack_notification_op(notification_text, "")
+        task_no_cache = slack_notification_op(notification_text, "", cc=notify, channel=channel)
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )

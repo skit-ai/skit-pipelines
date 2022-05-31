@@ -22,6 +22,7 @@ def fetch_tagged_calls_dataset(
     timezone: str = "Asia/Kolkata",
     task_type: str = "conversation",
     notify: str = "",
+    channel: str = ""
 ):
     """
     A pipeline to fetch tagged dataset.
@@ -60,6 +61,8 @@ def fetch_tagged_calls_dataset(
     :type task_type: str, optional
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
     """
     tagged_df = fetch_tagged_dataset_op(
         job_id,
@@ -82,7 +85,9 @@ def fetch_tagged_calls_dataset(
     notification_text = f"Here is your data for {org_id=} and {job_id=}."
     with kfp.dsl.Condition(notify == True, "notify").after(s3_upload) as check1:
         task_no_cache = slack_notification_op(
-            notification_text, s3_path=s3_upload.output
+            notification_text,
+            s3_path=s3_upload.output,
+            channel=channel
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
