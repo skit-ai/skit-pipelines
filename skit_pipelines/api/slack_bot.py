@@ -30,20 +30,7 @@ Failed to create pipeline:
 
 
 def help_message():
-    return """
-Currently supported commands are:
-
-@charon run *pipeline-name*
-```
-{
-\t"arg1": "val1",
-\t"arg2": "val2",
-\t...
-}
-```
-
-<https://skit-ai.github.io/skit-pipelines/#pipelines|Click here> to read about pipelines and their documentation.
-"""
+    return "<https://skit-ai.github.io/skit-pipelines/#pipelines|Click here> to read about pipelines"
 
 
 def command_parser(text):
