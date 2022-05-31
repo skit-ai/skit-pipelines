@@ -3,6 +3,7 @@ import os
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]
+SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
 DEFAULT_CHANNEL = os.environ["DEFAULT_SLACK_CHANNEL"]
 
 CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]

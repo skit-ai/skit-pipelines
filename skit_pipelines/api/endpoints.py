@@ -11,9 +11,9 @@ from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetai
 from loguru import logger
 
 import skit_pipelines.constants as const
-from skit_pipelines.api import BackgroundTasks, app, models, run_in_threadpool
+from skit_pipelines.api import BackgroundTasks, app, slack_app, slack_handler, models, run_in_threadpool
 from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
-from skit_pipelines.api.slack_bot import slack_handler
+from skit_pipelines.api.slack_bot import make_response, get_message_data
 
 loop = asyncio.get_event_loop()
 
@@ -169,6 +169,27 @@ async def kfp_api_exception_handler(request, exc):
 async def endpoint(req: Request):
     return await slack_handler.handle(req)
 
+
+@slack_app.event("app_mention")
+def handle_app_mention_events(body, say, logger):
+    """
+    This function is called when the bot (@charon) is called in any slack channel.
+
+    :param body: [description]
+    :type body: [type]
+    :param say: [description]
+    :type say: [type]
+    :param _: [description]
+    :type _: [type]
+    """
+    channel_id, message_ts, text = get_message_data(body)
+    response = make_response(text)
+    say(
+        thread_ts=message_ts,
+        channel=channel_id,
+        unfurl_link=True,
+        text=response,
+    )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

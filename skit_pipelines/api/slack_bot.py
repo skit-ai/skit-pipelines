@@ -1,15 +1,8 @@
 import json
-import os
 import re
 import traceback
-from urllib import response
 
 import requests
-from slack_bolt import App
-from slack_bolt.adapter.fastapi import SlackRequestHandler
-
-app = App(token=os.environ["SLACK_TOKEN"])
-slack_handler = SlackRequestHandler(app)
 
 
 def get_message_data(body):
@@ -71,25 +64,3 @@ def make_response(text):
         response += f"\n\nError: {e}"
         response += f"\n\n```\n{traceback.format_exc()}\n```"
     return response
-
-
-@app.event("app_mention")
-def handle_app_mention_events(body, say, logger):
-    """
-    This function is called when the bot (@charon) is called in any slack channel.
-
-    :param body: [description]
-    :type body: [type]
-    :param say: [description]
-    :type say: [type]
-    :param _: [description]
-    :type _: [type]
-    """
-    channel_id, message_ts, text = get_message_data(body)
-    response = make_response(text)
-    say(
-        thread_ts=message_ts,
-        channel=channel_id,
-        unfurl_link=True,
-        text=response,
-    )
