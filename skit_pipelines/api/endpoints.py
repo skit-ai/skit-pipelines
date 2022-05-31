@@ -5,6 +5,7 @@ from typing import Any, Dict
 import kfp
 import kfp_server_api
 import pydantic
+from fastapi import Request
 from aiokafka import AIOKafkaProducer
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 from loguru import logger
@@ -12,11 +13,9 @@ from loguru import logger
 import skit_pipelines.constants as const
 from skit_pipelines.api import BackgroundTasks, app, models, run_in_threadpool
 from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
+from skit_pipelines.api.slack_bot import slack_handler
 
 loop = asyncio.get_event_loop()
-aioproducer = AIOKafkaProducer(
-    loop=loop, client_id=const.PROJECT_NAME, bootstrap_servers=const.KAFKA_INSTANCE
-)
 
 
 class RunPipelineResult:
@@ -77,21 +76,6 @@ async def schedule_run_completion(
     msg = models.statusWiseResponse(parsed_resp, webhook=bool(webhook_url))
     if webhook_url:
         webhook_utils.send_webhook_request(url=webhook_url, data=msg.body)
-
-
-@app.on_event("startup")
-async def startup_event():
-    logger.info("Starting Up...")
-    logger.info("Initializing kubeflow client.")
-    kf_client = kubeflow_login()
-    await aioproducer.start()
-    logger.info("Kubeflow client initialized.")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    await aioproducer.stop()
-    logger.info("Stopping server...")
 
 
 @app.get("/")
@@ -179,6 +163,11 @@ async def kfp_api_exception_handler(request, exc):
         status_code=exc.status,
         status="error",
     )
+
+
+@app.post("/slack/events")
+async def endpoint(req: Request):
+    return await slack_handler.handle(req)
 
 
 if __name__ == "__main__":
