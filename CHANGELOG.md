@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.86
+
+- [x] docs: Better examples, easier to copy paste commands.
+- [x] add: slack notifications to all components.
+
 ## 0.1.85
 
 - [x] fix: slack urls.
