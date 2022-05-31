@@ -279,41 +279,39 @@
 
 <span class="sd">    Example payload to invoke via slack integrations:</span>
 
-<span class="sd">    .. code-block:: markdown</span>
-
 <span class="sd">        @slackbot run train_voicebot_intent_model_xlmr</span>
-<span class="sd">        ```</span>
-<span class="sd">        {</span>
-<span class="sd">            "model_path": "s3://bucket-name/model/",</span>
-<span class="sd">            "s3_path": "s3://bucket-name/path/to/data.csv",</span>
-<span class="sd">            "org_id": "org",</span>
-<span class="sd">            "use_state": false,</span>
-<span class="sd">            "num_train_epochs": 10,</span>
-<span class="sd">            "max_seq_length": 128,</span>
-<span class="sd">            "learning_rate": 4e-5</span>
-<span class="sd">        }</span>
-<span class="sd">        ```</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">                "model_path": "s3://bucket-name/model/",</span>
+<span class="sd">                "s3_path": "s3://bucket-name/path/to/data.csv",</span>
+<span class="sd">                "org_id": "org",</span>
+<span class="sd">                "use_state": false,</span>
+<span class="sd">                "num_train_epochs": 10,</span>
+<span class="sd">                "max_seq_length": 128,</span>
+<span class="sd">                "learning_rate": 4e-5</span>
+<span class="sd">            }</span>
 
 <span class="sd">    We use the following payload to use via studio.</span>
 
-<span class="sd">    .. code-block:: markdown</span>
-
 <span class="sd">        @slackbot run train_voicebot_intent_model_xlmr</span>
-<span class="sd">        ```</span>
-<span class="sd">        {</span>
-<span class="sd">            "model_path": "s3://bucket-name/model/",</span>
-<span class="sd">            "dataset_path": "path/to/data.csv",</span>
-<span class="sd">            "storage_options": "{"type": "s3", "bucket": "bucket-name"}",</span>
-<span class="sd">            "org_id": "org",</span>
-<span class="sd">            "classifier_type": "xlmr",</span>
-<span class="sd">            "use_state": false,</span>
-<span class="sd">            "num_train_epochs": 10,</span>
-<span class="sd">            "max_seq_length": 128,</span>
-<span class="sd">            "learning_rate": 4e-5,</span>
-<span class="sd">            "notify": "@person, @personwith.spacedname",</span>
-<span class="sd">            "channel": "#some-public-channel"</span>
-<span class="sd">        }</span>
-<span class="sd">        ```</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">                "model_path": "s3://bucket-name/model/",</span>
+<span class="sd">                "dataset_path": "path/to/data.csv",</span>
+<span class="sd">                "storage_options": "{"type": "s3", "bucket": "bucket-name"}",</span>
+<span class="sd">                "org_id": "org",</span>
+<span class="sd">                "classifier_type": "xlmr",</span>
+<span class="sd">                "use_state": false,</span>
+<span class="sd">                "num_train_epochs": 10,</span>
+<span class="sd">                "max_seq_length": 128,</span>
+<span class="sd">                "learning_rate": 4e-5,</span>
+<span class="sd">                "notify": "@person, @personwith.spacedname",</span>
+<span class="sd">                "channel": "#some-public-channel"</span>
+<span class="sd">            }</span>
 
 <span class="sd">    :param model_path: Save path for the trained model.</span>
 <span class="sd">    :type model_path: str</span>

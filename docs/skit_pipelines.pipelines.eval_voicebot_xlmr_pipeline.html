@@ -236,20 +236,20 @@
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline">
 <span class="sig-name descname"><span class="pre">eval_voicebot_xlmr_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/eval_voicebot_xlmr_pipeline.html#eval_voicebot_xlmr_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluates an XLM Roberta model on given dataset.</p>
-<p id="p-eval-voicebot-xlmr-pipeline">Example payload to invoke via slack integrations:</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run eval_voicebot_xlmr_pipeline
-<span class="sb">```</span>
-<span class="sb">{</span>
-<span class="sb">    "s3_path_data": "s3://bucket-name/data/",</span>
-<span class="sb">    "s3_path_model": "s3://bucket-name/model/",</span>
-<span class="sb">    "org_id": "org",</span>
-<span class="sb">    "use_state": false,</span>
-<span class="sb">    "notify": "@person, @personwith.spacedname",</span>
-<span class="sb">    "channel": "#some-public-channel"</span>
-<span class="sb">}</span>
-<span class="sb">```</span>
+<p id="p-eval-voicebot-xlmr-pipeline">Example payload to invoke this pipeline via slack integrations:</p>
+<blockquote>
+<div><p>@charon run eval_voicebot_xlmr_pipeline</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"s3_path_data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket-name/data/"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"s3_path_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket-name/model/"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"org_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"use_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"notify"</span><span class="p">:</span><span class="w"> </span><span class="s2">"@person, @personwith.spacedname"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#some-public-channel"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

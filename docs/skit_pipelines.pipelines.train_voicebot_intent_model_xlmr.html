@@ -237,39 +237,39 @@
 <span class="sig-name descname"><span class="pre">train_voicebot_intent_model_xlmr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlmr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlmroberta'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_train_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_early_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_patience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/train_voicebot_intent_model_xlmr.html#train_voicebot_intent_model_xlmr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.train_voicebot_intent_model_xlmr" title="Permalink to this definition">#</a></dt>
 <dd><p>A pipeline to train an XLMR model on given dataset.</p>
 <p id="p-train-voicebot-intent-model-xlmr">Example payload to invoke via slack integrations:</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run train_voicebot_intent_model_xlmr
-<span class="sb">```</span>
-<span class="sb">{</span>
-<span class="sb">    "model_path": "s3://bucket-name/model/",</span>
-<span class="sb">    "s3_path": "s3://bucket-name/path/to/data.csv",</span>
-<span class="sb">    "org_id": "org",</span>
-<span class="sb">    "use_state": false,</span>
-<span class="sb">    "num_train_epochs": 10,</span>
-<span class="sb">    "max_seq_length": 128,</span>
-<span class="sb">    "learning_rate": 4e-5</span>
-<span class="sb">}</span>
-<span class="sb">```</span>
+<blockquote>
+<div><p>@slackbot run train_voicebot_intent_model_xlmr</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"model_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket-name/model/"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"s3_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket-name/path/to/data.csv"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"org_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"use_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"num_train_epochs"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"max_seq_length"</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"learning_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">4e-5</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+</div></blockquote>
 <p>We use the following payload to use via studio.</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run train_voicebot_intent_model_xlmr
-<span class="sb">```</span>
-<span class="sb">{</span>
-<span class="sb">    "model_path": "s3://bucket-name/model/",</span>
-<span class="sb">    "dataset_path": "path/to/data.csv",</span>
-<span class="sb">    "storage_options": "{"type": "s3", "bucket": "bucket-name"}",</span>
-<span class="sb">    "org_id": "org",</span>
-<span class="sb">    "classifier_type": "xlmr",</span>
-<span class="sb">    "use_state": false,</span>
-<span class="sb">    "num_train_epochs": 10,</span>
-<span class="sb">    "max_seq_length": 128,</span>
-<span class="sb">    "learning_rate": 4e-5,</span>
-<span class="sb">    "notify": "@person, @personwith.spacedname",</span>
-<span class="sb">    "channel": "#some-public-channel"</span>
-<span class="sb">}</span>
-<span class="sb">```</span>
+<blockquote>
+<div><p>@slackbot run train_voicebot_intent_model_xlmr</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+    "model_path": "s3://bucket-name/model/",
+    "dataset_path": "path/to/data.csv",
+    "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
+    "org_id": "org",
+    "classifier_type": "xlmr",
+    "use_state": false,
+    "num_train_epochs": 10,
+    "max_seq_length": 128,
+    "learning_rate": 4e-5,
+    "notify": "@person, @personwith.spacedname",
+    "channel": "#some-public-channel"
+}
 </pre></div>
 </div>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

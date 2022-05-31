@@ -31,21 +31,20 @@ def fetch_tagged_calls_dataset(
 
     Example payload to invoke via slack integrations:
 
-    .. code-block:: markdown
-
         @slackbot run fetch_tagged_calls_dataset
-        ```
-        {
-            "client_id": 1,
-            "start_date": "2020-01-01",
-            "lang": "en",
-            "end_date": "2020-01-01",
-            "reported": false,
-            "call_quantity": 200,
-            "notify": "@person, @personwith.spacedname",
-            "channel": "#some-public-channel"
-        }
-        ```
+
+        .. code-block:: json
+
+            {
+                "client_id": 1,
+                "start_date": "2020-01-01",
+                "lang": "en",
+                "end_date": "2020-01-01",
+                "reported": false,
+                "call_quantity": 200,
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
 
     :param org_id: reference path to save the metrics.
     :type org_id: str

@@ -237,18 +237,18 @@
 <span class="sig-name descname"><span class="pre">tag_calls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/tag_calls.html#tag_calls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.tag_calls.tag_calls" title="Permalink to this definition">#</a></dt>
 <dd><p>A pipeline to upload a dataset for annotation.</p>
 <p id="p-tag-calls">Example payload to invoke via slack integrations:</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run tag_calls
-<span class="sb">```</span>
-<span class="sb">{</span>
-<span class="sb">    "org_id": 23,</span>
-<span class="sb">    "job_ids": "1,2,3",</span>
-<span class="sb">    "s3_path": "s3://bucket/path/to/file.csv",</span>
-<span class="sb">    "notify": "@person, @personwith.spacedname",</span>
-<span class="sb">    "channel": "#some-public-channel"</span>
-<span class="sb">}</span>
-<span class="sb">```</span>
+<blockquote>
+<div><p>@slackbot run tag_calls</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"org_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"job_ids"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1,2,3"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"s3_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket/path/to/file.csv"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"notify"</span><span class="p">:</span><span class="w"> </span><span class="s2">"@person, @personwith.spacedname"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#some-public-channel"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

@@ -26,18 +26,17 @@ def tag_calls(
 
     Example payload to invoke via slack integrations:
 
-    .. code-block:: markdown
-
         @slackbot run tag_calls
-        ```
-        {
-            "org_id": 23,
-            "job_ids": "1,2,3",
-            "s3_path": "s3://bucket/path/to/file.csv",
-            "notify": "@person, @personwith.spacedname",
-            "channel": "#some-public-channel"
-        }
-        ```
+
+        .. code-block:: json
+
+            {
+                "org_id": 23,
+                "job_ids": "1,2,3",
+                "s3_path": "s3://bucket/path/to/file.csv",
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
 
     :param org_id: The organization id as per api-gateway.
     :type org_id: str

@@ -49,41 +49,39 @@ def train_voicebot_intent_model_xlmr(
 
     Example payload to invoke via slack integrations:
 
-    .. code-block:: markdown
-
         @slackbot run train_voicebot_intent_model_xlmr
-        ```
-        {
-            "model_path": "s3://bucket-name/model/",
-            "s3_path": "s3://bucket-name/path/to/data.csv",
-            "org_id": "org",
-            "use_state": false,
-            "num_train_epochs": 10,
-            "max_seq_length": 128,
-            "learning_rate": 4e-5
-        }
-        ```
+
+        .. code-block:: json
+
+            {
+                "model_path": "s3://bucket-name/model/",
+                "s3_path": "s3://bucket-name/path/to/data.csv",
+                "org_id": "org",
+                "use_state": false,
+                "num_train_epochs": 10,
+                "max_seq_length": 128,
+                "learning_rate": 4e-5
+            }
 
     We use the following payload to use via studio.
 
-    .. code-block:: markdown
-
         @slackbot run train_voicebot_intent_model_xlmr
-        ```
-        {
-            "model_path": "s3://bucket-name/model/",
-            "dataset_path": "path/to/data.csv",
-            "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
-            "org_id": "org",
-            "classifier_type": "xlmr",
-            "use_state": false,
-            "num_train_epochs": 10,
-            "max_seq_length": 128,
-            "learning_rate": 4e-5,
-            "notify": "@person, @personwith.spacedname",
-            "channel": "#some-public-channel"
-        }
-        ```
+
+        .. code-block:: json
+
+            {
+                "model_path": "s3://bucket-name/model/",
+                "dataset_path": "path/to/data.csv",
+                "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
+                "org_id": "org",
+                "classifier_type": "xlmr",
+                "use_state": false,
+                "num_train_epochs": 10,
+                "max_seq_length": 128,
+                "learning_rate": 4e-5,
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
 
     :param model_path: Save path for the trained model.
     :type model_path: str

@@ -40,21 +40,20 @@ def eval_voicebot_xlmr_pipeline(
 
     .. _p_eval_voicebot_xlmr_pipeline:
 
-    Example payload to invoke via slack integrations:
+    Example payload to invoke this pipeline via slack integrations:
 
-    .. code-block:: markdown
+        @charon run eval_voicebot_xlmr_pipeline
 
-        @slackbot run eval_voicebot_xlmr_pipeline
-        ```
-        {
-            "s3_path_data": "s3://bucket-name/data/",
-            "s3_path_model": "s3://bucket-name/model/",
-            "org_id": "org",
-            "use_state": false,
-            "notify": "@person, @personwith.spacedname",
-            "channel": "#some-public-channel"
-        }
-        ```
+        .. code-block:: json
+
+            {
+                "s3_path_data": "s3://bucket-name/data/",
+                "s3_path_model": "s3://bucket-name/model/",
+                "org_id": "org",
+                "use_state": false,
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
 
     :param s3_path_data: S3 path to a tagged dataset (.csv).
     :type s3_path_data: str

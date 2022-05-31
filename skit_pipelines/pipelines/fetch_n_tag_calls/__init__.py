@@ -39,21 +39,20 @@ def fetch_n_tag_calls(
 
     Example payload to invoke via slack integrations:
 
-    .. code-block:: markdown
-
         @slackbot run fetch_n_tag_calls
-        ```
-        {
-            "client_id": 1,
-            "start_date": "2020-01-01",
-            "lang": "en",
-            "end_date": "2020-01-01",
-            "reported": false,
-            "call_quantity": 200,
-            "notify": "@person, @personwith.spacedname",
-            "channel": "#some-public-channel"
-        }
-        ```
+
+        .. code-block:: json
+
+            {
+                "client_id": 1,
+                "start_date": "2020-01-01",
+                "lang": "en",
+                "end_date": "2020-01-01",
+                "reported": false,
+                "call_quantity": 200,
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
 
     :param client_id: The client id as per api-gateway.
     :type client_id: int

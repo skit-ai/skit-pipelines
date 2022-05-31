@@ -237,21 +237,21 @@
 <span class="sig-name descname"><span class="pre">fetch_tagged_calls_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'conversation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_tagged_calls_dataset.html#fetch_tagged_calls_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_tagged_calls_dataset.fetch_tagged_calls_dataset" title="Permalink to this definition">#</a></dt>
 <dd><p>A pipeline to fetch tagged dataset.</p>
 <p id="p-fetch-tagged-calls-dataset">Example payload to invoke via slack integrations:</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="ni">@slackbot</span> run fetch_tagged_calls_dataset
-<span class="sb">```</span>
-<span class="sb">{</span>
-<span class="sb">    "client_id": 1,</span>
-<span class="sb">    "start_date": "2020-01-01",</span>
-<span class="sb">    "lang": "en",</span>
-<span class="sb">    "end_date": "2020-01-01",</span>
-<span class="sb">    "reported": false,</span>
-<span class="sb">    "call_quantity": 200,</span>
-<span class="sb">    "notify": "@person, @personwith.spacedname",</span>
-<span class="sb">    "channel": "#some-public-channel"</span>
-<span class="sb">}</span>
-<span class="sb">```</span>
+<blockquote>
+<div><p>@slackbot run fetch_tagged_calls_dataset</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"client_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"start_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"lang"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"end_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"reported"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"call_quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"notify"</span><span class="p">:</span><span class="w"> </span><span class="s2">"@person, @personwith.spacedname"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#some-public-channel"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

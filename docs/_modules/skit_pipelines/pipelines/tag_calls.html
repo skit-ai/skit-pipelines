@@ -256,18 +256,17 @@
 
 <span class="sd">    Example payload to invoke via slack integrations:</span>
 
-<span class="sd">    .. code-block:: markdown</span>
-
 <span class="sd">        @slackbot run tag_calls</span>
-<span class="sd">        ```</span>
-<span class="sd">        {</span>
-<span class="sd">            "org_id": 23,</span>
-<span class="sd">            "job_ids": "1,2,3",</span>
-<span class="sd">            "s3_path": "s3://bucket/path/to/file.csv",</span>
-<span class="sd">            "notify": "@person, @personwith.spacedname",</span>
-<span class="sd">            "channel": "#some-public-channel"</span>
-<span class="sd">        }</span>
-<span class="sd">        ```</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">                "org_id": 23,</span>
+<span class="sd">                "job_ids": "1,2,3",</span>
+<span class="sd">                "s3_path": "s3://bucket/path/to/file.csv",</span>
+<span class="sd">                "notify": "@person, @personwith.spacedname",</span>
+<span class="sd">                "channel": "#some-public-channel"</span>
+<span class="sd">            }</span>
 
 <span class="sd">    :param org_id: The organization id as per api-gateway.</span>
 <span class="sd">    :type org_id: str</span>
