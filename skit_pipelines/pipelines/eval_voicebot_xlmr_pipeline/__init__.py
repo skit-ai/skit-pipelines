@@ -37,16 +37,19 @@ def eval_voicebot_xlmr_pipeline(
 
     .. _p_eval_voicebot_xlmr_pipeline:
 
-    Example
+    Example payload to invoke via slack integrations:
 
-    .. code-block:: json
+    .. code-block:: markdown
 
+        @slackbot run eval_voicebot_xlmr_pipeline
+        ```
         {
             "s3_path_data": "s3://bucket-name/data/",
             "s3_path_model": "s3://bucket-name/model/",
             "org_id": "org",
             "use_state": false
         }
+        ```
 
     :param s3_path_data: S3 path to a tagged dataset (.csv).
     :type s3_path_data: str
@@ -121,3 +124,6 @@ def eval_voicebot_xlmr_pipeline(
     upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+
+__all__ = ["eval_voicebot_xlmr_pipeline"]

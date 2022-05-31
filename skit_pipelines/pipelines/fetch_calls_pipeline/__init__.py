@@ -28,6 +28,23 @@ def fetch_calls_pipeline(
 
     .. _p_fetch_calls_pipeline:
 
+    Example payload to invoke via slack integrations:
+
+    .. code-block:: markdown
+
+        @slackbot run fetch_calls_pipeline
+        ```
+        {
+            "client_id": 1,
+            "start_date": "2020-01-01",
+            "lang": "en",
+            "end_date": "2020-01-01",
+            "reported": false,
+            "call_quantity": 200,
+            "notify": "@person, @personwith.spacedname"
+        }
+        ```
+
     :param client_id: The client id as per fsm db.
     :type client_id: int
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
@@ -82,3 +99,6 @@ def fetch_calls_pipeline(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+
+__all__ = ["fetch_calls_pipeline"]

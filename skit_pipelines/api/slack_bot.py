@@ -47,7 +47,7 @@ Currently supported commands are:
 }
 ```
 
-<https://github.com/skit-ai/skit-pipelines | Click here> to read about pipelines and their documentation.
+<https://github.com/skit-ai/skit-pipelines#pipelines | Click here> to read about pipelines and their documentation.
 """
 
 

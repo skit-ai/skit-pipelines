@@ -18,6 +18,20 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
 
     .. _p_tag_calls:
 
+    Example payload to invoke via slack integrations:
+
+    .. code-block:: markdown
+
+        @slackbot run fetch_calls_pipeline
+        ```
+        {
+            "org_id": 23,
+            "job_ids": "1,2,3",
+            "s3_path": "s3://bucket/path/to/file.csv",
+            "notify": "@person, @personwith.spacedname"
+        }
+        ```
+
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
     :param job_ids: Comma separated list of job ids. 
@@ -48,3 +62,5 @@ def tag_calls(org_id: str, job_ids: str, s3_path: str, notify: str = ""):
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+__all__ = ["tag_calls"]

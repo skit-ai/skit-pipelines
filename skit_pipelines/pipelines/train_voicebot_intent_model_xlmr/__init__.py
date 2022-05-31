@@ -44,14 +44,41 @@ def train_voicebot_intent_model_xlmr(
 
     .. _p_train_voicebot_intent_model_xlmr:
 
-    example: 
+    Example payload to invoke via slack integrations:
 
-    .. code-block:: python3
+    .. code-block:: markdown
 
+        @slackbot run fetch_calls_pipeline
+        ```
         {
-            "type": "s3",
-            "bucket": "bucket-name"
+            "model_path": "s3://bucket-name/model/",
+            "s3_path": "s3://bucket-name/path/to/data.csv",
+            "org_id": "org",
+            "use_state": false,
+            "num_train_epochs": 10,
+            "max_seq_length": 128,
+            "learning_rate": 4e-5
         }
+        ```
+
+    We use the following payload to use via studio.
+
+    .. code-block:: markdown
+
+        @slackbot run fetch_calls_pipeline
+        ```
+        {
+            "model_path": "s3://bucket-name/model/",
+            "dataset_path": "path/to/data.csv",
+            "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
+            "org_id": "org",
+            "classifier_type": "xlmr",
+            "use_state": false,
+            "num_train_epochs": 10,
+            "max_seq_length": 128,
+            "learning_rate": 4e-5
+        }
+        ```
 
     :param model_path: Save path for the trained model.
     :type model_path: str
@@ -137,3 +164,5 @@ def train_voicebot_intent_model_xlmr(
     upload.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+__all__ = ["train_voicebot_intent_model_xlmr"]

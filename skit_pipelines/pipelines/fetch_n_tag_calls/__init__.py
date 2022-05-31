@@ -37,6 +37,24 @@ def fetch_n_tag_calls(
 
     .. _p_fetch_n_tag_calls:
 
+    Example payload to invoke via slack integrations:
+
+    .. code-block:: markdown
+
+        @slackbot run fetch_calls_pipeline
+        ```
+        {
+            "client_id": 1,
+            "start_date": "2020-01-01",
+            "lang": "en",
+            "end_date": "2020-01-01",
+            "reported": false,
+            "call_quantity": 200,
+            "notify": "@person, @personwith.spacedname",
+            "channel": "#some-public-channel"
+        }
+        ```
+
     :param client_id: The client id as per api-gateway.
     :type client_id: int
     :param org_id: The organization id as per api-gateway.
@@ -118,3 +136,5 @@ def fetch_n_tag_calls(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+__all__ = ["fetch_n_tag_calls"]

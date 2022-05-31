@@ -28,6 +28,24 @@ def fetch_tagged_calls_dataset(
 
     .. _p_fetch_tagged_calls_dataset:
 
+    Example payload to invoke via slack integrations:
+
+    .. code-block:: markdown
+
+        @slackbot run fetch_calls_pipeline
+        ```
+        {
+            "client_id": 1,
+            "start_date": "2020-01-01",
+            "lang": "en",
+            "end_date": "2020-01-01",
+            "reported": false,
+            "call_quantity": 200,
+            "notify": "@person, @personwith.spacedname",
+            "channel": "#some-public-channel"
+        }
+        ```
+
     :param org_id: reference path to save the metrics.
     :type org_id: str
     :param job_id: The annotation dataset id.
@@ -69,3 +87,5 @@ def fetch_tagged_calls_dataset(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+__all__ = ["fetch_tagged_calls_dataset"]
