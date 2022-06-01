@@ -75,16 +75,16 @@ def fetch_tagged_calls_dataset(
     )
     s3_upload = upload2s3_op(
         path_on_disk=tagged_df.outputs["output"],
-        org_id=org_id,
+        reference=f"{org_id}_{job_id}",
         file_type=f"tagged",
         bucket=pipeline_constants.BUCKET,
         ext=".csv",
     )
 
     notification_text = f"Here is your data for {org_id=} and {job_id=}."
-    with kfp.dsl.Condition(notify == True, "notify").after(s3_upload) as check1:
+    with kfp.dsl.Condition(notify != "", "notify").after(s3_upload) as check1:
         task_no_cache = slack_notification_op(
-            notification_text, s3_path=s3_upload.output, channel=channel
+            notification_text, s3_path=s3_upload.output, cc=notify, channel=channel
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

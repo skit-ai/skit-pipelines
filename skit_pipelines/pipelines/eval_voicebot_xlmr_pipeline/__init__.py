@@ -108,7 +108,11 @@ def eval_voicebot_xlmr_pipeline(
 
     # produce test set metrics.
     upload_irr = upload2s3_op(
-        irr_op.outputs["output"], org_id, "xlmr-irr-metrics", BUCKET, ".txt"
+        path_on_disk=irr_op.outputs["output"],
+        reference=org_id,
+        file_type="xlmr-irr-metrics",
+        bucket=BUCKET,
+        ext=".txt"
     )
     upload_irr.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -130,11 +134,11 @@ def eval_voicebot_xlmr_pipeline(
     )
 
     upload_cm = upload2s3_op(
-        confusion_matrix_op.outputs["output"],
-        org_id,
-        "xlmr-confusion-matrix",
-        BUCKET,
-        ".txt",
+        path_on_disk=confusion_matrix_op.outputs["output"],
+        reference=org_id,
+        file_type="xlmr-confusion-matrix",
+        bucket=BUCKET,
+        ext=".txt",
     )
     upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

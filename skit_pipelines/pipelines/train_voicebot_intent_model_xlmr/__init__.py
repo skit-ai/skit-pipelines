@@ -161,10 +161,10 @@ def train_voicebot_intent_model_xlmr(
     # produce test set metrics.
     train_op.set_gpu_limit(1)
     upload = upload2s3_op(
-        train_op.outputs["model"],
-        org_id,
-        "intent_classifier_xlmr",
-        BUCKET,
+        path_on_disk=train_op.outputs["model"],
+        reference=org_id,
+        file_type="intent_classifier_xlmr",
+        bucket=BUCKET,
         output_path=model_path,
         storage_options=storage_options,
     )

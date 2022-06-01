@@ -8,7 +8,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def upload2s3(
     path_on_disk: InputPath(str),
-    org_id: str = "",
+    reference: str = "",
     file_type: str = "",
     bucket: str = "",
     ext: str = ".csv",
@@ -36,10 +36,10 @@ def upload2s3(
         bucket = storage_options.bucket
 
     if os.path.isfile(path_on_disk):
-        upload_path = output_path or create_file_name(org_id, file_type, ext)
+        upload_path = output_path or create_file_name(reference, file_type, ext)
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
     elif os.path.isdir(path_on_disk):
-        upload_path = output_path or create_dir_name(org_id, file_type)
+        upload_path = output_path or create_dir_name(reference, file_type)
         for full_file_path in glob(f"{path_on_disk}/**", recursive=True):
             if not os.path.isfile(full_file_path):
                 continue
