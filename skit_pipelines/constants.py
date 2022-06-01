@@ -2,7 +2,7 @@ import os
 
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 BUCKET = os.environ["BUCKET"]
-SLACK_TOKEN = os.environ["SLACK_BOT_TOKEN"]
+SLACK_TOKEN = os.environ["SLACK_TOKEN"]
 SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
 DEFAULT_CHANNEL = os.environ["DEFAULT_SLACK_CHANNEL"]
 
