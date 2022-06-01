@@ -17,8 +17,8 @@ from skit_pipelines.components import (
 def fetch_tagged_calls_dataset(
     org_id: str,
     job_id: int,
-    start_date: str,
-    end_date: str,
+    start_date: str = "",
+    end_date: str = "",
     timezone: str = "Asia/Kolkata",
     task_type: str = "conversation",
     notify: str = "",

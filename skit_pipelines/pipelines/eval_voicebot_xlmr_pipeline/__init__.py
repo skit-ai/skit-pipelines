@@ -28,10 +28,10 @@ INTENT = pipeline_constants.INTENT
 def eval_voicebot_xlmr_pipeline(
     *,
     s3_path_data: str,
-    s3_path_model: str,
     org_id: str,
     use_state: bool = True,
     model_name: str = "xlm-roberta-base",
+    s3_path_model: str = "",
     notify: str = "",
     channel: str = "",
 ):
