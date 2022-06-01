@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.87
+
+- [x] fix: db host name.
+- [x] update: default arguments fixed.
+
 ## 0.1.86
 
 - [x] docs: Better examples, easier to copy paste commands.
