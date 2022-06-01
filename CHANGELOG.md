@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.88
+
+- [x] fix: slack token const.
+- [x] refactor: unused types.
+
 ## 0.1.87
 
 - [x] fix: db host name.
