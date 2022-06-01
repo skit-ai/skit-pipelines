@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html" /><link rel="prev" title="skit_pipelines.pipelines.tag_calls package" href="skit_pipelines.pipelines.tag_calls.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package - skit-pipelines 0.1.89 documentation</title>
+        <title>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.1.89 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.89 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -254,19 +254,19 @@
 <p>We use the following payload to use via studio.</p>
 <blockquote>
 <div><p>@charon run train_voicebot_intent_model_xlmr</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
-    "model_path": "s3://bucket-name/model/",
-    "dataset_path": "path/to/data.csv",
-    "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
-    "org_id": "org",
-    "classifier_type": "xlmr",
-    "use_state": false,
-    "num_train_epochs": 10,
-    "max_seq_length": 128,
-    "learning_rate": 4e-5,
-    "notify": "@person, @personwith.spacedname",
-    "channel": "#some-public-channel"
-}
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"model_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3://bucket-name/model/"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"dataset_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/data.csv"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"storage_options"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"type\": \"s3\", \"bucket\": \"bucket-name\"}"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"org_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"classifier_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xlmr"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"use_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"num_train_epochs"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"max_seq_length"</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"learning_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">4e-05</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"notify"</span><span class="p">:</span><span class="w"> </span><span class="s2">"@person, @personwith.spacedname"</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#some-public-channel"</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 </div></blockquote>
