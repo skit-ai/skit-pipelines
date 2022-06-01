@@ -72,7 +72,7 @@ def train_voicebot_intent_model_xlmr(
             {
                 "model_path": "s3://bucket-name/model/",
                 "dataset_path": "path/to/data.csv",
-                "storage_options": "{"type": "s3", "bucket": "bucket-name"}",
+                "storage_options": "{\"type\": \"s3\", \"bucket\": \"bucket-name\"}",
                 "org_id": "org",
                 "classifier_type": "xlmr",
                 "use_state": false,
