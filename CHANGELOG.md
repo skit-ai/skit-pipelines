@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.89
+
+- [x] fix: storage options.
+
 ## 0.1.88
 
 - [x] fix: slack token const.
