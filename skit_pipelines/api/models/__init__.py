@@ -2,6 +2,7 @@ import skit_pipelines.api.models.errors as errors
 from skit_pipelines.api.models.custom_models import ParseRunResponse
 from skit_pipelines.api.models.requests import (
     BaseRequestSchema,
+    StorageOptions,
     generate_schema,
     get_all_pipelines_fn,
 )

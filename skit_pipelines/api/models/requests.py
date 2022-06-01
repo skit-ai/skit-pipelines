@@ -35,3 +35,8 @@ class BaseRequestSchema(BaseModel):
     @validator("*", pre=True)
     def transform_none(cls, value):
         return "" if value is None else value
+
+
+class StorageOptions(BaseRequestSchema):
+    type: str = "s3"
+    bucket: str = const.BUCKET
