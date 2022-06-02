@@ -24,8 +24,7 @@ BUCKET = pipeline_constants.BUCKET
 )
 def train_voicebot_intent_model_xlmr(
     *,
-    s3_path: str = "",
-    dataset_path: str = "",
+    dataset_path: str,
     model_path: str,
     storage_options: str = "",
     org_id: str = "",
@@ -55,7 +54,7 @@ def train_voicebot_intent_model_xlmr(
 
             {
                 "model_path": "s3://bucket-name/model/",
-                "s3_path": "s3://bucket-name/path/to/data.csv",
+                "dataset_path": "s3://bucket-name/path/to/data.csv",
                 "org_id": "org",
                 "use_state": false,
                 "num_train_epochs": 10,
@@ -86,10 +85,8 @@ def train_voicebot_intent_model_xlmr(
 
     :param model_path: Save path for the trained model.
     :type model_path: str
-    :param s3_path: S3 path for a tagged dataset, defaults to ""
-    :type s3_path: str, optional
-    :param dataset_path: The S3 key for the tagged dataset. Use only if s3_path is missing and dataset_path is known instead, defaults to ""
-    :type dataset_path: str, optional
+    :param dataset_path: The S3 URI or the S3 key for the tagged dataset.
+    :type dataset_path: str
     :param storage_options: A json string that specifies the bucket and key, defaults to ""
     :type storage_options: str, optional
     :param org_id: reference path to save the metrics.
@@ -119,21 +116,14 @@ def train_voicebot_intent_model_xlmr(
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
     """
-    with kfp.dsl.Condition(s3_path != "", "s3_path_check") as check1:
-        tagged_data_op = download_from_s3_op(storage_path=s3_path)
-
-    with kfp.dsl.Condition(dataset_path != "", "dataset_path_check") as check2:
-        tagged_data_op = download_from_s3_op(
-            storage_path=dataset_path, storage_options=storage_options
-        )
+    
+    tagged_data_op = download_from_s3_op(storage_path=dataset_path, storage_options=storage_options)
 
     # preprocess the file
 
     # Create true label column
-    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
-        check1, check2
-    )
-
+    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"])
+    
     # Create utterance column
     preprocess_data_op = create_true_intent_labels_op(
         preprocess_data_op.outputs["output"]

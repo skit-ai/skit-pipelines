@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 .PHONY: all test pipes docs
 
-BASE := skit_pipelines/pipelines/
+BASE := skit_pipelines/pipelines
 BLANK := 
-SOURCE_FILES := $(shell find ${BASE} -name "__init__.py" ! -wholename "${BASE}__init__.py")
+SOURCE_FILES := $(shell find ${BASE} -name "__init__.py" ! -wholename "${BASE}/__init__.py")
 
 lint:
 	@echo -e "Running linter"
@@ -25,8 +25,8 @@ update_secrets:
 pipes:
 	@if [ -d "build" ]; then rm -rf build/**; fi
 	@for file in $(SOURCE_FILES); do \
-		# echo "Building $$file"; \
-		pipeline_file=$${file/skit_pipelines\/pipelines\//}; \
+		echo "Building $$file"; \
+		pipeline_file=$${file/skit_pipelines\/pipelines\/}; \
 		pipeline_name=$${pipeline_file/\/__init__.py/}; \
 		echo "Building $$pipeline_name"; \
 		touch build/$$pipeline_name.yaml; \
