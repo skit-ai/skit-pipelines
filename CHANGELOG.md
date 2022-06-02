@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.1.90
+
+- [x] update: replace org-id with reference in s3 upload component.
+
+## 0.1.89
+
+- [x] fix: storage options.
+
+## 0.1.88
+
+- [x] fix: slack token const.
+- [x] refactor: unused types.
+
+## 0.1.87
+
+- [x] fix: db host name.
+- [x] update: default arguments fixed.
+
+## 0.1.86
+
+- [x] docs: Better examples, easier to copy paste commands.
+- [x] add: slack notifications to all components.
+
+## 0.1.85
+
+- [x] fix: slack urls.
+- [x] add: slack notifications to all components.
+
+## 0.1.84
+
+- [x] add: slack signing secret.
+
+## 0.1.83
+
+- [x] docs: Pipeline and payload docs added.
+- [x] update: slackbot command parser responds with stacktrace.
+
+## 0.1.82
+
+- [x] fix: No module named 'skit_pipelines' caused by installing before copy source in dockerfile.
+- [x] refactor: makefile for building pipelines is leaner.
+
+## 0.1.80
+
+- [x] add: slack-bot integration. Invoke pipelines via slackbot.
+- [x] refactor: Automatic generation of pydantic models using kfp signature.
+
+## 0.1.79
+
+- [x] add: intent evaluation pipeline.
+- [x] add: crr evaluation pipeline.
+- [x] add: slack-bot integration.
+
 ## 0.1.62
 - [x] update: remove helper function for upload2sheet
 - [x] update: sheet duplication and row logic while pushing calls to google sheet

@@ -1,4 +1,5 @@
 from typing import Union
+
 import kfp
 from kfp.components import InputPath
 
@@ -7,23 +8,26 @@ from skit_pipelines import constants as pipeline_constants
 
 def upload2s3(
     path_on_disk: InputPath(str),
-    org_id: str = "",
+    reference: str = "",
     file_type: str = "",
     bucket: str = "",
     ext: str = ".csv",
     output_path: str = "",
-    storage_options: str = ""
+    storage_options: str = "",
 ) -> str:
-    import os
     import json
+    import os
     from glob import glob
 
     import boto3
     from loguru import logger
 
-    from skit_pipelines.utils import create_dir_name, create_file_name
     from skit_pipelines.api.models import StorageOptions
-    from skit_pipelines.utils import create_storage_path
+    from skit_pipelines.utils import (
+        create_dir_name,
+        create_file_name,
+        create_storage_path,
+    )
 
     s3_resource = boto3.client("s3")
 
@@ -32,10 +36,10 @@ def upload2s3(
         bucket = storage_options.bucket
 
     if os.path.isfile(path_on_disk):
-        upload_path = output_path or create_file_name(org_id, file_type, ext)
+        upload_path = output_path or create_file_name(reference, file_type, ext)
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
     elif os.path.isdir(path_on_disk):
-        upload_path = output_path or create_dir_name(org_id, file_type)
+        upload_path = output_path or create_dir_name(reference, file_type)
         for full_file_path in glob(f"{path_on_disk}/**", recursive=True):
             if not os.path.isfile(full_file_path):
                 continue

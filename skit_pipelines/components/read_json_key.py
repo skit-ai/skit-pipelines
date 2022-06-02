@@ -7,7 +7,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def read_json_key(req_value: str, input_file: InputPath(str)) -> Any:
-    
+
     import json
     import os
 
