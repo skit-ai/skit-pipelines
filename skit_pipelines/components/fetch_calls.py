@@ -15,11 +15,12 @@ def fetch_calls(
     call_quantity: int = 200,
     call_type: Optional[str] = None,
     ignore_callers: Optional[str] = None,
-    reported: Optional[str] = None,
+    reported: bool = False,
     use_case: Optional[str] = None,
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
+    states: Optional[str] = None,
 ) -> str:
     import tempfile
     import time
@@ -49,6 +50,9 @@ def fetch_calls(
         ignore_callers = const.DEFAULT_IGNORE_CALLERS_LIST
 
     start = time.time()
+    states = states.replace(" ", "")
+    states = states.split(",") if states else states
+
     maybe_df = calls.sample(
         client_id,
         start_date,
@@ -62,6 +66,7 @@ def fetch_calls(
         flow_name=flow_name or None,
         min_duration=min_duration or None,
         asr_provider=asr_provider or None,
+        states=states or None,
         on_disk=False,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
@@ -70,7 +75,7 @@ def fetch_calls(
 
     s3_path = upload2s3(
         file_path,
-        org_id=client_id,
+        reference=f"{client_id}-{start_date}-{end_date}",
         file_type=f"{lang}-untagged",
         bucket=pipeline_constants.BUCKET,
         ext=".csv",

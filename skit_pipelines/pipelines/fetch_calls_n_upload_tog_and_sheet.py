@@ -1,3 +1,4 @@
+from typing import Optional
 import kfp
 
 from skit_pipelines.components import (
@@ -22,11 +23,12 @@ def fetch_calls_n_upload_tog_and_sheet(
     lang: str,
     end_date: str,
     ignore_callers: str,
-    reported: str,
+    reported: bool,
     use_case: str,
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    states: Optional[str] = None,
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     sheet_id: str = "",
@@ -42,6 +44,7 @@ def fetch_calls_n_upload_tog_and_sheet(
         call_type=call_type,
         ignore_callers=ignore_callers,
         reported=reported,
+        states=states,
         use_case=use_case,
         flow_name=flow_name,
         min_duration=min_duration,
