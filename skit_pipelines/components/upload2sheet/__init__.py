@@ -5,7 +5,7 @@ from kfp.components import InputPath, OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 def upload2sheet(
-    untagged_records_path_on_disk: str,
+    untagged_records_path: str,
     output_json: OutputPath(str),
     org_id: str = "",
     sheet_id = "",
@@ -32,7 +32,7 @@ def upload2sheet(
     }
 
     try:
-        df = pd.read_csv(untagged_records_path_on_disk)
+        df = pd.read_csv(untagged_records_path)
         unique_uuids = df.call_uuid.unique()
         console_links = [
             f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={i}"
@@ -98,7 +98,7 @@ def upload2sheet(
         update_range = f"A3:A{range_end_row_number}"
         console_cell_values = [[console_link] for console_link in console_links]
         target_worksheet.update(update_range, console_cell_values)
-        logger.debug(f"Uploaded {untagged_records_path_on_disk} to google sheet {sheet_id}")
+        logger.debug(f"Uploaded {untagged_records_path} to google sheet {sheet_id}")
 
         output_dict["num_calls_uploaded"] = len(console_links)
         output_dict["spread_sheet_url"] = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit#gid={target_worksheet.id}"

@@ -11,18 +11,18 @@ from skit_pipelines.components import (
     name="Fetch and push for calls to gogole sheets pipeline",
     description="fetches calls from production db with respective arguments and uploads calls to google sheets for Call tagging",
 )
-def run_fetch_calls_n_push_to_sheets(
+def fetch_calls_n_push_to_sheets(
     client_id: int,
     org_id: str,
     start_date: str,
     lang: str,
     end_date: str,
     ignore_callers: str,
-    reported: str,
     use_case: str,
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    reported: bool = False,
     call_quantity: int = 200,
     call_type: str = "INBOUND",
     sheet_id: str = "",
@@ -74,3 +74,5 @@ def run_fetch_calls_n_push_to_sheets(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+__all__ = ["run_fetch_calls_n_push_to_sheets"]

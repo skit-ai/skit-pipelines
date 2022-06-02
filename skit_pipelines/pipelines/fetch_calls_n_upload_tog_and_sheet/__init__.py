@@ -23,11 +23,11 @@ def fetch_calls_n_upload_tog_and_sheet(
     lang: str,
     end_date: str,
     ignore_callers: str,
-    reported: bool,
     use_case: str,
     flow_name: str,
     min_duration: str,
     asr_provider: str,
+    reported: bool = False,
     states: Optional[str] = None,
     call_quantity: int = 200,
     call_type: str = "INBOUND",
@@ -126,3 +126,5 @@ def fetch_calls_n_upload_tog_and_sheet(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+__all__ = ["fetch_calls_n_upload_tog_and_sheet"]
