@@ -93,3 +93,6 @@ def GET_RUN_URL(namespace, id):
 FILTER_LIST = [
     "webhook_uri",
 ]
+
+# GITLAB PERSONAL ACCESS TOKEN for downloading repo.
+GITLAB_PERSONAL_ACCESS_TOKEN = os.environ["GITLAB_PERSONAL_ACCESS_TOKEN"]
