@@ -32,7 +32,7 @@ pipes:
 		touch build/$$pipeline_name.yaml; \
 		source secrets/env.sh && dsl-compile --py $$file --output build/$$pipeline_name.yaml; \
 	done
-
+	
 docs:
 	@sphinx-apidoc -f -o source ./skit_pipelines
 	@sphinx-build -b html source docs

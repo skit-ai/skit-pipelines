@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 0.1.91
+
+- [x] update: fetch_calls_n_upload_tog_and_sheet and fetch_calls_n_push_to_sheets pipelines refactor
+
 ## 0.1.90
 
 - [x] update: replace org-id with reference in s3 upload component.
@@ -52,6 +57,29 @@
 - [x] add: intent evaluation pipeline.
 - [x] add: crr evaluation pipeline.
 - [x] add: slack-bot integration.
+
+## 0.1.62
+- [x] update: remove helper function for upload2sheet
+- [x] update: sheet duplication and row logic while pushing calls to google sheet
+
+## 0.1.53
+- [x] update: move helper functions of upload2sheet into a folder
+
+## 0.1.52
+- [x] update: skit-calls==0.2.15
+
+## 0.1.48
+- [x] update: skit-calls==0.2.14
+
+## 0.1.45
+- [x] fix: to make Docker file and github actions yaml to use google secrets
+
+## 0.1.44
+- [x] update: component to push CSV to a google sheet. Load google secrets from a Github secrets
+- [x] update: Docker file and github actions yaml to use google secrets
+## 0.1.43
+- [x] add: component to push CSV to a google sheet.
+- [x] add: pipeline to fetch calls and push to google sheet.
 
 ## 0.1.42
 

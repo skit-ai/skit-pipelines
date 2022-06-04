@@ -10,3 +10,9 @@ from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.train_voicebot_intent_model_xlmr import (
     train_voicebot_intent_model_xlmr,
 )
+from skit_pipelines.pipelines.fetch_calls_n_push_to_sheets import (
+    fetch_calls_n_push_to_sheets,
+)
+from skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet import (
+    fetch_calls_n_upload_tog_and_sheet,
+)
