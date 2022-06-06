@@ -34,8 +34,8 @@ compile_pipes:
 	done
 
 docs:
-	@sphinx-apidoc -f -o source ./skit_pipelines
-	@sphinx-build -b html source docs
+	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
+	@source secrets/env.sh && sphinx-build -b html source docs
 	@cp source/index.rst README.rst
 
 pipes: secrets compile_pipes
