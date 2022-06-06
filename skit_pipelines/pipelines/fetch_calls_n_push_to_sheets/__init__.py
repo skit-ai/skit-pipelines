@@ -2,10 +2,11 @@ import kfp
 
 from skit_pipelines.components import (
     fetch_calls_op,
-    upload2sheet_op,
     read_json_key_op,
     slack_notification_op,
+    upload2sheet_op,
 )
+
 
 @kfp.dsl.pipeline(
     name="Fetch and push for calls to gogole sheets pipeline",
@@ -43,11 +44,11 @@ def fetch_calls_n_push_to_sheets(
         min_duration=min_duration,
         asr_provider=asr_provider,
     )
-    
+
     untagged_records_s3_path.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
-    
+
     upload = upload2sheet_op(
         untagged_records_s3_path.output,
         org_id=org_id,
@@ -55,24 +56,29 @@ def fetch_calls_n_push_to_sheets(
         language_code=lang,
         flow_name=flow_name,
     )
-    
+
     upload.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
-    notification_text_op: str = read_json_key_op("notification_text", upload.outputs["output_json"])
+    notification_text_op: str = read_json_key_op(
+        "notification_text", upload.outputs["output_json"]
+    )
     notification_text_op.display_name = "get-upload2sheet-notification-text"
 
     notification_text_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
     notification_text = f"{getattr(notification_text_op, 'output')}"
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload) as check3:
-        task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
+        task_no_cache = slack_notification_op(
+            notification_text, "", channel=channel, cc=notify
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["run_fetch_calls_n_push_to_sheets"]

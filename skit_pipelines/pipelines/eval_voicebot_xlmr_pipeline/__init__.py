@@ -112,7 +112,7 @@ def eval_voicebot_xlmr_pipeline(
         reference=org_id,
         file_type="xlmr-irr-metrics",
         bucket=BUCKET,
-        ext=".txt"
+        ext=".txt",
     )
     upload_irr.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

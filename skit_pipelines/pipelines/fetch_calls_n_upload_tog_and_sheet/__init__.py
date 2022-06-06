@@ -1,13 +1,14 @@
 from typing import Optional
+
 import kfp
 
 from skit_pipelines.components import (
     fetch_calls_op,
     org_auth_token_op,
     read_json_key_op,
-    upload2sheet_op,
     slack_notification_op,
     tag_calls_op,
+    upload2sheet_op,
 )
 
 
@@ -52,7 +53,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
     auth_token = org_auth_token_op(org_id)
@@ -82,28 +83,36 @@ def fetch_calls_n_upload_tog_and_sheet(
     errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
     errors.display_name = "get-any-errors"
 
-    actual_num_calls_fetched_op = read_json_key_op("actual_num_calls_fetched", upload.outputs["output_json"])
+    actual_num_calls_fetched_op = read_json_key_op(
+        "actual_num_calls_fetched", upload.outputs["output_json"]
+    )
     actual_num_calls_fetched_op.display_name = "get-actual-num-calls-fetched"
     actual_num_calls_fetched_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
-    num_calls_uploaded_to_sheet_op = read_json_key_op("num_calls_uploaded", upload.outputs["output_json"])
+    num_calls_uploaded_to_sheet_op = read_json_key_op(
+        "num_calls_uploaded", upload.outputs["output_json"]
+    )
     num_calls_uploaded_to_sheet_op.display_name = "get-num-calls-uploaded-to-sheet"
     num_calls_uploaded_to_sheet_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
-    spread_sheet_url_op = read_json_key_op("spread_sheet_url", upload.outputs["output_json"])
+    spread_sheet_url_op = read_json_key_op(
+        "spread_sheet_url", upload.outputs["output_json"]
+    )
     spread_sheet_url_op.display_name = "get-spread-sheet-url"
     spread_sheet_url_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
-    upload_to_sheet_errors_op = read_json_key_op("errors", upload.outputs["output_json"])
+    upload_to_sheet_errors_op = read_json_key_op(
+        "errors", upload.outputs["output_json"]
+    )
     upload_to_sheet_errors_op.display_name = "get-upload-to-sheet-errors"
     upload_to_sheet_errors_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D" # disables caching
+        "P0D"  # disables caching
     )
 
     notification_text = f"""
@@ -122,9 +131,12 @@ def fetch_calls_n_upload_tog_and_sheet(
 """
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
-        task_no_cache = slack_notification_op(notification_text, "", channel=channel, cc=notify)
+        task_no_cache = slack_notification_op(
+            notification_text, "", channel=channel, cc=notify
+        )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["fetch_calls_n_upload_tog_and_sheet"]

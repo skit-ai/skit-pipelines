@@ -22,7 +22,10 @@ def fetch_tagged_dataset(
     from loguru import logger
     from skit_labels import constants as const
     from skit_labels import utils
-    from skit_labels.commands import download_dataset_from_db, download_dataset_from_labelstudio
+    from skit_labels.commands import (
+        download_dataset_from_db,
+        download_dataset_from_labelstudio,
+    )
 
     from skit_pipelines import constants as pipeline_constants
 

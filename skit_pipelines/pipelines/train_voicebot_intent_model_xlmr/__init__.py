@@ -116,14 +116,16 @@ def train_voicebot_intent_model_xlmr(
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
     """
-    
-    tagged_data_op = download_from_s3_op(storage_path=dataset_path, storage_options=storage_options)
+
+    tagged_data_op = download_from_s3_op(
+        storage_path=dataset_path, storage_options=storage_options
+    )
 
     # preprocess the file
 
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"])
-    
+
     # Create utterance column
     preprocess_data_op = create_true_intent_labels_op(
         preprocess_data_op.outputs["output"]
