@@ -6,6 +6,7 @@ from skit_pipelines.components import (
     read_json_key_op,
     slack_notification_op,
     tag_calls_op,
+    labelstudio_import_op
 )
 
 
@@ -16,10 +17,11 @@ from skit_pipelines.components import (
 def fetch_n_tag_calls(
     client_id: int,
     org_id: str,
-    job_ids: str,
     start_date: str,
     lang: str,
     end_date: str,
+    job_ids: str = "",
+    labelstudio_project_id: str = "",
     ignore_callers: str = "",
     use_case: str = "",
     flow_name: str = "",
@@ -60,6 +62,8 @@ def fetch_n_tag_calls(
     :type org_id: str
     :param job_ids: The job ids as per tog.
     :type job_ids: str
+    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
+    :type labelstudio_project_id: str
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
     :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.
@@ -117,6 +121,7 @@ def fetch_n_tag_calls(
     tag_calls_output = tag_calls_op(
         input_file=calls.output,
         job_ids=job_ids,
+        project_id=labelstudio_project_id,
         token=auth_token.output,
     )
 

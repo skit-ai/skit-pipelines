@@ -17,6 +17,7 @@ from skit_pipelines.components import (
 def fetch_tagged_calls_dataset(
     org_id: str,
     job_id: int,
+    labelstudio_project_id: str = "",
     start_date: str = "",
     end_date: str = "",
     timezone: str = "Asia/Kolkata",
@@ -48,6 +49,8 @@ def fetch_tagged_calls_dataset(
     :type org_id: str
     :param job_id: The annotation dataset id.
     :type job_id: int
+    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
+    :type labelstudio_project_id: str
     :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.
     :type start_date: str
     :param end_date: The end date range (YYYY-MM-DD) to filter tagged data

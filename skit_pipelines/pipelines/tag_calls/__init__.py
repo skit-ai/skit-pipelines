@@ -14,8 +14,9 @@ from skit_pipelines.components import (
 )
 def tag_calls(
     org_id: str,
-    job_ids: str,
     s3_path: str,
+    job_ids: str = "",
+    labelstudio_project_id: str = "",
     notify: str = "",
     channel: str = "",
 ):
@@ -42,6 +43,8 @@ def tag_calls(
     :type org_id: str
     :param job_ids: Comma separated list of job ids.
     :type job_ids: str
+    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
+    :type labelstudio_project_id: str
     :param s3_path: The s3 path to the dataset.
     :type s3_path: str
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
@@ -56,6 +59,7 @@ def tag_calls(
     tag_calls_output = tag_calls_op(
         input_file=s3_path,
         job_ids=job_ids,
+        project_id=labelstudio_project_id,
         token=auth_token.output,
     )
     df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
