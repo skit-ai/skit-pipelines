@@ -39,9 +39,21 @@ def tag_calls(
                 "channel": "#some-public-channel"
             }
 
+        @charon run tag_calls
+
+        .. code-block:: json
+
+            {
+                "org_id": 23,
+                "labelstudio_project_id": "41",
+                "s3_path": "s3://bucket/path/to/file.csv",
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
+
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
-    :param job_ids: Comma separated list of job ids.
+    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
     :type job_ids: str
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str

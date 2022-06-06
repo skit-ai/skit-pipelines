@@ -16,7 +16,7 @@ from skit_pipelines.components import (
 )
 def fetch_tagged_calls_dataset(
     org_id: str,
-    job_id: int,
+    job_id: str = "",
     labelstudio_project_id: str = "",
     start_date: str = "",
     end_date: str = "",
@@ -38,7 +38,21 @@ def fetch_tagged_calls_dataset(
 
             {
                 "org_id": 1,
-                "job_id": 4011,
+                "job_id": "4011",
+                "start_date": "2020-01-01",
+                "end_date": "2020-01-01",
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
+
+
+        @charon run fetch_tagged_calls_dataset
+
+        .. code-block:: json
+
+            {
+                "org_id": 1,
+                "labelstudio_project_id": "40",
                 "start_date": "2020-01-01",
                 "end_date": "2020-01-01",
                 "notify": "@person, @personwith.spacedname",
@@ -47,8 +61,8 @@ def fetch_tagged_calls_dataset(
 
     :param org_id: reference path to save the metrics.
     :type org_id: str
-    :param job_id: The annotation dataset id.
-    :type job_id: int
+    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
+    :type job_id: str
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
     :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.
@@ -65,7 +79,8 @@ def fetch_tagged_calls_dataset(
     :type channel: str, optional
     """
     tagged_df = fetch_tagged_dataset_op(
-        job_id,
+        job_id=job_id,
+        project_id=labelstudio_project_id,
         task_type=task_type,
         timezone=timezone,
         start_date=start_date,

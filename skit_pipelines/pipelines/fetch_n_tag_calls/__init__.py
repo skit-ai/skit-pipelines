@@ -51,6 +51,23 @@ def fetch_n_tag_calls(
                 "lang": "en",
                 "end_date": "2020-01-01",
                 "reported": false,
+                "jobs_id": "4011,4012,4013",
+                "call_quantity": 200,
+                "notify": "@person, @personwith.spacedname",
+                "channel": "#some-public-channel"
+            }
+
+        @charon run fetch_n_tag_calls
+
+        .. code-block:: json
+
+            {
+                "client_id": 1,
+                "start_date": "2020-01-01",
+                "lang": "en",
+                "end_date": "2020-01-01",
+                "reported": false,
+                "labelstudio_project_id": "40",
                 "call_quantity": 200,
                 "notify": "@person, @personwith.spacedname",
                 "channel": "#some-public-channel"
@@ -60,7 +77,7 @@ def fetch_n_tag_calls(
     :type client_id: int
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
-    :param job_ids: The job ids as per tog.
+    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
     :type job_ids: str
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
