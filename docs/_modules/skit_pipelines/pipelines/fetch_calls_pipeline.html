@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.pipelines.fetch_calls_pipeline - skit-pipelines 0.1.85 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
+        <title>skit_pipelines.pipelines.fetch_calls_pipeline - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.85 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.85 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,10 +179,13 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -213,7 +216,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -234,27 +238,27 @@
 
 
 <div class="viewcode-block" id="fetch_calls_pipeline"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html#skit_pipelines.pipelines.fetch_calls_pipeline.fetch_calls_pipeline">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"Fetch Calls Pipeline"</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">"fetches calls from production db with respective arguments"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fetch Calls Pipeline&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;fetches calls from production db with respective arguments&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">fetch_calls_pipeline</span><span class="p">(</span>
     <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">ignore_callers</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">ignore_callers</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">reported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">use_case</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">flow_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">min_duration</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">asr_provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">states</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">use_case</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">flow_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">min_duration</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">asr_provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">states</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">call_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-    <span class="n">call_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"inbound"</span><span class="p">,</span>
-    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">call_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;inbound&quot;</span><span class="p">,</span>
+    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to randomly sample calls for a given voice-bot project.</span>
 
 <span class="sd">    .. _p_fetch_calls_pipeline:</span>
@@ -267,14 +271,14 @@
 <span class="sd">        .. code-block:: json</span>
 
 <span class="sd">            {</span>
-<span class="sd">                "client_id": 1,</span>
-<span class="sd">                "start_date": "2020-01-01",</span>
-<span class="sd">                "lang": "en",</span>
-<span class="sd">                "end_date": "2020-01-01",</span>
-<span class="sd">                "reported": false,</span>
-<span class="sd">                "call_quantity": 200,</span>
-<span class="sd">                "notify": "@person, @personwith.spacedname",</span>
-<span class="sd">                "channel": "#some-public-channel"</span>
+<span class="sd">                &quot;client_id&quot;: 1,</span>
+<span class="sd">                &quot;start_date&quot;: &quot;2020-01-01&quot;,</span>
+<span class="sd">                &quot;lang&quot;: &quot;en&quot;,</span>
+<span class="sd">                &quot;end_date&quot;: &quot;2020-01-01&quot;,</span>
+<span class="sd">                &quot;reported&quot;: false,</span>
+<span class="sd">                &quot;call_quantity&quot;: 200,</span>
+<span class="sd">                &quot;notify&quot;: &quot;@person, @personwith.spacedname&quot;,</span>
+<span class="sd">                &quot;channel&quot;: &quot;#some-public-channel&quot;</span>
 <span class="sd">            }</span>
 
 <span class="sd">    :param client_id: The client id as per fsm db.</span>
@@ -285,29 +289,29 @@
 <span class="sd">    :type lang: str</span>
 <span class="sd">    :param end_date: The end date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type end_date: str</span>
-<span class="sd">    :param ignore_callers: Comma separated list of callers to ignore, defaults to ""</span>
+<span class="sd">    :param ignore_callers: Comma separated list of callers to ignore, defaults to &quot;&quot;</span>
 <span class="sd">    :type ignore_callers: str, optional</span>
 <span class="sd">    :param reported: Pick only reported calls, defaults to False</span>
 <span class="sd">    :type reported: bool</span>
-<span class="sd">    :param use_case: Voice bot project's use-case, defaults to ""</span>
+<span class="sd">    :param use_case: Voice bot project&#39;s use-case, defaults to &quot;&quot;</span>
 <span class="sd">    :type use_case: str, optional</span>
-<span class="sd">    :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to ""</span>
+<span class="sd">    :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to &quot;&quot;</span>
 <span class="sd">    :type flow_name: str, optional</span>
-<span class="sd">    :param min_duration: Call duration filter, defaults to ""</span>
+<span class="sd">    :param min_duration: Call duration filter, defaults to &quot;&quot;</span>
 <span class="sd">    :type min_duration: str, optional</span>
-<span class="sd">    :param asr_provider: The ASR vendor (google/VASR), defaults to ""</span>
+<span class="sd">    :param asr_provider: The ASR vendor (google/VASR), defaults to &quot;&quot;</span>
 <span class="sd">    :type asr_provider: str, optional</span>
-<span class="sd">    :param states: Filter calls in a comma separated list of states, defaults to ""</span>
+<span class="sd">    :param states: Filter calls in a comma separated list of states, defaults to &quot;&quot;</span>
 <span class="sd">    :type states: str, optional</span>
 <span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
 <span class="sd">    :type call_quantity: int, optional</span>
-<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "inbound"</span>
+<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to &quot;inbound&quot;</span>
 <span class="sd">    :type call_type: str, optional</span>
-<span class="sd">    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""</span>
+<span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
-<span class="sd">    :param channel: The slack channel to send the notification, defaults to ""</span>
+<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type channel: str, optional</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
         <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
         <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
@@ -324,20 +328,20 @@
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">calls</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"notify"</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">calls</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
-        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Finished a request for </span><span class="si">{</span><span class="n">call_quantity</span><span class="si">}</span><span class="s2"> calls. Fetched from </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">client_id</span><span class="si">=}</span><span class="s2">."</span>
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">calls</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
+        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Finished a request for </span><span class="si">{</span><span class="n">call_quantity</span><span class="si">}</span><span class="s2"> calls. Fetched from </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">client_id</span><span class="si">=}</span><span class="s2">.&quot;</span>
         <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
             <span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span>
         <span class="p">)</span>
         <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"fetch_calls_pipeline"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fetch_calls_pipeline&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>

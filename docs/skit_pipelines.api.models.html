@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components package" href="skit_pipelines.components.html" /><link rel="prev" title="skit_pipelines.api package" href="skit_pipelines.api.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
         <title>skit_pipelines.api.models package - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -180,10 +180,13 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -214,7 +217,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -249,6 +253,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.ParseRunResponse.set_state">
 <span class="sig-name descname"><span class="pre">set_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#ParseRunResponse.set_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.ParseRunResponse.set_state" title="Permalink to this definition">#</a></dt>
@@ -258,7 +263,9 @@
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.artifact_node_to_uri">
 <span class="sig-name descname"><span class="pre">artifact_node_to_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#artifact_node_to_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.artifact_node_to_uri" title="Permalink to this definition">#</a></dt>
@@ -268,6 +275,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.filter_artifact_nodes">
 <span class="sig-name descname"><span class="pre">filter_artifact_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#filter_artifact_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.filter_artifact_nodes" title="Permalink to this definition">#</a></dt>
@@ -277,6 +285,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.get_kf_object_uri">
 <span class="sig-name descname"><span class="pre">get_kf_object_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#get_kf_object_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.get_kf_object_uri" title="Permalink to this definition">#</a></dt>
@@ -286,6 +295,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.api.models.errors">
 <span id="skit-pipelines-api-models-errors-module"></span><h2>skit_pipelines.api.models.errors module<a class="headerlink" href="#module-skit_pipelines.api.models.errors" title="Permalink to this headline">#</a></h2>
@@ -298,6 +308,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.api.models.requests">
 <span id="skit-pipelines-api-models-requests-module"></span><h2>skit_pipelines.api.models.requests module<a class="headerlink" href="#module-skit_pipelines.api.models.requests" title="Permalink to this headline">#</a></h2>
@@ -309,7 +320,9 @@
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.BaseRequestSchema.transform_none">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/requests.html#BaseRequestSchema.transform_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.requests.BaseRequestSchema.transform_none" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.StorageOptions">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StorageOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/requests.html#StorageOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.requests.StorageOptions" title="Permalink to this definition">#</a></dt>
@@ -318,19 +331,24 @@
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.StorageOptions.bucket">
 <span class="sig-name descname"><span class="pre">bucket</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.requests.StorageOptions.bucket" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.StorageOptions.type">
 <span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.requests.StorageOptions.type" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.generate_schema">
 <span class="sig-name descname"><span class="pre">generate_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/requests.html#generate_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.requests.generate_schema" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.requests.get_all_pipelines_fn">
 <span class="sig-name descname"><span class="pre">get_all_pipelines_fn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/requests.html#get_all_pipelines_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.requests.get_all_pipelines_fn" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </section>
 <section id="module-skit_pipelines.api.models.responses">
 <span id="skit-pipelines-api-models-responses-module"></span><h2>skit_pipelines.api.models.responses module<a class="headerlink" href="#module-skit_pipelines.api.models.responses" title="Permalink to this headline">#</a></h2>
@@ -342,23 +360,29 @@
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.message">
 <span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.message" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.run_id">
 <span class="sig-name descname"><span class="pre">run_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.run_id" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.run_url">
 <span class="sig-name descname"><span class="pre">run_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.run_url" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.uris">
 <span class="sig-name descname"><span class="pre">uris</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.uris" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.webhook">
 <span class="sig-name descname"><span class="pre">webhook</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.webhook" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.customResponse">
 <span class="sig-name descname"><span class="pre">customResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ok'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/responses.html#customResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.responses.customResponse" title="Permalink to this definition">#</a></dt>
@@ -368,14 +392,17 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.statusWiseResponse">
 <span class="sig-name descname"><span class="pre">statusWiseResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">webhook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/responses.html#statusWiseResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.responses.statusWiseResponse" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.successfulCreationResponse">
 <span class="sig-name descname"><span class="pre">successfulCreationResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/responses.html#successfulCreationResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.responses.successfulCreationResponse" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </section>
 <section id="module-skit_pipelines.api.models">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.api.models" title="Permalink to this headline">#</a></h2>

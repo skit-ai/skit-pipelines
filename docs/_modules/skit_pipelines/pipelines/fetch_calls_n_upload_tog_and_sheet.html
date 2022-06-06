@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.pipelines.tag_calls - skit-pipelines 0.1.90 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -231,100 +231,149 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.pipelines.tag_calls</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+          <h1>Source code for skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">kfp</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">fetch_calls_op</span><span class="p">,</span>
     <span class="n">org_auth_token_op</span><span class="p">,</span>
     <span class="n">read_json_key_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">tag_calls_op</span><span class="p">,</span>
+    <span class="n">upload2sheet_op</span><span class="p">,</span>
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.tag_calls.html#skit_pipelines.pipelines.tag_calls.tag_calls">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Tag Calls Pipeline&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Uploads calls to database for tagging&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="fetch_calls_n_upload_tog_and_sheet"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html#skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.fetch_calls_n_upload_tog_and_sheet">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fetch calls and push to tog and sheet&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;fetches calls from production db with respective arguments and uploads the same set of calls to both tog (for intent, region, and transcription tagging) and a google sheet (for Call tagging and SCR analysis)&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">tag_calls</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">fetch_calls_n_upload_tog_and_sheet</span><span class="p">(</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">labelstudio_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ignore_callers</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">use_case</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">flow_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">min_duration</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">asr_provider</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">reported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">states</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">call_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="n">call_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;INBOUND&quot;</span><span class="p">,</span>
+    <span class="n">sheet_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A pipeline to upload a dataset for annotation.</span>
+    <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+        <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+        <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+        <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
+        <span class="n">call_quantity</span><span class="o">=</span><span class="n">call_quantity</span><span class="p">,</span>
+        <span class="n">call_type</span><span class="o">=</span><span class="n">call_type</span><span class="p">,</span>
+        <span class="n">ignore_callers</span><span class="o">=</span><span class="n">ignore_callers</span><span class="p">,</span>
+        <span class="n">reported</span><span class="o">=</span><span class="n">reported</span><span class="p">,</span>
+        <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+        <span class="n">use_case</span><span class="o">=</span><span class="n">use_case</span><span class="p">,</span>
+        <span class="n">flow_name</span><span class="o">=</span><span class="n">flow_name</span><span class="p">,</span>
+        <span class="n">min_duration</span><span class="o">=</span><span class="n">min_duration</span><span class="p">,</span>
+        <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span><span class="p">,</span>
+    <span class="p">)</span>
 
-<span class="sd">    .. _p_tag_calls:</span>
+    <span class="n">calls</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
 
-<span class="sd">    Example payload to invoke via slack integrations:</span>
-
-<span class="sd">        @charon run tag_calls</span>
-
-<span class="sd">        .. code-block:: json</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 23,</span>
-<span class="sd">                &quot;job_ids&quot;: &quot;1,2,3&quot;,</span>
-<span class="sd">                &quot;s3_path&quot;: &quot;s3://bucket/path/to/file.csv&quot;,</span>
-<span class="sd">                &quot;notify&quot;: &quot;@person, @personwith.spacedname&quot;,</span>
-<span class="sd">                &quot;channel&quot;: &quot;#some-public-channel&quot;</span>
-<span class="sd">            }</span>
-
-<span class="sd">        @charon run tag_calls</span>
-
-<span class="sd">        .. code-block:: json</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 23,</span>
-<span class="sd">                &quot;labelstudio_project_id&quot;: &quot;41&quot;,</span>
-<span class="sd">                &quot;s3_path&quot;: &quot;s3://bucket/path/to/file.csv&quot;,</span>
-<span class="sd">                &quot;notify&quot;: &quot;@person, @personwith.spacedname&quot;,</span>
-<span class="sd">                &quot;channel&quot;: &quot;#some-public-channel&quot;</span>
-<span class="sd">            }</span>
-
-<span class="sd">    :param org_id: The organization id as per api-gateway.</span>
-<span class="sd">    :type org_id: str</span>
-<span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
-<span class="sd">    :type job_ids: str</span>
-<span class="sd">    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
-<span class="sd">    :type labelstudio_project_id: str</span>
-<span class="sd">    :param s3_path: The s3 path to the dataset.</span>
-<span class="sd">    :type s3_path: str</span>
-<span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
-<span class="sd">    :type notify: str, optional</span>
-<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
-<span class="sd">    :type channel: str, optional</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">auth_token</span> <span class="o">=</span> <span class="n">org_auth_token_op</span><span class="p">(</span><span class="n">org_id</span><span class="p">)</span>
     <span class="n">auth_token</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
+
     <span class="n">tag_calls_output</span> <span class="o">=</span> <span class="n">tag_calls_op</span><span class="p">(</span>
-        <span class="n">input_file</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span>
+        <span class="n">input_file</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">job_ids</span><span class="o">=</span><span class="n">job_ids</span><span class="p">,</span>
-        <span class="n">project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
     <span class="p">)</span>
+
+    <span class="n">upload</span> <span class="o">=</span> <span class="n">upload2sheet_op</span><span class="p">(</span>
+        <span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
+        <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
+        <span class="n">sheet_id</span><span class="o">=</span><span class="n">sheet_id</span><span class="p">,</span>
+        <span class="n">language_code</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
+        <span class="n">flow_name</span><span class="o">=</span><span class="n">flow_name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">upload</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
     <span class="n">df_sizes</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span><span class="s2">&quot;df_sizes&quot;</span><span class="p">,</span> <span class="n">tag_calls_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">])</span>
     <span class="n">df_sizes</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-df-size&quot;</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">,</span> <span class="n">tag_calls_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">])</span>
     <span class="n">errors</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-any-errors&quot;</span>
 
-    <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Uploaded </span><span class="si">{</span><span class="n">s3_path</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">df_sizes</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">org_id</span><span class="si">=}</span><span class="s2">) for tagging to </span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Errors: </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">actual_num_calls_fetched_op</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span>
+        <span class="s2">&quot;actual_num_calls_fetched&quot;</span><span class="p">,</span> <span class="n">upload</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">actual_num_calls_fetched_op</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-actual-num-calls-fetched&quot;</span>
+    <span class="n">actual_num_calls_fetched_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
+    <span class="n">num_calls_uploaded_to_sheet_op</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span>
+        <span class="s2">&quot;num_calls_uploaded&quot;</span><span class="p">,</span> <span class="n">upload</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">num_calls_uploaded_to_sheet_op</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-num-calls-uploaded-to-sheet&quot;</span>
+    <span class="n">num_calls_uploaded_to_sheet_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
+    <span class="n">spread_sheet_url_op</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span>
+        <span class="s2">&quot;spread_sheet_url&quot;</span><span class="p">,</span> <span class="n">upload</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">spread_sheet_url_op</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-spread-sheet-url&quot;</span>
+    <span class="n">spread_sheet_url_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
+    <span class="n">upload_to_sheet_errors_op</span> <span class="o">=</span> <span class="n">read_json_key_op</span><span class="p">(</span>
+        <span class="s2">&quot;errors&quot;</span><span class="p">,</span> <span class="n">upload</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_json&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">upload_to_sheet_errors_op</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;get-upload-to-sheet-errors&quot;</span>
+    <span class="n">upload_to_sheet_errors_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
+    <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">*Made a request for:* </span><span class="si">{</span><span class="n">call_quantity</span><span class="si">}</span><span class="s2"> calls</span>
+<span class="s2">*For the client id:* </span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">*For language code:* </span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">*For flow name*: </span><span class="si">{</span><span class="n">flow_name</span><span class="si">}</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">*Fetched CSV s3 url:* &lt;</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">calls</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">|s3 link&gt;</span>
+<span class="s2">*Number of calls actually fetched:* </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">actual_num_calls_fetched_op</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (this is the number of unique calls present in above fetchd CSV)</span>
+<span class="s2">*Number of calls pushed for Call tagging:* </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">num_calls_uploaded_to_sheet_op</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">*Google sheet url:* &lt;</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">spread_sheet_url_op</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">|link&gt;</span>
+<span class="s2">*Number of user turns pushed to each of the tog job ids (</span><span class="si">{</span><span class="n">job_ids</span><span class="si">}</span><span class="s2">):* </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">df_sizes</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> respectively. (these are the number of user turns present in the </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">actual_num_calls_fetched_op</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> fetched calls)</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">*Note:* If there are 0 calls fetched, no new worksheet will be created in your google spreadsheet. No data will be uploaded to the tog jobs as well.</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">*Errors while uploading to tog:* </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">*Errors while uploading to sheet:* </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">upload_to_sheet_errors_op</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">&quot;&quot;&quot;</span>
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
         <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
-            <span class="n">notification_text</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span>
+            <span class="n">notification_text</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span>
         <span class="p">)</span>
         <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tag_calls&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fetch_calls_n_upload_tog_and_sheet&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>

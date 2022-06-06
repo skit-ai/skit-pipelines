@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.fetch_calls_pipeline package" href="skit_pipelines.pipelines.fetch_calls_pipeline.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
         <title>skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -180,10 +180,13 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -214,7 +217,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -262,10 +266,11 @@ The component will helplessly reduce 30% of the data <strong>always</strong>.</p
 <h2>Pipelines<a class="headerlink" href="#pipelines" title="Permalink to this headline">#</a></h2>
 <p>Pipelines are complex ML workflows that are required regularly like: training a model, sampling data, getting data annotated, producing metrics, etc.</p>
 <p>Here’s a list of official pipelines, within these docs we share snippets for slack-bot invocations:</p>
-<div class="table-wrapper"><table class="docutils align-default">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 2%"/>
-<col style="width: 98%"/>
+<col style="width: 2%" />
+<col style="width: 98%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head" colspan="2"><div class="line-block">
@@ -288,7 +293,8 @@ The component will helplessly reduce 30% of the data <strong>always</strong>.</p
 <tr class="row-odd"><td colspan="2"><p>6 | <a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html#p-eval-voicebot-xlmr-pipeline"><span class="std std-ref">XLMR Intent evaluation</span></a></p></td>
 </tr>
 </tbody>
-</table></div>
+</table>
+</div>
 </section>
 <section id="project-strucuture">
 <h2>Project strucuture<a class="headerlink" href="#project-strucuture" title="Permalink to this headline">#</a></h2>
@@ -370,12 +376,12 @@ and <a class="reference external" href="https://www.kubeflow.org/docs/components
 <h3>Endpoint responses<a class="headerlink" href="#endpoint-responses" title="Permalink to this headline">#</a></h3>
 <blockquote>
 <div><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"ok"</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"response"</span><span class="p">:{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"message"</span><span class="p">:</span><span class="s2">"Pipeline run created successfully."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"train-voicebot-xlmr"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_id"</span><span class="p">:</span><span class="s2">"e33879a1-xxxxx"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_url"</span><span class="p">:</span><span class="s2">"https://kubeflow.skit.ai/pipeline/?ns=..."</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;response&quot;</span><span class="p">:{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="s2">&quot;Pipeline run created successfully.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;train-voicebot-xlmr&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_id&quot;</span><span class="p">:</span><span class="s2">&quot;e33879a1-xxxxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_url&quot;</span><span class="p">:</span><span class="s2">&quot;https://kubeflow.skit.ai/pipeline/?ns=...&quot;</span><span class="w"></span>
 <span class="w">   </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
@@ -387,14 +393,14 @@ and <a class="reference external" href="https://www.kubeflow.org/docs/components
 <section id="success">
 <h4>Success<a class="headerlink" href="#success" title="Permalink to this headline">#</a></h4>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Run completed successfully."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"662b9909-d251-45f8-a8xxxxx"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://kubeflow.skit.ai/pipeline/?ns=..."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"file_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/tmp/outputs/Output/data"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"s3_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;artifact s3_path tar file&gt;"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"webhook"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ok&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Run completed successfully.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;662b9909-d251-45f8-a8xxxxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://kubeflow.skit.ai/pipeline/?ns=...&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/tmp/outputs/Output/data&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;s3_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;artifact s3_path tar file&gt;&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;webhook&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 <span class="w">   </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
@@ -403,14 +409,14 @@ and <a class="reference external" href="https://www.kubeflow.org/docs/components
 <section id="error">
 <h4>Error<a class="headerlink" href="#error" title="Permalink to this headline">#</a></h4>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Run failed."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"662b9909-d251-45f8xxxxxxxx"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://kubeflow.skit.ai/pipeline/?ns=..."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"file_path"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"s3_path"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"webhook"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;error&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Run failed.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;662b9909-d251-45f8xxxxxxxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://kubeflow.skit.ai/pipeline/?ns=...&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;s3_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;webhook&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 <span class="w">   </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>
@@ -419,14 +425,14 @@ and <a class="reference external" href="https://www.kubeflow.org/docs/components
 <section id="pending">
 <h4>Pending<a class="headerlink" href="#pending" title="Permalink to this headline">#</a></h4>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w"></span>
-<span class="w">   </span><span class="nt">"response"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Run in progress."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"662b9909-d251-45f8-axxxxxxxxx"</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"run_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://kubeflow.skit.ai/pipeline/?ns=..."</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"file_path"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"s3_path"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
-<span class="w">      </span><span class="nt">"webhook"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pending&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Run in progress.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;662b9909-d251-45f8-axxxxxxxxx&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;run_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://kubeflow.skit.ai/pipeline/?ns=...&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;s3_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;webhook&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
 <span class="w">   </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </pre></div>

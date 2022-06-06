@@ -2,7 +2,6 @@ import kfp
 
 from skit_pipelines.components import (
     fetch_calls_op,
-    labelstudio_import_op,
     org_auth_token_op,
     read_json_key_op,
     slack_notification_op,

@@ -3,12 +3,12 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="skit_pipelines.pipelines package" href="skit_pipelines.pipelines.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
         <title>skit_pipelines.utils package - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -180,10 +180,13 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -214,7 +217,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -244,6 +248,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.cookies.fetch_latest_cookies">
 <span class="sig-name descname"><span class="pre">fetch_latest_cookies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookie_save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/tmp/kf_cookies.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/cookies.html#fetch_latest_cookies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.cookies.fetch_latest_cookies" title="Permalink to this definition">#</a></dt>
@@ -253,6 +258,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.cookies.load_cookies">
 <span class="sig-name descname"><span class="pre">load_cookies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">COOKIES_PATH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/tmp/kf_cookies.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/cookies.html#load_cookies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.cookies.load_cookies" title="Permalink to this definition">#</a></dt>
@@ -262,6 +268,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.cookies.save_cookies">
 <span class="sig-name descname"><span class="pre">save_cookies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">COOKIES_PATH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/tmp/kf_cookies.json'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/cookies.html#save_cookies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.cookies.save_cookies" title="Permalink to this definition">#</a></dt>
@@ -271,6 +278,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.cookies.simulate_selenium_connection">
 <span class="sig-name descname"><span class="pre">simulate_selenium_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/cookies.html#simulate_selenium_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.cookies.simulate_selenium_connection" title="Permalink to this definition">#</a></dt>
@@ -280,6 +288,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.utils.login">
 <span id="skit-pipelines-utils-login-module"></span><h2>skit_pipelines.utils.login module<a class="headerlink" href="#module-skit_pipelines.utils.login" title="Permalink to this headline">#</a></h2>
@@ -292,6 +301,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.utils.normalize">
 <span id="skit-pipelines-utils-normalize-module"></span><h2>skit_pipelines.utils.normalize module<a class="headerlink" href="#module-skit_pipelines.utils.normalize" title="Permalink to this headline">#</a></h2>
@@ -304,6 +314,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.normalize.to_snake_case">
 <span class="sig-name descname"><span class="pre">to_snake_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/normalize.html#to_snake_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.normalize.to_snake_case" title="Permalink to this definition">#</a></dt>
@@ -313,6 +324,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.utils.storage">
 <span id="skit-pipelines-utils-storage-module"></span><h2>skit_pipelines.utils.storage module<a class="headerlink" href="#module-skit_pipelines.utils.storage" title="Permalink to this headline">#</a></h2>
@@ -320,6 +332,7 @@
 <dt class="sig sig-object py" id="skit_pipelines.utils.storage.create_storage_path">
 <span class="sig-name descname"><span class="pre">create_storage_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage_options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/storage.html#create_storage_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.storage.create_storage_path" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </section>
 <section id="module-skit_pipelines.utils.webhook">
 <span id="skit-pipelines-utils-webhook-module"></span><h2>skit_pipelines.utils.webhook module<a class="headerlink" href="#module-skit_pipelines.utils.webhook" title="Permalink to this headline">#</a></h2>
@@ -328,11 +341,13 @@
 <span class="sig-name descname"><span class="pre">send_webhook_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/webhook.html#send_webhook_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.webhook.send_webhook_request" title="Permalink to this definition">#</a></dt>
 <dd><p>Send finished runs to the webhook url</p>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.webhook.validate_request_success">
 <span class="sig-name descname"><span class="pre">validate_request_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils/webhook.html#validate_request_success"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.webhook.validate_request_success" title="Permalink to this definition">#</a></dt>
 <dd><p>Validate the response from the webhook request</p>
 </dd></dl>
+
 </section>
 <section id="module-skit_pipelines.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.utils" title="Permalink to this headline">#</a></h2>
@@ -349,23 +364,29 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.utils.SlackBlockFactory.code_block">
 <span class="sig-name descname"><span class="pre">code_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#SlackBlockFactory.code_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.SlackBlockFactory.code_block" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.utils.SlackBlockFactory.ping">
 <span class="sig-name descname"><span class="pre">ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#SlackBlockFactory.ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.SlackBlockFactory.ping" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.utils.SlackBlockFactory.text">
 <span class="sig-name descname"><span class="pre">text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#SlackBlockFactory.text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.SlackBlockFactory.text" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.utils.SlackBlockFactory.text_block">
 <span class="sig-name descname"><span class="pre">text_block</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#SlackBlockFactory.text_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.SlackBlockFactory.text_block" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.create_dir_name">
 <span class="sig-name descname"><span class="pre">create_dir_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#create_dir_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.create_dir_name" title="Permalink to this definition">#</a></dt>
@@ -375,6 +396,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.create_file_name">
 <span class="sig-name descname"><span class="pre">create_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#create_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.create_file_name" title="Permalink to this definition">#</a></dt>
@@ -384,6 +406,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.utils.filter_schema">
 <span class="sig-name descname"><span class="pre">filter_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/utils.html#filter_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.filter_schema" title="Permalink to this definition">#</a></dt>
@@ -393,6 +416,7 @@
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 </section>
 
@@ -402,14 +426,14 @@
         
         <div class="related-pages">
           
-          <a class="prev-page" href="skit_pipelines.pipelines.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.pipelines package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</div>
                 
               </div>
             </a>

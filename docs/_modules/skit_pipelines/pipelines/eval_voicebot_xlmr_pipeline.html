@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline - skit-pipelines 0.1.89 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
+        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.89 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.89 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,10 +179,13 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -213,7 +216,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -252,20 +256,20 @@
 
 
 <div class="viewcode-block" id="eval_voicebot_xlmr_pipeline"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"XLMR Voicebot Eval Pipeline"</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">"Produces intent metrics for an XLM Roberta model on given dataset."</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;XLMR Voicebot Eval Pipeline&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Produces intent metrics for an XLM Roberta model on given dataset.&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">eval_voicebot_xlmr_pipeline</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">s3_path_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">use_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"xlm-roberta-base"</span><span class="p">,</span>
-    <span class="n">s3_path_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
-    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xlm-roberta-base&quot;</span><span class="p">,</span>
+    <span class="n">s3_path_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluates an XLM Roberta model on given dataset.</span>
 
 <span class="sd">    .. _p_eval_voicebot_xlmr_pipeline:</span>
@@ -277,12 +281,12 @@
 <span class="sd">        .. code-block:: json</span>
 
 <span class="sd">            {</span>
-<span class="sd">                "s3_path_data": "s3://bucket-name/data/",</span>
-<span class="sd">                "s3_path_model": "s3://bucket-name/model/",</span>
-<span class="sd">                "org_id": "org",</span>
-<span class="sd">                "use_state": false,</span>
-<span class="sd">                "notify": "@person, @personwith.spacedname",</span>
-<span class="sd">                "channel": "#some-public-channel"</span>
+<span class="sd">                &quot;s3_path_data&quot;: &quot;s3://bucket-name/data/&quot;,</span>
+<span class="sd">                &quot;s3_path_model&quot;: &quot;s3://bucket-name/model/&quot;,</span>
+<span class="sd">                &quot;org_id&quot;: &quot;org&quot;,</span>
+<span class="sd">                &quot;use_state&quot;: false,</span>
+<span class="sd">                &quot;notify&quot;: &quot;@person, @personwith.spacedname&quot;,</span>
+<span class="sd">                &quot;channel&quot;: &quot;#some-public-channel&quot;</span>
 <span class="sd">            }</span>
 
 <span class="sd">    :param s3_path_data: S3 path to a tagged dataset (.csv).</span>
@@ -293,37 +297,37 @@
 <span class="sd">    :type org_id: str</span>
 <span class="sd">    :param use_state: Use the XLMR model with state encoding?, defaults to True</span>
 <span class="sd">    :type use_state: bool, optional</span>
-<span class="sd">    :param model_name: The flavour of the BERT model, defaults to "xlm-roberta-base"</span>
+<span class="sd">    :param model_name: The flavour of the BERT model, defaults to &quot;xlm-roberta-base&quot;</span>
 <span class="sd">    :type model_name: str, optional</span>
-<span class="sd">    :param channel: The slack channel to send the notification, defaults to ""</span>
+<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type channel: str, optional</span>
-<span class="sd">    """</span>
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">s3_path_data</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"s3_path_data_check"</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">s3_path_data</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;s3_path_data_check&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
         <span class="n">tagged_data_op</span> <span class="o">=</span> <span class="n">download_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">s3_path_data</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">s3_path_model</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"s3_path_model_check"</span><span class="p">)</span> <span class="k">as</span> <span class="n">check2</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">s3_path_model</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;s3_path_model_check&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">check2</span><span class="p">:</span>
         <span class="n">loaded_model_op</span> <span class="o">=</span> <span class="n">download_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">s3_path_model</span><span class="p">)</span>
 
     <span class="c1"># Create true label column</span>
-    <span class="n">preprocess_data_op</span> <span class="o">=</span> <span class="n">create_utterances_op</span><span class="p">(</span><span class="n">tagged_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">])</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
+    <span class="n">preprocess_data_op</span> <span class="o">=</span> <span class="n">create_utterances_op</span><span class="p">(</span><span class="n">tagged_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
         <span class="n">check1</span>
     <span class="p">)</span>
 
     <span class="c1"># Create utterance column</span>
     <span class="n">preprocess_data_op</span> <span class="o">=</span> <span class="n">create_true_intent_labels_op</span><span class="p">(</span>
-        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">]</span>
+        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="c1"># Normalize utterance column</span>
     <span class="n">preprocess_data_op</span> <span class="o">=</span> <span class="n">create_features_op</span><span class="p">(</span>
-        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span> <span class="n">use_state</span>
+        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">use_state</span>
     <span class="p">)</span>
 
     <span class="c1"># get predictions from the model</span>
     <span class="c1"># TODO: make s3_path_model optional, without which predictions already present in the csv to be used.</span>
     <span class="n">pred_op</span> <span class="o">=</span> <span class="n">get_preds_voicebot_xlmr_op</span><span class="p">(</span>
-        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
-        <span class="n">loaded_model_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
+        <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">loaded_model_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">utterance_column</span><span class="o">=</span><span class="n">UTTERANCES</span><span class="p">,</span>
         <span class="n">output_pred_label_column</span><span class="o">=</span><span class="n">INTENT</span><span class="p">,</span>
     <span class="p">)</span>
@@ -331,60 +335,60 @@
     <span class="n">pred_op</span><span class="o">.</span><span class="n">set_gpu_limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">irr_op</span> <span class="o">=</span> <span class="n">gen_irr_metrics_op</span><span class="p">(</span>
-        <span class="n">pred_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
+        <span class="n">pred_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">true_label_column</span><span class="o">=</span><span class="n">INTENT_Y</span><span class="p">,</span>
         <span class="n">pred_label_column</span><span class="o">=</span><span class="n">INTENT</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># produce test set metrics.</span>
     <span class="n">upload_irr</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">irr_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
+        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">irr_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-        <span class="n">file_type</span><span class="o">=</span><span class="s2">"xlmr-irr-metrics"</span><span class="p">,</span>
+        <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;xlmr-irr-metrics&quot;</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
-        <span class="n">ext</span><span class="o">=</span><span class="s2">".txt"</span>
+        <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">upload_irr</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"notify"</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_irr</span><span class="p">)</span> <span class="k">as</span> <span class="n">irr_check</span><span class="p">:</span>
-        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Here's the IRR report."</span>
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_irr</span><span class="p">)</span> <span class="k">as</span> <span class="n">irr_check</span><span class="p">:</span>
+        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the IRR report.&quot;</span>
         <span class="n">irr_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
             <span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span>
         <span class="p">)</span>
         <span class="n">irr_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
     <span class="n">confusion_matrix_op</span> <span class="o">=</span> <span class="n">gen_confusion_matrix_op</span><span class="p">(</span>
-        <span class="n">pred_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
+        <span class="n">pred_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">true_label_column</span><span class="o">=</span><span class="n">INTENT_Y</span><span class="p">,</span>
         <span class="n">pred_label_column</span><span class="o">=</span><span class="n">INTENT</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">upload_cm</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">confusion_matrix_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"output"</span><span class="p">],</span>
+        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">confusion_matrix_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-        <span class="n">file_type</span><span class="o">=</span><span class="s2">"xlmr-confusion-matrix"</span><span class="p">,</span>
+        <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;xlmr-confusion-matrix&quot;</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
-        <span class="n">ext</span><span class="o">=</span><span class="s2">".txt"</span><span class="p">,</span>
+        <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">upload_cm</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"notify"</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_cm</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm_check</span><span class="p">:</span>
-        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Here's the confusion matrix."</span>
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">upload_cm</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm_check</span><span class="p">:</span>
+        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the confusion matrix.&quot;</span>
         <span class="n">cm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
             <span class="n">notification_text</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span>
         <span class="p">)</span>
         <span class="n">cm_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">"P0D"</span>  <span class="c1"># disables caching</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"eval_voicebot_xlmr_pipeline"</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eval_voicebot_xlmr_pipeline&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>

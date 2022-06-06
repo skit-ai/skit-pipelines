@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.constants - skit-pipelines 0.1.89 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
+        <title>skit_pipelines.constants - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">skit-pipelines 0.1.89 documentation</div></a>
+      <a href="../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.89 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,10 +179,13 @@
 <li class="toctree-l5"><a class="reference internal" href="../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -213,7 +216,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -230,96 +234,98 @@
           <h1>Source code for skit_pipelines.constants</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 
-<span class="n">BASE_IMAGE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"BASE_IMAGE"</span><span class="p">]</span>
-<span class="n">BUCKET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"BUCKET"</span><span class="p">]</span>
-<span class="n">SLACK_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SLACK_TOKEN"</span><span class="p">]</span>
-<span class="n">SLACK_SIGNING_SECRET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SLACK_SIGNING_SECRET"</span><span class="p">]</span>
-<span class="n">DEFAULT_CHANNEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DEFAULT_SLACK_CHANNEL"</span><span class="p">]</span>
+<span class="n">BASE_IMAGE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BASE_IMAGE&quot;</span><span class="p">]</span>
+<span class="n">BUCKET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BUCKET&quot;</span><span class="p">]</span>
+<span class="n">SLACK_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">SLACK_SIGNING_SECRET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">]</span>
+<span class="n">DEFAULT_CHANNEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DEFAULT_SLACK_CHANNEL&quot;</span><span class="p">]</span>
 
-<span class="n">CONSOLE_API_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SKIT_API_GATEWAY_URL"</span><span class="p">]</span>
-<span class="n">CONSOLE_IAM_EMAIL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SKIT_API_GATEWAY_EMAIL"</span><span class="p">]</span>
-<span class="n">CONSOLE_IAM_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SKIT_API_GATEWAY_PASSWORD"</span><span class="p">]</span>
+<span class="n">CONSOLE_API_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKIT_API_GATEWAY_URL&quot;</span><span class="p">]</span>
+<span class="n">CONSOLE_IAM_EMAIL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKIT_API_GATEWAY_EMAIL&quot;</span><span class="p">]</span>
+<span class="n">CONSOLE_IAM_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKIT_API_GATEWAY_PASSWORD&quot;</span><span class="p">]</span>
 
-<span class="n">DB_HOST</span> <span class="o">=</span> <span class="s2">"production-postgresql-slave.default"</span>
-<span class="n">DB_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DB_PORT"</span><span class="p">]</span>
-<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DB_PASSWORD"</span><span class="p">]</span>
-<span class="n">DB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DB_USER"</span><span class="p">]</span>
+<span class="n">DB_HOST</span> <span class="o">=</span> <span class="s2">&quot;production-postgresql-slave.default&quot;</span>
+<span class="n">DB_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_PORT&quot;</span><span class="p">]</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_PASSWORD&quot;</span><span class="p">]</span>
+<span class="n">DB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_USER&quot;</span><span class="p">]</span>
 
-<span class="n">KF_NAMESPACE</span> <span class="o">=</span> <span class="s2">"skit"</span>
-<span class="n">DEFAULT_EXPERIMENT_NAME</span> <span class="o">=</span> <span class="s2">"Default"</span>
+<span class="n">KF_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;skit&quot;</span>
+<span class="n">DEFAULT_EXPERIMENT_NAME</span> <span class="o">=</span> <span class="s2">&quot;Default&quot;</span>
 
-<span class="n">PROJECT_NAME</span> <span class="o">=</span> <span class="s2">"skit-pipelines"</span>
-<span class="n">CONFIG_DIR</span> <span class="o">=</span> <span class="s2">"config/"</span>
-<span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="s2">"config.yaml"</span>
+<span class="n">PROJECT_NAME</span> <span class="o">=</span> <span class="s2">&quot;skit-pipelines&quot;</span>
+<span class="n">CONFIG_DIR</span> <span class="o">=</span> <span class="s2">&quot;config/&quot;</span>
+<span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="s2">&quot;config.yaml&quot;</span>
 <span class="n">CONFIG_FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="n">CONFIG_FILE</span><span class="p">)</span>
-<span class="n">KAFKA_INSTANCE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"KAFKA_INSTANCE"</span><span class="p">,</span> <span class="s2">"kafka:9092"</span><span class="p">)</span>
+<span class="n">KAFKA_INSTANCE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;KAFKA_INSTANCE&quot;</span><span class="p">,</span> <span class="s2">&quot;kafka:9092&quot;</span><span class="p">)</span>
 
-<span class="n">VOICE_BOT_XLMR_LABEL_COL</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="n">TEXT</span> <span class="o">=</span> <span class="s2">"text"</span>
+<span class="n">VOICE_BOT_XLMR_LABEL_COL</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">TEXT</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
 
-<span class="n">TRAIN</span> <span class="o">=</span> <span class="s2">"train"</span>
-<span class="n">TEST</span> <span class="o">=</span> <span class="s2">"test"</span>
-<span class="n">LABELS</span> <span class="o">=</span> <span class="s2">"labels"</span>
-<span class="n">CSV_FILE</span> <span class="o">=</span> <span class="s2">".csv"</span>
-<span class="n">UTTERANCES</span> <span class="o">=</span> <span class="s2">"utterances"</span>
-<span class="n">ALTERNATIVES</span> <span class="o">=</span> <span class="s2">"alternatives"</span>
-<span class="n">TAG</span> <span class="o">=</span> <span class="s2">"tag"</span>
-<span class="n">ID</span> <span class="o">=</span> <span class="s2">"id"</span>
-<span class="n">DATA_ID</span> <span class="o">=</span> <span class="s2">"data_id"</span>
-<span class="n">INTENT_X</span> <span class="o">=</span> <span class="s2">"intent_x"</span>
-<span class="n">INTENT_Y</span> <span class="o">=</span> <span class="s2">"intent_y"</span>
-<span class="n">INTENT</span> <span class="o">=</span> <span class="s2">"intent"</span>
-<span class="n">STATE</span> <span class="o">=</span> <span class="s2">"state"</span>
+<span class="n">TRAIN</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span>
+<span class="n">TEST</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
+<span class="n">LABELS</span> <span class="o">=</span> <span class="s2">&quot;labels&quot;</span>
+<span class="n">CSV_FILE</span> <span class="o">=</span> <span class="s2">&quot;.csv&quot;</span>
+<span class="n">UTTERANCES</span> <span class="o">=</span> <span class="s2">&quot;utterances&quot;</span>
+<span class="n">ALTERNATIVES</span> <span class="o">=</span> <span class="s2">&quot;alternatives&quot;</span>
+<span class="n">TAG</span> <span class="o">=</span> <span class="s2">&quot;tag&quot;</span>
+<span class="n">ID</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
+<span class="n">DATA_ID</span> <span class="o">=</span> <span class="s2">&quot;data_id&quot;</span>
+<span class="n">INTENT_X</span> <span class="o">=</span> <span class="s2">&quot;intent_x&quot;</span>
+<span class="n">INTENT_Y</span> <span class="o">=</span> <span class="s2">&quot;intent_y&quot;</span>
+<span class="n">INTENT</span> <span class="o">=</span> <span class="s2">&quot;intent&quot;</span>
+<span class="n">STATE</span> <span class="o">=</span> <span class="s2">&quot;state&quot;</span>
 
-<span class="n">START_TOKEN</span> <span class="o">=</span> <span class="s2">"&lt;s&gt;"</span>
-<span class="n">END_TOKEN</span> <span class="o">=</span> <span class="s2">"&lt;/s&gt;"</span>
-<span class="n">TRANSCRIPT</span> <span class="o">=</span> <span class="s2">"transcript"</span>
+<span class="n">START_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;&lt;s&gt;&quot;</span>
+<span class="n">END_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;&lt;/s&gt;&quot;</span>
+<span class="n">TRANSCRIPT</span> <span class="o">=</span> <span class="s2">&quot;transcript&quot;</span>
 
-<span class="n">MULTI_USER</span> <span class="o">=</span> <span class="s2">"multi_user"</span>
-<span class="n">KFP_RUN_FN</span> <span class="o">=</span> <span class="s2">"create_run_from_pipeline_func"</span>
+<span class="n">MULTI_USER</span> <span class="o">=</span> <span class="s2">&quot;multi_user&quot;</span>
+<span class="n">KFP_RUN_FN</span> <span class="o">=</span> <span class="s2">&quot;create_run_from_pipeline_func&quot;</span>
 
 
-<span class="n">KF_USERNAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"KF_USERNAME"</span><span class="p">]</span>
-<span class="n">KF_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"KF_PASSWORD"</span><span class="p">]</span>
+<span class="n">KF_USERNAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;KF_USERNAME&quot;</span><span class="p">]</span>
+<span class="n">KF_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;KF_PASSWORD&quot;</span><span class="p">]</span>
 
-<span class="n">USERNAME_ELEMENT_ID</span> <span class="o">=</span> <span class="s2">"signInFormUsername"</span>
-<span class="n">PASSWORD_ELEMENT_ID</span> <span class="o">=</span> <span class="s2">"signInFormPassword"</span>
-<span class="n">SUBMIT_BUTTON_ID</span> <span class="o">=</span> <span class="s2">"signInSubmitButton"</span>
+<span class="n">USERNAME_ELEMENT_ID</span> <span class="o">=</span> <span class="s2">&quot;signInFormUsername&quot;</span>
+<span class="n">PASSWORD_ELEMENT_ID</span> <span class="o">=</span> <span class="s2">&quot;signInFormPassword&quot;</span>
+<span class="n">SUBMIT_BUTTON_ID</span> <span class="o">=</span> <span class="s2">&quot;signInSubmitButton&quot;</span>
 
-<span class="n">USERNAME_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"(//input[@id='</span><span class="si">{</span><span class="n">USERNAME_ELEMENT_ID</span><span class="si">}</span><span class="s2">'])[2]"</span>
-<span class="n">PASSWORD_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"(//input[@id='</span><span class="si">{</span><span class="n">PASSWORD_ELEMENT_ID</span><span class="si">}</span><span class="s2">'])[2]"</span>
-<span class="n">SUBMIT_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"(//input[@name='</span><span class="si">{</span><span class="n">SUBMIT_BUTTON_ID</span><span class="si">}</span><span class="s2">'])[2]"</span>
+<span class="n">USERNAME_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;(//input[@id=&#39;</span><span class="si">{</span><span class="n">USERNAME_ELEMENT_ID</span><span class="si">}</span><span class="s2">&#39;])[2]&quot;</span>
+<span class="n">PASSWORD_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;(//input[@id=&#39;</span><span class="si">{</span><span class="n">PASSWORD_ELEMENT_ID</span><span class="si">}</span><span class="s2">&#39;])[2]&quot;</span>
+<span class="n">SUBMIT_XPATH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;(//input[@name=&#39;</span><span class="si">{</span><span class="n">SUBMIT_BUTTON_ID</span><span class="si">}</span><span class="s2">&#39;])[2]&quot;</span>
 
-<span class="n">NODE_TYPE</span> <span class="o">=</span> <span class="s2">"type"</span>
-<span class="n">NODE_TYPE_POD</span> <span class="o">=</span> <span class="s2">"Pod"</span>
-<span class="n">NODE_OUTPUT</span> <span class="o">=</span> <span class="s2">"outputs"</span>
-<span class="n">NODE_ARTIFACTS</span> <span class="o">=</span> <span class="s2">"artifacts"</span>
-<span class="n">ARTIFACT_URI_KEY</span> <span class="o">=</span> <span class="s2">"key"</span>
-<span class="n">OBJECT_BUCKET</span> <span class="o">=</span> <span class="s2">"bucket"</span>
+<span class="n">NODE_TYPE</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span>
+<span class="n">NODE_TYPE_POD</span> <span class="o">=</span> <span class="s2">&quot;Pod&quot;</span>
+<span class="n">NODE_OUTPUT</span> <span class="o">=</span> <span class="s2">&quot;outputs&quot;</span>
+<span class="n">NODE_ARTIFACTS</span> <span class="o">=</span> <span class="s2">&quot;artifacts&quot;</span>
+<span class="n">ARTIFACT_URI_KEY</span> <span class="o">=</span> <span class="s2">&quot;key&quot;</span>
+<span class="n">OBJECT_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;bucket&quot;</span>
 
-<span class="n">NAME</span> <span class="o">=</span> <span class="s2">"name"</span>
-<span class="n">VALUE</span> <span class="o">=</span> <span class="s2">"value"</span>
-<span class="n">DOMAIN</span> <span class="o">=</span> <span class="s2">"domain"</span>
-<span class="n">COOKIES_PATH</span> <span class="o">=</span> <span class="s2">"/tmp/kf_cookies.json"</span>
-<span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"KUBEFLOW_GATEWAY_ENDPOINT"</span><span class="p">]</span>
-<span class="n">COOKIE_0</span> <span class="o">=</span> <span class="s2">"AWSELBAuthSessionCookie-0"</span>
-<span class="n">COOKIE_1</span> <span class="o">=</span> <span class="s2">"AWSELBAuthSessionCookie-1"</span>
+<span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
+<span class="n">VALUE</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span>
+<span class="n">DOMAIN</span> <span class="o">=</span> <span class="s2">&quot;domain&quot;</span>
+<span class="n">COOKIES_PATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/kf_cookies.json&quot;</span>
+<span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;KUBEFLOW_GATEWAY_ENDPOINT&quot;</span><span class="p">]</span>
+<span class="n">COOKIE_0</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-0&quot;</span>
+<span class="n">COOKIE_1</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-1&quot;</span>
 <span class="n">COOKIE_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="n">COOKIE_0</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">COOKIE_1</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-<span class="n">PIPELINE_HOST_URL</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"https://</span><span class="si">{</span><span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span><span class="si">}</span><span class="s2">/pipeline"</span>
+<span class="n">PIPELINE_HOST_URL</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span><span class="si">}</span><span class="s2">/pipeline&quot;</span>
+<span class="n">LABELSTUDIO_SVC</span> <span class="o">=</span> <span class="s2">&quot;https://labelstudio.skit.ai&quot;</span>
+<span class="n">LABELSTUDIO_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LABELSTUDIO_TOKEN&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="CONSTRUCT_COOKIE_TOKEN"><a class="viewcode-back" href="../../skit_pipelines.html#skit_pipelines.constants.CONSTRUCT_COOKIE_TOKEN">[docs]</a><span class="k">def</span> <span class="nf">CONSTRUCT_COOKIE_TOKEN</span><span class="p">(</span><span class="n">cookie_dict</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">COOKIE_0</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">cookie_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">COOKIE_0</span><span class="p">)</span><span class="si">}</span><span class="s2">;</span><span class="si">{</span><span class="n">COOKIE_1</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">cookie_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">COOKIE_1</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">COOKIE_0</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">cookie_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">COOKIE_0</span><span class="p">)</span><span class="si">}</span><span class="s2">;</span><span class="si">{</span><span class="n">COOKIE_1</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">cookie_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">COOKIE_1</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GET_RUN_URL"><a class="viewcode-back" href="../../skit_pipelines.html#skit_pipelines.constants.GET_RUN_URL">[docs]</a><span class="k">def</span> <span class="nf">GET_RUN_URL</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">PIPELINE_HOST_URL</span><span class="si">}</span><span class="s2">/?ns=</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">#/runs/details/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">"</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PIPELINE_HOST_URL</span><span class="si">}</span><span class="s2">/?ns=</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">#/runs/details/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <span class="n">FILTER_LIST</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">"webhook_uri"</span><span class="p">,</span>
+    <span class="s2">&quot;webhook_uri&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
         </article>

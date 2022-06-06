@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/>
-        <title>skit_pipelines.api.endpoints - skit-pipelines 0.1.85 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
+        <title>skit_pipelines.api.endpoints - skit-pipelines 0.1.90 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.85 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.85 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,10 +179,13 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -213,7 +216,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -265,7 +269,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">wait_for_run_completion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">"RunPipelineResult(run_id=</span><span class="si">{}</span><span class="s2">)"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;RunPipelineResult(run_id=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="call_kfp_method"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.call_kfp_method">[docs]</a><span class="k">def</span> <span class="nf">call_kfp_method</span><span class="p">(</span><span class="n">method_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">KFP_RUN_FN</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -283,7 +287,7 @@
         <span class="k">if</span> <span class="n">experiment</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">DEFAULT_EXPERIMENT_NAME</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">experiment</span><span class="o">.</span><span class="n">id</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"No experiment named </span><span class="si">{</span><span class="n">const</span><span class="o">.</span><span class="n">DEFAULT_EXPERIMENT_NAME</span><span class="si">}</span><span class="s2"> found in namespace </span><span class="si">{</span><span class="n">const</span><span class="o">.</span><span class="n">KF_NAMESPACE</span><span class="si">}</span><span class="s2">."</span>
+        <span class="sa">f</span><span class="s2">&quot;No experiment named </span><span class="si">{</span><span class="n">const</span><span class="o">.</span><span class="n">DEFAULT_EXPERIMENT_NAME</span><span class="si">}</span><span class="s2"> found in namespace </span><span class="si">{</span><span class="n">const</span><span class="o">.</span><span class="n">KF_NAMESPACE</span><span class="si">}</span><span class="s2">.&quot;</span>
     <span class="p">)</span></div>
 
 
@@ -307,34 +311,34 @@
     <span class="n">run_resp</span><span class="p">:</span> <span class="n">kfp_ApiRunDetail</span> <span class="o">=</span> <span class="k">await</span> <span class="n">run_in_threadpool</span><span class="p">(</span>
         <span class="n">client_resp</span><span class="o">.</span><span class="n">wait_for_run_completion</span>
     <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pipeline run finished!"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pipeline run finished!&quot;</span><span class="p">)</span>
     <span class="n">parsed_resp</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ParseRunResponse</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">run_resp</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">)</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">statusWiseResponse</span><span class="p">(</span><span class="n">parsed_resp</span><span class="p">,</span> <span class="n">webhook</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">webhook_url</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">webhook_url</span><span class="p">:</span>
         <span class="n">webhook_utils</span><span class="o">.</span><span class="n">send_webhook_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">webhook_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">msg</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="health_check"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.health_check">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<div class="viewcode-block" id="health_check"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.health_check">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">health_check</span><span class="p">():</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get server status health.</span>
 <span class="sd">    The purpose of this API is to help other people/machines know liveness of the application.</span>
-<span class="sd">    """</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Health check pinged!"</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Health check pinged!&quot;</span><span class="p">)</span>
     <span class="n">kf_client</span> <span class="o">=</span> <span class="n">kubeflow_login</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">kf_client</span><span class="o">.</span><span class="n">get_kfp_healthz</span><span class="p">()</span><span class="o">.</span><span class="n">multi_user</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">models</span><span class="o">.</span><span class="n">customResponse</span><span class="p">(</span>
-            <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Kubeflow server communication is up!"</span><span class="p">}</span>
+            <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Kubeflow server communication is up!&quot;</span><span class="p">}</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">models</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">kfp_api_error</span><span class="p">(</span>
-            <span class="n">reason</span><span class="o">=</span><span class="s2">"Unable to communicate with Kubeflow server..."</span>
+            <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Unable to communicate with Kubeflow server...&quot;</span>
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_run_info"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.get_run_info">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/</span><span class="si">{namespace}</span><span class="s2">/pipelines/</span><span class="si">{pipeline_name}</span><span class="s2">/runs/"</span><span class="p">)</span>
+<div class="viewcode-block" id="get_run_info"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.get_run_info">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{namespace}</span><span class="s2">/pipelines/</span><span class="si">{pipeline_name}</span><span class="s2">/runs/&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_run_info</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">run_resp</span> <span class="o">=</span> <span class="n">call_kfp_method</span><span class="p">(</span><span class="n">method_fn</span><span class="o">=</span><span class="s2">"get_run"</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span>
+    <span class="n">run_resp</span> <span class="o">=</span> <span class="n">call_kfp_method</span><span class="p">(</span><span class="n">method_fn</span><span class="o">=</span><span class="s2">&quot;get_run&quot;</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">)</span>
 
     <span class="n">parsed_resp</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ParseRunResponse</span><span class="p">(</span>
         <span class="n">run</span><span class="o">=</span><span class="n">run_resp</span><span class="p">,</span> <span class="n">component_display_name</span><span class="o">=</span><span class="n">pipeline_name</span>
@@ -342,7 +346,7 @@
     <span class="k">return</span> <span class="n">models</span><span class="o">.</span><span class="n">statusWiseResponse</span><span class="p">(</span><span class="n">parsed_resp</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pipeline_run_req"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/</span><span class="si">{namespace}</span><span class="s2">/pipelines/run/</span><span class="si">{pipeline_name}</span><span class="s2">/"</span><span class="p">)</span>
+<div class="viewcode-block" id="pipeline_run_req"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{namespace}</span><span class="s2">/pipelines/run/</span><span class="si">{pipeline_name}</span><span class="s2">/&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">pipeline_run_req</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -360,11 +364,11 @@
         <span class="k">for</span> <span class="n">pipeline</span> <span class="ow">in</span> <span class="n">kf_client</span><span class="o">.</span><span class="n">list_pipelines</span><span class="p">()</span><span class="o">.</span><span class="n">pipelines</span>
     <span class="p">}</span>
 
-    <span class="n">pipeline_names</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipelines</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">pipeline_names</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipelines</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">pipeline_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pipelines</span> <span class="ow">and</span> <span class="n">pipeline_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">RequestSchemas</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">models</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">kfp_api_error</span><span class="p">(</span>
-            <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"""Pipeline should be one of: </span><span class="si">{</span><span class="n">pipeline_names</span><span class="si">}</span><span class="s2">.</span>
-<span class="s2">If your pipeline is present, it is not supported in the official release."""</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Pipeline should be one of: </span><span class="si">{</span><span class="n">pipeline_names</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">If your pipeline is present, it is not supported in the official release.&quot;&quot;&quot;</span><span class="p">,</span>
             <span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -395,20 +399,20 @@
 <div class="viewcode-block" id="kfp_api_exception_handler"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.kfp_api_exception_handler">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">kfp_server_api</span><span class="o">.</span><span class="n">ApiException</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">kfp_api_exception_handler</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">models</span><span class="o">.</span><span class="n">customResponse</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">"message"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
         <span class="n">status_code</span><span class="o">=</span><span class="n">exc</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
-        <span class="n">status</span><span class="o">=</span><span class="s2">"error"</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="endpoint"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.endpoint">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/slack/events"</span><span class="p">)</span>
+<div class="viewcode-block" id="endpoint"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.endpoint">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">endpoint</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">slack_handler</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">req</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="handle_app_mention_events"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.handle_app_mention_events">[docs]</a><span class="nd">@slack_app</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="s2">"app_mention"</span><span class="p">)</span>
+<div class="viewcode-block" id="handle_app_mention_events"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.handle_app_mention_events">[docs]</a><span class="nd">@slack_app</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="s2">&quot;app_mention&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">handle_app_mention_events</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">say</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function is called when the bot (@charon) is called in any slack channel.</span>
 
 <span class="sd">    :param body: [description]</span>
@@ -417,7 +421,7 @@
 <span class="sd">    :type say: [type]</span>
 <span class="sd">    :param _: [description]</span>
 <span class="sd">    :type _: [type]</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">channel_id</span><span class="p">,</span> <span class="n">message_ts</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">get_message_data</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">make_response</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">say</span><span class="p">(</span>
@@ -428,8 +432,8 @@
     <span class="p">)</span></div>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>

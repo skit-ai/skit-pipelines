@@ -4,9 +4,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.04.07"/><title>Index - skit-pipelines 0.1.90 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/><title>Index - skit-pipelines 0.1.90 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -178,10 +178,13 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
@@ -212,7 +215,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -361,6 +365,8 @@
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.fetch_calls.fetch_calls">fetch_calls() (in module skit_pipelines.components.fetch_calls)</a>
 </li>
+        <li><a href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html#skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.fetch_calls_n_upload_tog_and_sheet">fetch_calls_n_upload_tog_and_sheet() (in module skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet)</a>
+</li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.fetch_calls_op">fetch_calls_op() (in module skit_pipelines.components)</a>
 
         <ul>
@@ -369,10 +375,10 @@
         </ul></li>
         <li><a href="skit_pipelines.pipelines.fetch_calls_pipeline.html#skit_pipelines.pipelines.fetch_calls_pipeline.fetch_calls_pipeline">fetch_calls_pipeline() (in module skit_pipelines.pipelines.fetch_calls_pipeline)</a>
 </li>
-        <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.cookies.fetch_latest_cookies">fetch_latest_cookies() (in module skit_pipelines.utils.cookies)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.cookies.fetch_latest_cookies">fetch_latest_cookies() (in module skit_pipelines.utils.cookies)</a>
+</li>
         <li><a href="skit_pipelines.pipelines.fetch_n_tag_calls.html#skit_pipelines.pipelines.fetch_n_tag_calls.fetch_n_tag_calls">fetch_n_tag_calls() (in module skit_pipelines.pipelines.fetch_n_tag_calls)</a>
 </li>
         <li><a href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html#skit_pipelines.pipelines.fetch_tagged_calls_dataset.fetch_tagged_calls_dataset">fetch_tagged_calls_dataset() (in module skit_pipelines.pipelines.fetch_tagged_calls_dataset)</a>
@@ -557,11 +563,17 @@
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.upload2s3">skit_pipelines.components.upload2s3</a>
 </li>
+          <li><a href="skit_pipelines.components.upload2sheet.html#module-skit_pipelines.components.upload2sheet">skit_pipelines.components.upload2sheet</a>
+</li>
           <li><a href="skit_pipelines.html#module-skit_pipelines.constants">skit_pipelines.constants</a>
 </li>
           <li><a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines">skit_pipelines.pipelines</a>
 </li>
           <li><a href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html#module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline</a>
+</li>
+          <li><a href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html#module-skit_pipelines.pipelines.fetch_calls_n_push_to_sheets">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets</a>
+</li>
+          <li><a href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html#module-skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet</a>
 </li>
           <li><a href="skit_pipelines.pipelines.fetch_calls_pipeline.html#module-skit_pipelines.pipelines.fetch_calls_pipeline">skit_pipelines.pipelines.fetch_calls_pipeline</a>
 </li>
@@ -833,8 +845,6 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_intent_column.html#module-skit_pipelines.components.preprocess.create_true_intent_column">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_true_intent_column.utils
 
@@ -842,6 +852,8 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_intent_column.html#module-skit_pipelines.components.preprocess.create_true_intent_column.utils">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_utterance_column
 
@@ -885,6 +897,13 @@
 </li>
         </ul></li>
         <li>
+    skit_pipelines.components.upload2sheet
+
+        <ul>
+          <li><a href="skit_pipelines.components.upload2sheet.html#module-skit_pipelines.components.upload2sheet">module</a>
+</li>
+        </ul></li>
+        <li>
     skit_pipelines.constants
 
         <ul>
@@ -903,6 +922,20 @@
 
         <ul>
           <li><a href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html#module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.pipelines.fetch_calls_n_push_to_sheets
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html#module-skit_pipelines.pipelines.fetch_calls_n_push_to_sheets">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html#module-skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet">module</a>
 </li>
         </ul></li>
         <li>
@@ -1062,6 +1095,14 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.upload2sheet.html#skit_pipelines.components.upload2sheet.upload2sheet">upload2sheet() (in module skit_pipelines.components.upload2sheet)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.upload2sheet_op">upload2sheet_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.upload2sheet.html#skit_pipelines.components.upload2sheet.upload2sheet_op">(in module skit_pipelines.components.upload2sheet)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.responses.StatusResponseModel.uris">uris (StatusResponseModel attribute)</a>
 </li>
     </ul></td>
