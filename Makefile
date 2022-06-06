@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: all test pipes docs
+.PHONY: all test secrets compile_pipes pipes docs
 
 BASE := skit_pipelines/pipelines
 BLANK := 
@@ -16,26 +16,27 @@ lint:
 test: ## Run the tests.conf
 	@pytest --cov=skit_pipelines --cov-report html --durations=5 --cov-report term:skip-covered tests/
 
-clean:
+secrets:
 	@if [ -d "secrets" ]; then rm -rf secrets; fi
-
-update_secrets:
 	@dvc get https://github.com/skit-ai/skit-calls secrets
+	@dvc pull
+	@cat env.sh >> secrets/env.sh
 
-pipes:
+
+compile_pipes:
 	@if [ -d "build" ]; then rm -rf build/**; fi
 	@for file in $(SOURCE_FILES); do \
-		echo "Building $$file"; \
 		pipeline_file=$${file/skit_pipelines\/pipelines\/}; \
 		pipeline_name=$${pipeline_file/\/__init__.py/}; \
 		echo "Building $$pipeline_name"; \
 		touch build/$$pipeline_name.yaml; \
 		source secrets/env.sh && dsl-compile --py $$file --output build/$$pipeline_name.yaml; \
 	done
-	
+
 docs:
 	@sphinx-apidoc -f -o source ./skit_pipelines
 	@sphinx-build -b html source docs
 	@cp source/index.rst README.rst
 
-all: clean update_secrets pipes
+pipes: secrets compile_pipes
+all: lint pipes docs
