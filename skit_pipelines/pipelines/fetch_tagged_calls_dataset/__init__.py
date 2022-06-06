@@ -36,12 +36,10 @@ def fetch_tagged_calls_dataset(
         .. code-block:: json
 
             {
-                "client_id": 1,
+                "org_id": 1,
+                "job_id": 4011,
                 "start_date": "2020-01-01",
-                "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": false,
-                "call_quantity": 200,
                 "notify": "@person, @personwith.spacedname",
                 "channel": "#some-public-channel"
             }
