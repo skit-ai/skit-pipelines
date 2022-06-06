@@ -8,7 +8,8 @@ from skit_pipelines import constants as pipeline_constants
 
 def fetch_tagged_dataset(
     output_path: OutputPath(str),
-    job_id: int,
+    job_id: Optional[str] = None,
+    project_id: Optional[str] = None,
     task_type: str = "conversation",
     timezone: str = "Asia/Kolkata",
     start_date: Optional[str] = None,
@@ -21,7 +22,7 @@ def fetch_tagged_dataset(
     from loguru import logger
     from skit_labels import constants as const
     from skit_labels import utils
-    from skit_labels.commands import download_dataset_from_db
+    from skit_labels.commands import download_dataset_from_db, download_dataset_from_labelstudio
 
     from skit_pipelines import constants as pipeline_constants
 
@@ -40,17 +41,26 @@ def fetch_tagged_dataset(
 
     start = time.time()
 
-    df_path, _ = download_dataset_from_db(
-        job_id=job_id,
-        task_type=task_type or None,
-        timezone=pytz.timezone(timezone) if timezone else None,
-        start_date=start_date or None,
-        end_date=end_date or None,
-        host=host,
-        port=port,
-        password=password,
-        user=user,
-    )
+    if job_id:
+        df_path, _ = download_dataset_from_db(
+            job_id=int(job_id),
+            task_type=task_type or None,
+            timezone=pytz.timezone(timezone) if timezone else None,
+            start_date=start_date or None,
+            end_date=end_date or None,
+            host=host,
+            port=port,
+            password=password,
+            user=user,
+        )
+    elif project_id:
+        df_path, _ = download_dataset_from_labelstudio(
+            url=pipeline_constants.LABELSTUDIO_SVC,
+            token=pipeline_constants.LABELSTUDIO_TOKEN,
+            project_id=int(project_id),
+        )
+    else:
+        raise ValueError("Either job_id or project_id must be provided")
 
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     df = pd.read_csv(df_path)
