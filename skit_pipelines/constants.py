@@ -76,6 +76,8 @@ COOKIE_0 = "AWSELBAuthSessionCookie-0"
 COOKIE_1 = "AWSELBAuthSessionCookie-1"
 COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
 PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
+LABELSTUDIO_SVC = "https://labelstudio.skit.ai"
+LABELSTUDIO_TOKEN = os.environ["LABELSTUDIO_TOKEN"]
 
 
 def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
