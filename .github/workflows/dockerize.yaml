@@ -30,14 +30,15 @@ jobs:
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
 
-      - name: Pull secrets & Build base image
+      - name: Pull secrets & Build image
         env:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: dvc get https://github.com/skit-ai/skit-calls secrets && docker build
+          --build-arg ECR_REGISTRY=$ECR_REGISTRY
+          --build-arg ECR_REPOSITORY_ROOT=${{ secrets.ECR_REPOSITORY_ROOT }}
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
-          --build-arg CUDA_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}-cuda:${RELEASE_VERSION}
           --build-arg DB_HOST=${{ secrets.DB_HOST }}
           --build-arg DB_PORT=${{ secrets.DB_PORT }}
           --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
@@ -57,53 +58,12 @@ jobs:
           --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
           --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
           --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
-          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY . -f Dockerfile.base
+          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY .
 
-      - name: Pull secrets & Build cuda_p38 image
-        env:
-          DOCKER_BUILDKIT: 1
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: dvc get https://github.com/skit-ai/skit-calls secrets && docker build
-          --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
-          --build-arg CUDA_IMAGE=${ECR_REGISTRY}/${ECR_REPOSITORY}-cuda:${RELEASE_VERSION}
-          --build-arg DB_HOST=${{ secrets.DB_HOST }}
-          --build-arg DB_PORT=${{ secrets.DB_PORT }}
-          --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          --build-arg DB_NAME=${{ secrets.DB_NAME }}
-          --build-arg DB_USER=${{ secrets.DB_USER }}
-          --build-arg CDN_RECORDINGS_BASE_PATH=${{ secrets.CDN_RECORDINGS_BASE_PATH }}
-          --build-arg BUCKET=${{ secrets.BUCKET }}
-          --build-arg SLACK_TOKEN=${{ secrets.SLACK_TOKEN }}
-          --build-arg SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }}
-          --build-arg DEFAULT_SLACK_CHANNEL=${{ secrets.DEFAULT_SLACK_CHANNEL }}
-          --build-arg TOG_TASK_URL=${{ secrets.TOG_TASK_URL }}
-          --build-arg LABELSTUDIO_TOKEN=${{ secrets.LABELSTUDIO_TOKEN }}
-          --build-arg SKIT_API_GATEWAY_PASSWORD=${{ secrets.SKIT_API_GATEWAY_PASSWORD }}
-          --build-arg SKIT_API_GATEWAY_EMAIL=${{ secrets.SKIT_API_GATEWAY_EMAIL }}
-          --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
-          --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.KUBEFLOW_GATEWAY_ENDPOINT }}
-          --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
-          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
-          --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
-          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY . -f Dockerfile.cuda_p38
-
-      - name: Tag and push base image
+      - name: Tag and push images
         env: 
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        run: |
-          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
-          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:master
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:master
-
-      - name: Tag and push cuda image
-        env: 
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}-cuda
         run: |
           docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
