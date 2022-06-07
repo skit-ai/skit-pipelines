@@ -35,6 +35,10 @@ RUN poetry config virtualenvs.create false
 
 RUN conda install scipy
 
+COPY pyproject.toml .
+
+RUN poetry install --no-dev
+
 COPY . .
 
 RUN poetry install --no-dev
