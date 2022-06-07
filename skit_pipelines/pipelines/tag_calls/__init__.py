@@ -39,6 +39,8 @@ def tag_calls(
                 "channel": "#some-public-channel"
             }
 
+    To use labelstudio:
+
         @charon run tag_calls
 
         .. code-block:: json

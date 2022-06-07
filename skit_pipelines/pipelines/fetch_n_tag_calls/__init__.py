@@ -56,6 +56,8 @@ def fetch_n_tag_calls(
                 "channel": "#some-public-channel"
             }
 
+    To use labelstudio:
+
         @charon run fetch_n_tag_calls
 
         .. code-block:: json

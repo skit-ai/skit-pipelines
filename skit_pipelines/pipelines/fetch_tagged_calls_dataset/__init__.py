@@ -45,6 +45,7 @@ def fetch_tagged_calls_dataset(
                 "channel": "#some-public-channel"
             }
 
+    To use labelstudio:
 
         @charon run fetch_tagged_calls_dataset
 
