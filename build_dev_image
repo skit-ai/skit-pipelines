@@ -1,7 +1,13 @@
 #!/bin/bash
 branch_name=`git rev-parse --abbrev-ref HEAD`
 tag=${1:-$branch_name}
-echo $tag
+
+if [ $tag == "main" ]
+then
+    echo "Read the docs: https://github.com/skit-ai/skit-pipelines/blob/main/CONTRIBUTING.md"
+    exit 0
+fi
+
 source secrets/env.sh && docker build \
     --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$tag \
     --build-arg DB_HOST=$DB_HOST \
@@ -23,5 +29,6 @@ source secrets/env.sh && docker build \
     --build-arg KF_USERNAME=$KF_USERNAME \
     --build-arg KF_PASSWORD=$KF_PASSWORD \
     --build-arg GOOGLE_SHEETS_CREDENTIALS=$GOOGLE_SHEETS_CREDENTIALS \
-    --build-arg KAFKA_INSTANCE=$KAFKA_INSTANCE -t $ECR_REPOSITORY .
-
+    --build-arg KAFKA_INSTANCE=$KAFKA_INSTANCE -t $ECR_REPOSITORY . \
+    && docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:$tag \
+    && docker push $ECR_REGISTRY/$ECR_REPOSITORY:$tag
