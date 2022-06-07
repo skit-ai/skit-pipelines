@@ -105,6 +105,7 @@ celerybeat.pid
 
 # Environments
 env.sh
+build_dev_image.sh
 .env
 .venv
 env/
