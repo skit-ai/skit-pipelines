@@ -32,7 +32,6 @@ def tag_calls(
 
     all_errors, df_sizes = ["no errors"], [0, 0, 0]
     output_dict = {"errors": all_errors, "df_sizes": df_sizes}
-    input_file = input_file.lstrip("<").rstrip(">")
     try:
         url = pipeline_constants.CONSOLE_API_URL if url is None else url
         job_ids = job_ids.replace(" ", "").split(",")

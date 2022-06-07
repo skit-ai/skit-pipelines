@@ -16,7 +16,6 @@ def download_from_s3(
     from skit_pipelines.api.models import StorageOptions
     from skit_pipelines.utils import create_storage_path
 
-    storage_path = storage_path.lstrip("<").rstrip(">")
     pattern = re.compile(r"^s3://(.+?)/(.+?)$")
     if storage_options:
         storage_options = StorageOptions(**json.loads(storage_options))
