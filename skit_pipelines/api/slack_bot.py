@@ -38,6 +38,9 @@ def command_parser(text):
     if match and match.group(1) and match.group(2):
         pipeline_name, code_block = [m.strip() for m in match.group(2).split("```")][:2]
         payload = json.loads(code_block)
+        for k, v in payload.items():
+            if isinstance(v, str):
+                payload[k] = v.lstrip("<").rstrip(">")
         return match.group(1), pipeline_name, payload
     return None, None, None
 
