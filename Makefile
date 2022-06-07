@@ -22,7 +22,6 @@ secrets:
 	@dvc pull
 	@cat env.sh >> secrets/env.sh
 
-
 compile_pipes:
 	@if [ -d "build" ]; then rm -rf build/**; fi
 	@for file in $(SOURCE_FILES); do \
