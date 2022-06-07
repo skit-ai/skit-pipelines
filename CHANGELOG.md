@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.93
+
+- [x] fix: Slack hyperlink markup removed.
+
 ## 0.1.92
 
 - [x] add: Labelstudio integration.
