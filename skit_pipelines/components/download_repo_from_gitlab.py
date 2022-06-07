@@ -7,7 +7,6 @@ from skit_pipelines import constants as pipeline_constants
 def download_repo_from_gitlab_func(
     project_id: int, output_path: OutputPath(str)
 ) -> None:
-    # def download_repo_from_gitlab_func(project_id: int) -> None:
 
     import requests
     from loguru import logger
@@ -37,6 +36,5 @@ download_repo_from_gitlab_op = kfp.components.create_component_from_func(
 
 if __name__ == "__main__":
 
-    # project_id = 32702497
-    project_id = 31749390
-    download_repo_from_gitlab_func(project_id)
+    project_id = 35529988
+    download_repo_from_gitlab_func(project_id, "output_dir")
