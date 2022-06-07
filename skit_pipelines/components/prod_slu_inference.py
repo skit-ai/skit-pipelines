@@ -1,11 +1,15 @@
 import kfp
-from kfp.components import OutputPath
+from kfp.components import InputPath, OutputPath
 from torch import detach
 
-# from skit_pipelines import constants as pipeline_constants
+from skit_pipelines import constants as pipeline_constants
 
 # def prod_slu_inference_func(slu_repo_tar_path: str, output_path: OutputPath(str)) -> None:
-def prod_slu_inference_func(slu_repo_tar_path: str, tog_tagged_data_path : str, project_id: int) -> None:
+def prod_slu_inference_func(
+    slu_repo_tar_path: InputPath(str),
+    s3_tagged_data_path : str, 
+    project_id: int
+    ) -> None:
 
     import os
     import tarfile
@@ -77,8 +81,8 @@ def prod_slu_inference_func(slu_repo_tar_path: str, tog_tagged_data_path : str, 
     )
 
     api_import_file_path = "slu/src/api/endpoints.py"
-    if os.path.isfile(api_import_file_path):
-        logger.info(f"found: {api_import_file_path}")
+    if not os.path.isfile(api_import_file_path):
+        logger.error(f"missing: {api_import_file_path}")
 
     import slu.src.api.endpoints as api
     logger.info("loaded: PREDICT_API")
@@ -86,7 +90,7 @@ def prod_slu_inference_func(slu_repo_tar_path: str, tog_tagged_data_path : str, 
 
     # get dataframe input with alternatives column
 
-    df = pd.read_csv(tog_tagged_data_path)
+    df = pd.read_csv(s3_tagged_data_path)
     tagged_region_entity_text_column_name = "text"
 
     df["response"] = df[tagged_region_entity_text_column_name].apply(lambda x: api.PREDICT_API(
@@ -102,13 +106,9 @@ def prod_slu_inference_func(slu_repo_tar_path: str, tog_tagged_data_path : str, 
     duckling_container.kill()
 
 
-
-
-
-
-# prod_slu_inference_func_op = kfp.components.create_component_from_func(
-#     prod_slu_inference_func, base_image=pipeline_constants.BASE_IMAGE
-# )
+prod_slu_inference_op = kfp.components.create_component_from_func(
+    prod_slu_inference_func, base_image=pipeline_constants.BASE_IMAGE
+)
 
 
 if __name__ == "__main__":

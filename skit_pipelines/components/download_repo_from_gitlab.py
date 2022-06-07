@@ -3,8 +3,8 @@ from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
-# def download_repo_from_gitlab_func(project_id: int, output_path: OutputPath(str)) -> None:
-def download_repo_from_gitlab_func(project_id: int) -> None:
+def download_repo_from_gitlab_func(project_id: int, target_path: OutputPath(str)) -> None:
+# def download_repo_from_gitlab_func(project_id: int) -> None:
 
     import requests
     from loguru import logger
@@ -29,9 +29,9 @@ def download_repo_from_gitlab_func(project_id: int) -> None:
 
 
 
-# download_repo_from_gitlab_op = kfp.components.create_component_from_func(
-#     download_repo_from_gitlab_func, base_image=pipeline_constants.BASE_IMAGE
-# )
+download_repo_from_gitlab_op = kfp.components.create_component_from_func(
+    download_repo_from_gitlab_func, base_image=pipeline_constants.BASE_IMAGE
+)
 
 
 if __name__ == "__main__":
