@@ -45,6 +45,12 @@ def metadata2accuracy(metadata: str) -> float:
 The import statement is within the component because kubeflow while compiling, will take the function body as the source code for the container.
 We maintain reusable functions in the `skit-pipelines.utls` or `skit-pipelines.components.*` packages. Any modification to these functions will require a new image build.
 
+## Soft Release
+
+1. Build a docker image locally.
+2. Tag it with a name instead of semver, preferably a branch-name.
+3. 
+
 ## Release
 
 We use github actions to make releases. It helps us update our images over to aws ecr. If we are adding secrets, make sure they are added to the projects secrets page as well and then used in the dockerfile. This is necessary because we don't want the image to have provisions to read secrets.
