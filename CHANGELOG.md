@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.92
+
+- [x] add: Labelstudio integration.
 
 ## 0.1.91
 
