@@ -1,6 +1,8 @@
 FROM gpuci/miniconda-cuda:11.3-devel-ubuntu20.04
 
-RUN apt-get -y update && apt-get install -y wget gcc libpq-dev libblas-dev liblapack-dev gfortran
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub \
+    && apt-get -y update \
+    && apt-get install -y wget gcc libpq-dev
 
 RUN conda install python=3.10 -y\ 
     && conda install pip\
@@ -22,6 +24,9 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
 
 # set display port to avoid crashgit
 ENV DISPLAY=:99
+
+RUN apt-get -y update\
+    && apt-get -y install libblas-dev liblapack-dev gfortran
 
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.2.1
