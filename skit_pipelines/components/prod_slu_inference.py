@@ -126,7 +126,7 @@ prod_slu_inference_op = kfp.components.create_component_from_func(
 
 if __name__ == "__main__":
 
-    # project_id = 32702497
-    project_id = 31749390
-    slu_repo_tar_path = f"{project_id}.tar.gz"
-    prod_slu_inference_func(slu_repo_tar_path, project_id)
+    project_id = 35529988
+    slu_repo_tar_path = f"./output_dir"
+    entity_job_s3_path = "s3://vernacular-ml/project/73_4358/2022-06-07/73_4358-2022-06-07-tagged.csv"
+    prod_slu_inference_func(slu_repo_tar_path, entity_job_s3_path, project_id)
