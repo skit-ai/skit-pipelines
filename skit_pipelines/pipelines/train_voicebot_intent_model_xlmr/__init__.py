@@ -1,5 +1,3 @@
-import json
-
 import kfp
 
 from skit_pipelines import constants as pipeline_constants
