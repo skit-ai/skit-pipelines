@@ -1,6 +1,7 @@
 import os
 
 BASE_IMAGE = os.environ["BASE_IMAGE"]
+CUDA_P38_IMAGE = os.environ["CUDA_IMAGE"]
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]
 SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
