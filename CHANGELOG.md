@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.94
+
+- [x] update: skit-labels unpacks tagged dataset.
+- [x] fix: 'AttributeError: 'NoneType' object has no attribute 'get' on fetching calls with failed predictions.
+- [x] fix: compatibility between skit-labels, skit-calls, skit-auth, kfp, etc.
+- [x] add: s3 url support for tag calls pipeline.
+
 ## 0.1.93
 
 - [x] fix: Slack hyperlink markup removed.
