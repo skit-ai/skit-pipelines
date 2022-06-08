@@ -50,7 +50,7 @@ def fetch_n_tag_calls(
                 "lang": "en",
                 "end_date": "2020-01-01",
                 "reported": false,
-                "jobs_id": "4011,4012,4013",
+                "jobs_ids": "4011,4012,4013",
                 "call_quantity": 200,
                 "notify": "@person, @personwith.spacedname",
                 "channel": "#some-public-channel"
