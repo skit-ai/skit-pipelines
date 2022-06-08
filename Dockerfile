@@ -30,7 +30,9 @@ RUN apt-get -y update\
 
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.2.1
+RUN pip install poetry==1.1.13
 RUN poetry config virtualenvs.create false
+
 RUN conda install scipy
 
 COPY pyproject.toml .
