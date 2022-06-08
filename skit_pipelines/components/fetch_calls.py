@@ -34,6 +34,7 @@ def fetch_calls(
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components import upload2s3
+    from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
     start_date = to_datetime(start_date)
@@ -50,8 +51,7 @@ def fetch_calls(
         ignore_callers = const.DEFAULT_IGNORE_CALLERS_LIST
 
     start = time.time()
-    states = states.replace(" ", "")
-    states = states.split(",") if states else states
+    states = comma_sep_str(states) if states else states
 
     maybe_df = calls.sample(
         client_id,
