@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.95
+
+- [x] fix: TypeError: Object of type JSONDecodeError is not JSON serializable on dataset uploads.
+- [x] fix: invalid literal for int() with base 10: '' on dataset uploads
+
 ## 0.1.94
 
 - [x] update: skit-labels unpacks tagged dataset.
