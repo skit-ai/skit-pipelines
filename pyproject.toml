@@ -27,7 +27,7 @@ slack-bolt = "^1.14.0"
 kfp = "1.8.11"
 simpletransformers = "0.63.6"
 pandas = "1.4.2"
-skit-auth = "0.1.4"
+skit-auth = "0.1.5"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
