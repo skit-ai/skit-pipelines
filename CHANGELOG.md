@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.99
+
+- [x] fix: auth-token type.
+
 ## 0.1.98
 
 - [x] fix: training pre-proc handles utterances from these columns as well: alternatives, data.
