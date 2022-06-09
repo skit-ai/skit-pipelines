@@ -22,10 +22,11 @@ def tag_calls(
     import pandas as pd
     from loguru import logger
     from skit_labels import utils
-    from skit_pipelines.utils.normalize import comma_sep_str
-    from skit_pipelines.components.tag_calls.tog import upload2tog
-    from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
+
     from skit_pipelines.components.tag_calls.base import Response
+    from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
+    from skit_pipelines.components.tag_calls.tog import upload2tog
+    from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
     response = Response([], [])

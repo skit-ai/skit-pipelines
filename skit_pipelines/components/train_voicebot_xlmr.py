@@ -50,12 +50,12 @@ def train_voicebot_xlmr(
     import pickle
 
     import pandas as pd
+    from loguru import logger
     from simpletransformers.classification import (
         ClassificationArgs,
         ClassificationModel,
     )
     from sklearn import preprocessing
-    from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
 

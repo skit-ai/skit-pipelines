@@ -16,7 +16,7 @@ def isdigit(c: str) -> bool:
     return c.isdigit()
 
 
-def comma_sep_str(string: str, fn = None) -> str:
+def comma_sep_str(string: str, fn=None) -> str:
     default_fn = lambda c: c
     fn = fn or default_fn
     return list(map(fn, filter(isdigit, map(strip, string.split(",")))))
