@@ -15,8 +15,8 @@ def fetch_tagged_dataset(
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
 ):
-    import time
     import asyncio
+    import time
 
     import pandas as pd
     import pytz
@@ -58,11 +58,13 @@ def fetch_tagged_dataset(
             user=user,
         )
     elif project_id:
-        df_path, _ = asyncio.run(download_dataset_from_labelstudio(
-            url=pipeline_constants.LABELSTUDIO_SVC,
-            token=pipeline_constants.LABELSTUDIO_TOKEN,
-            project_id=int(project_id),
-        ))
+        df_path, _ = asyncio.run(
+            download_dataset_from_labelstudio(
+                url=pipeline_constants.LABELSTUDIO_SVC,
+                token=pipeline_constants.LABELSTUDIO_TOKEN,
+                project_id=int(project_id),
+            )
+        )
     else:
         raise ValueError("Either job_id or project_id must be provided")
 

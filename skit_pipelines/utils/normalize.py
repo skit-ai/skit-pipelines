@@ -13,7 +13,7 @@ def strip(c: str) -> str:
 
 
 def non_blank(c: str) -> bool:
-    return c != ''
+    return c != ""
 
 
 def comma_sep_str(string: str, fn=None) -> str:

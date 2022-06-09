@@ -1,5 +1,7 @@
-import kfp
 from typing import Optional
+
+import kfp
+
 from skit_pipelines import constants as pipeline_constants
 
 

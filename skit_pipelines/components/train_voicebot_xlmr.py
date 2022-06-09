@@ -94,7 +94,7 @@ def train_voicebot_xlmr(
         model_name,
         num_labels=train_df[label_column].nunique(),
         args=model_args,
-        use_cuda=True
+        use_cuda=True,
     )
     train_df = train_df[[pipeline_constants.TEXT, pipeline_constants.LABELS]]
     train_df.to_csv("train_readable.csv", index=False)
