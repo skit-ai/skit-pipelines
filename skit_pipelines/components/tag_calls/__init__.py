@@ -40,7 +40,7 @@ def tag_calls(
 
         if response.errors:
             logger.error(response.errors)
-        logger.info(f"{response.df_sizes[0]} rows in the dataset")
+        logger.info(f"{response.df_sizes} rows in the dataset")
         logger.info(f"{response.errors=}")
 
     except pd.errors.EmptyDataError:
