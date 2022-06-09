@@ -71,9 +71,8 @@ def tag_calls(
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
-    dataset_op = download_from_s3_op(storage_path=s3_path, storage_options="")
     tag_calls_output = tag_calls_op(
-        input_file=dataset_op.outputs["output"],
+        input_file=s3_path,
         job_ids=job_ids,
         project_id=labelstudio_project_id,
         token=auth_token.output,
