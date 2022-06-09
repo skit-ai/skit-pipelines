@@ -143,3 +143,10 @@ test_auth_kf.py
 /secrets
 
 .history
+*.csv
+docker_build_dev_image
+docs/*
+source/*
+tests/*
+test_*.py
+*.dvc
