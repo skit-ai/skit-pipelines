@@ -11,7 +11,7 @@ def tag_calls(
     input_file: str,
     job_ids: str = "",
     project_id: Optional[str] = None,
-    token: InputPath(str),
+    token: str,
     url: str = None,
     output_json: OutputPath(str),
 ) -> Dict[str, Any]:
@@ -34,6 +34,7 @@ def tag_calls(
     try:
         job_ids = comma_sep_str(job_ids)
         if job_ids:
+            logger.info(f"{token=}")
             response = upload2tog(input_file, token, job_ids, response)
 
         if project_id:
