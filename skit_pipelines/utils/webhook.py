@@ -1,11 +1,11 @@
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict, Union
 
 import requests
 from loguru import logger
 
 
-def validate_request_success(resp: requests.Response | str):
+def validate_request_success(resp: Union[requests.Response, str]):
     """
     Validate the response from the webhook request
     """

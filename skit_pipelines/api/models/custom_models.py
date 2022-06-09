@@ -15,11 +15,10 @@ def filter_artifact_nodes(nodes: Dict[str, Any]) -> List[Dict[str, Any]]:
 def get_kf_object_uri(obj: Dict[str, Any], store="s3") -> str:
     key = obj[store][const.ARTIFACT_URI_KEY]
     bucket = obj[store][const.OBJECT_BUCKET]
-    match store:
-        case "s3":
-            return f"s3://{bucket}/{key}"
-        case _:
-            raise ValueError(f"Unsupported store: {store}")
+    if store == "s3":
+        return f"s3://{bucket}/{key}"
+    else:
+        raise ValueError(f"Unsupported store: {store}")
 
 
 def artifact_node_to_uri(node: Dict[str, Any], store="s3") -> Iterable[str]:

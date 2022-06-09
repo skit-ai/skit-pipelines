@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, validator
@@ -11,7 +11,7 @@ class StatusResponseModel(BaseModel):
     message: str
     run_id: str
     run_url: str
-    uris: List[str] | None = None
+    uris: Union[List[str], None] = None
     webhook: bool = False
 
 
