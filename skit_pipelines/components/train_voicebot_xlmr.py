@@ -69,10 +69,13 @@ def train_voicebot_xlmr(
         use_multiprocessing=False,
         max_seq_length=max_seq_length,
         output_dir=model_path,
+        fp16=False,
         best_model_dir=f"{model_path}/best",
         overwrite_output_dir=True,
         save_eval_checkpoints=False,
         save_model_every_epoch=False,
+        save_steps=-1,
+        no_cache=True,
         use_early_stopping=use_early_stopping,
         early_stopping_patience=early_stopping_patience,
         early_stopping_delta=early_stopping_delta,
@@ -91,14 +94,19 @@ def train_voicebot_xlmr(
         model_name,
         num_labels=train_df[label_column].nunique(),
         args=model_args,
+        use_cuda=True
     )
     train_df = train_df[[pipeline_constants.TEXT, pipeline_constants.LABELS]]
+    train_df.to_csv("train_readable.csv", index=False)
     logger.debug(train_df.head())
+    logger.debug(train_df[pipeline_constants.LABELS].nunique())
+    logger.debug(f"{train_df[pipeline_constants.LABELS].unique()}")
+    logger.debug(f"{train_df[pipeline_constants.LABELS].nunique()}")
     model.train_model(train_df)
     with open(labelencoder_file_path, "wb") as file:
         _ = pickle.dump(labelencoder, file)
 
 
 train_voicebot_xlmr_op = kfp.components.create_component_from_func(
-    train_voicebot_xlmr, base_image=pipeline_constants.CUDA_P38_IMAGE
+    train_voicebot_xlmr, base_image=pipeline_constants.BASE_IMAGE
 )
