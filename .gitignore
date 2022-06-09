@@ -134,7 +134,6 @@ dmypy.json
 *.json
 
 # environment variables used by tools
-env.sh
 test_auth_kf.py
 # query files
 *.sql
@@ -149,4 +148,4 @@ docs/*
 source/*
 tests/*
 test_*.py
-*.dvc
+
