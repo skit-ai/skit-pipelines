@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.96
+
+- [x] update: normalize.comma_sep_str can be used for comma separated numbers and strings.
+
 ## 0.1.95
 
 - [x] fix: TypeError: Object of type JSONDecodeError is not JSON serializable on dataset uploads.
