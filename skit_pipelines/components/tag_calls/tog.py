@@ -6,7 +6,7 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components.tag_calls.base import Response
 
 
-def upload2tog(input_file: str, url: str, token: str, job_ids: List[str], response: Response):
+def upload2tog(input_file: str, token: str, job_ids: List[str], response: Response):
     url = pipeline_constants.CONSOLE_API_URL
     for job_id in job_ids:
         errors, df_size = upload_dataset(
