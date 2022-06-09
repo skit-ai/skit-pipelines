@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.97
+
+- [x] update: dockerfile uses python 3.8 and cuda 10.2.
+- [x] fix: labelstudio download.
+- [x] update: compatible with python 3.8.
+
 ## 0.1.96
 
 - [x] update: normalize.comma_sep_str can be used for comma separated numbers and strings.
