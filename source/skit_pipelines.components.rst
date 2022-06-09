@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    skit_pipelines.components.preprocess
+   skit_pipelines.components.tag_calls
    skit_pipelines.components.upload2sheet
 
 Submodules
@@ -89,14 +90,6 @@ skit\_pipelines.components.read\_json\_key module
 -------------------------------------------------
 
 .. automodule:: skit_pipelines.components.read_json_key
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-skit\_pipelines.components.tag\_calls module
---------------------------------------------
-
-.. automodule:: skit_pipelines.components.tag_calls
    :members:
    :undoc-members:
    :show-inheritance:

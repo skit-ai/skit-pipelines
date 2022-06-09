@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.1.90 documentation</title>
+        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.1.95 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.95 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.95 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
@@ -268,6 +269,7 @@
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="n">upload2s3</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
     <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
     <span class="n">start_date</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span><span class="n">start_date</span><span class="p">)</span>
@@ -284,8 +286,7 @@
         <span class="n">ignore_callers</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">DEFAULT_IGNORE_CALLERS_LIST</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">states</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">states</span> <span class="o">=</span> <span class="n">states</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">states</span> <span class="k">else</span> <span class="n">states</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">states</span><span class="p">)</span> <span class="k">if</span> <span class="n">states</span> <span class="k">else</span> <span class="n">states</span>
 
     <span class="n">maybe_df</span> <span class="o">=</span> <span class="n">calls</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
         <span class="n">client_id</span><span class="p">,</span>

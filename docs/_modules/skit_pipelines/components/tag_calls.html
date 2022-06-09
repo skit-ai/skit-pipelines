@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.components.tag_calls - skit-pipelines 0.1.90 documentation</title>
+        <title>skit_pipelines.components.tag_calls - skit-pipelines 0.1.95 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.90 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.1.95 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.90 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.95 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
@@ -240,10 +241,10 @@
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
-<div class="viewcode-block" id="tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.tag_calls.tag_calls">[docs]</a><span class="k">def</span> <span class="nf">tag_calls</span><span class="p">(</span>
+<div class="viewcode-block" id="tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.components.tag_calls.html#skit_pipelines.components.tag_calls.tag_calls">[docs]</a><span class="k">def</span> <span class="nf">tag_calls</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -251,57 +252,42 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 
     <span class="kn">import</span> <span class="nn">json</span>
-    <span class="kn">import</span> <span class="nn">os</span>
-    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="kn">import</span> <span class="nn">traceback</span>
 
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-    <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">labels_constants</span>
     <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">utils</span>
-    <span class="kn">from</span> <span class="nn">skit_labels.cli</span> <span class="kn">import</span> <span class="n">upload_dataset</span>
 
-    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.tag_calls.base</span> <span class="kn">import</span> <span class="n">Response</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.tag_calls.labelstudio</span> <span class="kn">import</span> <span class="n">upload2labelstudio</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.tag_calls.tog</span> <span class="kn">import</span> <span class="n">upload2tog</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
     <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">Response</span><span class="p">([],</span> <span class="p">[])</span>
 
-    <span class="n">all_errors</span><span class="p">,</span> <span class="n">df_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;no errors&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">output_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="n">all_errors</span><span class="p">,</span> <span class="s2">&quot;df_sizes&quot;</span><span class="p">:</span> <span class="n">df_sizes</span><span class="p">}</span>
-    <span class="n">input_file</span> <span class="o">=</span> <span class="n">input_file</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CONSOLE_API_URL</span> <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">url</span>
-        <span class="n">job_ids</span> <span class="o">=</span> <span class="n">job_ids</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-
-        <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;all_errors&quot;</span><span class="p">],</span> <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;df_sizes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">:</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-            <span class="n">errors</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload_dataset</span><span class="p">(</span>
-                <span class="n">input_file</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">),</span> <span class="n">labels_constants</span><span class="o">.</span><span class="n">SOURCE__DB</span>
-            <span class="p">)</span>
-            <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;all_errors&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-            <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;df_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_size</span><span class="p">)</span>
-
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uploaded in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds to </span><span class="si">{</span><span class="n">job_id</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df_size</span><span class="si">=}</span><span class="s2"> rows in the dataset&quot;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">errors</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">job_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job_ids</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">upload2tog</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">project_id</span><span class="p">:</span>
-            <span class="n">errors</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload_dataset</span><span class="p">(</span>
-                <span class="n">input_file</span><span class="p">,</span>
-                <span class="n">url</span><span class="p">,</span>
-                <span class="n">token</span><span class="p">,</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">project_id</span><span class="p">),</span>
-                <span class="n">labels_constants</span><span class="o">.</span><span class="n">SOURCE__LABELSTUDIO</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">upload2labelstudio</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">df_sizes</span><span class="si">}</span><span class="s2"> rows in the dataset&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">errors</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
     <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;empty dataframe&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;all_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">output_dict</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">output_dict</span></div>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">_asdict</span><span class="p">(),</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">_asdict</span><span class="p">()</span></div>
 
 
 <span class="n">tag_calls_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
