@@ -135,3 +135,10 @@ dmypy.json
 # custom
 test_auth_kf.py
 *.json
+*.csv
+docker_build_dev_image
+docs/*
+source/*
+tests/*
+test_*.py
+*.dvc
