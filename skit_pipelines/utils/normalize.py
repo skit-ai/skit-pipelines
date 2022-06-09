@@ -12,11 +12,11 @@ def strip(c: str) -> str:
     return c.strip()
 
 
-def isdigit(c: str) -> bool:
-    return c.isdigit()
+def non_blank(c: str) -> bool:
+    return c != ''
 
 
 def comma_sep_str(string: str, fn=None) -> str:
     default_fn = lambda c: c
     fn = fn or default_fn
-    return list(map(fn, filter(isdigit, map(strip, string.split(",")))))
+    return list(map(fn, filter(non_blank, map(strip, string.split(",")))))
