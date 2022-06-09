@@ -17,11 +17,16 @@ def create_utterances(data_path: InputPath(str), output_path: OutputPath(str)):
 
     df = pd.read_csv(data_path)
     logger.debug(f"Read {len(df)} rows from {data_path}")
-    df = df[df.data.notna()]
-    df = df[df.tag.notna()]
+
+    if UTTERANCES in df.columns:
+        ...
+    elif "alternatives" in df.columns:
+        df[UTTERANCES] = df.alternatives
+    else:
+        df = df[df.data.notna()]
+        df[UTTERANCES] = df.data.apply(build_utterance)
+
     logger.debug(f"After removing rows with missing data, {len(df)} rows remain")
-    df.data.dropna(inplace=True)
-    df[UTTERANCES] = df.data.apply(build_utterance)
     logger.debug(df.utterances[:10])
     df.to_csv(output_path, index=False)
 
