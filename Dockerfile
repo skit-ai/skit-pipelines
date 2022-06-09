@@ -1,10 +1,10 @@
-FROM gpuci/miniconda-cuda:11.3-devel-ubuntu20.04
+FROM gpuci/miniconda-cuda:10.2-runtime-ubuntu18.04
 
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub \
     && apt-get -y update \
     && apt-get install -y wget gcc libpq-dev
 
-RUN conda install python=3.10 -y\ 
+RUN conda install python=3.8 -y\ 
     && conda install pip\
     && conda init bash
 
