@@ -285,7 +285,7 @@
 <span class="sd">                &quot;lang&quot;: &quot;en&quot;,</span>
 <span class="sd">                &quot;end_date&quot;: &quot;2020-01-01&quot;,</span>
 <span class="sd">                &quot;reported&quot;: false,</span>
-<span class="sd">                &quot;jobs_ids&quot;: &quot;4011,4012,4013&quot;,</span>
+<span class="sd">                &quot;job_ids&quot;: &quot;4011,4012,4013&quot;,</span>
 <span class="sd">                &quot;call_quantity&quot;: 200,</span>
 <span class="sd">                &quot;notify&quot;: &quot;@person, @personwith.spacedname&quot;,</span>
 <span class="sd">                &quot;channel&quot;: &quot;#some-public-channel&quot;</span>
@@ -311,38 +311,55 @@
 
 <span class="sd">    :param client_id: The client id as per api-gateway.</span>
 <span class="sd">    :type client_id: int</span>
+
 <span class="sd">    :param org_id: The organization id as per api-gateway.</span>
 <span class="sd">    :type org_id: str</span>
+
 <span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
 <span class="sd">    :type job_ids: str</span>
+
 <span class="sd">    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
 <span class="sd">    :type labelstudio_project_id: str</span>
+
 <span class="sd">    :param start_date: The start date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type start_date: str</span>
+
 <span class="sd">    :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.</span>
 <span class="sd">    :type lang: str</span>
+
 <span class="sd">    :param end_date: The end date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type end_date: str</span>
+
 <span class="sd">    :param ignore_callers: Comma separated list of callers to ignore, defaults to &quot;&quot;</span>
 <span class="sd">    :type ignore_callers: str, optional</span>
+
 <span class="sd">    :param reported: Pick only reported calls, defaults to False</span>
 <span class="sd">    :type reported: bool</span>
+
 <span class="sd">    :param use_case: Voice bot project&#39;s use-case, defaults to &quot;&quot;</span>
 <span class="sd">    :type use_case: str, optional</span>
+
 <span class="sd">    :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to &quot;&quot;</span>
 <span class="sd">    :type flow_name: str, optional</span>
+
 <span class="sd">    :param min_duration: Call duration filter, defaults to &quot;&quot;</span>
 <span class="sd">    :type min_duration: str, optional</span>
+
 <span class="sd">    :param asr_provider: The ASR vendor (google/VASR), defaults to &quot;&quot;</span>
 <span class="sd">    :type asr_provider: str, optional</span>
+
 <span class="sd">    :param states: Filter calls in a comma separated list of states, defaults to &quot;&quot;</span>
 <span class="sd">    :type states: str, optional</span>
+
 <span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
 <span class="sd">    :type call_quantity: int, optional</span>
+
 <span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to &quot;inbound&quot;</span>
 <span class="sd">    :type call_type: str, optional</span>
+
 <span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
+
 <span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type channel: str, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
