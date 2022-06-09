@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.98
+
+- [x] fix: training pre-proc handles utterances from these columns as well: alternatives, data.
+
 ## 0.1.97
 
 - [x] update: dockerfile uses python 3.8 and cuda 10.2.
