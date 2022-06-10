@@ -41,6 +41,7 @@ INTENT_X = "intent_x"
 INTENT_Y = "intent_y"
 INTENT = "intent"
 STATE = "state"
+PREDICTION = "prediction"
 
 START_TOKEN = "<s>"
 END_TOKEN = "</s>"
