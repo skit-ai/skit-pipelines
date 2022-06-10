@@ -1,18 +1,58 @@
 import json
 import re
 import traceback
+from typing import Any, Dict
 
 import requests
 
 
-def get_message_data(body):
+def get_message_data(body: Dict[str, Any]):
+    """
+    A message from a user to the slack bot.
+
+    Removing attributes other than :code:`event` for brevity, even within
+    :code:`event.blocks` is redacted. It is helpful for markdown content that
+    users may send.
+
+    .. code-block:: json
+
+        {
+            "event": {
+                "client_msg_id": "<UUID>",
+                "type": "message",
+                "text": "help",
+                "user": "[A-Z0-9]+",
+                "ts": "1654862590.595759",
+                "team": "[A-Z0-9]+",
+                "blocks": [{}],
+                "channel": "[A-Z0-9]+",
+                "event_ts": "1654862590.595759",
+                "channel_type": "im"
+            }
+        }
+
+    :param body: The message event.
+    :type body: 
+    :return: _description_
+    :rtype: _type_
+    """
     channel = body.get("event", {}).get("channel")
     ts = body.get("event", {}).get("ts")
     text = body.get("event", {}).get("text")
-    return channel, ts, text
+    user = body.get("event", {}).get("user")
+    user = f"<@{user}>"
+    return channel, ts, text, user
 
 
-def run_pipeline(pipeline_name, payload):
+def run_pipeline(pipeline_name, payload, channel_id, message_ts, user):
+    if "channel" not in payload:
+        payload["channel"] = channel_id
+
+    if "notify" not in payload:
+        payload["notify"] = user
+    else:
+        payload["notify"] += f", {user}"
+
     res = requests.post(
         f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
     )
@@ -45,12 +85,12 @@ def command_parser(text):
     return None, None, None
 
 
-def make_response(text):
+def make_response(channel_id, message_ts, text, user):
     try:
         command, pipeline_name, payload = command_parser(text)
         match command:
             case "run":
-                return run_pipeline(pipeline_name, payload)
+                return run_pipeline(pipeline_name, payload, channel_id, message_ts, user)
             case _:
                 return help_message()
     except Exception as e:

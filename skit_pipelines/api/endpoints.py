@@ -139,7 +139,6 @@ If your pipeline is present, it is not supported in the official release.""",
         )
 
     Schema = models.RequestSchemas[pipeline_name]
-
     try:
         payload = Schema.parse_obj(payload)
     except pydantic.error_wrappers.ValidationError as e:
@@ -188,8 +187,8 @@ def handle_app_mention_events(body, say, logger):
     :param _: [description]
     :type _: [type]
     """
-    channel_id, message_ts, text = get_message_data(body)
-    response = make_response(text)
+    channel_id, message_ts, text, user = get_message_data(body)
+    response = make_response(channel_id, message_ts, text, user)
     say(
         thread_ts=message_ts,
         channel=channel_id,
