@@ -1,9 +1,13 @@
 import json
 import re
 import traceback
-from typing import Any, Dict
+from typing import Any, Dict, Tuple, Union
 
 import requests
+
+CommandType = Union[str, None]
+PipelineNameType = Union[str, None]
+PayloadType = Union[Dict[str, Any], None]
 
 
 def get_message_data(body: Dict[str, Any]):
@@ -74,7 +78,38 @@ def help_message():
     return "<https://skit-ai.github.io/skit-pipelines/#pipelines|Click here> to read about pipelines"
 
 
-def command_parser(text):
+def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadType]:
+    """
+    Parses pipeline run commands.
+
+    .. note:: We assume commands to follow the following template:
+
+        @slackbot run <pipeline_name>
+        ```
+        {
+            "param_1": "value",
+        }
+        ```
+    
+    This allows us to parse the pipeline name and arguments conveniently but there are certain
+    pitfalls we need to keep in mind. 
+
+    1. We slack markdown auto-format for links. if the value is a link it will be automatically formatted 
+        by slack and users have no way to remove it in the code-blocks. Either way it leads to poor UX. The
+        link format is either <link> or <link|description>.
+
+    2. KFP doesn't like arguments other than strings and numbers. So for pipelines that may need dictionaries, we serialize
+        the dictionary to JSON and pass it as a string. This is inconvenient because users need to remember escaping strings,
+        the payload quickly becomes unreadable in case of any nesting.
+
+    We handle [1] by parsing the markdown and using only the link since that's the user's expectation.
+    For [2] we require users to pass indented, neat, dictionaries. The serialization is done here so that pipelines are happy.
+
+    :param text: The command text.
+    :type text: str
+    :return: The command, pipeline name, and payload.
+    :rtype: Tuple[str]
+    """
     match = re.match(r"<@[a-zA-Z0-9]+> (run) (.*)", text, re.DOTALL)
     if match and match.group(1) and match.group(2):
         pipeline_name, code_block = [m.strip() for m in match.group(2).split("```")][:2]
@@ -83,6 +118,8 @@ def command_parser(text):
             if isinstance(v, str):
                 if v.startswith("<") and v.endswith(">"):
                     payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
+            if isinstance(v, (dict|list)):
+                payload[k] = json.dumps(v)
         return match.group(1), pipeline_name, payload
     return None, None, None
 
