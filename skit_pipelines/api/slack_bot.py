@@ -81,7 +81,8 @@ def command_parser(text):
         payload = json.loads(code_block)
         for k, v in payload.items():
             if isinstance(v, str):
-                payload[k] = v.lstrip("<").rstrip(">")
+                if v.startswith("<") and v.endswith(">"):
+                    payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
         return match.group(1), pipeline_name, payload
     return None, None, None
 
