@@ -34,6 +34,7 @@ def eval_voicebot_xlmr_pipeline(
     s3_path_model: str = "",
     notify: str = "",
     channel: str = "",
+    slack_thread: float = 0,
 ):
     """
     Evaluates an XLM Roberta model on given dataset.
@@ -67,6 +68,8 @@ def eval_voicebot_xlmr_pipeline(
     :type model_name: str, optional
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
     """
     with kfp.dsl.Condition(s3_path_data != "", "s3_path_data_check") as check1:
         tagged_data_op = download_from_s3_op(storage_path=s3_path_data)

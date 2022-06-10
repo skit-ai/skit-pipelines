@@ -19,6 +19,7 @@ def tag_calls(
     labelstudio_project_id: str = "",
     notify: str = "",
     channel: str = "",
+    slack_thread: float = 0
 ):
     """
     A pipeline to upload a dataset for annotation.
@@ -65,6 +66,8 @@ def tag_calls(
     :type notify: str, optional
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
     """
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (

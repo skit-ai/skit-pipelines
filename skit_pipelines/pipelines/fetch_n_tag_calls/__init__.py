@@ -32,6 +32,7 @@ def fetch_n_tag_calls(
     call_type: str = "INBOUND",
     notify: str = "",
     channel: str = "",
+    slack_thread: float = 0
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -127,6 +128,9 @@ def fetch_n_tag_calls(
 
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
+
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
