@@ -47,6 +47,7 @@ def get_message_data(body: Dict[str, Any]):
 def run_pipeline(pipeline_name, payload, channel_id, message_ts, user):
     if "channel" not in payload:
         payload["channel"] = channel_id
+        payload["slack_thread"] = message_ts
 
     if "notify" not in payload:
         payload["notify"] = user
