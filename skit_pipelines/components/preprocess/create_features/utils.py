@@ -1,7 +1,7 @@
 import json
 
 import pydash as py_
-
+import pandas as pd
 from skit_pipelines import constants as pipeline_constants
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -29,13 +29,21 @@ def featurize_state(state):
 
 
 def row2features(use_state: bool):
-    def featurize(row):
-        data = json.loads(row.data)
-        data = json.loads(data) if isinstance(data, str) else data
-        utterances = data.get(UTTERANCES) or data.get(ALTERNATIVES)
-        utterances = (
-            json.loads(utterances) if isinstance(utterances, str) else utterances
-        )
+    def featurize(row: pd.Series):
+        if UTTERANCES in row:
+            utterances = json.loads(row[UTTERANCES])
+        elif ALTERNATIVES in row:
+            utterances = json.loads(row[ALTERNATIVES])
+        elif "data" in row:
+            data = json.loads(row.data)
+            data = json.loads(data) if isinstance(data, str) else data
+            utterances = data.get(UTTERANCES) or data.get(ALTERNATIVES)
+            utterances = (
+                json.loads(utterances) if isinstance(utterances, str) else utterances
+            )
+        else:
+            raise ValueError(f"No utterances found in row: {row}")
+
         feat_utterance = featurize_utterances(utterances)
         feat_state = featurize_state(data.get(STATE))
         return f"{feat_utterance} {feat_state}" if use_state else f"{feat_utterance}"
