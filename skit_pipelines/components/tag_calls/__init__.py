@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional
 
 import kfp
-from kfp.components import InputPath, OutputPath
+from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -17,9 +17,6 @@ def tag_calls(
 ) -> Dict[str, Any]:
 
     import json
-    import traceback
-
-    import pandas as pd
     from loguru import logger
     from skit_labels import utils
 
@@ -31,25 +28,19 @@ def tag_calls(
     utils.configure_logger(7)
     response = Response([], [])
 
-    try:
-        job_ids = comma_sep_str(job_ids)
-        if job_ids:
-            logger.info(f"{token=}")
-            response = upload2tog(input_file, token, job_ids, response)
+    job_ids = comma_sep_str(job_ids)
+    if job_ids:
+        logger.info(f"{token=}")
+        response = upload2tog(input_file, token, job_ids, response)
 
-        if project_id:
-            response = upload2labelstudio(input_file, project_id, response)
+    if project_id:
+        response = upload2labelstudio(input_file, project_id, response)
 
-        if response.errors:
-            logger.error(response.errors)
-        logger.info(f"{response.df_sizes} rows in the dataset")
-        logger.info(f"{response.errors=}")
+    if response.errors:
+        logger.error(response.errors)
 
-    except pd.errors.EmptyDataError:
-        logger.error("empty dataframe")
-    except Exception as e:
-        logger.error(e)
-        logger.error(traceback.format_exc())
+    logger.info(f"{response.df_sizes} rows in the dataset")
+    logger.info(f"{response.errors=}")
 
     with open(output_json, "w") as f:
         json.dump(response._asdict(), f, indent=4)
