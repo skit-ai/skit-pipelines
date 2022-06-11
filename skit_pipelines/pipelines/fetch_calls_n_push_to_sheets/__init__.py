@@ -29,7 +29,7 @@ def fetch_calls_n_push_to_sheets(
     sheet_id: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     untagged_records_s3_path = fetch_calls_op(
         client_id=client_id,

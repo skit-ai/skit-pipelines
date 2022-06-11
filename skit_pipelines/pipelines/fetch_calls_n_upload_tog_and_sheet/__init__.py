@@ -35,7 +35,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     sheet_id: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     calls = fetch_calls_op(
         client_id=client_id,
@@ -79,11 +79,6 @@ def fetch_calls_n_upload_tog_and_sheet(
         "P0D"  # disables caching
     )
 
-    df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
-    df_sizes.display_name = "get-df-size"
-    errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
-    errors.display_name = "get-any-errors"
-
     actual_num_calls_fetched_op = read_json_key_op(
         "actual_num_calls_fetched", upload.outputs["output_json"]
     )
@@ -116,22 +111,25 @@ def fetch_calls_n_upload_tog_and_sheet(
         "P0D"  # disables caching
     )
 
-    notification_text = f"""
-*Made a request for:* {call_quantity} calls
-*For the client id:* {client_id}
-*For language code:* {lang}
-*For flow name*: {flow_name}\n
-*Fetched CSV s3 url:* <{getattr(calls, 'output')}|s3 link>
-*Number of calls actually fetched:* {getattr(actual_num_calls_fetched_op, 'output')} (this is the number of unique calls present in above fetchd CSV)
-*Number of calls pushed for Call tagging:* {getattr(num_calls_uploaded_to_sheet_op, 'output')}
-*Google sheet url:* <{getattr(spread_sheet_url_op, 'output')}|link>
-*Number of user turns pushed to each of the tog job ids ({job_ids}):* {getattr(df_sizes, 'output')} respectively. (these are the number of user turns present in the {getattr(actual_num_calls_fetched_op, 'output')} fetched calls)\n
-*Note:* If there are 0 calls fetched, no new worksheet will be created in your google spreadsheet. No data will be uploaded to the tog jobs as well.\n
-*Errors while uploading to tog:* {getattr(errors, 'output')}
-*Errors while uploading to sheet:* {getattr(upload_to_sheet_errors_op, 'output')}
-"""
 
-    with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
+    with kfp.dsl.Condition(notify != "", "notify").after(upload_to_sheet_errors_op) as check1:
+        df_sizes = tag_calls_output.outputs["df_sizes"]
+        errors = tag_calls_output.outputs["errors"]
+        notification_text = f"""
+    *Made a request for:* {call_quantity} calls
+    *For the client id:* {client_id}
+    *For language code:* {lang}
+    *For flow name*: {flow_name}\n
+    *Fetched CSV s3 url:* <{getattr(calls, 'output')}|s3 link>
+    *Number of calls actually fetched:* {getattr(actual_num_calls_fetched_op, 'output')} (this is the number of unique calls present in above fetchd CSV)
+    *Number of calls pushed for Call tagging:* {getattr(num_calls_uploaded_to_sheet_op, 'output')}
+    *Google sheet url:* <{getattr(spread_sheet_url_op, 'output')}|link>
+    *Number of user turns pushed to each of the tog job ids ({job_ids}):* {df_sizes} respectively. (these are the number of user turns present in the {getattr(actual_num_calls_fetched_op, 'output')} fetched calls)\n
+    *Note:* If there are 0 calls fetched, no new worksheet will be created in your google spreadsheet. No data will be uploaded to the tog jobs as well.\n
+    *Errors while uploading to tog:* {errors}
+    *Errors while uploading to sheet:* {getattr(upload_to_sheet_errors_op, 'output')}
+    """
+
         task_no_cache = slack_notification_op(
             notification_text, channel=channel, cc=notify
         )

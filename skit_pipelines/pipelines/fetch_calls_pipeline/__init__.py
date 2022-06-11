@@ -23,7 +23,7 @@ def fetch_calls_pipeline(
     call_type: str = "inbound",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     """
     A pipeline to randomly sample calls for a given voice-bot project.
@@ -79,7 +79,7 @@ def fetch_calls_pipeline(
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
     :param slack_thread: The slack thread to send the notification, defaults to ""
-    :type slack_thread: float, optional
+    :type slack_thread: str, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,

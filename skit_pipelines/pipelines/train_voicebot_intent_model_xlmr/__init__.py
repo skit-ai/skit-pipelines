@@ -38,7 +38,7 @@ def train_voicebot_intent_model_xlmr(
     learning_rate: float = 4e-5,
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     """
     A pipeline to train an XLMR model on given dataset.
@@ -115,7 +115,7 @@ def train_voicebot_intent_model_xlmr(
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
     :param slack_thread: The slack thread to send the notification, defaults to ""
-    :type slack_thread: float, optional
+    :type slack_thread: str, optional
     """
     tagged_data_op = download_from_s3_op(
         storage_path=dataset_path, storage_options=storage_options

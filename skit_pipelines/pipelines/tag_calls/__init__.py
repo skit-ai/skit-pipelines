@@ -19,7 +19,7 @@ def tag_calls(
     labelstudio_project_id: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     """
     A pipeline to upload a dataset for annotation.
@@ -79,15 +79,13 @@ def tag_calls(
         project_id=labelstudio_project_id,
         token=auth_token.output,
     )
-    df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
-    df_sizes.display_name = "get-df-size"
-    errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
-    errors.display_name = "get-any-errors"
 
-    notification_text = f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
-    code_block = f"aws s3 cp {s3_path} ."
+    with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:
+        df_sizes = tag_calls_output.outputs["df_sizes"]
+        errors = tag_calls_output.outputs["errors"]
+        notification_text = f"Uploaded {s3_path} ({df_sizes}, {org_id=}) for tagging to {job_ids=}.\nErrors: {errors}"
+        code_block = f"aws s3 cp {s3_path} ."
 
-    with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(
             notification_text,
             cc=notify,

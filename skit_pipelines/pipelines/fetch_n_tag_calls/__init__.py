@@ -32,7 +32,7 @@ def fetch_n_tag_calls(
     call_type: str = "INBOUND",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -164,15 +164,15 @@ def fetch_n_tag_calls(
         token=auth_token.output,
     )
 
-    df_sizes = read_json_key_op("df_sizes", tag_calls_output.outputs["output_json"])
-    df_sizes.display_name = "get-df-size"
-    errors = read_json_key_op("errors", tag_calls_output.outputs["output_json"])
-    errors.display_name = "get-any-errors"
 
-    notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-    Uploaded {getattr(calls, 'output')} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"""
+    with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:
+        df_sizes = tag_calls_output.outputs["df_sizes"]
+        errors = tag_calls_output.outputs["errors"]
 
-    with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
+        notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
+        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {job_ids=}."""
+        notification_text += f"\nErrors: {errors}" if errors else ""
+
         task_no_cache = slack_notification_op(
             notification_text, channel=channel, cc=notify, thread_id=slack_thread
         )

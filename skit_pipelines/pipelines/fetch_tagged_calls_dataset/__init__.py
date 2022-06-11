@@ -24,7 +24,7 @@ def fetch_tagged_calls_dataset(
     task_type: str = "conversation",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0,
+    slack_thread: str = "",
 ):
     """
     A pipeline to fetch tagged dataset.
@@ -80,7 +80,7 @@ def fetch_tagged_calls_dataset(
     :param channel: The slack channel to send the notification, defaults to ""
     :type channel: str, optional
     :param slack_thread: The slack thread to send the notification, defaults to ""
-    :type slack_thread: float, optional
+    :type slack_thread: str, optional
     """
     tagged_df = fetch_tagged_dataset_op(
         job_id=job_id,
