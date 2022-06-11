@@ -35,7 +35,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     sheet_id: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0
+    slack_thread: float = 0,
 ):
     calls = fetch_calls_op(
         client_id=client_id,

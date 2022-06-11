@@ -17,6 +17,7 @@ def tag_calls(
 ) -> Dict[str, Any]:
 
     import json
+
     from loguru import logger
     from skit_labels import utils
 

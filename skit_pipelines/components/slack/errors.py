@@ -1,7 +1,8 @@
-from functools import wraps
 import traceback
+from functools import wraps
 
 from loguru import logger
+
 from skit_pipelines.components.slack.notification import slack_notification
 
 

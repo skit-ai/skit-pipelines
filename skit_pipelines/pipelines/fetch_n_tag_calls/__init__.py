@@ -32,7 +32,7 @@ def fetch_n_tag_calls(
     call_type: str = "INBOUND",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0
+    slack_thread: float = 0,
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.

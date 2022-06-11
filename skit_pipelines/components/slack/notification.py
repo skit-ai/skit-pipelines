@@ -4,11 +4,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def slack_notification(
-    message: str,
-    code_block: str="",
-    channel: str = "",
-    cc: str = "",
-    thread_id = 0
+    message: str, code_block: str = "", channel: str = "", cc: str = "", thread_id=0
 ) -> None:
     """
     Send a message on any channel.
@@ -37,10 +33,7 @@ def slack_notification(
     try:
         client = WebClient(token=pipeline_constants.SLACK_TOKEN)
         client.chat_postMessage(
-            channel=channel, 
-            **slack_message_blocks,
-            link_names=1,
-            thread_ts=thread_id
+            channel=channel, **slack_message_blocks, link_names=1, thread_ts=thread_id
         )
     except SlackApiError as error:
         logger.error(error)

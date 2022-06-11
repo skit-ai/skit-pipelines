@@ -19,7 +19,7 @@ def tag_calls(
     labelstudio_project_id: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: float = 0
+    slack_thread: float = 0,
 ):
     """
     A pipeline to upload a dataset for annotation.

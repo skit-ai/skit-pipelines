@@ -36,7 +36,7 @@ def get_message_data(body: Dict[str, Any]):
         }
 
     :param body: The message event.
-    :type body: 
+    :type body:
     :return: _description_
     :rtype: _type_
     """
@@ -90,11 +90,11 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
             "param_1": "value",
         }
         ```
-    
-    This allows us to parse the pipeline name and arguments conveniently but there are certain
-    pitfalls we need to keep in mind. 
 
-    1. We slack markdown auto-format for links. if the value is a link it will be automatically formatted 
+    This allows us to parse the pipeline name and arguments conveniently but there are certain
+    pitfalls we need to keep in mind.
+
+    1. We slack markdown auto-format for links. if the value is a link it will be automatically formatted
         by slack and users have no way to remove it in the code-blocks. Either way it leads to poor UX. The
         link format is either <link> or <link|description>.
 
@@ -118,7 +118,7 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
             if isinstance(v, str):
                 if v.startswith("<") and v.endswith(">"):
                     payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
-            if isinstance(v, (dict|list)):
+            if isinstance(v, (dict | list)):
                 payload[k] = json.dumps(v)
         return match.group(1), pipeline_name, payload
     return None, None, None
@@ -129,7 +129,9 @@ def make_response(channel_id, message_ts, text, user):
         command, pipeline_name, payload = command_parser(text)
         match command:
             case "run":
-                return run_pipeline(pipeline_name, payload, channel_id, message_ts, user)
+                return run_pipeline(
+                    pipeline_name, payload, channel_id, message_ts, user
+                )
             case _:
                 return help_message()
     except Exception as e:
