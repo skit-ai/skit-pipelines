@@ -115,7 +115,7 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
             if isinstance(v, str):
                 if v.startswith("<") and v.endswith(">"):
                     payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
-            if isinstance(v, (dict | list)):
+            if isinstance(v, (dict, list)):
                 payload[k] = json.dumps(v)
         return match.group(1), pipeline_name, payload
     return None, None, None
