@@ -75,7 +75,7 @@ def fetch_calls_n_push_to_sheets(
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload) as check3:
         task_no_cache = slack_notification_op(
-            notification_text, channel=channel, cc=notify
+            notification_text, channel=channel, cc=notify, thread_id=slack_thread
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

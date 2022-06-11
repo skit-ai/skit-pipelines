@@ -104,7 +104,7 @@ def fetch_calls_pipeline(
         notification_text = f"Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}."
         code_block = f"aws s3 cp {calls.output} ."
         task_no_cache = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block
+            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

@@ -166,7 +166,7 @@ def train_voicebot_intent_model_xlmr(
     with kfp.dsl.Condition(notify != "", "notify").after(upload) as check1:
         code_block = f"aws s3 cp {upload.output} ."
         task_no_cache = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block
+            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
