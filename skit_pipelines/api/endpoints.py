@@ -1,6 +1,7 @@
+import json
 import asyncio
 from datetime import timedelta
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import kfp
 import kfp_server_api
@@ -20,6 +21,7 @@ from skit_pipelines.api import (
 )
 from skit_pipelines.api.slack_bot import get_message_data, make_response
 from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
+from skit_pipelines.components.notification import slack_notification
 
 loop = asyncio.get_event_loop()
 
@@ -72,7 +74,11 @@ def run_kfp(
 
 
 async def schedule_run_completion(
-    client_resp: RunPipelineResult, namespace: str, webhook_url: str
+    client_resp: RunPipelineResult,
+    namespace: str,
+    webhook_url: str,
+    slack_channel: Optional[str] = None,
+    slack_thread: Optional[float] = None
 ):
     run_resp: kfp_ApiRunDetail = await run_in_threadpool(
         client_resp.wait_for_run_completion
@@ -82,6 +88,13 @@ async def schedule_run_completion(
     msg = models.statusWiseResponse(parsed_resp, webhook=bool(webhook_url))
     if webhook_url:
         webhook_utils.send_webhook_request(url=webhook_url, data=msg.body)
+
+    if slack_thread and slack_channel:
+        res = json.loads(msg.body.decode("utf8"))
+        message = res.get("response", {}).get("message")
+        url = res.get("response", {}).get("run_url")
+        message = f"<{url}|{message}>"
+        slack_notification(message, channel=slack_channel, thread_id=slack_thread)
 
 
 @app.get("/")
@@ -155,6 +168,8 @@ If your pipeline is present, it is not supported in the official release.""",
         client_resp=run,
         namespace=namespace,
         webhook_url=payload.webhook_uri,
+        slack_channel=payload.channel,
+        slack_thread=payload.slack_thread,
     )
     return models.successfulCreationResponse(
         run_id=run.run_id, name=pipeline_name, namespace=namespace
