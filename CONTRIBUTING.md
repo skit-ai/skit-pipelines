@@ -65,3 +65,9 @@ To release, we update the:
 6. The pipeline name on kubeflow should be exactly the same as the file name and function name of the pipeline. We can normalize kebab-cased-names to snake_cased_names.
 
 **Do not** create tags for development and testing purposes.
+
+
+## Breaking changes
+
+- Changing schema of pipelines or components.
+- Server code changes: Things that modify the APIs, slack command parsing etc.
