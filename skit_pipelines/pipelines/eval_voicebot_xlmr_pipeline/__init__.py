@@ -123,8 +123,9 @@ def eval_voicebot_xlmr_pipeline(
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
         notification_text = f"Here's the IRR report."
+        code_block = f"```\naws s3 cp {upload_irr.output} .\n```"
         irr_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, s3_path=upload_irr.output
+            notification_text, channel=channel, cc=notify, code_block=code_block
         )
         irr_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -149,8 +150,9 @@ def eval_voicebot_xlmr_pipeline(
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
         notification_text = f"Here's the confusion matrix."
+        code_block = f"```\naws s3 cp {upload_irr.output} .\n```"
         cm_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, s3_path=upload_irr.output
+            notification_text, channel=channel, cc=notify, code_block=code_block
         )
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

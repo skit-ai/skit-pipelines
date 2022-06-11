@@ -88,7 +88,7 @@ def tag_calls(
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(
-            notification_text, "", cc=notify, channel=channel
+            notification_text, cc=notify, channel=channel
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

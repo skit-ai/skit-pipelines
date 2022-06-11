@@ -4,7 +4,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def slack_notification(
-    message: str, s3_path: str, channel: str = "", cc: str = ""
+    message: str, code_block: str = "", channel: str = "", cc: str = ""
 ) -> None:
     """
     Send a message on any channel.
@@ -26,7 +26,7 @@ def slack_notification(
         .ping(cc)
         .text()
         .text_block()
-        .code_block(f"aws s3 cp {s3_path} ." if s3_path else None)
+        .code_block(code_block)
         .build()
     )
 
