@@ -102,7 +102,7 @@ def fetch_tagged_calls_dataset(
     )
 
     notification_text = f"Here is your data for {org_id=} and {job_id=}."
-    code_block = f"```\naws s3 cp {s3_upload.output} .\n```"
+    code_block = f"aws s3 cp {s3_upload.output} ."
     with kfp.dsl.Condition(notify != "", "notify").after(s3_upload) as check1:
         task_no_cache = slack_notification_op(
             notification_text, code_block=code_block, cc=notify, channel=channel

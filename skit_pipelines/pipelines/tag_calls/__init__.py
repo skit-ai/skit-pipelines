@@ -85,10 +85,11 @@ def tag_calls(
     errors.display_name = "get-any-errors"
 
     notification_text = f"Uploaded {s3_path} ({getattr(df_sizes, 'output')}, {org_id=}) for tagging to {job_ids=}.\nErrors: {getattr(errors, 'output')}"
+    code_block = f"aws s3 cp {s3_path} ."
 
     with kfp.dsl.Condition(notify != "", "notify").after(errors) as check1:
         task_no_cache = slack_notification_op(
-            notification_text, cc=notify, channel=channel
+            notification_text, cc=notify, channel=channel, code_block=code_block
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

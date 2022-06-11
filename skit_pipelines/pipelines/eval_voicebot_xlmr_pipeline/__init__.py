@@ -150,7 +150,7 @@ def eval_voicebot_xlmr_pipeline(
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
         notification_text = f"Here's the confusion matrix."
-        code_block = f"```\naws s3 cp {upload_irr.output} .\n```"
+        code_block = f"aws s3 cp {upload_irr.output} ."
         cm_notif = slack_notification_op(
             notification_text, channel=channel, cc=notify, code_block=code_block
         )
