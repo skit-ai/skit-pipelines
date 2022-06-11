@@ -62,7 +62,7 @@ class SlackBlockFactory:
         names = []
         for name in cc.split(","):
             name = name.strip()
-            if name[0] != "@":
+            if not name.startswith("<@"):
                 name = f"<@{name}>"
             if not name:
                 continue
