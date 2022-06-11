@@ -8,7 +8,7 @@ def slack_notification(
     code_block: str = "",
     channel: str = "",
     cc: str = "",
-    thread_id: float = 0,
+    thread_id: str = "",
 ) -> None:
     """
     Send a message on any channel.
