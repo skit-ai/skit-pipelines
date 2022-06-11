@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines" href="modules.html" /><link rel="prev" title="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package - skit-pipelines 0.1.95 documentation</title>
+        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package - skit-pipelines 0.1.100 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.1.95 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.1.100 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.1.95 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.1.100 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -180,6 +180,7 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.slack.html">skit_pipelines.components.slack package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
@@ -239,7 +240,7 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline">
-<span class="sig-name descname"><span class="pre">eval_voicebot_xlmr_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/eval_voicebot_xlmr_pipeline.html#eval_voicebot_xlmr_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">eval_voicebot_xlmr_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/eval_voicebot_xlmr_pipeline.html#eval_voicebot_xlmr_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluates an XLM Roberta model on given dataset.</p>
 <p id="p-eval-voicebot-xlmr-pipeline">Example payload to invoke this pipeline via slack integrations:</p>
 <blockquote>
@@ -264,6 +265,7 @@
 <li><p><strong>use_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use the XLMR model with state encoding?, defaults to True</p></li>
 <li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The flavour of the BERT model, defaults to “xlm-roberta-base”</p></li>
 <li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
+<li><p><strong>slack_thread</strong> (<em>float</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
 </ul>
 </dd>
 </dl>

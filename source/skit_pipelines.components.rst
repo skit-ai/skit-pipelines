@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    skit_pipelines.components.preprocess
+   skit_pipelines.components.slack
    skit_pipelines.components.tag_calls
    skit_pipelines.components.upload2sheet
 
