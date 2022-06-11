@@ -1,51 +1,49 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 import kfp
-from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
+from skit_pipelines.types.tag_calls import TaggingResponseType
 
 
 def tag_calls(
-    *,
     input_file: str,
+    token: str = "",
     job_ids: str = "",
-    project_id: Optional[str] = None,
-    token: str,
-    url: str = None,
-    output_json: OutputPath(str),
-) -> Dict[str, Any]:
-
-    import json
-
+    project_id: Optional[str] = None
+) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
 
-    from skit_pipelines.components.tag_calls.base import Response
+    from skit_pipelines.types.tag_calls import TaggingResponse
     from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
     from skit_pipelines.components.tag_calls.tog import upload2tog
     from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
-    response = Response([], [])
+    error_string = ""
+    df_size_string = ""
+    errors = []
+    df_sizes = []
 
     job_ids = comma_sep_str(job_ids)
     if job_ids:
-        logger.info(f"{token=}")
-        response = upload2tog(input_file, token, job_ids, response)
+        errors, df_sizes = upload2tog(input_file, token, job_ids)
 
     if project_id:
-        response = upload2labelstudio(input_file, project_id, response)
+        error, df_size = upload2labelstudio(input_file, project_id)
+        errors.append(error)
+        df_sizes.append(df_size)
 
-    if response.errors:
-        logger.error(response.errors)
+    if errors:
+        error_string = "\n".join(errors)
+    df_size_string = ", ".join(map(str, df_sizes))
 
+    response = TaggingResponse(error_string, df_size_string)
     logger.info(f"{response.df_sizes} rows in the dataset")
     logger.info(f"{response.errors=}")
 
-    with open(output_json, "w") as f:
-        json.dump(response._asdict(), f, indent=4)
-    return response._asdict()
+    return response
 
 
 tag_calls_op = kfp.components.create_component_from_func(
