@@ -105,7 +105,11 @@ def fetch_tagged_calls_dataset(
     code_block = f"aws s3 cp {s3_upload.output} ."
     with kfp.dsl.Condition(notify != "", "notify").after(s3_upload) as check1:
         task_no_cache = slack_notification_op(
-            notification_text, code_block=code_block, cc=notify, channel=channel, thread_id=slack_thread
+            notification_text,
+            code_block=code_block,
+            cc=notify,
+            channel=channel,
+            thread_id=slack_thread,
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

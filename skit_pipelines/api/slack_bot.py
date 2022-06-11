@@ -53,7 +53,9 @@ def run_pipeline(pipeline_name, payload, channel_id, message_ts, user):
         payload["channel"] = channel_id
         payload["slack_thread"] = message_ts
 
-    payload["notify"] = user if "notify" not in payload else f"{payload['notify']} ,{user}"
+    payload["notify"] = (
+        user if "notify" not in payload else f"{payload['notify']} ,{user}"
+    )
 
     res = requests.post(
         f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
@@ -125,9 +127,7 @@ def make_response(channel_id, message_ts, text, user):
     try:
         command, pipeline_name, payload = command_parser(text)
         if command == "run":
-            return run_pipeline(
-                pipeline_name, payload, channel_id, message_ts, user
-            )
+            return run_pipeline(pipeline_name, payload, channel_id, message_ts, user)
         else:
             return help_message()
     except Exception as e:
