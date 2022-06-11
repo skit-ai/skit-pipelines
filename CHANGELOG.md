@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.101 [pre-release]
+
+- [x] fix: slack parser handles urls in code blocks.
+- [x] update: add slack thread id, channel and user id automatically.
+- [x] update: slack notification component expects code_blocks instead of s3_path.
+- [x] update: slack notifications can go to threads directly.
+- [x] fix: slack parser compatible with python 3.8
+
 ## 0.1.100 [pre-release]
 
 - [x] fix: slack parser handles urls in code blocks.
