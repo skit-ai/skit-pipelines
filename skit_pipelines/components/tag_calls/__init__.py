@@ -27,6 +27,9 @@ def tag_calls(
     df_sizes = []
 
     job_ids = comma_sep_str(job_ids)
+    if not job_ids and not project_id:
+        raise ValueError("Either job_ids or project_id must be provided")
+
     if job_ids:
         errors, df_sizes = upload2tog(input_file, token, job_ids)
 
@@ -38,6 +41,9 @@ def tag_calls(
     if errors:
         error_string = "\n".join(errors)
     df_size_string = ", ".join(map(str, df_sizes))
+
+    if not response.df_sizes:
+        raise ValueError(f"Nothing was uploaded.")
 
     response = TaggingResponse(error_string, df_size_string)
     logger.info(f"{response.df_sizes} rows in the dataset")
