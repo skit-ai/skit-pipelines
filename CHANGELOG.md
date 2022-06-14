@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.4
+
+- [x] fix: uploading dirs to s3
+- [x] fix: tagging response defined before use.
+
+## 0.2.3
+
+- [x] update: xlmr eval output as csv.
+
 ## 0.2.2
 
 - [x] fix: evaluation pipeline for intent evaluation on f1-score metric.
