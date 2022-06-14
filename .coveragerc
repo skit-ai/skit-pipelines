@@ -1,0 +1,3 @@
+[coverage:run]
+omit = 
+    skit_pipelines/pipelines/*.py
