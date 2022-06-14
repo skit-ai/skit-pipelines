@@ -10,6 +10,7 @@ Subpackages
    skit_pipelines.api
    skit_pipelines.components
    skit_pipelines.pipelines
+   skit_pipelines.types
    skit_pipelines.utils
 
 Submodules
