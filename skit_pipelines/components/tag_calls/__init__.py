@@ -42,10 +42,11 @@ def tag_calls(
         error_string = "\n".join(errors)
     df_size_string = ", ".join(map(str, df_sizes))
 
+    response = TaggingResponse(error_string, df_size_string)
+
     if not response.df_sizes:
         raise ValueError(f"Nothing was uploaded.")
 
-    response = TaggingResponse(error_string, df_size_string)
     logger.info(f"{response.df_sizes} rows in the dataset")
     logger.info(f"{response.errors=}")
 
