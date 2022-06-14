@@ -35,9 +35,7 @@ def tag_calls(
             {
                 "org_id": 23,
                 "job_ids": "1,2,3",
-                "s3_path": "s3://bucket/path/to/file.csv",
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "s3_path": "s3://bucket/path/to/file.csv"
             }
 
     To use labelstudio:
@@ -49,9 +47,7 @@ def tag_calls(
             {
                 "org_id": 23,
                 "labelstudio_project_id": "41",
-                "s3_path": "s3://bucket/path/to/file.csv",
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "s3_path": "s3://bucket/path/to/file.csv"
             }
 
     :param org_id: The organization id as per api-gateway.

@@ -43,9 +43,7 @@ def fetch_calls_pipeline(
                 "lang": "en",
                 "end_date": "2020-01-01",
                 "reported": false,
-                "call_quantity": 200,
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "call_quantity": 200
             }
 
     :param client_id: The client id as per fsm db.

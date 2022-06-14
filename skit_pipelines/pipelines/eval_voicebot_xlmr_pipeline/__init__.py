@@ -51,9 +51,7 @@ def eval_voicebot_xlmr_pipeline(
                 "s3_path_data": "s3://bucket-name/data/",
                 "s3_path_model": "s3://bucket-name/model/",
                 "org_id": "org",
-                "use_state": false,
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "use_state": false
             }
 
     :param s3_path_data: S3 path to a tagged dataset (.csv).

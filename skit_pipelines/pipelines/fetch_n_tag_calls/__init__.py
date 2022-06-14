@@ -52,9 +52,7 @@ def fetch_n_tag_calls(
                 "end_date": "2020-01-01",
                 "reported": false,
                 "job_ids": "4011,4012,4013",
-                "call_quantity": 200,
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "call_quantity": 200
             }
 
     To use labelstudio:
@@ -70,9 +68,7 @@ def fetch_n_tag_calls(
                 "end_date": "2020-01-01",
                 "reported": false,
                 "labelstudio_project_id": "40",
-                "call_quantity": 200,
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "call_quantity": 200
             }
 
     :param client_id: The client id as per api-gateway.

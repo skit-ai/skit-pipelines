@@ -41,9 +41,7 @@ def fetch_tagged_calls_dataset(
                 "org_id": 1,
                 "job_id": "4011",
                 "start_date": "2020-01-01",
-                "end_date": "2020-01-01",
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "end_date": "2020-01-01"
             }
 
     To use labelstudio:
@@ -56,9 +54,7 @@ def fetch_tagged_calls_dataset(
                 "org_id": 1,
                 "labelstudio_project_id": "40",
                 "start_date": "2020-01-01",
-                "end_date": "2020-01-01",
-                "notify": "@person, @personwith.spacedname",
-                "channel": "#some-public-channel"
+                "end_date": "2020-01-01"
             }
 
     :param org_id: reference path to save the metrics.
