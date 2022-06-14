@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- [x] fix: evaluation pipeline for intent evaluation on f1-score metric.
+
 ## 0.2.1
 
 - [x] fix: training pipeline accomodates older/newer datasets.
