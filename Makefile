@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: all test secrets compile_pipes pipes docs
+.PHONY: all test secrets compile_pipes pipes docs dev dev_image
 
 BASE := skit_pipelines/pipelines
 BLANK := 
@@ -32,10 +32,14 @@ compile_pipes:
 		source secrets/env.sh && dsl-compile --py $$file --output build/$$pipeline_name.yaml; \
 	done
 
+dev_image:
+	@source secrets/env.sh && ./docker_build_dev_image master
+
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
 	@cp source/index.rst README.rst
 
+dev: dev_image compile_pipes
 pipes: secrets compile_pipes
 all: lint pipes docs
