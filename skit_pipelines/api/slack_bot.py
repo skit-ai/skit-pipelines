@@ -1,3 +1,4 @@
+import ast
 import json
 import re
 import traceback
@@ -112,7 +113,10 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
     match = re.match(r"<@[a-zA-Z0-9]+> (run) (.*)", text, re.DOTALL)
     if match and match.group(1) and match.group(2):
         pipeline_name, code_block = [m.strip() for m in match.group(2).split("```")][:2]
-        payload = json.loads(code_block)
+        try:
+            payload = ast.literal_eval(code_block)
+        except (SyntaxError, ValueError) as e:
+            raise SyntaxError(f"The {code_block=} isn't a valid json: {e}")
         for k, v in payload.items():
             if isinstance(v, str):
                 if v.startswith("<") and v.endswith(">"):
