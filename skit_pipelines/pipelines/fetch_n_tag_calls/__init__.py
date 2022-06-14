@@ -160,7 +160,6 @@ def fetch_n_tag_calls(
         token=auth_token.output,
     )
 
-
     with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:
         df_sizes = tag_calls_output.outputs["df_sizes"]
         errors = tag_calls_output.outputs["errors"]

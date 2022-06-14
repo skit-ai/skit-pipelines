@@ -1,6 +1,5 @@
-from typing import NamedTuple
 from collections import namedtuple
-
+from typing import NamedTuple
 
 name = "TaggingResponse"
 errors = "errors"

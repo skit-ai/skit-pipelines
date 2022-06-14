@@ -111,8 +111,9 @@ def fetch_calls_n_upload_tog_and_sheet(
         "P0D"  # disables caching
     )
 
-
-    with kfp.dsl.Condition(notify != "", "notify").after(upload_to_sheet_errors_op) as check1:
+    with kfp.dsl.Condition(notify != "", "notify").after(
+        upload_to_sheet_errors_op
+    ) as check1:
         df_sizes = tag_calls_output.outputs["df_sizes"]
         errors = tag_calls_output.outputs["errors"]
         notification_text = f"""

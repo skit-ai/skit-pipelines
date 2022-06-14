@@ -36,7 +36,7 @@ def eval_voicebot_xlmr_pipeline(
     channel: str = "",
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
-    slack_thread: str = ""
+    slack_thread: str = "",
 ):
     """
     Evaluates an XLM Roberta model on given dataset.

@@ -2,6 +2,7 @@ import json
 
 import pandas as pd
 import pydash as py_
+
 from skit_pipelines import constants as pipeline_constants
 
 UTTERANCES = pipeline_constants.UTTERANCES

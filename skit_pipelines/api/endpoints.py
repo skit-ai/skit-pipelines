@@ -1,5 +1,5 @@
-import json
 import asyncio
+import json
 from datetime import timedelta
 from typing import Any, Dict, Optional
 
@@ -20,8 +20,8 @@ from skit_pipelines.api import (
     slack_handler,
 )
 from skit_pipelines.api.slack_bot import get_message_data, make_response
-from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
 from skit_pipelines.components.notification import slack_notification
+from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
 
 loop = asyncio.get_event_loop()
 
@@ -78,7 +78,7 @@ async def schedule_run_completion(
     namespace: str,
     webhook_url: str,
     slack_channel: Optional[str] = None,
-    slack_thread: Optional[float] = None
+    slack_thread: Optional[float] = None,
 ):
     run_resp: kfp_ApiRunDetail = await run_in_threadpool(
         client_resp.wait_for_run_completion

@@ -10,14 +10,14 @@ def tag_calls(
     input_file: str,
     token: str = "",
     job_ids: str = "",
-    project_id: Optional[str] = None
+    project_id: Optional[str] = None,
 ) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
 
-    from skit_pipelines.types.tag_calls import TaggingResponse
     from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
     from skit_pipelines.components.tag_calls.tog import upload2tog
+    from skit_pipelines.types.tag_calls import TaggingResponse
     from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
