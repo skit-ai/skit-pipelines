@@ -40,12 +40,16 @@ def upload2s3(
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
     elif os.path.isdir(path_on_disk):
         upload_path = output_path or create_dir_name(reference, file_type)
-        for full_file_path in glob(f"{path_on_disk}/**", recursive=True):
-            if not os.path.isfile(full_file_path):
+        if upload_path.startswith("s3://"):
+            object_path = upload_path.replace(f"s3://{bucket}/", "")
+        else:
+            object_path = upload_path
+        for file_on_disk in glob(f"{path_on_disk}/**", recursive=True):
+            if not os.path.isfile(file_on_disk):
                 continue
-            _, file_path = os.path.split(full_file_path)
+            _, file_path = os.path.split(file_on_disk)
             s3_resource.upload_file(
-                full_file_path, bucket, os.path.join(upload_path, file_path)
+                file_on_disk, bucket, os.path.join(object_path, file_path)
             )
 
     s3_path = output_path or f"s3://{bucket}/{upload_path}"
