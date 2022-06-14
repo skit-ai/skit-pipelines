@@ -1,11 +1,16 @@
 # Changelog
 
+## 0.2.1
+
+- [x] fix: training pipeline accomodates older/newer datasets.
+- [x] update: tag calls raises exception if neither of tog/labelstudio ids are provided.
+- [x] update: tag calls raises exception if no data was uploaded.
+
 ## 0.2.0
 
 - [x] fix: slack parser handles urls in code blocks.
 - [x] update: add slack thread id, channel and user id automatically.
 - [x] update: slack notification component expects code_blocks instead of s3_path.
-- [x] update: slack notifications can go to threads directly.
 - [x] fix: slack parser compatible with python 3.8
 - [x] fix: notfications are sent to slack threads if thread id is present.
 - [x] feat: Notify users when a pipeline run is complete / failed.
