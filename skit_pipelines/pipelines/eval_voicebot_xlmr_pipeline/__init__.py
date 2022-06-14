@@ -69,15 +69,14 @@ def eval_voicebot_xlmr_pipeline(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-    with kfp.dsl.Condition(s3_path_data != "", "s3_path_data_check") as check1:
-        tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
+    tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
 
     with kfp.dsl.Condition(s3_path_model != "", "s3_path_model_check") as check2:
         loaded_model_op = download_from_s3_op(storage_path=s3_path_model)
 
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
-        check1
+        tagged_data_op
     )
 
     # Create utterance column
@@ -90,22 +89,30 @@ def eval_voicebot_xlmr_pipeline(
         preprocess_data_op.outputs["output"], use_state
     )
 
-    # get predictions from the model
-    # TODO: make s3_path_model optional, without which predictions already present in the csv to be used.
-    pred_op = get_preds_voicebot_xlmr_op(
-        preprocess_data_op.outputs["output"],
-        loaded_model_op.outputs["output"],
-        utterance_column=UTTERANCES,
-        output_pred_label_column=INTENT,
-    )
+    with kfp.dsl.Condition(s3_path_model != "", "model_present") as model_present:
+        # get predictions from the model
+        # TODO: make s3_path_model optional, without which predictions already present in the csv to be used.
+        pred_op = get_preds_voicebot_xlmr_op(
+            preprocess_data_op.outputs["output"],
+            loaded_model_op.outputs["output"],
+            utterance_column=UTTERANCES,
+            output_pred_label_column=INTENT,
+        )
+        pred_op.set_gpu_limit(1)
+        irr_op = gen_irr_metrics_op(
+            pred_op.outputs["output"]
+        )
+        confusion_matrix_op = gen_confusion_matrix_op(
+            pred_op.outputs["output"],
+        )
 
-    pred_op.set_gpu_limit(1)
-
-    irr_op = gen_irr_metrics_op(
-        pred_op.outputs["output"],
-        true_label_column=INTENT_Y,
-        pred_label_column=INTENT,
-    )
+    with kfp.dsl.Condition(s3_path_model == "", "model_missing") as model_missing:
+        irr_op = gen_irr_metrics_op(
+            preprocess_data_op.outputs["output"]
+        )
+        confusion_matrix_op = gen_confusion_matrix_op(
+            preprocess_data_op.outputs["output"],
+        )
 
     # produce test set metrics.
     upload_irr = upload2s3_op(
@@ -114,37 +121,30 @@ def eval_voicebot_xlmr_pipeline(
         file_type="xlmr-irr-metrics",
         bucket=BUCKET,
         ext=".txt",
-    )
+    ).after(model_present or model_missing)
     upload_irr.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
-
-    with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
-        notification_text = f"Here's the IRR report."
-        code_block = f"```\naws s3 cp {upload_irr.output} .\n```"
-        irr_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block
-        )
-        irr_notif.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
-        )
-
-    confusion_matrix_op = gen_confusion_matrix_op(
-        pred_op.outputs["output"],
-        true_label_column=INTENT_Y,
-        pred_label_column=INTENT,
-    )
-
     upload_cm = upload2s3_op(
         path_on_disk=confusion_matrix_op.outputs["output"],
         reference=org_id,
         file_type="xlmr-confusion-matrix",
         bucket=BUCKET,
         ext=".txt",
-    )
+    ).after(model_present or model_missing)
     upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+    with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
+        notification_text = f"Here's the IRR report."
+        code_block = f"aws s3 cp {upload_irr.output} ."
+        irr_notif = slack_notification_op(
+            notification_text, channel=channel, cc=notify, code_block=code_block
+        )
+        irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
 
     with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
         notification_text = f"Here's the confusion matrix."
