@@ -130,7 +130,7 @@ def eval_voicebot_xlmr_pipeline(
         reference=org_id,
         file_type="xlmr-irr-metrics",
         bucket=BUCKET,
-        ext=".txt",
+        ext=".csv",
     ).after(model_present or model_missing)
     upload_irr.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -140,7 +140,7 @@ def eval_voicebot_xlmr_pipeline(
         reference=org_id,
         file_type="xlmr-confusion-matrix",
         bucket=BUCKET,
-        ext=".txt",
+        ext=".csv",
     ).after(model_present or model_missing)
     upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -150,7 +150,7 @@ def eval_voicebot_xlmr_pipeline(
         notification_text = f"Here's the IRR report."
         code_block = f"aws s3 cp {upload_irr.output} ."
         irr_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block
+            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
         )
         irr_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -160,7 +160,7 @@ def eval_voicebot_xlmr_pipeline(
         notification_text = f"Here's the confusion matrix."
         code_block = f"aws s3 cp {upload_irr.output} ."
         cm_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block
+            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
         )
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

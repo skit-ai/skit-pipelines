@@ -33,18 +33,21 @@ def gen_irr_metrics(
         f"Generating IRR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
     )
 
-    with open(output_path, "wt") as f:
-        report = intent_report(
-            pred_df[[pipeline_constants.ID, true_label_column]].rename(
-                columns={true_label_column: "intent"}
-            ),
-            pred_df[[pipeline_constants.ID, pred_label_column]].rename(
-                columns={pred_label_column: "intent"}
-            ),
-        )
-        print(report, file=f)
-        logger.debug(f"Generated IRR report:")
-        logger.debug(report)
+    report = intent_report(
+        pred_df[[pipeline_constants.ID, true_label_column]].rename(
+            columns={true_label_column: "intent"}
+        ),
+        pred_df[[pipeline_constants.ID, pred_label_column]].rename(
+            columns={pred_label_column: "intent"}
+        ),
+        return_output_as_dict=True
+    )
+
+    report_df = pd.DataFrame(report).T
+
+    report_df.to_csv(output_path, index=False)
+    logger.debug(f"Generated IRR report:")
+    logger.debug(report)
 
 
 gen_irr_metrics_op = kfp.components.create_component_from_func(
