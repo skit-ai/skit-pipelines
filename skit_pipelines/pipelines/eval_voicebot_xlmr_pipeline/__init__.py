@@ -34,7 +34,9 @@ def eval_voicebot_xlmr_pipeline(
     s3_path_model: str = "",
     notify: str = "",
     channel: str = "",
-    slack_thread: str = "",
+    true_label_column: str = "intent_y",
+    pred_label_column: str = "raw.intent",
+    slack_thread: str = ""
 ):
     """
     Evaluates an XLM Roberta model on given dataset.
@@ -100,18 +102,26 @@ def eval_voicebot_xlmr_pipeline(
         )
         pred_op.set_gpu_limit(1)
         irr_op = gen_irr_metrics_op(
-            pred_op.outputs["output"]
+            pred_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
         )
         confusion_matrix_op = gen_confusion_matrix_op(
             pred_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
         )
 
     with kfp.dsl.Condition(s3_path_model == "", "model_missing") as model_missing:
         irr_op = gen_irr_metrics_op(
-            preprocess_data_op.outputs["output"]
+            preprocess_data_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
         )
         confusion_matrix_op = gen_confusion_matrix_op(
             preprocess_data_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
         )
 
     # produce test set metrics.
