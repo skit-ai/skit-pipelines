@@ -75,7 +75,6 @@ def train_voicebot_xlmr(
         save_eval_checkpoints=False,
         save_model_every_epoch=False,
         save_steps=-1,
-        no_cache=True,
         use_early_stopping=use_early_stopping,
         early_stopping_patience=early_stopping_patience,
         early_stopping_delta=early_stopping_delta,
