@@ -7,11 +7,9 @@ from skit_pipelines import constants as pipeline_constants
 def gen_irr_metrics(
     data_path: InputPath(str),
     output_path: OutputPath(str),
-    true_label_column: str,
-    pred_label_column: str,
+    true_label_column: str = "intent",
+    pred_label_column: str = "intent",
 ):
-
-    import os
 
     import pandas as pd
     from eevee.metrics import intent_report
