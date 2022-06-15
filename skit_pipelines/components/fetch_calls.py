@@ -1,7 +1,6 @@
 from typing import Optional
 
 import kfp
-from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
@@ -9,9 +8,13 @@ from skit_pipelines import constants as pipeline_constants
 def fetch_calls(
     *,
     client_id: int,
-    start_date: str,
     lang: str,
+    start_date: str,
     end_date: Optional[str] = None,
+    start_date_offset: int = 0,
+    end_date_offset: int = 0,
+    start_time_offset: int = 0,
+    end_time_offset: int = 0,
     call_quantity: int = 200,
     call_type: Optional[str] = None,
     ignore_callers: Optional[str] = None,
@@ -24,7 +27,6 @@ def fetch_calls(
 ) -> str:
     import tempfile
     import time
-    from datetime import datetime, timedelta
 
     from loguru import logger
     from skit_calls import calls
@@ -40,7 +42,14 @@ def fetch_calls(
     start_date = to_datetime(start_date)
     end_date = to_datetime(end_date)
 
-    start_date, end_date = process_date_filters(start_date, end_date)
+    start_date, end_date = process_date_filters(
+        start_date,
+        end_date,
+        start_date_offset=start_date_offset,
+        end_date_offset=end_date_offset,
+        start_time_offset=start_time_offset,
+        end_time_offset=end_time_offset
+    )
     validate_date_ranges(start_date, end_date)
 
     if not call_quantity:
