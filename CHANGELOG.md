@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5
+
+- [x] update: date time offsets for data pipelines.
+- [x] update: tarfile uploads for directories.
+
 ## 0.2.4
 
 - [x] fix: uploading dirs to s3
