@@ -2778,7 +2778,7 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.17"
+version = "0.2.18"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
@@ -3727,7 +3727,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "997004cfbffd96e88f2cd4e52948c9886df6d07c3771a55deac51f397a4bb99b"
+content-hash = "cde2cc9a66429efc2daff3e10662ef5c79903e0d0fff9f2edef5fb50063c1d23"
 
 [metadata.files]
 absl-py = [
@@ -5816,8 +5816,8 @@ skit-auth = [
     {file = "skit_auth-0.1.5-py3-none-any.whl", hash = "sha256:534bda8bac8b1b24eba3521fbaabf7e605b3eefe1cc5a9ea5d237a5504801791"},
 ]
 skit-calls = [
-    {file = "skit-calls-0.2.17.tar.gz", hash = "sha256:24d6a335323e4b3776580c04f0719278dc02ecc2bc0357ff65f9fdafe2991248"},
-    {file = "skit_calls-0.2.17-py3-none-any.whl", hash = "sha256:22765b0b0cf18786abc6f342d73c8a8c21232c7d897b4952ebf77484da27d331"},
+    {file = "skit-calls-0.2.18.tar.gz", hash = "sha256:02a80ae4d7583cf75aab0c37839b88f6a28b1a19c7b98701cc2875c3e493706e"},
+    {file = "skit_calls-0.2.18-py3-none-any.whl", hash = "sha256:b7642029c35618cbc700e515036a3287a86a70c52855474bde3a558f1e55eae8"},
 ]
 skit-labels = [
     {file = "skit-labels-0.3.24.tar.gz", hash = "sha256:1d128d4667ca4367a5b161f0f933c5f8369367cf555a1440fb3e648d912a9bf7"},
