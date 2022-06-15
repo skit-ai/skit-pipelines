@@ -17,17 +17,14 @@ def upload2s3(
 ) -> str:
     import json
     import os
-    from glob import glob
+    import tarfile
+    import tempfile
 
     import boto3
     from loguru import logger
 
     from skit_pipelines.api.models import StorageOptions
-    from skit_pipelines.utils import (
-        create_dir_name,
-        create_file_name,
-        create_storage_path,
-    )
+    from skit_pipelines.utils import create_file_name
 
     s3_resource = boto3.client("s3")
 
@@ -35,24 +32,16 @@ def upload2s3(
         storage_options = StorageOptions(**json.loads(storage_options))
         bucket = storage_options.bucket
 
-    if os.path.isfile(path_on_disk):
-        upload_path = output_path or create_file_name(reference, file_type, ext)
-        s3_resource.upload_file(path_on_disk, bucket, upload_path)
-    elif os.path.isdir(path_on_disk):
-        upload_path = output_path or create_dir_name(reference, file_type)
-        if upload_path.startswith("s3://"):
-            object_path = upload_path.replace(f"s3://{bucket}/", "")
-        else:
-            object_path = upload_path
-        for file_on_disk in glob(f"{path_on_disk}/**", recursive=True):
-            if not os.path.isfile(file_on_disk):
-                continue
-            _, file_path = os.path.split(file_on_disk)
-            s3_resource.upload_file(
-                file_on_disk, bucket, os.path.join(object_path, file_path)
-            )
+    if os.path.isdir(path_on_disk):
+        _, tar_path = tempfile.mkstemp(suffix=".tar.gz")
+        with tarfile.open(tar_path, "w:gz") as tar:
+            tar.add(path_on_disk)
+        path_on_disk = tar_path
 
-    s3_path = output_path or f"s3://{bucket}/{upload_path}"
+    upload_path = output_path or create_file_name(reference, file_type, ext)
+    s3_resource.upload_file(path_on_disk, bucket, upload_path)
+
+    s3_path = f"s3://{bucket}/{upload_path}"
     logger.debug(f"Uploaded {path_on_disk} to {upload_path}")
     return s3_path
 
