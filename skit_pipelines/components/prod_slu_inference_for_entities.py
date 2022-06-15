@@ -28,8 +28,32 @@ def prod_slu_inference_func(
     from requests.adapters import HTTPAdapter, Retry
     from tqdm import tqdm
 
+    SLU_HOST = "http://localhost:9002"
+    NUM_MAX_RETRIES = 100
+    DUCKLING_IMAGE_NAME_ON_ECR = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/duckling:master"
+    SLU_ENTRYPOINT_CMD = "uwsgi --http :9002 --enable-threads --single-interpreter --threads 1 --callable=app --module slu.src.api.endpoints:app --ini uwsgi.ini"
 
     tqdm.pandas()
+
+    def requests_retry_session(
+        retries=3,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504),
+        session=None,
+    ):
+        # ripped off from: https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+        session = session or requests.Session()
+        retry = Retry(
+            total=retries,
+            read=retries,
+            connect=retries,
+            backoff_factor=backoff_factor,
+            status_forcelist=status_forcelist,
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        return session
 
 
     def create_data_column(row):
@@ -44,15 +68,9 @@ def prod_slu_inference_func(
     def make_request_to_slu(payload: Dict) -> str:
 
         try:
-            num_max_retries = 30
-            s = requests.Session()
-            retries = Retry(total=num_max_retries,
-                            connect=num_max_retries,
-                            backoff_factor=0.1,
-                            status_forcelist=[500, 502, 503, 504])
-            s.mount('http://', HTTPAdapter(max_retries=retries))
+            s = requests_retry_session(retries=NUM_MAX_RETRIES)
             r = s.post(f"{SLU_HOST}/predict/{lang}/slu", json=payload)
-            time.sleep(0.05)
+            time.sleep(0.01)
 
             if r.status_code == requests.codes.OK:
                 print(r.content)
@@ -69,15 +87,11 @@ def prod_slu_inference_func(
         return json.dumps(None)
 
 
-    SLU_HOST = "http://localhost:9002"
-
-
     # docker run detach duckling + slu, using docker-py
     # https://docker-py.readthedocs.io/{lang}/stable/
     docker_client = docker.from_env()
 
-    DUCKLING_IMAGE_NAME_ON_ECR = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/duckling:master"
-
+    
     try:
         logger.info("trying to authenticate and docker login with ecr credentials ...")
         ecr_client = boto3.client("ecr", region_name="ap-south-1")
@@ -98,16 +112,17 @@ def prod_slu_inference_func(
 
     logger.info(f"pulling slu docker image from ECR ...")
     docker_client.images.pull(slu_image_on_ecr)
-    slu_entrypoint_command = "uwsgi --http :9002 --enable-threads --single-interpreter --threads 1 --callable=app --module slu.src.api.endpoints:app --ini uwsgi.ini"
+    
     logger.info(f"creating slu_container ...")
     slu_container: Container = docker_client.containers.run(
         slu_image_on_ecr,
-        command=slu_entrypoint_command,
+        command=SLU_ENTRYPOINT_CMD,
         detach=True,
-        ports={"9002/tcp": 9002},
-        environment=["ENVIRONMENT=debug"],
+        environment={"SENTRY_DSN": ""},
         remove=True,
-        name="slu_container"
+        name="slu_container",
+        network="host",
+        # ports={"9002/tcp": 9002}, # no need since we are using "host"
     )
 
     logger.info(f"pulling duckling docker image from ECR ...")
@@ -117,19 +132,16 @@ def prod_slu_inference_func(
         DUCKLING_IMAGE_NAME_ON_ECR,
         command="./duckling-example-exe",
         detach=True,
-        ports={"8000/tcp": 8000},
         remove=True,
-        name="duckling_container"
+        name="duckling_container",
+        network="host",
+        # ports={"8000/tcp": 8000}, # no need since we are using "host"
     )
 
 
     try:
         logger.info(f"waiting for SLU container to accept requests ...")
-        s = requests.Session()
-        retries = Retry(total=5,
-                        backoff_factor=0.1,
-                        status_forcelist=[500, 502, 503, 504 ])
-        s.mount('http://', HTTPAdapter(max_retries=retries))
+        s = requests_retry_session(retries=NUM_MAX_RETRIES)
         r = s.get(SLU_HOST)
 
         if r.status_code == requests.codes.OK:
@@ -157,10 +169,10 @@ def prod_slu_inference_func(
         else:
             logger.info("making request to SLU for generating new predictions from `data` column.")
             df["prediction"] = df["data"].progress_apply(make_request_to_slu)
-        
-        df["prediction"] = df["prediction"].apply(json.loads)
+
 
         # how to pass empty region tagged text?
+        # skip making requests for them
         df["entity_region_tagged_text"] = df["tag"].apply(lambda x: x[0].get("text") if x else "")
 
         tag_as_payload = []
@@ -176,9 +188,7 @@ def prod_slu_inference_func(
         logger.info("making request to SLU for generating new predictions from `tag` derived text for ground-truth.")
         df["tag_but_slu_predicted"] = df["tag_payload"].progress_apply(make_request_to_slu)
 
-        df["prediction"] = df["prediction"].apply(json.dumps)
         df["tag_payload"] = df["tag_payload"].apply(json.dumps)
-        df["tag_but_slu_predicted"] = df["tag_but_slu_predicted"]
 
         print(df.head())
         df.to_csv("./okok.csv")
@@ -200,12 +210,18 @@ def prod_slu_inference_func(
 if __name__ == "__main__":
 
     # # kent stuff which works - keshav
-    # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/kent-uc2:master"
-    # entity_job_s3_path = "s3://vernacular-ml/project/73_4358/2022-06-07/73_4358-2022-06-07-tagged.csv"
+    slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/kent-uc2:master"
+    entity_job_s3_path = "s3://vernacular-ml/project/73_4358/2022-06-15/73_4358-2022-06-15-tagged.csv"
+    lang = "hi"
 
     # ashley - american finance - vinay
-    slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/ashley:master"
-    entity_job_s3_path = "s3://vernacular-ml/project/129_3861/2022-06-14/129_3861-2022-06-14-tagged.csv"
-    lang = "en"
+    # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/ashley:master"
+    # entity_job_s3_path = "s3://vernacular-ml/project/129_3861/2022-06-14/129_3861-2022-06-14-tagged.csv"
+    # lang = "en"
+
+    # vodafone - amey
+    # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/vodafone-test:master"
+    # entity_job_s3_path = "s3://vernacular-ml/project/65_3322/2022-06-15/65_3322-2022-06-15-tagged.csv"
+    # lang = "en"
 
     prod_slu_inference_func(slu_image_on_ecr, entity_job_s3_path, lang, use_existing_prediction=False)
