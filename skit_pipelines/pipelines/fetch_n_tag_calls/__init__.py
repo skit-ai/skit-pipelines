@@ -47,14 +47,14 @@ def fetch_n_tag_calls(
 
         @charon run fetch_n_tag_calls
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "client_id": 1,
                 "start_date": "2020-01-01",
                 "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": false,
+                "reported": False,
                 "job_ids": "4011,4012,4013",
                 "call_quantity": 200
             }
@@ -63,14 +63,14 @@ def fetch_n_tag_calls(
 
         @charon run fetch_n_tag_calls
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "client_id": 1,
                 "start_date": "2020-01-01",
                 "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": false,
+                "reported": False,
                 "labelstudio_project_id": "40",
                 "call_quantity": 200
             }
@@ -117,6 +117,18 @@ def fetch_n_tag_calls(
     :param states: Filter calls in a comma separated list of states, defaults to ""
     :type states: str, optional
 
+    :param start_date_offset: Offset the start date by an integer value, defaults to 0
+    :type start_date_offset: int, optional
+
+    :param end_date_offset: Offset the end date by an integer value, defaults to 0
+    :type end_date_offset: int, optional
+
+    :param start_time_offset: Offset the start time by an integer value, defaults to 0
+    :type start_time_offset: int, optional
+
+    :param end_time_offset: Offset the end time by an integer value, defaults to 0
+    :type end_time_offset: int, optional
+
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
@@ -139,6 +151,10 @@ def fetch_n_tag_calls(
         lang=lang,
         call_quantity=call_quantity,
         call_type=call_type,
+        start_date_offset=start_date_offset,
+        end_date_offset=end_date_offset,
+        start_time_offset=start_time_offset,
+        end_time_offset=end_time_offset,
         ignore_callers=ignore_callers,
         reported=reported,
         use_case=use_case,

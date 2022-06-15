@@ -47,13 +47,13 @@ def eval_voicebot_xlmr_pipeline(
 
         @charon run eval_voicebot_xlmr_pipeline
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "s3_path_data": "s3://bucket-name/data/",
                 "s3_path_model": "s3://bucket-name/model/",
                 "org_id": "org",
-                "use_state": false
+                "use_state": False
             }
 
     :param s3_path_data: S3 path to a tagged dataset (.csv).

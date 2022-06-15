@@ -30,7 +30,7 @@ def tag_calls(
 
         @charon run tag_calls
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "org_id": 23,
@@ -42,7 +42,7 @@ def tag_calls(
 
         @charon run tag_calls
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "org_id": 23,

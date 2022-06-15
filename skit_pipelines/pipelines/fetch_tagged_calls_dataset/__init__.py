@@ -35,7 +35,7 @@ def fetch_tagged_calls_dataset(
 
         @charon run fetch_tagged_calls_dataset
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "org_id": 1,
@@ -48,7 +48,7 @@ def fetch_tagged_calls_dataset(
 
         @charon run fetch_tagged_calls_dataset
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "org_id": 1,

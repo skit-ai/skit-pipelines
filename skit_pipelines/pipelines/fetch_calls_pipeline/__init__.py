@@ -35,14 +35,14 @@ def fetch_calls_pipeline(
 
         @charon run fetch_calls_pipeline
 
-        .. code-block:: json
+        .. code-block:: python
 
             {
                 "client_id": 1,
                 "start_date": "2020-01-01",
                 "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": false,
+                "reported": False,
                 "call_quantity": 200
             }
 
