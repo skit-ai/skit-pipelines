@@ -8,12 +8,12 @@ from skit_pipelines.utils.login import kubeflow_login
 from skit_pipelines.utils.storage import create_storage_path
 
 
-def create_file_name(org_id: str, file_type: str, ext=".csv") -> str:
+def create_file_name(reference: str, file_type: str, ext=".csv") -> str:
     return os.path.join(
         "project",
-        str(org_id),
+        str(reference),
         datetime.now().strftime("%Y-%m-%d"),
-        f"{org_id}-{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
+        f"{reference}-{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
     )
 
 
