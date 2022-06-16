@@ -8,16 +8,19 @@ from tqdm import tqdm
 
 # def prod_slu_inference_func(slu_repo_tar_path: str, output_path: OutputPath(str)) -> None:
 def prod_slu_inference_func(
-    slu_image_on_ecr: str, s3_tagged_data_path: str,
+    s3_tagged_data_path: InputPath(str),
+    output_path: OutputPath(str),
+    slu_image_on_ecr: str,
     lang: str,
-    use_existing_prediction: bool=True
+    use_existing_prediction: bool=True,
+    use_duckling: bool=False,
 ) -> None:
 
     import time
     import json
     import base64
 
-    from typing import Dict
+    from typing import Dict, List
 
     import boto3
     import docker
@@ -65,16 +68,18 @@ def prod_slu_inference_func(
         }
 
 
-    def make_request_to_slu(payload: Dict) -> str:
+    def make_request_to_slu(payload: Dict, session: requests.Session) -> str:
+
+        if not payload:
+            return {}
 
         try:
-            s = requests_retry_session(retries=NUM_MAX_RETRIES)
-            r = s.post(f"{SLU_HOST}/predict/{lang}/slu", json=payload)
+            r = session.post(f"{SLU_HOST}/predict/{lang}/slu", json=payload)
             time.sleep(0.01)
 
-            if r.status_code == requests.codes.OK:
-                print(r.content)
-                return r.content
+            if r.status_code == requests.codes.OK and "message" not in r.json():
+                # print(r.content)
+                return r.json()
             else:
                 logger.warning(r.status_code)
                 logger.warning(r.content)
@@ -83,16 +88,127 @@ def prod_slu_inference_func(
             logger.exception(e)
             logger.exception(traceback.print_stack())
         
-        # to be altered
-        return json.dumps(None)
+        return {}
 
 
-    # docker run detach duckling + slu, using docker-py
-    # https://docker-py.readthedocs.io/{lang}/stable/
-    docker_client = docker.from_env()
+    def extract_entities_from_tag_predicted(truth_predicted: Dict):
+
+        if "response" not in truth_predicted:
+            return []
+
+        if "entities" not in truth_predicted["response"]:
+            return []
+
+        truth_entities : List = truth_predicted["response"]["entities"]
+
+        if not isinstance(truth_entities, list) or (not truth_entities):
+            return []
+
+        first_entity : Dict = truth_entities[0]
+        keys_to_be_present = ["entity_type", "value"]
+
+        if not isinstance(first_entity, dict):
+            return []
+
+        if any([k not in first_entity for k in keys_to_be_present]):
+            return []
+
+        eevee_schema_entity = {}
+
+        for key in keys_to_be_present:
+            if first_entity.get(key) is not None:
+                if key == "entity_type":
+                    eevee_schema_entity["type"] = first_entity[key]
+                else:
+                    eevee_schema_entity[key] = first_entity[key]
+
+        interval_types = ["date", "time", "datetime"]
+        if eevee_schema_entity["type"] in interval_types and isinstance(eevee_schema_entity["value"], dict):
+            eevee_type_value = eevee_schema_entity["value"]
+            to_replace_value = {}
+            if isinstance(eevee_type_value.get("from"), str):
+                to_replace_value["from"] = {"value": eevee_type_value.get("from")}
+            if isinstance(eevee_type_value.get("to"), str):
+                to_replace_value["to"] = {"value": eevee_type_value.get("to")}
+
+            if to_replace_value:
+                eevee_schema_entity["value"] = to_replace_value
+            else:
+                eevee_schema_entity["value"] = None
+
+        if any(val is None for val in eevee_schema_entity.values()):
+            return []
+
+        if not eevee_schema_entity:
+            return []
+
+        return [eevee_schema_entity]
+
+
+    def extract_entities_from_predicted(predicted: Dict):
+
+        if "slots" not in predicted:
+            return []
+
+        predicted_slots : List = predicted["slots"]
+
+        if not isinstance(predicted_slots, list) or not predicted_slots:
+            return []
+
+        first_slot : Dict = predicted_slots[0]
+
+        if not isinstance(first_slot, dict):
+            return []
+
+        if "values" not in first_slot:
+            return []
+        
+        if not first_slot["values"]:
+            return []
+
+        first_slot_values : Dict = first_slot["values"][0]
+
+        eevee_schema_entity = {}
+
+        keys_to_be_present = ["type", "value", "text"]
+        if any([k not in first_slot_values for k in keys_to_be_present]):
+            return []
+    
+        for key in keys_to_be_present:
+            if first_slot_values.get(key) is not None:
+                eevee_schema_entity[key] = first_slot_values[key]
+
+        interval_types = ["date", "time", "datetime"]
+        if eevee_schema_entity["type"] in interval_types and isinstance(eevee_schema_entity["value"], dict):
+            eevee_type_value = eevee_schema_entity["value"]
+            to_replace_value = {}
+            if isinstance(eevee_type_value.get("from"), str):
+                to_replace_value["from"] = {"value": eevee_type_value.get("from")}
+            if isinstance(eevee_type_value.get("to"), str):
+                to_replace_value["to"] = {"value": eevee_type_value.get("to")}
+
+            if to_replace_value:
+                eevee_schema_entity["value"] = to_replace_value
+            else:
+                eevee_schema_entity["value"] = None
+
+        if any(val is None for val in eevee_schema_entity.values()):
+            return []
+
+        if not eevee_schema_entity:
+            return []
+
+        return [eevee_schema_entity]
+
+
 
     
     try:
+
+        # docker run detach duckling + slu, using docker-py
+        # https://docker-py.readthedocs.io/{lang}/stable/
+        docker_client = docker.from_env()
+
         logger.info("trying to authenticate and docker login with ecr credentials ...")
         ecr_client = boto3.client("ecr", region_name="ap-south-1")
         token = ecr_client.get_authorization_token()
@@ -106,40 +222,38 @@ def prod_slu_inference_func(
         if stat:
             logger.info("successfully authenticated and docker logged-in ...")
 
-    except Exception as e:
-        logger.exception(e)
-        logger.exception(traceback.print_stack())
-
-    logger.info(f"pulling slu docker image from ECR ...")
-    docker_client.images.pull(slu_image_on_ecr)
-    
-    logger.info(f"creating slu_container ...")
-    slu_container: Container = docker_client.containers.run(
-        slu_image_on_ecr,
-        command=SLU_ENTRYPOINT_CMD,
-        detach=True,
-        environment={"SENTRY_DSN": ""},
-        remove=True,
-        name="slu_container",
-        network="host",
-        # ports={"9002/tcp": 9002}, # no need since we are using "host"
-    )
-
-    logger.info(f"pulling duckling docker image from ECR ...")
-    docker_client.images.pull(DUCKLING_IMAGE_NAME_ON_ECR)
-    logger.info(f"creating duckling_container ...")
-    duckling_container: Container = docker_client.containers.run(
-        DUCKLING_IMAGE_NAME_ON_ECR,
-        command="./duckling-example-exe",
-        detach=True,
-        remove=True,
-        name="duckling_container",
-        network="host",
-        # ports={"8000/tcp": 8000}, # no need since we are using "host"
-    )
 
 
-    try:
+        logger.info(f"pulling slu docker image from ECR ...")
+        docker_client.images.pull(slu_image_on_ecr)
+        
+        logger.info(f"creating slu_container ...")
+        slu_container: Container = docker_client.containers.run(
+            slu_image_on_ecr,
+            command=SLU_ENTRYPOINT_CMD,
+            detach=True,
+            environment={"SENTRY_DSN": ""},
+            remove=True,
+            name="slu_container",
+            network="host",
+            # ports={"9002/tcp": 9002}, # no need since we are using "host"
+        )
+
+        if use_duckling:
+            logger.info(f"pulling duckling docker image from ECR ...")
+            docker_client.images.pull(DUCKLING_IMAGE_NAME_ON_ECR)
+            logger.info(f"creating duckling_container ...")
+            duckling_container: Container = docker_client.containers.run(
+                DUCKLING_IMAGE_NAME_ON_ECR,
+                command="./duckling-example-exe",
+                detach=True,
+                remove=True,
+                name="duckling_container",
+                network="host",
+                # ports={"8000/tcp": 8000}, # no need since we are using "host"
+            )
+
+
         logger.info(f"waiting for SLU container to accept requests ...")
         s = requests_retry_session(retries=NUM_MAX_RETRIES)
         r = s.get(SLU_HOST)
@@ -149,49 +263,62 @@ def prod_slu_inference_func(
         else:
             logger.error("SLU failed after several retries")
 
-    except Exception as e:
-        logger.exception(e)
-        logger.exception(traceback.format_stack())
+        df = pd.read_csv(s3_tagged_data_path)
 
-    df = pd.read_csv(s3_tagged_data_path)
-
-    df["data"] = df.apply(lambda row: create_data_column(row), axis=1)
-    logger.info(f"loaded {s3_tagged_data_path}")
-    logger.info(f"size of the dataset {len(df)}")
-
-    df["tag"] = df["tag"].apply(json.loads)
-
-
-    try:
+        df["data"] = df.apply(lambda row: create_data_column(row), axis=1)
+        logger.info(f"loaded {s3_tagged_data_path}")
+        logger.info(f"size of the dataset {len(df)}")
 
         if use_existing_prediction:
             logger.info("reusing existing predictions from `data` column.")
+            df["prediction"] = df["prediction"].apply(json.loads)
         else:
             logger.info("making request to SLU for generating new predictions from `data` column.")
-            df["prediction"] = df["data"].progress_apply(make_request_to_slu)
+            session = requests_retry_session(retries=NUM_MAX_RETRIES)
+            df["prediction"] = df["data"].progress_apply(make_request_to_slu, args=(session,))
 
 
         # how to pass empty region tagged text?
         # skip making requests for them
+        df["tag"] = df["tag"].apply(json.loads)
         df["entity_region_tagged_text"] = df["tag"].apply(lambda x: x[0].get("text") if x else "")
 
         tag_as_payload = []
         for _, row in df.iterrows():
             text = row["entity_region_tagged_text"]
-            payload = row["data"]
-            payload.pop("alternatives")
-            payload["text"] = text
+            if text:
+                payload = row["data"]
+                payload.pop("alternatives")
+                payload["text"] = text
+            else:
+                payload = {}
             tag_as_payload.append(payload)
 
         df["tag_payload"] = tag_as_payload
 
         logger.info("making request to SLU for generating new predictions from `tag` derived text for ground-truth.")
-        df["tag_but_slu_predicted"] = df["tag_payload"].progress_apply(make_request_to_slu)
+        session = requests_retry_session(retries=NUM_MAX_RETRIES)
+        df["tag_but_slu_predicted"] = df["tag_payload"].progress_apply(make_request_to_slu, args=(session,))
 
-        df["tag_payload"] = df["tag_payload"].apply(json.dumps)
+        df.rename(columns = {"conversation_uuid": "id"}, inplace=True)
+        df["true_entities"] = df["tag_but_slu_predicted"].apply(extract_entities_from_tag_predicted)
+        df["pred_entities"] = df["prediction"].apply(extract_entities_from_predicted)
 
+        # saving python object as JSON parsable string after saving to disk
+        # otherwise it gets saved as string of byte string and it is not JSON parsable.
+        columns_to_save_as_json = [
+            "tag_payload",
+            "tag_but_slu_predicted",
+            "prediction",
+            "true_entities",
+            "pred_entities"
+        ]
+        for column in columns_to_save_as_json:
+            df[column] = df[column].apply(json.dumps)
         print(df.head())
-        df.to_csv("./okok.csv")
+        print(df.columns)
+
+        df.to_csv(output_path, index=False)
 
     except Exception as e:
         logger.exception(e)
@@ -210,18 +337,19 @@ def prod_slu_inference_func(
 if __name__ == "__main__":
 
     # # kent stuff which works - keshav
-    slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/kent-uc2:master"
-    entity_job_s3_path = "s3://vernacular-ml/project/73_4358/2022-06-15/73_4358-2022-06-15-tagged.csv"
-    lang = "hi"
+    # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/kent-uc2:master"
+    # entity_job_s3_path = "s3://vernacular-ml/project/73_4358/2022-06-15/73_4358-2022-06-15-tagged.csv"
+    # lang = "hi"
+    # prod_slu_inference_func(entity_job_s3_path, "keshav-kent.csv" ,slu_image_on_ecr, lang)
 
     # ashley - american finance - vinay
     # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/ashley:master"
     # entity_job_s3_path = "s3://vernacular-ml/project/129_3861/2022-06-14/129_3861-2022-06-14-tagged.csv"
     # lang = "en"
+    # prod_slu_inference_func(entity_job_s3_path, "vinay-ashley.csv" ,slu_image_on_ecr, lang, use_duckling=True)
 
     # vodafone - amey
-    # slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/vodafone-test:master"
-    # entity_job_s3_path = "s3://vernacular-ml/project/65_3322/2022-06-15/65_3322-2022-06-15-tagged.csv"
-    # lang = "en"
-
-    prod_slu_inference_func(slu_image_on_ecr, entity_job_s3_path, lang, use_existing_prediction=False)
+    slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/vodafone-test:master"
+    entity_job_s3_path = "s3://vernacular-ml/project/65_3322/2022-06-15/65_3322-2022-06-15-tagged.csv"
+    lang = "en"
+    prod_slu_inference_func(entity_job_s3_path, "amey-vodafone.csv" ,slu_image_on_ecr, lang, use_duckling=True)
