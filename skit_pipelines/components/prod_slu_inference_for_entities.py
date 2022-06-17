@@ -1,9 +1,10 @@
 import traceback
+
 import kfp
 from kfp.components import InputPath, OutputPath
 from tqdm import tqdm
 
-# from skit_pipelines import constants as pipeline_constants
+from skit_pipelines import constants as pipeline_constants
 
 
 # def prod_slu_inference_func(slu_repo_tar_path: str, output_path: OutputPath(str)) -> None:
@@ -12,22 +13,21 @@ def prod_slu_inference_func(
     output_path: OutputPath(str),
     slu_image_on_ecr: str,
     lang: str,
-    use_existing_prediction: bool=True,
-    use_duckling: bool=False,
+    use_existing_prediction: bool = True,
+    use_duckling: bool = False,
 ) -> None:
 
-    import time
-    import json
     import base64
-
+    import json
+    import time
     from typing import Dict, List
 
     import boto3
     import docker
     import pandas as pd
+    import requests
     from docker.models.containers import Container
     from loguru import logger
-    import requests
     from requests.adapters import HTTPAdapter, Retry
     from tqdm import tqdm
 
@@ -54,19 +54,17 @@ def prod_slu_inference_func(
             status_forcelist=status_forcelist,
         )
         adapter = HTTPAdapter(max_retries=retry)
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
         return session
-
 
     def create_data_column(row):
 
         return {
             "alternatives": row["alternatives"],
             "state": row["state"],
-            "reftime": row["reftime"]
+            "reftime": row["reftime"],
         }
-
 
     def make_request_to_slu(payload: Dict, session: requests.Session) -> str:
 
@@ -87,9 +85,8 @@ def prod_slu_inference_func(
         except Exception as e:
             logger.exception(e)
             logger.exception(traceback.print_stack())
-        
-        return {}
 
+        return {}
 
     def extract_entities_from_tag_predicted(truth_predicted: Dict):
 
@@ -99,12 +96,12 @@ def prod_slu_inference_func(
         if "entities" not in truth_predicted["response"]:
             return []
 
-        truth_entities : List = truth_predicted["response"]["entities"]
+        truth_entities: List = truth_predicted["response"]["entities"]
 
         if not isinstance(truth_entities, list) or (not truth_entities):
             return []
 
-        first_entity : Dict = truth_entities[0]
+        first_entity: Dict = truth_entities[0]
         keys_to_be_present = ["entity_type", "value"]
 
         if not isinstance(first_entity, dict):
@@ -123,7 +120,9 @@ def prod_slu_inference_func(
                     eevee_schema_entity[key] = first_entity[key]
 
         interval_types = ["date", "time", "datetime"]
-        if eevee_schema_entity["type"] in interval_types and isinstance(eevee_schema_entity["value"], dict):
+        if eevee_schema_entity["type"] in interval_types and isinstance(
+            eevee_schema_entity["value"], dict
+        ):
             eevee_type_value = eevee_schema_entity["value"]
             to_replace_value = {}
             if isinstance(eevee_type_value.get("from"), str):
@@ -143,43 +142,44 @@ def prod_slu_inference_func(
             return []
 
         return [eevee_schema_entity]
-
 
     def extract_entities_from_predicted(predicted: Dict):
 
         if "slots" not in predicted:
             return []
 
-        predicted_slots : List = predicted["slots"]
+        predicted_slots: List = predicted["slots"]
 
         if not isinstance(predicted_slots, list) or not predicted_slots:
             return []
 
-        first_slot : Dict = predicted_slots[0]
+        first_slot: Dict = predicted_slots[0]
 
         if not isinstance(first_slot, dict):
             return []
 
         if "values" not in first_slot:
             return []
-        
+
         if not first_slot["values"]:
             return []
 
-        first_slot_values : Dict = first_slot["values"][0]
+        first_slot_values: Dict = first_slot["values"][0]
 
         eevee_schema_entity = {}
 
         keys_to_be_present = ["type", "value", "text"]
         if any([k not in first_slot_values for k in keys_to_be_present]):
             return []
-    
+
         for key in keys_to_be_present:
             if first_slot_values.get(key) is not None:
                 eevee_schema_entity[key] = first_slot_values[key]
 
         interval_types = ["date", "time", "datetime"]
-        if eevee_schema_entity["type"] in interval_types and isinstance(eevee_schema_entity["value"], dict):
+        if eevee_schema_entity["type"] in interval_types and isinstance(
+            eevee_schema_entity["value"], dict
+        ):
             eevee_type_value = eevee_schema_entity["value"]
             to_replace_value = {}
             if isinstance(eevee_type_value.get("from"), str):
@@ -200,9 +200,6 @@ def prod_slu_inference_func(
 
         return [eevee_schema_entity]
 
-
-
-    
     try:
 
         # docker run detach duckling + slu, using docker-py
@@ -222,11 +219,9 @@ def prod_slu_inference_func(
         if stat:
             logger.info("successfully authenticated and docker logged-in ...")
 
-
-
         logger.info(f"pulling slu docker image from ECR ...")
         docker_client.images.pull(slu_image_on_ecr)
-        
+
         logger.info(f"creating slu_container ...")
         slu_container: Container = docker_client.containers.run(
             slu_image_on_ecr,
@@ -253,7 +248,6 @@ def prod_slu_inference_func(
                 # ports={"8000/tcp": 8000}, # no need since we are using "host"
             )
 
-
         logger.info(f"waiting for SLU container to accept requests ...")
         s = requests_retry_session(retries=NUM_MAX_RETRIES)
         r = s.get(SLU_HOST)
@@ -273,15 +267,20 @@ def prod_slu_inference_func(
             logger.info("reusing existing predictions from `data` column.")
             df["prediction"] = df["prediction"].apply(json.loads)
         else:
-            logger.info("making request to SLU for generating new predictions from `data` column.")
+            logger.info(
+                "making request to SLU for generating new predictions from `data` column."
+            )
             session = requests_retry_session(retries=NUM_MAX_RETRIES)
-            df["prediction"] = df["data"].progress_apply(make_request_to_slu, args=(session,))
-
+            df["prediction"] = df["data"].progress_apply(
+                make_request_to_slu, args=(session,)
+            )
 
         # how to pass empty region tagged text?
         # skip making requests for them
         df["tag"] = df["tag"].apply(json.loads)
-        df["entity_region_tagged_text"] = df["tag"].apply(lambda x: x[0].get("text") if x else "")
+        df["entity_region_tagged_text"] = df["tag"].apply(
+            lambda x: x[0].get("text") if x else ""
+        )
 
         tag_as_payload = []
         for _, row in df.iterrows():
@@ -296,12 +295,18 @@ def prod_slu_inference_func(
 
         df["tag_payload"] = tag_as_payload
 
-        logger.info("making request to SLU for generating new predictions from `tag` derived text for ground-truth.")
+        logger.info(
+            "making request to SLU for generating new predictions from `tag` derived text for ground-truth."
+        )
         session = requests_retry_session(retries=NUM_MAX_RETRIES)
-        df["tag_but_slu_predicted"] = df["tag_payload"].progress_apply(make_request_to_slu, args=(session,))
+        df["tag_but_slu_predicted"] = df["tag_payload"].progress_apply(
+            make_request_to_slu, args=(session,)
+        )
 
-        df.rename(columns = {"conversation_uuid": "id"}, inplace=True)
-        df["true_entities"] = df["tag_but_slu_predicted"].apply(extract_entities_from_tag_predicted)
+        df.rename(columns={"conversation_uuid": "id"}, inplace=True)
+        df["true_entities"] = df["tag_but_slu_predicted"].apply(
+            extract_entities_from_tag_predicted
+        )
         df["pred_entities"] = df["prediction"].apply(extract_entities_from_predicted)
 
         # saving python object as JSON parsable string after saving to disk
@@ -311,7 +316,7 @@ def prod_slu_inference_func(
             "tag_but_slu_predicted",
             "prediction",
             "true_entities",
-            "pred_entities"
+            "pred_entities",
         ]
         for column in columns_to_save_as_json:
             df[column] = df[column].apply(json.dumps)
@@ -329,9 +334,9 @@ def prod_slu_inference_func(
         slu_container.kill()
 
 
-# prod_slu_inference_op = kfp.components.create_component_from_func(
-#     prod_slu_inference_func, base_image=pipeline_constants.BASE_IMAGE
-# )
+prod_slu_inference_op = kfp.components.create_component_from_func(
+    prod_slu_inference_func, base_image=pipeline_constants.BASE_IMAGE
+)
 
 
 if __name__ == "__main__":
@@ -350,6 +355,14 @@ if __name__ == "__main__":
 
     # vodafone - amey
     slu_image_on_ecr = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/vodafone-test:master"
-    entity_job_s3_path = "s3://vernacular-ml/project/65_3322/2022-06-15/65_3322-2022-06-15-tagged.csv"
+    entity_job_s3_path = (
+        "s3://vernacular-ml/project/65_3322/2022-06-15/65_3322-2022-06-15-tagged.csv"
+    )
     lang = "en"
-    prod_slu_inference_func(entity_job_s3_path, "amey-vodafone.csv" ,slu_image_on_ecr, lang, use_duckling=True)
+    prod_slu_inference_func(
+        entity_job_s3_path,
+        "amey-vodafone.csv",
+        slu_image_on_ecr,
+        lang,
+        use_duckling=True,
+    )
