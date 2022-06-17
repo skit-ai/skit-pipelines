@@ -1,3 +1,6 @@
+from skit_pipelines.pipelines.eval_dialogy_production_entities_pipeline import (
+    dialogy_prod_infer_and_eval_entities,
+)
 from skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline import (
     eval_voicebot_xlmr_pipeline,
 )
