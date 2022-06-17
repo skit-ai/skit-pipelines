@@ -28,7 +28,7 @@ def dialogy_prod_infer_and_eval_entities(
         slu_image_on_ecr=slu_image_on_ecr,
         lang=lang,
         use_existing_prediction=use_existing_prediction,
-        use_existing_prediction=use_duckling,
+        use_duckling=use_duckling,
     )
 
     prod_slu_infer_op.execution_options.caching_strategy.max_cache_staleness = (
