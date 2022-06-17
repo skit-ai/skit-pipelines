@@ -7,7 +7,6 @@ from tqdm import tqdm
 from skit_pipelines import constants as pipeline_constants
 
 
-# def prod_slu_inference_func(slu_repo_tar_path: str, output_path: OutputPath(str)) -> None:
 def prod_slu_inference_func(
     s3_tagged_data_path: InputPath(str),
     output_path: OutputPath(str),
