@@ -38,8 +38,8 @@ def gen_err_metrics(
     report_df: pd.DataFrame = entity_report(true_df, pred_df, dump=True)
     logger.debug(f"Generated ERR report:")
 
-    report_df.to_csv(entity_report_path, index=False)
     print(report_df)
+    report_df.to_csv(entity_report_path, index=False)
 
 
 gen_err_metrics_op = kfp.components.create_component_from_func(
