@@ -45,7 +45,7 @@ def dialogy_prod_infer_and_eval_entities(
 
     # produce test set metrics.
     upload_err = upload2s3_op(
-        path_on_disk=err_op.outputs["output"],
+        path_on_disk=err_op.outputs["entity_report"],
         reference=org_id,
         file_type="xlmr-dialogy-err-metrics",
         bucket=pipeline_constants.BUCKET,

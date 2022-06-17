@@ -7,9 +7,6 @@ from skit_pipelines import constants as pipeline_constants
 def gen_err_metrics(
     data_path: InputPath(str),
     entity_report_path: OutputPath(str),
-    # fp_path: OutputPath(str),
-    # fn_path: OutputPath(str),
-    # mm_path: OutputPath(str),
     true_label_column: str,
     pred_label_column: str,
 ):
@@ -52,9 +49,6 @@ if __name__ == "__main__":
     gen_err_metrics(
         "amey-vodafone.csv",
         "report.csv",
-        "./fp.csv",
-        "./fn.csv",
-        "./mm.csv",
         "true_entities",
         "pred_entities",
     )
