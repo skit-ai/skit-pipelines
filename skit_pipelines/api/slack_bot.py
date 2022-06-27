@@ -4,6 +4,7 @@ import requests
 import traceback
 from jsoncomment import JsonComment
 from typing import Any, Dict, Tuple, Union
+from loguru import logger
 
 json = JsonComment()
 
@@ -77,9 +78,7 @@ Failed to create pipeline:
 def recurr_run_format(pipeline_name: str, encoded_payload: str, channel_id: str, message_ts, user):
     return f"""
 To create a recurring run of {pipeline_name} use:
-```
-/remind <#channel_name> "@charon run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>
-```
+```/remind #bots "@charon run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>```
 """
 
 
@@ -146,33 +145,36 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
     :return: The command, pipeline name, and payload.
     :rtype: Tuple[str]
     """
-    match = re.search(r"<@[a-zA-Z0-9]+> (run|create_recurring) (.*)", text, re.DOTALL)
-    b64_match = re.search(r"(b64_(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)", text, re.DOTALL)
-    run_type, remaining_params = match.group(1), match.group(2)
     
-    if match and match.group(1) and match.group(2):
-        if b64_match and (encoded_payload := b64_match.group(1)):
-            pipeline_name = remaining_params\
-                                .replace(encoded_payload, "")\
-                                .strip()
-            try:
-                payload = decode_payload(encoded_payload.replace("b64_", ""))
-            except json.JSONDecodeError as e:
-                raise SyntaxError(f"The {encoded_payload=} isn't a valid b64 encoded json: {e}")
-        else:
-            pipeline_name, code_block = [m.strip() for m in remaining_params.split("```")][:2]
-            try:
-                payload = json.loads(code_block)
-            except (SyntaxError, ValueError) as e:
-                raise SyntaxError(f"The {code_block=} isn't a valid json: {e}")
-            
-        for k, v in payload.items():
-            if isinstance(v, str):
-                if v.startswith("<") and v.endswith(">"):
-                    payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
-            if isinstance(v, (dict, list)):
-                payload[k] = json.dumps(v)
-        return run_type, pipeline_name, payload
+    logger.info(f"text sent to slackbot - {text=}")
+    match = re.search(r"<@[a-zA-Z0-9|a-zA-Z0-9]+>[\n\r\s]+(run|create_recurring)[\n\r\s]+(.*)", text, re.DOTALL)
+    b64_match = re.search(r"(b64_(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)", text, re.DOTALL)
+    
+    if match:
+        run_type, remaining_params = match.group(1), match.group(2)
+        if run_type and remaining_params:
+            if b64_match and (encoded_payload := b64_match.group(1)):
+                pipeline_name = remaining_params\
+                                    .replace(encoded_payload, "")\
+                                    .strip()
+                try:
+                    payload = decode_payload(encoded_payload.replace("b64_", ""))
+                except json.JSONDecodeError as e:
+                    raise SyntaxError(f"The {encoded_payload=} isn't a valid b64 encoded json: {e}")
+            else:
+                pipeline_name, code_block = [m.strip() for m in remaining_params.split("```")][:2]
+                try:
+                    payload = json.loads(code_block)
+                except (SyntaxError, ValueError) as e:
+                    raise SyntaxError(f"The {code_block=} isn't a valid json: {e}")
+                
+            for k, v in payload.items():
+                if isinstance(v, str):
+                    if v.startswith("<") and v.endswith(">"):
+                        payload[k] = v.lstrip("<").rstrip(">").split("|")[0]
+                if isinstance(v, (dict, list)):
+                    payload[k] = json.dumps(v)
+            return run_type, pipeline_name, payload
     return None, None, None
 
 
