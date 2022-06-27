@@ -1,11 +1,11 @@
-import ast
-import base64
-import json
 import re
+import base64
+import requests
 import traceback
+from jsoncomment import JsonComment
 from typing import Any, Dict, Tuple, Union
 
-import requests
+json = JsonComment()
 
 CommandType = Union[str, None]
 PipelineNameType = Union[str, None]
@@ -78,7 +78,7 @@ def recurr_run_format(pipeline_name: str, encoded_payload: str, channel_id: str,
     return f"""
 To create a recurring run of {pipeline_name} use:
 ```
-/remind @charon run {pipeline_name} b64_{encoded_payload} <In ten minutes/30 May/Every Tuesday>
+/remind <#channel_name> "@charon run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>
 ```
 """
 
@@ -162,7 +162,7 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
         else:
             pipeline_name, code_block = [m.strip() for m in remaining_params.split("```")][:2]
             try:
-                payload = ast.literal_eval(code_block)
+                payload = json.loads(code_block)
             except (SyntaxError, ValueError) as e:
                 raise SyntaxError(f"The {code_block=} isn't a valid json: {e}")
             
@@ -180,7 +180,6 @@ def make_response(channel_id, message_ts, text, user):
     try:
         command, pipeline_name, payload = command_parser(text)
         if command == "run":
-            print(pipeline_name, payload, channel_id, message_ts, user)
             return run_pipeline(pipeline_name, payload, channel_id, message_ts, user)
         elif command == "create_recurring":
             b64_payload = encode_payload(payload)
