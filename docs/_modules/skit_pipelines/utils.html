@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.utils - skit-pipelines 0.2.2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.utils - skit-pipelines 0.2.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -244,12 +244,12 @@
 <span class="kn">from</span> <span class="nn">skit_pipelines.utils.storage</span> <span class="kn">import</span> <span class="n">create_storage_path</span>
 
 
-<div class="viewcode-block" id="create_file_name"><a class="viewcode-back" href="../../skit_pipelines.utils.html#skit_pipelines.utils.create_file_name">[docs]</a><span class="k">def</span> <span class="nf">create_file_name</span><span class="p">(</span><span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="create_file_name"><a class="viewcode-back" href="../../skit_pipelines.utils.html#skit_pipelines.utils.create_file_name">[docs]</a><span class="k">def</span> <span class="nf">create_file_name</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="s2">&quot;project&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">org_id</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">),</span>
         <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">org_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">file_type</span><span class="si">}{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">reference</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">file_type</span><span class="si">}{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
