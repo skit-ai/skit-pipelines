@@ -123,7 +123,7 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
         @slackbot run <pipeline_name>
         ```
         {
-            "param_1": "value",
+        "param_1": "value",
         }
         ```
 
@@ -177,6 +177,24 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
 
 
 def make_response(channel_id, message_ts, text, user):
+    """
+    Makes response for a given command in text.
+    
+    To schedule a run one can do -
+    
+    ```
+    @charon create_recurring <pipeline_name> <json parameters inside blockquote>
+    ```
+    
+    then it'll respond with -
+    
+    ```
+    To create a recurring run of <pipeline_name> use:
+    /remind #bots "@charon run <pipeline_name> <encoded parameters>" <In ten minutes/30 May/Every Tuesday/etc>
+    ```
+
+    copy paste and change the `time` depending on when pipeline should run, this will trigger slackbot reminders -> make the pipeline run accordingly.
+    """
     try:
         command, pipeline_name, payload = command_parser(text)
         if command == "run":

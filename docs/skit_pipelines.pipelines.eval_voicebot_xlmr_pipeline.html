@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines" href="modules.html" /><link rel="prev" title="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package - skit-pipelines 0.2.2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package - skit-pipelines 0.2.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.2 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -245,12 +245,12 @@
 <p id="p-eval-voicebot-xlmr-pipeline">Example payload to invoke this pipeline via slack integrations:</p>
 <blockquote>
 <div><p>&#64;charon run eval_voicebot_xlmr_pipeline</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;s3_path_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3://bucket-name/data/&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;s3_path_model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s3://bucket-name/model/&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;org_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;use_state&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;s3_path_data&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/data/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s3_path_model&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/model/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="s2">&quot;org&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;use_state&quot;</span><span class="p">:</span> <span class="kc">False</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>

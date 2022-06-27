@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.api.slack_bot - skit-pipelines 0.2.2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.api.slack_bot - skit-pipelines 0.2.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -234,13 +234,14 @@
         </div>
         <article role="main">
           <h1>Source code for skit_pipelines.api.slack_bot</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">ast</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">jsoncomment</span> <span class="kn">import</span> <span class="n">JsonComment</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">json</span> <span class="o">=</span> <span class="n">JsonComment</span><span class="p">()</span>
 
 <span class="n">CommandType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 <span class="n">PipelineNameType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
@@ -309,10 +310,45 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">success_message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Running &lt;</span><span class="si">{</span><span class="n">run_url</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&gt;.&quot;</span></div>
 
+<div class="viewcode-block" id="recurr_run_format"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.recurr_run_format">[docs]</a><span class="k">def</span> <span class="nf">recurr_run_format</span><span class="p">(</span><span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoded_payload</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message_ts</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">To create a recurring run of </span><span class="si">{</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2"> use:</span>
+<span class="s2">```</span>
+<span class="s2">/remind &lt;#channel_name&gt; &quot;@charon run </span><span class="si">{</span><span class="n">pipeline_name</span><span class="si">}</span><span class="s2"> b64_</span><span class="si">{</span><span class="n">encoded_payload</span><span class="si">}</span><span class="s2">&quot; &lt;In ten minutes/30 May/Every Tuesday&gt;</span>
+<span class="s2">```</span>
+<span class="s2">&quot;&quot;&quot;</span></div>
+
 
 <div class="viewcode-block" id="help_message"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.help_message">[docs]</a><span class="k">def</span> <span class="nf">help_message</span><span class="p">():</span>
     <span class="k">return</span> <span class="s2">&quot;&lt;https://skit-ai.github.io/skit-pipelines/#pipelines|Click here&gt; to read about pipelines&quot;</span></div>
 
+<div class="viewcode-block" id="encode_payload"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.encode_payload">[docs]</a><span class="k">def</span> <span class="nf">encode_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="n">PayloadType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encodes a JSON to base64 string</span>
+
+<span class="sd">    :param payload: A JSON payload.</span>
+<span class="sd">    :type payload: PayloadType</span>
+<span class="sd">    :return: BASE64 encoded payload.</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="decode_payload"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.decode_payload">[docs]</a><span class="k">def</span> <span class="nf">decode_payload</span><span class="p">(</span><span class="n">encoded_payload</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PayloadType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decodes a base64 string to JSON</span>
+
+<span class="sd">    :param encoded_payload: A base64 string.</span>
+<span class="sd">    :type encoded_payload: str</span>
+<span class="sd">    :return: decoded JSON.</span>
+<span class="sd">    :rtype: PayloadType</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span>
+        <span class="n">encoded_payload</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="command_parser"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.command_parser">[docs]</a><span class="k">def</span> <span class="nf">command_parser</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">CommandType</span><span class="p">,</span> <span class="n">PipelineNameType</span><span class="p">,</span> <span class="n">PayloadType</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -323,7 +359,7 @@
 <span class="sd">        @slackbot run &lt;pipeline_name&gt;</span>
 <span class="sd">        ```</span>
 <span class="sd">        {</span>
-<span class="sd">            &quot;param_1&quot;: &quot;value&quot;,</span>
+<span class="sd">        &quot;param_1&quot;: &quot;value&quot;,</span>
 <span class="sd">        }</span>
 <span class="sd">        ```</span>
 
@@ -346,28 +382,62 @@
 <span class="sd">    :return: The command, pipeline name, and payload.</span>
 <span class="sd">    :rtype: Tuple[str]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;@[a-zA-Z0-9]+&gt; (run) (.*)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;@[a-zA-Z0-9]+&gt; (run|create_recurring) (.*)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">b64_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(b64_(?:[A-Za-z0-9+/]</span><span class="si">{4}</span><span class="s2">)*(?:[A-Za-z0-9+/]</span><span class="si">{2}</span><span class="s2">==|[A-Za-z0-9+/]</span><span class="si">{3}</span><span class="s2">=)?)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">run_type</span><span class="p">,</span> <span class="n">remaining_params</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">code_block</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">)][:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">payload</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">code_block</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">SyntaxError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">code_block</span><span class="si">=}</span><span class="s2"> isn&#39;t a valid json: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b64_match</span> <span class="ow">and</span> <span class="p">(</span><span class="n">encoded_payload</span> <span class="o">:=</span> <span class="n">b64_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="n">pipeline_name</span> <span class="o">=</span> <span class="n">remaining_params</span>\
+                                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">encoded_payload</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">payload</span> <span class="o">=</span> <span class="n">decode_payload</span><span class="p">(</span><span class="n">encoded_payload</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;b64_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">encoded_payload</span><span class="si">=}</span><span class="s2"> isn&#39;t a valid b64 encoded json: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">code_block</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">remaining_params</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">)][:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">code_block</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">SyntaxError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">code_block</span><span class="si">=}</span><span class="s2"> isn&#39;t a valid json: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">):</span>
                     <span class="n">payload</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
                 <span class="n">payload</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">payload</span>
+        <span class="k">return</span> <span class="n">run_type</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">payload</span>
     <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="make_response"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.slack_bot.make_response">[docs]</a><span class="k">def</span> <span class="nf">make_response</span><span class="p">(</span><span class="n">channel_id</span><span class="p">,</span> <span class="n">message_ts</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes response for a given command in text.</span>
+<span class="sd">    </span>
+<span class="sd">    To schedule a run one can do -</span>
+<span class="sd">    </span>
+<span class="sd">    ```</span>
+<span class="sd">    @charon create_recurring &lt;pipeline_name&gt; &lt;json parameters inside blockquote&gt;</span>
+<span class="sd">    ```</span>
+<span class="sd">    </span>
+<span class="sd">    then it&#39;ll respond with -</span>
+<span class="sd">    </span>
+<span class="sd">    ```</span>
+<span class="sd">    To create a recurring run of &lt;pipeline_name&gt; use:</span>
+<span class="sd">    /remind #bots &quot;@charon run &lt;pipeline_name&gt; &lt;encoded parameters&gt;&quot; &lt;In ten minutes/30 May/Every Tuesday/etc&gt;</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    copy paste and change the `time` depending on when pipeline should run, this will trigger slackbot reminders -&gt; make the pipeline run accordingly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">command</span><span class="p">,</span> <span class="n">pipeline_name</span><span class="p">,</span> <span class="n">payload</span> <span class="o">=</span> <span class="n">command_parser</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;run&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">run_pipeline</span><span class="p">(</span><span class="n">pipeline_name</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">,</span> <span class="n">message_ts</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;create_recurring&quot;</span><span class="p">:</span>
+            <span class="n">b64_payload</span> <span class="o">=</span> <span class="n">encode_payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">recurr_run_format</span><span class="p">(</span><span class="n">pipeline_name</span><span class="p">,</span> <span class="n">b64_payload</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">,</span> <span class="n">message_ts</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">help_message</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

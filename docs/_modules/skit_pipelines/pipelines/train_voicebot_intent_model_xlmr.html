@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr - skit-pipelines 0.2.2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr - skit-pipelines 0.2.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -260,6 +260,7 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">storage_options</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">classifier_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xlmr&quot;</span><span class="p">,</span>
@@ -285,13 +286,13 @@
 
 <span class="sd">        @charon run train_voicebot_intent_model_xlmr</span>
 
-<span class="sd">        .. code-block:: json</span>
+<span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                &quot;model_path&quot;: &quot;s3://bucket-name/model/&quot;,</span>
+<span class="sd">                &quot;version&quot;: &quot;0.0.1&quot;,</span>
 <span class="sd">                &quot;dataset_path&quot;: &quot;s3://bucket-name/path/to/data.csv&quot;,</span>
 <span class="sd">                &quot;org_id&quot;: &quot;org&quot;,</span>
-<span class="sd">                &quot;use_state&quot;: false,</span>
+<span class="sd">                &quot;use_state&quot;: False,</span>
 <span class="sd">                &quot;num_train_epochs&quot;: 10,</span>
 <span class="sd">                &quot;max_seq_length&quot;: 128,</span>
 <span class="sd">                &quot;learning_rate&quot;: 4e-5</span>
@@ -301,10 +302,10 @@
 
 <span class="sd">        @charon run train_voicebot_intent_model_xlmr</span>
 
-<span class="sd">        .. code-block:: json</span>
+<span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                &quot;model_path&quot;: &quot;s3://bucket-name/model/&quot;,</span>
+<span class="sd">                &quot;model_path&quot;: &quot;path/to/model.tar.gz&quot;,</span>
 <span class="sd">                &quot;dataset_path&quot;: &quot;path/to/data.csv&quot;,</span>
 <span class="sd">                &quot;storage_options&quot;: {</span>
 <span class="sd">                    &quot;type&quot;: &quot;s3&quot;,</span>
@@ -312,7 +313,7 @@
 <span class="sd">                },</span>
 <span class="sd">                &quot;org_id&quot;: &quot;org&quot;,</span>
 <span class="sd">                &quot;classifier_type&quot;: &quot;xlmr&quot;,</span>
-<span class="sd">                &quot;use_state&quot;: false,</span>
+<span class="sd">                &quot;use_state&quot;: False,</span>
 <span class="sd">                &quot;num_train_epochs&quot;: 10,</span>
 <span class="sd">                &quot;max_seq_length&quot;: 128,</span>
 <span class="sd">                &quot;learning_rate&quot;: 4e-05</span>
@@ -320,36 +321,52 @@
 
 <span class="sd">    :param model_path: Save path for the trained model.</span>
 <span class="sd">    :type model_path: str</span>
+
 <span class="sd">    :param dataset_path: The S3 URI or the S3 key for the tagged dataset.</span>
 <span class="sd">    :type dataset_path: str</span>
+
 <span class="sd">    :param storage_options: A json string that specifies the bucket and key, defaults to &quot;&quot;</span>
 <span class="sd">    :type storage_options: str, optional</span>
+
 <span class="sd">    :param org_id: reference path to save the metrics.</span>
 <span class="sd">    :type org_id: str, optional</span>
+
 <span class="sd">    :param classifier_type: One of XLMR and MLP, defaults to &quot;xlmr&quot;</span>
 <span class="sd">    :type classifier_type: str, optional</span>
+
 <span class="sd">    :param use_state: Train the model using state as a feature, defaults to False</span>
 <span class="sd">    :type use_state: bool, optional</span>
+
 <span class="sd">    :param model_type: The BERT model type, defaults to &quot;xlmroberta&quot;</span>
 <span class="sd">    :type model_type: str, optional</span>
+
 <span class="sd">    :param model_name: The BERT model sub type, defaults to &quot;xlm-roberta-base&quot;</span>
 <span class="sd">    :type model_name: str, optional</span>
+
 <span class="sd">    :param num_train_epochs: Number of epchs to train the model, defaults to 10</span>
 <span class="sd">    :type num_train_epochs: int, optional</span>
+
 <span class="sd">    :param use_early_stopping: If the loss threshold is below an expected value, setting this to true will stop the training, defaults to False</span>
 <span class="sd">    :type use_early_stopping: bool, optional</span>
+
 <span class="sd">    :param early_stopping_patience: Number of iterations for which the loss must be less than expected value, defaults to 3</span>
 <span class="sd">    :type early_stopping_patience: int, optional</span>
+
 <span class="sd">    :param early_stopping_delta: The diff between expected and actual loss that triggers early stopping, defaults to 0</span>
 <span class="sd">    :type early_stopping_delta: float, optional</span>
+
 <span class="sd">    :param max_seq_length: Truncate an input after these many characters, defaults to 128</span>
 <span class="sd">    :type max_seq_length: int, optional</span>
+
 <span class="sd">    :param learning_rate: A multiplier to control weight updates, defaults to 4e-5</span>
 <span class="sd">    :type learning_rate: float,</span>
+
 <span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
+
 <span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type channel: str, optional</span>
+
 <span class="sd">    :param slack_thread: The slack thread to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type slack_thread: str, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -389,9 +406,10 @@
     <span class="n">train_op</span><span class="o">.</span><span class="n">set_gpu_limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">upload</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
         <span class="n">path_on_disk</span><span class="o">=</span><span class="n">train_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
-        <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
+        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">org_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;intent_classifier_xlmr&quot;</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+        <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.tar.gz&quot;</span><span class="p">,</span>
         <span class="n">output_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
     <span class="p">)</span>
