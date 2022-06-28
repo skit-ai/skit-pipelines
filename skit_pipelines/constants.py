@@ -11,10 +11,10 @@ CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]
 CONSOLE_IAM_EMAIL = os.environ["SKIT_API_GATEWAY_EMAIL"]
 CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
-DB_HOST = "production-postgresql-slave.default"
-DB_PORT = os.environ["DB_PORT"]
-DB_PASSWORD = os.environ["DB_PASSWORD"]
-DB_USER = os.environ["DB_USER"]
+# DB_HOST = "production-postgresql-slave.default"
+# DB_PORT = os.environ["DB_PORT"]
+# DB_PASSWORD = os.environ["DB_PASSWORD"]
+# DB_USER = os.environ["DB_USER"]
 
 KF_NAMESPACE = "skit"
 DEFAULT_EXPERIMENT_NAME = "Default"
