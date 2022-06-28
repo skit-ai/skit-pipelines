@@ -454,8 +454,3 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     main(args)
-
-
-# docker run --rm -it -v /home/dazai/work/skit-pipelines:/home/dazai/work/skit-pipelines -e AWS_ACCESS_KEY_ID=***REMOVED*** -e AWS_SECRET_ACCESS_KEY=***REMOVED*** --network=host  536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/kubeflow/ml-pipeline:entity-test bash
-
-# poetry run python prod_slu_inference_for_entities.py --s3_tagged_data_path s3://vernacular-ml/project/129_3861/2022-06-14/129_3861-2022-06-14-tagged.csv --slu_image_on_ecr 536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/ai/clients/ashley:master --lang en --use_duckling True --output_path ./okok.csv
