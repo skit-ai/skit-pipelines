@@ -4,7 +4,7 @@ from kfp.components import InputPath, OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def create_features(
+def create_features(*,
     data_path: InputPath(str),
     use_state: bool,
     output_path: OutputPath(str),
@@ -24,7 +24,7 @@ def create_features(
     subset = (UTTERANCES, INTENT_Y) if mode == TRAIN else (INTENT_Y,)
 
     df.dropna(subset=subset, inplace=True)
-    df.utterances = df.apply(row2features(use_state), axis=1)
+    df["utterances"] = df.apply(row2features(use_state), axis=1)
     logger.debug(df.utterances[:10])
 
     df.to_csv(output_path, index=False)
