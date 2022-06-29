@@ -70,6 +70,7 @@ def train_voicebot_xlmr(
         max_seq_length=max_seq_length,
         output_dir=model_path,
         fp16=False,
+        n_gpu=1,
         best_model_dir=f"{model_path}/best",
         overwrite_output_dir=True,
         save_eval_checkpoints=False,
