@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6
+
+- [x] add: use slackbot reminders to run/schedule recurring pipelines
+- [x] update: skit-cals version bump to 0.2.19
+
 ## 0.2.5
 
 - [x] update: date time offsets for data pipelines.
