@@ -73,9 +73,6 @@ def eval_voicebot_xlmr_pipeline(
     """
     tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
 
-    with kfp.dsl.Condition(s3_path_model != "", "s3_path_model_check") as check2:
-        loaded_model_op = download_from_s3_op(storage_path=s3_path_model)
-
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
         tagged_data_op
@@ -88,10 +85,13 @@ def eval_voicebot_xlmr_pipeline(
 
     # Normalize utterance column
     preprocess_data_op = create_features_op(
-        preprocess_data_op.outputs["output"], use_state
+        preprocess_data_op.outputs["output"],
+        use_state=use_state,
+        mode="test"
     )
 
     with kfp.dsl.Condition(s3_path_model != "", "model_present") as model_present:
+        loaded_model_op = download_from_s3_op(storage_path=s3_path_model)
         # get predictions from the model
         # TODO: make s3_path_model optional, without which predictions already present in the csv to be used.
         pred_op = get_preds_voicebot_xlmr_op(
@@ -101,12 +101,12 @@ def eval_voicebot_xlmr_pipeline(
             output_pred_label_column=INTENT,
         )
         pred_op.set_gpu_limit(1)
-        irr_op = gen_irr_metrics_op(
+        with_model_irr_op = gen_irr_metrics_op(
             pred_op.outputs["output"],
             true_label_column=true_label_column,
             pred_label_column=pred_label_column,
         )
-        confusion_matrix_op = gen_confusion_matrix_op(
+        with_model_confusion_matrix_op = gen_confusion_matrix_op(
             pred_op.outputs["output"],
             true_label_column=true_label_column,
             pred_label_column=pred_label_column,
@@ -126,7 +126,7 @@ def eval_voicebot_xlmr_pipeline(
 
     # produce test set metrics.
     upload_irr = upload2s3_op(
-        path_on_disk=irr_op.outputs["output"],
+        path_on_disk=with_model_irr_op.outputs["output"] or irr_op.outputs["output"],
         reference=org_id,
         file_type="xlmr-irr-metrics",
         bucket=BUCKET,
@@ -136,7 +136,7 @@ def eval_voicebot_xlmr_pipeline(
         "P0D"  # disables caching
     )
     upload_cm = upload2s3_op(
-        path_on_disk=confusion_matrix_op.outputs["output"],
+        path_on_disk=with_model_confusion_matrix_op.outputs["output"] or confusion_matrix_op.outputs["output"],
         reference=org_id,
         file_type="xlmr-confusion-matrix",
         bucket=BUCKET,
