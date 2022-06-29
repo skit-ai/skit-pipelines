@@ -7,11 +7,12 @@ from skit_pipelines import constants as pipeline_constants
 def gen_irr_metrics(
     data_path: InputPath(str),
     output_path: OutputPath(str),
-    true_label_column: str = "intent",
-    pred_label_column: str = "intent",
+    true_label_column: str = "intent_y",
+    pred_label_column: str = "intent_x",
 ):
 
     import pandas as pd
+    from tabulate import tabulate
     from eevee.metrics import intent_report
     from loguru import logger
 
@@ -35,10 +36,10 @@ def gen_irr_metrics(
 
     report = intent_report(
         pred_df[[pipeline_constants.ID, true_label_column]].rename(
-            columns={true_label_column: "intent"}
+            columns={true_label_column: "intent_y"}
         ),
         pred_df[[pipeline_constants.ID, pred_label_column]].rename(
-            columns={pred_label_column: "intent"}
+            columns={pred_label_column: "intent_x"}
         ),
         return_output_as_dict=True
     )
@@ -47,7 +48,7 @@ def gen_irr_metrics(
 
     report_df.to_csv(output_path, index=False)
     logger.debug(f"Generated IRR report:")
-    logger.debug(report)
+    print(tabulate(report_df, tablefmt="github"))
 
 
 gen_irr_metrics_op = kfp.components.create_component_from_func(
