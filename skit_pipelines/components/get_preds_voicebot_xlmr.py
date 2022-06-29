@@ -11,65 +11,63 @@ def get_preds_voicebot_xlmr(
     utterance_column: str,
     output_pred_label_column: str,
     model_type: str = "xlmroberta",
-    # max_seq_length: int = 128,
+    max_seq_length: int = 128,
+    confidence_threshold: float = 0.1
 ):
 
-    # HACK: This code should go as soon as this issue is fixed:
-    # https://github.com/ThilinaRajapakse/simpletransformers/issues/1386
-    import collections
     import os
     import pickle
-    from collections.abc import Iterable
+    import tempfile
 
+    import numpy as np
     import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
     from loguru import logger
 
-    setattr(collections, "Iterable", Iterable)
-    # ----------------------------------------------
-    import shutil
     import tarfile
 
     from simpletransformers.classification import (
         ClassificationArgs,
         ClassificationModel,
     )
-    from sklearn import preprocessing
-    from tqdm import trange
 
-    from skit_pipelines import constants as pipeline_constants
+    df = pd.read_csv(data_path)
+    temp_model_path = tempfile.mkdtemp()
 
-    pred_df = pd.read_csv(data_path)
-
-    logger.debug(f"Extracting .tgz archive {model_path} to output_path {output_path}.")
+    logger.debug(f"Extracting .tgz archive {model_path} to output_path {temp_model_path}.")
     tar = tarfile.open(model_path)
-    tar.extractall(path=output_path)
+    tar.extractall(path=temp_model_path)
     tar.close()
     logger.debug(f"Extracted successfully.")
 
-    model_path = os.path.join(output_path, "data")
+    model_path = os.path.join(temp_model_path, "data")
 
-    encoder = pickle.load(open(os.path.join(model_path, "labelencoder.pkl"), "rb"))
+    encoder: LabelEncoder = pickle.load(open(os.path.join(model_path, "labelencoder.pkl"), "rb"))
+    model_args = ClassificationArgs(
+        output_dir=None,
+        reprocess_input_data=True,
+        use_multiprocessing_for_evaluation=False,
+        use_multiprocessing=False,
+        eval_batch_size=20,
+        thread_count=1,
+        silent=False
+    )
 
-    model = ClassificationModel("xlmroberta", model_path)
+    model = ClassificationModel("xlmroberta", model_path, args=model_args)
 
-    # model_path is no longer required, remove it from inside of output_path. also remove the output_path as we will write the output csv to it
-    shutil.rmtree(output_path)
+    logger.debug(f"starting predict on {df.shape[0]} rows:")
+    logger.debug(df[utterance_column].iloc[:5])
+    df["text"] = df.utterances
+    df["labels"] = encoder.transform(df.intent_y)
+    logger.debug(df.columns)
 
-    logger.debug(f"starting predict on {pred_df.shape[0]} rows:")
-    logger.debug(pred_df[utterance_column].iloc[:5])
+    _, preds, err = model.eval_model(df, output_dir="/tmp")
+    encoded_labels = np.argmax(preds, axis=1)
+    df["intent_x"] = encoder.inverse_transform(encoded_labels)
 
-    utterances_l = pred_df[utterance_column].tolist()
-    predictions_l = []
-    batch_size = 16
-    for i in range(0, len(utterances_l), batch_size):
-        batch = utterances_l[i : i + batch_size]
-        predictions, _ = model.predict(batch)
-        predictions_l.extend(predictions)
+    logger.debug(f"completed predict on {df.shape[0]} rows.")
 
-    logger.debug(f"completed predict on {pred_df.shape[0]} rows.")
-
-    pred_df[output_pred_label_column] = encoder.inverse_transform(predictions_l)
-    pred_df.to_csv(output_path)
+    df.to_csv(output_path,)
 
 
 get_preds_voicebot_xlmr_op = kfp.components.create_component_from_func(
