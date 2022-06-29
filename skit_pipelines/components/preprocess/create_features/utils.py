@@ -33,10 +33,10 @@ def row2features(use_state: bool):
     def featurize(row: pd.Series):
         if UTTERANCES in row:
             utterances = json.loads(row[UTTERANCES])
-            state = row[STATE]
+            state = row[STATE] if use_state else ""
         elif ALTERNATIVES in row:
             utterances = json.loads(row[ALTERNATIVES])
-            state = row[STATE]
+            state = row[STATE] if use_state else ""
         elif "data" in row:
             data = json.loads(row.data)
             data = json.loads(data) if isinstance(data, str) else data
