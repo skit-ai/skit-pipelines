@@ -37,6 +37,7 @@ def fetch_n_tag_calls(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
+    on_prem: bool = False,
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -143,6 +144,9 @@ def fetch_n_tag_calls(
 
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: float, optional
+
+    :param on_prem: Whether the pipeline is run on prem or not, defaults to False
+    :type on_prem: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -162,6 +166,7 @@ def fetch_n_tag_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
         states=states,
+        on_prem=on_prem,
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

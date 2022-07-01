@@ -24,6 +24,7 @@ def fetch_calls(
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
     states: Optional[str] = None,
+    on_prem: bool = False,
 ) -> str:
     import tempfile
     import time
@@ -77,6 +78,7 @@ def fetch_calls(
         asr_provider=asr_provider or None,
         states=states or None,
         on_disk=False,
+        on_prem=on_prem,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
