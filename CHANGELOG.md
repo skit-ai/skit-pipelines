@@ -1,9 +1,13 @@
 # Changelog
 
+## 0.2.7
+
+- [x] update: skit-calls version bump to 0.2.21
+
 ## 0.2.6
 
 - [x] add: use slackbot reminders to run/schedule recurring pipelines
-- [x] update: skit-cals version bump to 0.2.19
+- [x] update: skit-calls version bump to 0.2.19
 
 ## 0.2.5
 
