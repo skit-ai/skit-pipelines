@@ -34,6 +34,7 @@ def fetch_calls_n_push_to_sheets(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
+    on_prem: bool = False,
 ):
     untagged_records_s3_path = fetch_calls_op(
         client_id=client_id,
@@ -52,6 +53,7 @@ def fetch_calls_n_push_to_sheets(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
+        on_prem=on_prem,
     )
 
     untagged_records_s3_path.execution_options.caching_strategy.max_cache_staleness = (
