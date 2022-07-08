@@ -39,6 +39,7 @@ sphinx-copybutton = "0.3.1"
 sphinx-autodoc-typehints = "1.16.0"
 furo = "^2022.4.7"
 taskipy = "^1.10.2"
+asr = { git = "https://github.com/skit-ai/asr-tuning.git", branch = "main" }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
