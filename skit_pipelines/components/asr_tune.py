@@ -5,13 +5,13 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def asr_tune(
+    corpus_path: InputPath(str),
+    augment_wordlist_path: InputPath(str),
+    remove_wordlist_path: InputPath(str),
     lang: str,
     base_model_path: str,
     target_model_path: str,
-    corpus_path: InputPath(str),
     domain_bias: float,
-    augment_wordlist_path: InputPath(str),
-    remove_wordlist_path: InputPath(str),
     ) -> None:
     import tuning.app.core as tuning_core
 

@@ -36,10 +36,17 @@ def asr_tune(
     TODO: Docstring.
     """
     corpus_op = download_from_s3_op(storage_path=corpus_path)
-    augment_wordlist_op = download_from_s3_op(storage_path=augment_wordlist_path)
-    remove_wordlist_op = download_from_s3_op(storage_path=remove_wordlist_path)
+    with kfp.dsl.Condition(augment_wordlist_path != "", "augment_wordlist_present") as augment_wordlist_present:
+        augment_wordlist_op = download_from_s3_op(storage_path=augment_wordlist_path)
+    # with kfp.dsl.Condition(augment_wordlist_path == "", "augment_wordlist_missing") as augment_wordlist_missing:
+    #     augment_wordlist_path_ = ""
+    with kfp.dsl.Condition(remove_wordlist_path != "", "remove_wordlist_present") as remove_wordlist_present:
+        remove_wordlist_op = download_from_s3_op(storage_path=remove_wordlist_path)
+    # with kfp.dsl.Condition(remove_wordlist_path == "", "remove_wordlist_missing") as remove_wordlist_missing:
+    #     remove_wordlist_path_ = ""
 
-    tune_op = asr_tune_op(lang=lang, base_model_path=base_model_path, target_model_path=target_model_path, corpus_path=corpus_op.outputs["output"], domain_bias=domain_bias, augment_wordlist_path=augment_wordlist_op.outputs["output"], remove_wordlist_path=remove_wordlist_op.outputs["output"])
+    tune_op = asr_tune_op(corpus_op.outputs["output"], "", "", lang=lang, base_model_path=base_model_path, target_model_path=target_model_path, domain_bias=domain_bias)
+    # tune_op = asr_tune_op(corpus_op.outputs["output"], augment_wordlist_op.outputs["output"] or "", remove_wordlist_op.outputs["output"] or "", lang=lang, base_model_path=base_model_path, target_model_path=target_model_path, domain_bias=domain_bias)
 
     with kfp.dsl.Condition(notify != "", "notify").after(tune_op) as tune_check:
         notification_text = f"The ASR Tuning pipeline is completed."
