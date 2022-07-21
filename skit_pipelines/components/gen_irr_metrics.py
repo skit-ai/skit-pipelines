@@ -46,7 +46,7 @@ def gen_irr_metrics(
 
     report_df = pd.DataFrame(report).T
 
-    report_df.to_csv(output_path, index=False)
+    report_df.to_csv(output_path)
     logger.debug(f"Generated IRR report:")
     print(tabulate(report_df, tablefmt="github"))
 
