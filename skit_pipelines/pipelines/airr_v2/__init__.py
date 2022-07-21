@@ -64,7 +64,7 @@ def airr_v2_pipeline(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(job_id == "", name="s3_csv_provided") as s3_csv:
+    with kfp.dsl.Condition(job_id == "", name="tog_job_id_provided") as s3_csv:
         s3_csv_op = download_from_s3_op(storage_path=s3_path_data)
 
         s3_csv_op.execution_options.caching_strategy.max_cache_staleness = (
