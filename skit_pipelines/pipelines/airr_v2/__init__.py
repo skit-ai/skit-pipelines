@@ -51,7 +51,7 @@ def airr_v2_pipeline(
     """
 
     with kfp.dsl.Condition(job_id != "", name="tog_job_id_provided") as tog_data:
-        tog_data_op = fetch_tagged_dataset_op(
+        tagged_data_op = fetch_tagged_dataset_op(
             job_id=job_id,
             project_id=labelstudio_project_id,
             task_type=task_type,
@@ -60,20 +60,16 @@ def airr_v2_pipeline(
             end_date=end_date,
         )
 
-        tog_data_op.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
-        )
-
     with kfp.dsl.Condition(job_id == "", name="tog_job_id_provided") as s3_csv:
-        s3_csv_op = download_from_s3_op(storage_path=s3_path_data)
+        tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
 
-        s3_csv_op.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
-        )
+    tagged_data_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
 
 
     # Create true label column
-    preprocess_data_op = create_utterances_op(tog_data_op.outputs["output"] or s3_csv_op.outputs["output"]).after(
+    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"] or s3_csv_op.outputs["output"]).after(
         tog_data or s3_csv
     )
 
