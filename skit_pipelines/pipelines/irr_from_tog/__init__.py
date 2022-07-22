@@ -4,18 +4,14 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_tagged_dataset_op,
     create_true_intent_labels_op,
-    download_from_s3_op,
     gen_confusion_matrix_op,
     gen_irr_metrics_op,
-    # get_preds_voicebot_xlmr_op,
     slack_notification_op,
     upload2s3_op,
 )
 
-UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
 BUCKET = pipeline_constants.BUCKET
-INTENT = pipeline_constants.INTENT
 
 
 @kfp.dsl.pipeline(
@@ -29,8 +25,6 @@ def irr_from_tog(
     start_date: str = "",
     end_date: str = "",
     timezone: str = "Asia/Kolkata",
-    task_type: str = "conversation",
-    use_state: bool = True,
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
     mlwr: bool = False,
@@ -87,12 +81,6 @@ def irr_from_tog(
     :param timezone: The timezone to apply for multi-region datasets, defaults to "Asia/Kolkata"
     :type timezone: str, optional
 
-    :param task_type: https://github.com/skit-ai/skit-labels#task-types, defaults to "conversation"
-    :type task_type: str, optional
-
-    :param use_state: Use the XLMR model with state encoding?, defaults to True
-    :type use_state: bool, optional
-
     :param true_label_column: Column name of ground-truth which will be used for eevee intent evaluation.
     :type true_label_column: str, optional
 
@@ -116,7 +104,6 @@ def irr_from_tog(
     tagged_data_op = fetch_tagged_dataset_op(
         job_id=job_id,
         project_id=labelstudio_project_id,
-        task_type=task_type,
         timezone=timezone,
         start_date=start_date,
         end_date=end_date,
