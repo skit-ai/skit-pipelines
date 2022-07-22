@@ -3,13 +3,11 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_tagged_dataset_op,
-    create_features_op,
     create_true_intent_labels_op,
-    create_utterances_op,
     download_from_s3_op,
     gen_confusion_matrix_op,
     gen_irr_metrics_op,
-    get_preds_voicebot_xlmr_op,
+    # get_preds_voicebot_xlmr_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -21,10 +19,10 @@ INTENT = pipeline_constants.INTENT
 
 
 @kfp.dsl.pipeline(
-    name="XLMR Voicebot Eval IRR pipeline v2",
-    description="Produces intent metrics given a .csv/tog-job, optionally takes in a model, can publish for MLWR too.",
+    name="XLMR Voicebot Eval IRR pipeline for tog & labelstudio tagged datasets",
+    description="Produces intent metrics given a tog-job/labelstudio-project.",
 )
-def airr_v2_pipeline(
+def irr_from_tog(
     org_id: str,
     job_id: str = "",
     labelstudio_project_id: str = "",
@@ -40,7 +38,81 @@ def airr_v2_pipeline(
     channel: str = "",
     slack_thread: str = "",
 ):
+    """
+    Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.
 
+    .. _p_irr_from_tog:
+
+    Example payload to invoke this pipeline via slack integrations:
+
+        @charon run irr_from_tog
+
+        .. code-block:: python
+
+            {
+                "org_id": 1,
+                "job_id": "4011",
+                "start_date": "2022-06-01",
+                "end_date": "2022-08-01"
+            }
+
+    To use labelstudio:
+
+        @charon run irr_from_tog
+
+        .. code-block:: python
+
+            {
+                "org_id": 1,
+                "labelstudio_project_id": "61",
+                "start_date": "2022-06-01",
+                "end_date": "2022-08-01"
+            }
+
+    :param org_id: reference path to save the metrics on s3.
+    :type org_id: str
+
+    :param job_id: intent tog job IDs.
+    :type job_id: str
+
+    :param labelstudio_project_id: intent labelstudio project IDs.
+    :type labelstudio_project_id: str
+
+    :param start_date: The start date range to filter calls in YYYY-MM-DD format.
+    :type start_date: str
+
+    :param end_date: The end date range to filter calls in YYYY-MM-DD format.
+    :type end_date: str
+
+    :param timezone: The timezone to apply for multi-region datasets, defaults to "Asia/Kolkata"
+    :type timezone: str, optional
+
+    :param task_type: https://github.com/skit-ai/skit-labels#task-types, defaults to "conversation"
+    :type task_type: str, optional
+
+    :param use_state: Use the XLMR model with state encoding?, defaults to True
+    :type use_state: bool, optional
+
+    :param true_label_column: Column name of ground-truth which will be used for eevee intent evaluation.
+    :type true_label_column: str, optional
+
+    :param pred_label_column: Column name of SLU production predictions which will be used for eevee intent evaluation.
+    :type pred_label_column: str, optional
+
+    :param mlwr: when True, pushes the eevee intent metrics to events DB for MLWR.
+    :type use_state: bool, optional
+
+    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
+    :type notify: str, optional
+
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
+
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: str, optional
+    """
+
+    # gets the tog job / labelstudio dataset
     tagged_data_op = fetch_tagged_dataset_op(
         job_id=job_id,
         project_id=labelstudio_project_id,
@@ -54,35 +126,29 @@ def airr_v2_pipeline(
         "P0D"  # disables caching
     )
 
-
     # Create true label column
-    preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
+    preprocess_data_op = create_true_intent_labels_op(tagged_data_op.outputs["output"]).after(
         tagged_data_op
     )
 
-    # Create utterance column
-    preprocess_data_op = create_true_intent_labels_op(
-        preprocess_data_op.outputs["output"]
-    )
-
-    # Normalize utterance column
-    preprocess_data_op = create_features_op(
-        preprocess_data_op.outputs["output"], use_state
-    )
-
-
+    # use eevee for comparing ground-truth tog/label studio annotated values
+    # with actual production prediction values present in the same tog/label studio
+    # dataset.
     irr_op = gen_irr_metrics_op(
         preprocess_data_op.outputs["output"],
         true_label_column=true_label_column,
         pred_label_column=pred_label_column,
     )
+
+    # confusion matrix on the same ground-truth tog/labelstudio dataset 
+    # vs SLU production predictions
     confusion_matrix_op = gen_confusion_matrix_op(
         preprocess_data_op.outputs["output"],
         true_label_column=true_label_column,
         pred_label_column=pred_label_column,
     )
 
-    # produce test set metrics.
+    # upload tagged dataset eevee metrics.
     upload_irr = upload2s3_op(
         path_on_disk=irr_op.outputs["output"],
         reference=org_id,
@@ -94,6 +160,7 @@ def airr_v2_pipeline(
         "P0D"  # disables caching
     )
 
+    # upload confusion matrix.
     upload_cm = upload2s3_op(
         path_on_disk=confusion_matrix_op.outputs["output"],
         reference=org_id,
@@ -128,4 +195,4 @@ def airr_v2_pipeline(
     # with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-events-db"):
     #     pass
 
-__all__ = ["airr_v2_pipeline"]
+__all__ = ["irr_from_tog"]
