@@ -29,7 +29,7 @@ RUN apt-get -y update\
     && apt-get -y install libblas-dev liblapack-dev gfortran
 
 RUN conda install git pip
-RUN pip install git+https://github.com/skit-ai/eevee.git@1.2.1
+RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
 RUN pip install poetry==1.1.13
 RUN poetry config virtualenvs.create false
 
