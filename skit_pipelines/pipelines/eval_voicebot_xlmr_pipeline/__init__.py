@@ -85,9 +85,7 @@ def eval_voicebot_xlmr_pipeline(
 
     # Normalize utterance column
     preprocess_data_op = create_features_op(
-        preprocess_data_op.outputs["output"],
-        use_state=use_state,
-        mode="test"
+        preprocess_data_op.outputs["output"], use_state=use_state, mode="test"
     )
 
     with kfp.dsl.Condition(s3_path_model != "", "model_present") as model_present:
@@ -136,7 +134,8 @@ def eval_voicebot_xlmr_pipeline(
         "P0D"  # disables caching
     )
     upload_cm = upload2s3_op(
-        path_on_disk=with_model_confusion_matrix_op.outputs["output"] or confusion_matrix_op.outputs["output"],
+        path_on_disk=with_model_confusion_matrix_op.outputs["output"]
+        or confusion_matrix_op.outputs["output"],
         reference=org_id,
         file_type="xlmr-confusion-matrix",
         bucket=BUCKET,
@@ -150,7 +149,11 @@ def eval_voicebot_xlmr_pipeline(
         notification_text = f"Here's the IRR report."
         code_block = f"aws s3 cp {upload_irr.output} ."
         irr_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
         )
         irr_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -160,7 +163,11 @@ def eval_voicebot_xlmr_pipeline(
         notification_text = f"Here's the confusion matrix."
         code_block = f"aws s3 cp {upload_irr.output} ."
         cm_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
         )
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

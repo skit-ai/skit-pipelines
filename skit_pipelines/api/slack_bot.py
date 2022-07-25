@@ -1,9 +1,10 @@
-import re
 import base64
-import requests
+import re
 import traceback
-from jsoncomment import JsonComment
 from typing import Any, Dict, Tuple, Union
+
+import requests
+from jsoncomment import JsonComment
 from loguru import logger
 
 json = JsonComment()
@@ -75,7 +76,10 @@ Failed to create pipeline:
     name = success_message.get("name")
     return f"Running <{run_url}|{name}>."
 
-def recurr_run_format(pipeline_name: str, encoded_payload: str, channel_id: str, message_ts, user):
+
+def recurr_run_format(
+    pipeline_name: str, encoded_payload: str, channel_id: str, message_ts, user
+):
     return f"""
 To create a recurring run of {pipeline_name} use:
 ```/remind #bots "@charon run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>```
@@ -84,6 +88,7 @@ To create a recurring run of {pipeline_name} use:
 
 def help_message():
     return "<https://skit-ai.github.io/skit-pipelines/#pipelines|Click here> to read about pipelines"
+
 
 def encode_payload(payload: PayloadType) -> str:
     """
@@ -94,10 +99,9 @@ def encode_payload(payload: PayloadType) -> str:
     :return: BASE64 encoded payload.
     :rtype: str
     """
-    
-    return base64.b64encode(
-        json.dumps(payload).encode("utf-8")
-    ).decode("utf-8")
+
+    return base64.b64encode(json.dumps(payload).encode("utf-8")).decode("utf-8")
+
 
 def decode_payload(encoded_payload: str) -> PayloadType:
     """
@@ -108,10 +112,9 @@ def decode_payload(encoded_payload: str) -> PayloadType:
     :return: decoded JSON.
     :rtype: PayloadType
     """
-    
-    return json.loads(base64.b64decode(
-        encoded_payload.encode("utf-8")
-    ).decode("utf-8"))
+
+    return json.loads(base64.b64decode(encoded_payload.encode("utf-8")).decode("utf-8"))
+
 
 def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadType]:
     """
@@ -145,29 +148,39 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
     :return: The command, pipeline name, and payload.
     :rtype: Tuple[str]
     """
-    
+
     logger.info(f"text sent to slackbot - {text=}")
-    match = re.search(r"<@[a-zA-Z0-9|a-zA-Z0-9]+>[\n\r\s]+(run|create_recurring)[\n\r\s]+(.*)", text, re.DOTALL)
-    b64_match = re.search(r"(b64_(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)", text, re.DOTALL)
-    
+    match = re.search(
+        r"<@[a-zA-Z0-9|a-zA-Z0-9]+>[\n\r\s]+(run|create_recurring)[\n\r\s]+(.*)",
+        text,
+        re.DOTALL,
+    )
+    b64_match = re.search(
+        r"(b64_(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)",
+        text,
+        re.DOTALL,
+    )
+
     if match:
         run_type, remaining_params = match.group(1), match.group(2)
         if run_type and remaining_params:
             if b64_match and (encoded_payload := b64_match.group(1)):
-                pipeline_name = remaining_params\
-                                    .replace(encoded_payload, "")\
-                                    .strip()
+                pipeline_name = remaining_params.replace(encoded_payload, "").strip()
                 try:
                     payload = decode_payload(encoded_payload.replace("b64_", ""))
                 except json.JSONDecodeError as e:
-                    raise SyntaxError(f"The {encoded_payload=} isn't a valid b64 encoded json: {e}")
+                    raise SyntaxError(
+                        f"The {encoded_payload=} isn't a valid b64 encoded json: {e}"
+                    )
             else:
-                pipeline_name, code_block = [m.strip() for m in remaining_params.split("```")][:2]
+                pipeline_name, code_block = [
+                    m.strip() for m in remaining_params.split("```")
+                ][:2]
                 try:
                     payload = json.loads(code_block)
                 except (SyntaxError, ValueError) as e:
                     raise SyntaxError(f"The {code_block=} isn't a valid json: {e}")
-                
+
             for k, v in payload.items():
                 if isinstance(v, str):
                     if v.startswith("<") and v.endswith(">"):
@@ -181,15 +194,15 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
 def make_response(channel_id, message_ts, text, user):
     """
     Makes response for a given command in text.
-    
+
     To schedule a run one can do -
-    
+
     ```
     @charon create_recurring <pipeline_name> <json parameters inside blockquote>
     ```
-    
+
     then it'll respond with -
-    
+
     ```
     To create a recurring run of <pipeline_name> use:
     /remind #bots "@charon run <pipeline_name> <encoded parameters>" <In ten minutes/30 May/Every Tuesday/etc>
@@ -203,7 +216,9 @@ def make_response(channel_id, message_ts, text, user):
             return run_pipeline(pipeline_name, payload, channel_id, message_ts, user)
         elif command == "create_recurring":
             b64_payload = encode_payload(payload)
-            return recurr_run_format(pipeline_name, b64_payload, channel_id, message_ts, user)
+            return recurr_run_format(
+                pipeline_name, b64_payload, channel_id, message_ts, user
+            )
         else:
             return help_message()
     except Exception as e:

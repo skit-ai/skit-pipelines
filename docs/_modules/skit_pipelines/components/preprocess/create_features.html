@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.04.1"/>
-        <title>skit_pipelines.components.preprocess.create_features - skit-pipelines 0.2.2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.components.preprocess.create_features - skit-pipelines 0.2.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.2 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.10 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.2 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.10 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -163,6 +163,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">Train XLMR model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -190,6 +191,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 </ul>
@@ -241,6 +243,7 @@
 
 
 <div class="viewcode-block" id="create_features"><a class="viewcode-back" href="../../../../skit_pipelines.components.preprocess.create_features.html#skit_pipelines.components.preprocess.create_features.create_features">[docs]</a><span class="k">def</span> <span class="nf">create_features</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
     <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">use_state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
@@ -260,7 +263,7 @@
     <span class="n">subset</span> <span class="o">=</span> <span class="p">(</span><span class="n">UTTERANCES</span><span class="p">,</span> <span class="n">INTENT_Y</span><span class="p">)</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">TRAIN</span> <span class="k">else</span> <span class="p">(</span><span class="n">INTENT_Y</span><span class="p">,)</span>
 
     <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="n">subset</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">utterances</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">row2features</span><span class="p">(</span><span class="n">use_state</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;utterances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">row2features</span><span class="p">(</span><span class="n">use_state</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">utterances</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 
     <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>

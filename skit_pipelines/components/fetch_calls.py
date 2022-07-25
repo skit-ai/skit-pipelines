@@ -49,7 +49,7 @@ def fetch_calls(
         start_date_offset=start_date_offset,
         end_date_offset=end_date_offset,
         start_time_offset=start_time_offset,
-        end_time_offset=end_time_offset
+        end_time_offset=end_time_offset,
     )
     validate_date_ranges(start_date, end_date)
 
