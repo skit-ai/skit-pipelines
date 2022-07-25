@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.upload2sheet package" href="skit_pipelines.components.upload2sheet.html" /><link rel="prev" title="skit_pipelines.components.preprocess.create_utterance_column package" href="skit_pipelines.components.preprocess.create_utterance_column.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.utils package" href="skit_pipelines.utils.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.tag_calls package - skit-pipelines 0.2.12 documentation</title>
+        <title>skit_pipelines.types package - skit-pipelines 0.2.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -174,14 +174,14 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.api.models.html">skit_pipelines.api.models package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.components.tag_calls package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
@@ -197,7 +197,7 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">skit_pipelines.types package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.utils.html">skit_pipelines.utils package</a></li>
 </ul>
 </li>
@@ -236,45 +236,40 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-components-tag-calls-package">
-<h1>skit_pipelines.components.tag_calls package<a class="headerlink" href="#skit-pipelines-components-tag-calls-package" title="Permalink to this headline">#</a></h1>
+          <section id="skit-pipelines-types-package">
+<h1>skit_pipelines.types package<a class="headerlink" href="#skit-pipelines-types-package" title="Permalink to this headline">#</a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="module-skit_pipelines.components.tag_calls.labelstudio">
-<span id="skit-pipelines-components-tag-calls-labelstudio-module"></span><h2>skit_pipelines.components.tag_calls.labelstudio module<a class="headerlink" href="#module-skit_pipelines.components.tag_calls.labelstudio" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.tag_calls.labelstudio.upload2labelstudio">
-<span class="sig-name descname"><span class="pre">upload2labelstudio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/tag_calls/labelstudio.html#upload2labelstudio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.tag_calls.labelstudio.upload2labelstudio" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-skit_pipelines.components.tag_calls.tog">
-<span id="skit-pipelines-components-tag-calls-tog-module"></span><h2>skit_pipelines.components.tag_calls.tog module<a class="headerlink" href="#module-skit_pipelines.components.tag_calls.tog" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.tag_calls.tog.upload2tog">
-<span class="sig-name descname"><span class="pre">upload2tog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/tag_calls/tog.html#upload2tog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.tag_calls.tog.upload2tog" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-skit_pipelines.components.tag_calls">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.tag_calls" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.tag_calls.tag_calls">
-<span class="sig-name descname"><span class="pre">tag_calls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/tag_calls.html#tag_calls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.tag_calls.tag_calls" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skit_pipelines.types.html#skit_pipelines.types.tag_calls.TaggingResponse" title="skit_pipelines.types.tag_calls.TaggingResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaggingResponse</span></code></a></p>
-</dd>
-</dl>
+<section id="module-skit_pipelines.types.tag_calls">
+<span id="skit-pipelines-types-tag-calls-module"></span><h2>skit_pipelines.types.tag_calls module<a class="headerlink" href="#module-skit_pipelines.types.tag_calls" title="Permalink to this headline">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TaggingResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse.df_sizes">
+<span class="sig-name descname"><span class="pre">df_sizes</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse.df_sizes" title="Permalink to this definition">#</a></dt>
+<dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.tag_calls.tag_calls_op">
-<span class="sig-name descname"><span class="pre">tag_calls_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.tag_calls.tag_calls_op" title="Permalink to this definition">#</a></dt>
-<dd><p>Tag calls</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse.errors">
+<span class="sig-name descname"><span class="pre">errors</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse.errors" title="Permalink to this definition">#</a></dt>
+<dd><p>Alias for field number 0</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponseType">
+<span class="sig-name descname"><span class="pre">TaggingResponseType</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponseType" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skit_pipelines.types.tag_calls.TaggingResponse" title="skit_pipelines.types.tag_calls.TaggingResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">skit_pipelines.types.tag_calls.TaggingResponse</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-skit_pipelines.types">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.types" title="Permalink to this headline">#</a></h2>
 </section>
 </section>
 
@@ -283,23 +278,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.components.upload2sheet.html">
+          <a class="next-page" href="skit_pipelines.utils.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.components.upload2sheet package</div>
+                <div class="title">skit_pipelines.utils package</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.components.preprocess.create_utterance_column.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.components.preprocess.create_utterance_column package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</div>
                 
               </div>
             </a>
@@ -335,11 +330,10 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.components.tag_calls package</a><ul>
+<li><a class="reference internal" href="#">skit_pipelines.types package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.tag_calls.labelstudio">skit_pipelines.components.tag_calls.labelstudio module</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.tag_calls.tog">skit_pipelines.components.tag_calls.tog module</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.tag_calls">Module contents</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.types.tag_calls">skit_pipelines.types.tag_calls module</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.types">Module contents</a></li>
 </ul>
 </li>
 </ul>

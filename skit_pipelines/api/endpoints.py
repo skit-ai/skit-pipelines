@@ -140,7 +140,7 @@ def pipeline_run_req(
 
     pipelines = {
         normalize.to_snake_case(pipeline.name): pipeline.id
-        for pipeline in kf_client.list_pipelines().pipelines
+        for pipeline in kf_client.list_pipelines(page_size=50).pipelines
     }
 
     pipeline_names = "\n".join(pipelines.keys())

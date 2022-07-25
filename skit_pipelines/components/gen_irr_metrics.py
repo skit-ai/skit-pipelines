@@ -12,9 +12,9 @@ def gen_irr_metrics(
 ):
 
     import pandas as pd
-    from tabulate import tabulate
     from eevee.metrics import intent_report
     from loguru import logger
+    from tabulate import tabulate
 
     from skit_pipelines import constants as pipeline_constants
 
@@ -41,7 +41,7 @@ def gen_irr_metrics(
         pred_df[[pipeline_constants.ID, pred_label_column]].rename(
             columns={pred_label_column: "intent_x"}
         ),
-        return_output_as_dict=True
+        return_output_as_dict=True,
     )
 
     report_df = pd.DataFrame(report).T
