@@ -41,7 +41,7 @@ RUN poetry install --no-dev
 
 COPY . .
 
-RUN poetry install --no-dev && pip install skit-labels -U
+RUN poetry install --no-dev
 
 ARG BASE_IMAGE
 ARG CUDA_IMAGE

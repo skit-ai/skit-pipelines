@@ -1,10 +1,9 @@
 # Changelog
 
-## 0.2.11
+## 0.2.12
 
 - [x] add: `irr_from_tog` pipeline, it takes a tog job id/ labelstudio project id and outputs eevee's intent metrics uploaded to s3 & optionally posted on slack, an addition to eval_voicebot_xlmr_pipeline.
 
-- [x] update: `skit-labels` version bump to 0.3.25
 ## 0.2.7
 
 - [x] update: skit-calls version bump to 0.2.21
