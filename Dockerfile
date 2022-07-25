@@ -37,10 +37,11 @@ RUN conda install scipy
 
 COPY pyproject.toml .
 
-RUN poetry install --no-dev && poetry run pip install skit-labels -U
+RUN poetry install --no-dev
 
 COPY . .
 
+RUN poetry install --no-dev && pip install skit-labels -U
 
 ARG BASE_IMAGE
 ARG CUDA_IMAGE

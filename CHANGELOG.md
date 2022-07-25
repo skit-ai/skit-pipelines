@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.10
+## 0.2.11
 
 - [x] add: `irr_from_tog` pipeline, it takes a tog job id/ labelstudio project id and outputs eevee's intent metrics uploaded to s3 & optionally posted on slack, an addition to eval_voicebot_xlmr_pipeline.
 
