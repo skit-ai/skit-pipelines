@@ -144,8 +144,6 @@ test_auth_kf.py
 .history
 *.csv
 docker_build_dev_image
-docs/*
-source/*
 tests/*
 test_*.py
 
