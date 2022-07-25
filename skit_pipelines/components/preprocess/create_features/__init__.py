@@ -4,7 +4,8 @@ from kfp.components import InputPath, OutputPath
 from skit_pipelines import constants as pipeline_constants
 
 
-def create_features(*,
+def create_features(
+    *,
     data_path: InputPath(str),
     use_state: bool,
     output_path: OutputPath(str),

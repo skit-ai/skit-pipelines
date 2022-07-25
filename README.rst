@@ -17,6 +17,7 @@ skit-pipelines
    Upload for annotation <./skit_pipelines.pipelines.tag_calls>
    Train XLMR model <./skit_pipelines.pipelines.train_voicebot_intent_model_xlmr>
    XLMR Intent evaluation <./skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline>
+   Annotated Dataset Intent Evaluation <./skit_pipelines.pipelines.irr_from_tog>
 
 .. toctree::
    :maxdepth: 1
@@ -74,6 +75,8 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 | 5 | :ref:`Train XLMR model <p_train_voicebot_intent_model_xlmr>`                    |
 +--+----------------------------------------------------------------------------------+
 | 6 | :ref:`XLMR Intent evaluation <p_eval_voicebot_xlmr_pipeline>`                   |
++--+----------------------------------------------------------------------------------+
+| 7 | :ref:`Annotated Dataset Intent Evaluation <p_irr_from_tog>`                     |
 +--+----------------------------------------------------------------------------------+
 
 Project strucuture

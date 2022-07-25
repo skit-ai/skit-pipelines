@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html" /><link rel="prev" title="skit_pipelines.pipelines.tag_calls package" href="skit_pipelines.pipelines.tag_calls.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines" href="modules.html" /><link rel="prev" title="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package - skit-pipelines 0.2.11 documentation</title>
+        <title>skit_pipelines.pipelines.irr_from_tog package - skit-pipelines 0.2.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -162,9 +162,9 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Train XLMR model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">Train XLMR model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Annotated Dataset Intent Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
@@ -192,9 +192,9 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
@@ -236,45 +236,34 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-pipelines-train-voicebot-intent-model-xlmr-package">
-<h1>skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package<a class="headerlink" href="#skit-pipelines-pipelines-train-voicebot-intent-model-xlmr-package" title="Permalink to this headline">#</a></h1>
-<section id="module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr" title="Permalink to this headline">#</a></h2>
+          <section id="skit-pipelines-pipelines-irr-from-tog-package">
+<h1>skit_pipelines.pipelines.irr_from_tog package<a class="headerlink" href="#skit-pipelines-pipelines-irr-from-tog-package" title="Permalink to this headline">#</a></h1>
+<section id="module-skit_pipelines.pipelines.irr_from_tog">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.irr_from_tog" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.train_voicebot_intent_model_xlmr">
-<span class="sig-name descname"><span class="pre">train_voicebot_intent_model_xlmr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlmr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlmroberta'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_train_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_early_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_patience</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_seq_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/train_voicebot_intent_model_xlmr.html#train_voicebot_intent_model_xlmr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.train_voicebot_intent_model_xlmr" title="Permalink to this definition">#</a></dt>
-<dd><p>A pipeline to train an XLMR model on given dataset.</p>
-<p id="p-train-voicebot-intent-model-xlmr">Example payload to invoke via slack integrations:</p>
+<dt class="sig sig-object py" id="skit_pipelines.pipelines.irr_from_tog.irr_from_tog">
+<span class="sig-name descname"><span class="pre">irr_from_tog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intent_y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw.intent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlwr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/irr_from_tog.html#irr_from_tog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.irr_from_tog.irr_from_tog" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.</p>
+<p id="p-irr-from-tog">Example payload to invoke this pipeline via slack integrations:</p>
 <blockquote>
-<div><p>&#64;charon run train_voicebot_intent_model_xlmr</p>
+<div><p>&#64;charon run irr_from_tog</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dataset_path&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/path/to/data.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="s2">&quot;org&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;use_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;num_train_epochs&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s2">&quot;max_seq_length&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
-    <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">4e-5</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4011&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>We use the following payload to use via studio.</p>
+<p>To use labelstudio:</p>
 <blockquote>
-<div><p>&#64;charon run train_voicebot_intent_model_xlmr</p>
+<div><p>&#64;charon run irr_from_tog</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;model_path&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/model.tar.gz&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dataset_path&quot;</span><span class="p">:</span> <span class="s2">&quot;path/to/data.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;storage_options&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;bucket&quot;</span><span class="p">:</span> <span class="s2">&quot;bucket-name&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="s2">&quot;org&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;classifier_type&quot;</span><span class="p">:</span> <span class="s2">&quot;xlmr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;use_state&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;num_train_epochs&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s2">&quot;max_seq_length&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
-    <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">4e-05</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_id&quot;</span><span class="p">:</span> <span class="s2">&quot;61&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -282,21 +271,16 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_path</strong> (<em>str</em>) – Save path for the trained model.</p></li>
-<li><p><strong>dataset_path</strong> (<em>str</em>) – The S3 URI or the S3 key for the tagged dataset.</p></li>
-<li><p><strong>storage_options</strong> (<em>str</em><em>, </em><em>optional</em>) – A json string that specifies the bucket and key, defaults to “”</p></li>
-<li><p><strong>org_id</strong> (<em>str</em><em>, </em><em>optional</em>) – reference path to save the metrics.</p></li>
-<li><p><strong>classifier_type</strong> (<em>str</em><em>, </em><em>optional</em>) – One of XLMR and MLP, defaults to “xlmr”</p></li>
-<li><p><strong>use_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – Train the model using state as a feature, defaults to False</p></li>
-<li><p><strong>model_type</strong> (<em>str</em><em>, </em><em>optional</em>) – The BERT model type, defaults to “xlmroberta”</p></li>
-<li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The BERT model sub type, defaults to “xlm-roberta-base”</p></li>
-<li><p><strong>num_train_epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of epchs to train the model, defaults to 10</p></li>
-<li><p><strong>use_early_stopping</strong> (<em>bool</em><em>, </em><em>optional</em>) – If the loss threshold is below an expected value, setting this to true will stop the training, defaults to False</p></li>
-<li><p><strong>early_stopping_patience</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations for which the loss must be less than expected value, defaults to 3</p></li>
-<li><p><strong>early_stopping_delta</strong> (<em>float</em><em>, </em><em>optional</em>) – The diff between expected and actual loss that triggers early stopping, defaults to 0</p></li>
-<li><p><strong>max_seq_length</strong> (<em>int</em><em>, </em><em>optional</em>) – Truncate an input after these many characters, defaults to 128</p></li>
-<li><p><strong>learning_rate</strong> (<em>float</em><em>,</em>) – A multiplier to control weight updates, defaults to 4e-5</p></li>
-<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to send a slack notification, defaults to “”</p></li>
+<li><p><strong>org_id</strong> (<em>str</em>) – reference path to save the metrics on s3.</p></li>
+<li><p><strong>job_id</strong> (<em>str</em>) – intent tog job IDs.</p></li>
+<li><p><strong>labelstudio_project_id</strong> (<em>str</em>) – intent labelstudio project IDs.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em>) – The start date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>end_date</strong> (<em>str</em>) – The end date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>timezone</strong> (<em>str</em><em>, </em><em>optional</em>) – The timezone to apply for multi-region datasets, defaults to “Asia/Kolkata”</p></li>
+<li><p><strong>true_label_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name of ground-truth which will be used for eevee intent evaluation.</p></li>
+<li><p><strong>pred_label_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name of SLU production predictions which will be used for eevee intent evaluation.</p></li>
+<li><p><strong>mlwr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – when True, pushes the eevee intent metrics to events DB for MLWR.</p></li>
+<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – A comma separated list of slack ids: “&#64;apples, &#64;orange.fruit” etc, defaults to “”</p></li>
 <li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
 <li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
 </ul>
@@ -312,23 +296,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">
+          <a class="next-page" href="modules.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</div>
+                <div class="title">skit_pipelines</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.pipelines.tag_calls.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.pipelines.tag_calls package</div>
+                <div class="title">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</div>
                 
               </div>
             </a>
@@ -364,8 +348,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a><ul>
-<li><a class="reference internal" href="#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr">Module contents</a></li>
+<li><a class="reference internal" href="#">skit_pipelines.pipelines.irr_from_tog package</a><ul>
+<li><a class="reference internal" href="#module-skit_pipelines.pipelines.irr_from_tog">Module contents</a></li>
 </ul>
 </li>
 </ul>
