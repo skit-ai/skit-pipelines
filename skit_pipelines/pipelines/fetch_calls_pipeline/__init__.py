@@ -1,5 +1,6 @@
 import kfp
 
+from skit_pipelines import constants
 from skit_pipelines.components import fetch_calls_op, slack_notification_op
 
 
@@ -20,7 +21,7 @@ def fetch_calls_pipeline(
     asr_provider: str = "",
     states: str = "",
     call_quantity: int = 200,
-    call_type: str = "inbound",
+    call_type: str = "INBOUND",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
