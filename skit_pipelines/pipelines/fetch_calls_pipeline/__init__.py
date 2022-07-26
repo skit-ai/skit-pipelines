@@ -1,6 +1,5 @@
 import kfp
 
-from skit_pipelines import constants
 from skit_pipelines.components import fetch_calls_op, slack_notification_op
 
 
