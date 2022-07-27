@@ -20,7 +20,7 @@ def fetch_calls_pipeline(
     asr_provider: str = "",
     states: str = "",
     call_quantity: int = 200,
-    call_type: str = "inbound",
+    call_type: str = "INBOUND",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -70,7 +70,7 @@ def fetch_calls_pipeline(
     :type states: str, optional
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
-    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "inbound"
+    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "INBOUND"
     :type call_type: str, optional
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
