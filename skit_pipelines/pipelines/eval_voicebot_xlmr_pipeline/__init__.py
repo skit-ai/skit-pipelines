@@ -1,5 +1,3 @@
-import os
-
 import kfp
 
 from skit_pipelines import constants as pipeline_constants
@@ -91,7 +89,6 @@ def eval_voicebot_xlmr_pipeline(
     with kfp.dsl.Condition(s3_path_model != "", "model_present") as model_present:
         loaded_model_op = download_from_s3_op(storage_path=s3_path_model)
         # get predictions from the model
-        # TODO: make s3_path_model optional, without which predictions already present in the csv to be used.
         pred_op = get_preds_voicebot_xlmr_op(
             preprocess_data_op.outputs["output"],
             loaded_model_op.outputs["output"],
@@ -109,6 +106,57 @@ def eval_voicebot_xlmr_pipeline(
             true_label_column=true_label_column,
             pred_label_column=pred_label_column,
         )
+        
+        # produce test set metrics.
+        upload_irr = upload2s3_op(
+            path_on_disk=with_model_irr_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-irr-metrics",
+            bucket=BUCKET,
+            ext=".csv",
+        )
+        upload_irr.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+        upload_cm = upload2s3_op(
+            path_on_disk=with_model_confusion_matrix_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-confusion-matrix",
+            bucket=BUCKET,
+            ext=".csv",
+        )
+        upload_cm.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
+        with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
+            notification_text = f"Here's the IRR report."
+            code_block = f"aws s3 cp {upload_irr.output} ."
+            irr_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+        with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
+            notification_text = f"Here's the confusion matrix."
+            code_block = f"aws s3 cp {upload_cm.output} ."
+            cm_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            cm_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+            
 
     with kfp.dsl.Condition(s3_path_model == "", "model_missing") as model_missing:
         irr_op = gen_irr_metrics_op(
@@ -122,56 +170,55 @@ def eval_voicebot_xlmr_pipeline(
             pred_label_column=pred_label_column,
         )
 
-    # produce test set metrics.
-    upload_irr = upload2s3_op(
-        path_on_disk=with_model_irr_op.outputs["output"] or irr_op.outputs["output"],
-        reference=org_id,
-        file_type="xlmr-irr-metrics",
-        bucket=BUCKET,
-        ext=".csv",
-    ).after(model_present or model_missing)
-    upload_irr.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-    upload_cm = upload2s3_op(
-        path_on_disk=with_model_confusion_matrix_op.outputs["output"]
-        or confusion_matrix_op.outputs["output"],
-        reference=org_id,
-        file_type="xlmr-confusion-matrix",
-        bucket=BUCKET,
-        ext=".csv",
-    ).after(model_present or model_missing)
-    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
-        notification_text = f"Here's the IRR report."
-        code_block = f"aws s3 cp {upload_irr.output} ."
-        irr_notif = slack_notification_op(
-            notification_text,
-            channel=channel,
-            cc=notify,
-            code_block=code_block,
-            thread_id=slack_thread,
+        # produce test set metrics.
+        upload_irr = upload2s3_op(
+            path_on_disk=irr_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-irr-metrics",
+            bucket=BUCKET,
+            ext=".csv",
         )
-        irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+        upload_irr.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+        upload_cm = upload2s3_op(
+            path_on_disk=confusion_matrix_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-confusion-matrix",
+            bucket=BUCKET,
+            ext=".csv",
+        )
+        upload_cm.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
-        notification_text = f"Here's the confusion matrix."
-        code_block = f"aws s3 cp {upload_irr.output} ."
-        cm_notif = slack_notification_op(
-            notification_text,
-            channel=channel,
-            cc=notify,
-            code_block=code_block,
-            thread_id=slack_thread,
-        )
-        cm_notif.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
-        )
+        with kfp.dsl.Condition(notify != "", "notify").after(upload_irr) as irr_check:
+            notification_text = f"Here's the IRR report."
+            code_block = f"aws s3 cp {upload_irr.output} ."
+            irr_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+        with kfp.dsl.Condition(notify != "", "notify").after(upload_cm) as cm_check:
+            notification_text = f"Here's the confusion matrix."
+            code_block = f"aws s3 cp {upload_cm.output} ."
+            cm_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            cm_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
 
 
 __all__ = ["eval_voicebot_xlmr_pipeline"]
