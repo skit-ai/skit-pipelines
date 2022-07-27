@@ -1,6 +1,12 @@
 # Changelog
 
+## 0.2.14
+
+- [x] fix: call_type default arg from "inbound" to "INBOUND" for fetch_calls_pipeline
+- [x] fix: eval_voicebot_xlmr_pipeline to work even when model is not present
+
 ## 0.2.13
+
 - [x] update: `skit-labels` version bump to 0.3.26
 
 ## 0.2.12

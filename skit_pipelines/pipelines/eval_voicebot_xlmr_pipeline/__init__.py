@@ -106,7 +106,7 @@ def eval_voicebot_xlmr_pipeline(
             true_label_column=true_label_column,
             pred_label_column=pred_label_column,
         )
-        
+
         # produce test set metrics.
         upload_irr = upload2s3_op(
             path_on_disk=with_model_irr_op.outputs["output"],
@@ -156,7 +156,6 @@ def eval_voicebot_xlmr_pipeline(
             cm_notif.execution_options.caching_strategy.max_cache_staleness = (
                 "P0D"  # disables caching
             )
-            
 
     with kfp.dsl.Condition(s3_path_model == "", "model_missing") as model_missing:
         irr_op = gen_irr_metrics_op(
