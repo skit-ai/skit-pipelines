@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.15
+
+- [x] update: `skit-labels` version bump to 0.3.27 - tag_calls and fetch_n_tag_calls uploads data in batches of batched data with retries + sleep.
+
 ## 0.2.14
 
 - [x] fix: call_type default arg from "inbound" to "INBOUND" for fetch_calls_pipeline

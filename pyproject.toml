@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skit-pipelines"
-version = "0.2.14"
+version = "0.2.15"
 description = "Kubeflow components for ml workflows at skit.ai."
 authors = ["ltbringer <amresh.venugopal@gmail.com>"]
 license = "MIT"
@@ -12,7 +12,7 @@ slack-sdk = "3.15.2"
 requests = "2.27.1"
 boto3 = "1.20.24"
 skit-calls = "0.2.21"
-skit-labels = "0.3.26"
+skit-labels = "0.3.27"
 torch = "1.11.0"
 fastapi = "0.75.1"
 uvicorn = {extras = ["standard"], version = "0.17.6"}
