@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.16
+
+- [x] update: start_date and end_date optional for fetch_calls_pipeline and fetch_n_tag_calls
 ## 0.2.15
 
 - [x] update: `skit-labels` version bump to 0.3.27 - tag_calls and fetch_n_tag_calls uploads data in batches of batched data with retries + sleep.

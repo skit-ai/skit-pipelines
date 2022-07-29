@@ -9,9 +9,9 @@ from skit_pipelines.components import fetch_calls_op, slack_notification_op
 )
 def fetch_calls_pipeline(
     client_id: int,
-    start_date: str,
     lang: str,
-    end_date: str,
+    start_date: str = "",
+    end_date: str = "",
     ignore_callers: str = "",
     reported: bool = False,
     use_case: str = "",
