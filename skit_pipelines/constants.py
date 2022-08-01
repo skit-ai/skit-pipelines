@@ -73,6 +73,7 @@ VALUE = "value"
 DOMAIN = "domain"
 COOKIES_PATH = "/tmp/kf_cookies.json"
 KUBEFLOW_GATEWAY_ENDPOINT = os.environ["KUBEFLOW_GATEWAY_ENDPOINT"]
+KUBEFLOW_BUCKET = "kubeflow-skit"
 COOKIE_0 = "AWSELBAuthSessionCookie-0"
 COOKIE_1 = "AWSELBAuthSessionCookie-1"
 COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
