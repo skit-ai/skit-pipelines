@@ -25,12 +25,8 @@ def push_irr_to_postgres(
     ML_METRICS_DB_PORT = os.environ["ML_METRICS_DB_PORT"]
     ML_METRICS_DB_USER = os.environ["ML_METRICS_DB_USER"]
     ML_METRICS_DB_PASSWORD = os.environ["ML_METRICS_DB_PASSWORD"]
-    logger.debug([ML_METRICS_DB_NAME, ML_METRICS_DB_HOST, ML_METRICS_DB_USER])
 
 
-    # project_event table under `ML Metrics` db
-    # with open("secrets/insert_irr_events.sql") as fp:
-    #     INSERT_SQL_QUERY = fp.read()
     INSERT_SQL_QUERY = """
     INSERT INTO project_event 
     (name, reference_id, support, precision, recall, f1, 
