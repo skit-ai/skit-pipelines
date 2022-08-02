@@ -147,3 +147,4 @@ docker_build_dev_image
 tests/*
 test_*.py
 
+/pipeline_secrets
