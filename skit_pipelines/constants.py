@@ -102,3 +102,15 @@ def GET_RUN_URL(namespace, id):
 FILTER_LIST = [
     "webhook_uri",
 ]
+
+# for pushing eevee intent metrics to project_event table.
+ML_INTENT_METRICS_INSERT_SQL_QUERY = """
+INSERT INTO project_event 
+(name, reference_id, support, precision, recall, f1, 
+    raw, is_deleted, is_complete, created_at, updated_at, 
+    of_type, language, app_id, created_date)
+VALUES 
+(%(name)s, %(reference_id)s, %(support)s, %(precision)s, %(recall)s, %(f1)s, 
+    %(raw)s, %(is_deleted)s, %(is_complete)s, %(created_at)s, %(updated_at)s, 
+    %(of_type)s, %(language)s, %(app_id)s, %(created_date)s);
+"""
