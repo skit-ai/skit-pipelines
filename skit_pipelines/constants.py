@@ -11,10 +11,18 @@ CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]
 CONSOLE_IAM_EMAIL = os.environ["SKIT_API_GATEWAY_EMAIL"]
 CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
+# for fsm-db
 DB_HOST = "production-postgresql-slave.default"
 DB_PORT = os.environ["DB_PORT"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_USER = os.environ["DB_USER"]
+
+# for metrics-db
+ML_METRICS_DB_NAME = os.environ["ML_METRICS_DB_NAME"]
+ML_METRICS_DB_HOST = os.environ["ML_METRICS_DB_HOST"]
+ML_METRICS_DB_PORT = os.environ["ML_METRICS_DB_PORT"]
+ML_METRICS_DB_USER = os.environ["ML_METRICS_DB_USER"]
+ML_METRICS_DB_PASSWORD = os.environ["ML_METRICS_DB_PASSWORD"]
 
 KF_NAMESPACE = "skit"
 DEFAULT_EXPERIMENT_NAME = "Default"

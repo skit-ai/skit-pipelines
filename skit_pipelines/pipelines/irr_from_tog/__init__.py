@@ -8,6 +8,7 @@ from skit_pipelines.components import (
     gen_irr_metrics_op,
     slack_notification_op,
     upload2s3_op,
+    push_irr_to_postgres_op,
 )
 
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -15,7 +16,7 @@ BUCKET = pipeline_constants.BUCKET
 
 
 @kfp.dsl.pipeline(
-    name="XLMR Voicebot Eval IRR pipeline for tog & labelstudio tagged datasets",
+    name="Eval IRR pipeline for tog & labelstudio tagged datasets",
     description="Produces intent metrics given a tog-job/labelstudio-project.",
 )
 def irr_from_tog(
@@ -28,6 +29,8 @@ def irr_from_tog(
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
     mlwr: bool = False,
+    lang: str = "",
+    slu_project_name: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -87,7 +90,7 @@ def irr_from_tog(
     :param pred_label_column: Column name of SLU production predictions which will be used for eevee intent evaluation.
     :type pred_label_column: str, optional
 
-    :param mlwr: when True, pushes the eevee intent metrics to events DB for MLWR.
+    :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, project_events table for MLWR.
     :type use_state: bool, optional
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
@@ -179,7 +182,17 @@ def irr_from_tog(
             "P0D"  # disables caching
         )
 
-    # with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-events-db"):
-    #     pass
+    with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-events-db"):
+        
+        pushed_stat = push_irr_to_postgres_op(
+            irr_op.outputs["output"],
+            job_id,
+            lang,
+            slu_project_name,
+        ).after(irr_op)
+        pushed_stat.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
 
 __all__ = ["irr_from_tog"]

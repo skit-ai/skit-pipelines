@@ -33,7 +33,7 @@ compile_pipes:
 	done
 
 dev_image:
-	@source secrets/env.sh && ./docker_build_dev_image master
+	@source secrets/env.sh && ./docker_build_dev_image mlwr_irr
 
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
