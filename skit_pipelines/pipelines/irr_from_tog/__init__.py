@@ -37,6 +37,7 @@ def irr_from_tog(
 ):
     """
     Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.
+    When passed with mlwr=True, it pushes the intent metrics to intent_metrics table.
 
     .. _p_irr_from_tog:
 
@@ -51,6 +52,22 @@ def irr_from_tog(
                 "job_id": "4011",
                 "start_date": "2022-06-01",
                 "end_date": "2022-08-01"
+            }
+
+    To push tog job intent metrics to db:
+
+        @charon run irr_from_tog
+
+        .. code-block:: python
+
+            {
+                "org_id": 34,
+                "job_id": "3091",
+                "start_date": "2022-06-01",
+                "end_date": "2022-07-20",
+                "mlwr": True,
+                "lang": "en",
+                "slu_project_name": "indigo"
             }
 
     To use labelstudio:
@@ -90,7 +107,7 @@ def irr_from_tog(
     :param pred_label_column: Column name of SLU production predictions which will be used for eevee intent evaluation.
     :type pred_label_column: str, optional
 
-    :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, project_events table for MLWR.
+    :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, intent_metrics table for MLWR.
     :type use_state: bool, optional
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
@@ -182,7 +199,7 @@ def irr_from_tog(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-events-db"):
+    with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
         
         pushed_stat = push_irr_to_postgres_op(
             irr_op.outputs["output"],
