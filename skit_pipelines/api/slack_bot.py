@@ -162,7 +162,7 @@ def command_parser(text: str) -> Tuple[CommandType, PipelineNameType, PayloadTyp
     )
 
     if match:
-        run_type, remaining_params = match.group(1), match.group(2)
+        run_type, remaining_params = match.group(1), match.group(2).rstrip(".")
         if run_type and remaining_params:
             if b64_match and (encoded_payload := b64_match.group(1)):
                 pipeline_name = remaining_params.replace(encoded_payload, "").strip()
