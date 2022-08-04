@@ -10,7 +10,7 @@ def push_irr_to_postgres(
     slu_project_name: str,
 ):
 
-
+    import traceback
     import pytz
     from datetime import datetime
 
@@ -55,23 +55,17 @@ def push_irr_to_postgres(
             to_use_datetime = datetime.now(tz=pytz.timezone("Asia/Kolkata"))
 
             query_parameters = {
-                "name": f"{category}-intents",
-                "reference_id": dataset_job_id,
-                "of_type": "metric",
-                "support": support,
+                "slu_name": slu_project_name,
+                "dataset_job_id": dataset_job_id,
                 "language": language,
-                "tagged": 0,
+                "metric_name": f"{category}-intents",
                 "precision": precision,
                 "recall": recall,
                 "f1": f1,
-                "raw": report_df.to_json(),
-                "app": slu_project_name,
-                "is_complete": True,
-                "is_deleted": False,
+                "support": support,
                 "created_at": to_use_datetime,
-                "updated_at": to_use_datetime,
-                "app_id": 1, # dummy
-                "created_date": to_use_datetime, # dunno what this is supposed to be, but can't be null   
+                "reference_url": f"{pipeline_constants.REFERENCE_URL}{dataset_job_id}",
+                "raw": report_df.to_json(),
             }
 
             cur.execute(pipeline_constants.ML_INTENT_METRICS_INSERT_SQL_QUERY, query_parameters)
@@ -80,6 +74,7 @@ def push_irr_to_postgres(
 
     except Exception as e:
         logger.exception(e)
+        print(traceback.print_exc())
 
     finally:
         cur.close()
