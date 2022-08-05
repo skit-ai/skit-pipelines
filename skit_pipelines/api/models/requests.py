@@ -5,7 +5,7 @@ from pydantic import BaseModel, create_model, validator
 
 import skit_pipelines.constants as const
 from skit_pipelines import pipelines
-from skit_pipelines.utils.normalize import to_camel_case
+from skit_pipelines.utils.normalize import to_camel_case, to_snake_case
 
 
 def get_all_pipelines_fn():
@@ -15,6 +15,11 @@ def get_all_pipelines_fn():
         if not pipeline_name.startswith("__") and callable(pipeline_fn)
     }
 
+def get_normalized_pipelines_fn_map():
+    return {
+        to_snake_case(pipeline_name): pipeline_fn
+        for pipeline_name, pipeline_fn in get_all_pipelines_fn().items()
+    }
 
 def generate_schema(pipeline_name, pipeline_fn):
     signature = inspect.signature(pipeline_fn)

@@ -34,6 +34,7 @@ def gen_irr_metrics(
         f"Generating IRR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
     )
 
+
     true_labels = pred_df[[pipeline_constants.ID, true_label_column]].rename(
         columns={true_label_column: "intent"}
     )

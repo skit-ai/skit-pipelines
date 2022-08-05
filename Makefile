@@ -20,7 +20,7 @@ secrets:
 	@if [ -d "secrets" ]; then rm -rf secrets; fi
 	@dvc get https://github.com/skit-ai/skit-calls secrets
 	@dvc pull
-	@cat env.sh >> secrets/env.sh
+	@cat pipeline_secrets/env.sh >> secrets/env.sh
 
 compile_pipes:
 	@if [ -d "build" ]; then rm -rf build/**; fi
@@ -32,14 +32,13 @@ compile_pipes:
 		source secrets/env.sh && dsl-compile --py $$file --output build/$$pipeline_name.yaml; \
 	done
 
-dev_image:
-	@source secrets/env.sh && ./docker_build_dev_image master
+dev:
+	@source secrets/env.sh && ./docker_build_dev_image $(tag)
 
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
 	@cp source/index.rst README.rst
 
-dev: dev_image compile_pipes
 pipes: secrets compile_pipes
 all: lint pipes docs
