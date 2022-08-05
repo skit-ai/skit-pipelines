@@ -5,13 +5,14 @@ from skit_pipelines import constants as pipeline_constants
 
 def push_irr_to_postgres(
     eevee_intent_df_path: InputPath(str),
-    dataset_job_id,
-    language: str,
+    extracted_pkl_path: InputPath(str),
     slu_project_name: str,
+    timezone: str = "Asia/Kolkata",
 ):
 
-    import traceback
+    import pickle
     import pytz
+    import traceback
     from datetime import datetime
 
     import pandas as pd
@@ -34,6 +35,10 @@ def push_irr_to_postgres(
 
 
         irr_metrics_df = pd.read_csv(eevee_intent_df_path, index_col=0)
+
+        with open(extracted_pkl_path, "rb") as fp:
+            collected_info = pickle.load(fp)
+
     
         metrics = {}
         metrics["overall"] = irr_metrics_df
@@ -44,7 +49,6 @@ def push_irr_to_postgres(
 
         for category, report_df in metrics.items():
             logger.debug(category)
-            logger.debug(report_df)
             precision = report_df.loc["weighted avg"]["precision"]
             recall = report_df.loc["weighted avg"]["recall"]
             f1 = report_df.loc["weighted avg"]["f1-score"]
@@ -52,18 +56,27 @@ def push_irr_to_postgres(
 
             logger.debug(report_df.loc["weighted avg"])
 
-            to_use_datetime = datetime.now(tz=pytz.timezone("Asia/Kolkata"))
+            pytz_tz = pytz.timezone(timezone)
+            created_at = datetime.now(tz=pytz_tz)
+
+            dataset_job_id = int(collected_info["dataset_job_id"])
 
             query_parameters = {
                 "slu_name": slu_project_name,
                 "dataset_job_id": dataset_job_id,
-                "language": language,
+                "language": collected_info["language"],
                 "metric_name": f"{category}-intents",
+                "n_calls": collected_info["n_calls"],
+                "n_turns": collected_info["n_turns"],
                 "precision": precision,
                 "recall": recall,
                 "f1": f1,
                 "support": support,
-                "created_at": to_use_datetime,
+                "created_at": created_at,
+                "calls_from_date": collected_info["calls_from_date"],
+                "calls_to_date": collected_info["calls_to_date"],
+                "tagged_from_date": collected_info["tagged_from_date"],
+                "tagged_to_date": collected_info["tagged_to_date"],
                 "reference_url": f"{pipeline_constants.REFERENCE_URL}{dataset_job_id}",
                 "raw": report_df.to_json(),
             }
@@ -94,7 +107,6 @@ push_irr_to_postgres_op = kfp.components.create_component_from_func(
     
 #     a = push_irr_to_postgres(
 #         eevee_intent_df_path,
-#         dataset_job_id,
-#         language,
-#         slu_project_name
+#         "saved_dictionary.pkl",
+#         slu_project_name,
 #     )

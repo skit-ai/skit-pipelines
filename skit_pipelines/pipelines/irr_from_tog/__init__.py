@@ -9,6 +9,7 @@ from skit_pipelines.components import (
     slack_notification_op,
     upload2s3_op,
     push_irr_to_postgres_op,
+    extract_info_from_dataset_op,
 )
 
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -29,7 +30,6 @@ def irr_from_tog(
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
     mlwr: bool = False,
-    lang: str = "",
     slu_project_name: str = "",
     notify: str = "",
     channel: str = "",
@@ -66,7 +66,6 @@ def irr_from_tog(
                 "start_date": "2022-06-01",
                 "end_date": "2022-07-20",
                 "mlwr": True,
-                "lang": "en",
                 "slu_project_name": "indigo"
             }
 
@@ -109,6 +108,9 @@ def irr_from_tog(
 
     :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, intent_metrics table for MLWR.
     :type use_state: bool, optional
+
+    :param slu_project_name: name of the slu deployment which we are tracking
+    :type slu_project_name: str, optional
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
@@ -200,13 +202,22 @@ def irr_from_tog(
         )
 
     with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
+
+        extracted_info = extract_info_from_dataset_op(
+            tagged_data_op.outputs["output"],
+            timezone=timezone,
+        ).after(tagged_data_op)
+        extracted_info.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
         
         pushed_stat = push_irr_to_postgres_op(
             irr_op.outputs["output"],
-            job_id,
-            lang,
-            slu_project_name,
-        ).after(irr_op)
+            extracted_info.outputs["output"],
+            slu_project_name=slu_project_name,
+            timezone=timezone,
+        ).after(irr_op, extracted_info)
         pushed_stat.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
