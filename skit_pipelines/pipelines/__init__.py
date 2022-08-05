@@ -1,6 +1,9 @@
 from skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline import (
     eval_voicebot_xlmr_pipeline,
 )
+from skit_pipelines.pipelines.eval_asr_pipeline import (
+    eval_asr_pipeline,
+)
 from skit_pipelines.pipelines.fetch_calls_n_push_to_sheets import (
     fetch_calls_n_push_to_sheets,
 )
