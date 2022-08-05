@@ -39,6 +39,7 @@ ID = "id"
 DATA_ID = "data_id"
 INTENT_X = "intent_x"
 INTENT_Y = "intent_y"
+TRANSCRIPT_Y = "transcript_y"
 INTENT = "intent"
 STATE = "state"
 

@@ -11,6 +11,12 @@ from skit_pipelines.components.preprocess.create_features import create_features
 from skit_pipelines.components.preprocess.create_true_intent_column import (
     create_true_intent_labels_op,
 )
+from skit_pipelines.components.preprocess.create_true_transcript_column import (
+    create_true_transcript_labels_op,
+)
+from skit_pipelines.components.gen_asr_metrics import (
+    gen_asr_metrics_op,
+)
 from skit_pipelines.components.preprocess.create_utterance_column import (
     create_utterances_op,
 )
