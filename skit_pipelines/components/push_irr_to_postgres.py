@@ -3,6 +3,7 @@ from kfp.components import InputPath
 
 from skit_pipelines import constants as pipeline_constants
 
+
 def push_irr_to_postgres(
     eevee_intent_df_path: InputPath(str),
     extracted_pkl_path: InputPath(str),
@@ -11,16 +12,15 @@ def push_irr_to_postgres(
 ):
 
     import pickle
-    import pytz
     import traceback
     from datetime import datetime
 
     import pandas as pd
     import psycopg2
+    import pytz
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
-
 
     try:
 
@@ -33,13 +33,11 @@ def push_irr_to_postgres(
         )
         cur = conn.cursor()
 
-
         irr_metrics_df = pd.read_csv(eevee_intent_df_path, index_col=0)
 
         with open(extracted_pkl_path, "rb") as fp:
             collected_info = pickle.load(fp)
 
-    
         metrics = {}
         metrics["overall"] = irr_metrics_df
 
@@ -81,9 +79,10 @@ def push_irr_to_postgres(
                 "raw": report_df.to_json(),
             }
 
-            cur.execute(pipeline_constants.ML_INTENT_METRICS_INSERT_SQL_QUERY, query_parameters)
+            cur.execute(
+                pipeline_constants.ML_INTENT_METRICS_INSERT_SQL_QUERY, query_parameters
+            )
             conn.commit()
-
 
     except Exception as e:
         logger.exception(e)
@@ -92,6 +91,7 @@ def push_irr_to_postgres(
     finally:
         cur.close()
         conn.close()
+
 
 push_irr_to_postgres_op = kfp.components.create_component_from_func(
     push_irr_to_postgres, base_image=pipeline_constants.BASE_IMAGE
@@ -104,7 +104,7 @@ push_irr_to_postgres_op = kfp.components.create_component_from_func(
 #     dataset_job_id = 3091
 #     language = "en"
 #     slu_project_name = "indigo"
-    
+
 #     a = push_irr_to_postgres(
 #         eevee_intent_df_path,
 #         "saved_dictionary.pkl",

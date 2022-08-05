@@ -1,19 +1,17 @@
-
 import kfp
 from kfp.components import InputPath, OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
+
 def extract_info_from_dataset(
-    dataset_path: InputPath(str),
-    output_path: OutputPath(str),
-    timezone: str
-    ):
+    dataset_path: InputPath(str), output_path: OutputPath(str), timezone: str
+):
 
     import pickle
 
-    import pytz
     import pandas as pd
+    import pytz
     from dateutil.parser import parse
     from loguru import logger
 
@@ -28,7 +26,6 @@ def extract_info_from_dataset(
         datetime_without_tz = parse(datetime_str).replace(tzinfo=None)
         return pytz_tz.localize(datetime_without_tz)
 
-
     language = df["raw.language"].iloc[0]
     job_id = df["job_id"].iloc[0]
     n_calls = df["call_uuid"].nunique()
@@ -37,7 +34,7 @@ def extract_info_from_dataset(
     max_tagged_time = df["tagged_time"].max()
     min_reftime = df["reftime"].min()
     max_reftime = df["reftime"].max()
-    
+
     min_reftime = give_appropriate_datetime(min_reftime, pytz_tz)
     max_reftime = give_appropriate_datetime(max_reftime, pytz_tz)
 
@@ -46,7 +43,9 @@ def extract_info_from_dataset(
 
     duplicated_conversations = df["conversation_uuid"].duplicated().sum()
     if duplicated_conversations > 0:
-        logger.info(f"there are {duplicated_conversations} duplicated converations in the dataset.")
+        logger.info(
+            f"there are {duplicated_conversations} duplicated converations in the dataset."
+        )
 
     collected_info = {
         "language": language,
@@ -60,7 +59,7 @@ def extract_info_from_dataset(
     }
     logger.debug(collected_info)
 
-    with open(output_path, 'wb') as f:
+    with open(output_path, "wb") as f:
         pickle.dump(collected_info, f)
 
 
@@ -71,7 +70,7 @@ extract_info_from_dataset_op = kfp.components.create_component_from_func(
 # if __name__ == "__main__":
 
 #     extract_info_from_dataset(
-#         dataset_path="3091.csv", 
-#         output_path="saved_dictionary.pkl", 
+#         dataset_path="3091.csv",
+#         output_path="saved_dictionary.pkl",
 #         timezone="Asia/Kolkata"
 #     )

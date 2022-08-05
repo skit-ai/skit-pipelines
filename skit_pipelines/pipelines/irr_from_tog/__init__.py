@@ -2,14 +2,14 @@ import kfp
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
-    fetch_tagged_dataset_op,
     create_true_intent_labels_op,
+    extract_info_from_dataset_op,
+    fetch_tagged_dataset_op,
     gen_confusion_matrix_op,
     gen_irr_metrics_op,
+    push_irr_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
-    push_irr_to_postgres_op,
-    extract_info_from_dataset_op,
 )
 
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -136,9 +136,9 @@ def irr_from_tog(
     )
 
     # Create true label column
-    preprocess_data_op = create_true_intent_labels_op(tagged_data_op.outputs["output"]).after(
-        tagged_data_op
-    )
+    preprocess_data_op = create_true_intent_labels_op(
+        tagged_data_op.outputs["output"]
+    ).after(tagged_data_op)
 
     # use eevee for comparing ground-truth tog/label studio annotated values
     # with actual production prediction values present in the same tog/label studio
@@ -149,7 +149,7 @@ def irr_from_tog(
         pred_label_column=pred_label_column,
     )
 
-    # confusion matrix on the same ground-truth tog/labelstudio dataset 
+    # confusion matrix on the same ground-truth tog/labelstudio dataset
     # vs SLU production predictions
     confusion_matrix_op = gen_confusion_matrix_op(
         preprocess_data_op.outputs["output"],
@@ -181,21 +181,33 @@ def irr_from_tog(
         "P0D"  # disables caching
     )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_irr) as irr_check:
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+        upload_irr
+    ) as irr_check:
         notification_text = f"Here's the IRR report."
         code_block = f"aws s3 cp {upload_irr.output} ."
         irr_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
         )
         irr_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_cm) as cm_check:
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+        upload_cm
+    ) as cm_check:
         notification_text = f"Here's the confusion matrix."
         code_block = f"aws s3 cp {upload_cm.output} ."
         cm_notif = slack_notification_op(
-            notification_text, channel=channel, cc=notify, code_block=code_block, thread_id=slack_thread
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
         )
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -211,7 +223,6 @@ def irr_from_tog(
             "P0D"  # disables caching
         )
 
-        
         pushed_stat = push_irr_to_postgres_op(
             irr_op.outputs["output"],
             extracted_info.outputs["output"],
