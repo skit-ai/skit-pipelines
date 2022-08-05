@@ -11,6 +11,7 @@ def push_irr_to_postgres(
     timezone: str = "Asia/Kolkata",
 ):
 
+    import json
     import pickle
     import traceback
     from datetime import datetime
@@ -46,6 +47,7 @@ def push_irr_to_postgres(
         # layers breakdown
 
         for category, report_df in metrics.items():
+
             logger.debug(category)
             precision = report_df.loc["weighted avg"]["precision"]
             recall = report_df.loc["weighted avg"]["recall"]
@@ -58,6 +60,11 @@ def push_irr_to_postgres(
             created_at = datetime.now(tz=pytz_tz)
 
             dataset_job_id = int(collected_info["dataset_job_id"])
+
+            report_df_dict = report_df.to_dict("index")
+            report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"]["support"]
+            report_df_dict["accuracy"]["precision"] = None
+            report_df_dict["accuracy"]["recall"] = None
 
             query_parameters = {
                 "slu_name": slu_project_name,
@@ -76,7 +83,7 @@ def push_irr_to_postgres(
                 "tagged_from_date": collected_info["tagged_from_date"],
                 "tagged_to_date": collected_info["tagged_to_date"],
                 "reference_url": f"{pipeline_constants.REFERENCE_URL}{dataset_job_id}",
-                "raw": report_df.to_json(),
+                "raw": json.dumps(report_df_dict),
             }
 
             cur.execute(
