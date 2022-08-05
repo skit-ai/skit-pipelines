@@ -30,7 +30,7 @@ RUN apt-get -y update\
 
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
-RUN pip install poetry==1.1.13
+RUN pip install poetry==1.1.14 regex==2022.7.25 pygit2==1.10.0
 RUN poetry config virtualenvs.create false
 
 RUN conda install scipy

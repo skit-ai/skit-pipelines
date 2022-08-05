@@ -12,29 +12,29 @@ def get_preds_voicebot_xlmr(
     output_pred_label_column: str,
     model_type: str = "xlmroberta",
     max_seq_length: int = 128,
-    confidence_threshold: float = 0.1
+    confidence_threshold: float = 0.1,
 ):
 
     import os
     import pickle
+    import tarfile
     import tempfile
 
     import numpy as np
     import pandas as pd
-    from sklearn.preprocessing import LabelEncoder
     from loguru import logger
-
-    import tarfile
-
     from simpletransformers.classification import (
         ClassificationArgs,
         ClassificationModel,
     )
+    from sklearn.preprocessing import LabelEncoder
 
     df = pd.read_csv(data_path)
     temp_model_path = tempfile.mkdtemp()
 
-    logger.debug(f"Extracting .tgz archive {model_path} to output_path {temp_model_path}.")
+    logger.debug(
+        f"Extracting .tgz archive {model_path} to output_path {temp_model_path}."
+    )
     tar = tarfile.open(model_path)
     tar.extractall(path=temp_model_path)
     tar.close()
@@ -42,7 +42,9 @@ def get_preds_voicebot_xlmr(
 
     model_path = os.path.join(temp_model_path, "data")
 
-    encoder: LabelEncoder = pickle.load(open(os.path.join(model_path, "labelencoder.pkl"), "rb"))
+    encoder: LabelEncoder = pickle.load(
+        open(os.path.join(model_path, "labelencoder.pkl"), "rb")
+    )
     model_args = ClassificationArgs(
         output_dir=None,
         reprocess_input_data=True,
@@ -50,7 +52,7 @@ def get_preds_voicebot_xlmr(
         use_multiprocessing=False,
         eval_batch_size=20,
         thread_count=1,
-        silent=False
+        silent=False,
     )
 
     model = ClassificationModel("xlmroberta", model_path, args=model_args)
@@ -67,7 +69,9 @@ def get_preds_voicebot_xlmr(
 
     logger.debug(f"completed predict on {df.shape[0]} rows.")
 
-    df.to_csv(output_path,)
+    df.to_csv(
+        output_path,
+    )
 
 
 get_preds_voicebot_xlmr_op = kfp.components.create_component_from_func(

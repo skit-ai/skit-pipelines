@@ -3,8 +3,8 @@
 ## Development
 
 1. Clone the project
-2. Create a conda environment using python 3.10
-3. Install git+https://github.com/skit-ai/eevee.git@1.2.1, `simpletransformers==0.63.6`, `kfp`, `scipy` separately until [this bug](https://github.com/skit-ai/skit-pipelines/issues/32) is resolved.
+2. Create a conda/pyenv environment using python 3.9
+3. Install git+https://github.com/skit-ai/eevee.git@1.3.0, `simpletransformers==0.63.6`, `kfp`, `scipy` separately until [this bug](https://github.com/skit-ai/skit-pipelines/issues/32) is resolved.
 4. poetry install.
 5. dvc pull
 6. run `make secrets`.
@@ -13,7 +13,9 @@
 To develop locally, just run `task serve`. This will host a fastapi server on your development environment.
 You can test out components via pytest (recommended) or atleast build them interactively on ipython.
 
-To deploy your pipeline on kubeflow, run `make pipes`. This will build the pipeline yamls in the `build/` directory.
+To test locally developed breaking changes, just run `make dev tag=<feature_x_tag_1>` where replace feature_x_tag_1 value with anything you want, this is to get away from kubeflow's image caching as here we are using a mono-image setup for pipelines. This will build, push new image with your tag and start the server with appropriate env vars.
+
+Running `make pipes`  will build the pipeline yamls in the `build/` directory which can be used to upload for a new official pipeline release in Kubeflow.
 
 ### Component Anatomy
 

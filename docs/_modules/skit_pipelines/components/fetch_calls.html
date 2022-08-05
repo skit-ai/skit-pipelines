@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.2.5 documentation</title>
+        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.2.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.5 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.14 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.5 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.14 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -163,6 +163,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">Train XLMR model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -190,6 +191,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 </ul>
@@ -260,6 +262,7 @@
     <span class="n">min_duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">asr_provider</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">states</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_prem</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">tempfile</span>
     <span class="kn">import</span> <span class="nn">time</span>
@@ -284,7 +287,7 @@
         <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
         <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
         <span class="n">start_time_offset</span><span class="o">=</span><span class="n">start_time_offset</span><span class="p">,</span>
-        <span class="n">end_time_offset</span><span class="o">=</span><span class="n">end_time_offset</span>
+        <span class="n">end_time_offset</span><span class="o">=</span><span class="n">end_time_offset</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">validate_date_ranges</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
 
@@ -313,6 +316,7 @@
         <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">states</span><span class="o">=</span><span class="n">states</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">on_disk</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">on_prem</span><span class="o">=</span><span class="n">on_prem</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>

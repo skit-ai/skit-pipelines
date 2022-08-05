@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.16
+
+- [x] update: start_date and end_date optional for fetch_calls_pipeline, fetch_n_tag_calls, fetch_calls_n_push_to_sheets and fetch_calls_n_upload_tog_and_sheet
+## 0.2.15
+
+- [x] update: `skit-labels` version bump to 0.3.27 - tag_calls and fetch_n_tag_calls uploads data in batches of batched data with retries + sleep.
+
+## 0.2.14
+
+- [x] fix: call_type default arg from "inbound" to "INBOUND" for fetch_calls_pipeline
+- [x] fix: eval_voicebot_xlmr_pipeline to work even when model is not present
+
+## 0.2.13
+
+- [x] update: `skit-labels` version bump to 0.3.26
+
+## 0.2.12
+
+- [x] add: `irr_from_tog` pipeline, it takes a tog job id/ labelstudio project id and outputs eevee's intent metrics uploaded to s3 & optionally posted on slack, an addition to eval_voicebot_xlmr_pipeline.
+
 ## 0.2.7
 
 - [x] update: skit-calls version bump to 0.2.21

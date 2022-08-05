@@ -234,4 +234,5 @@ def irr_from_tog(
         )
 
 
+
 __all__ = ["irr_from_tog"]

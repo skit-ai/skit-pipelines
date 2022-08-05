@@ -16,9 +16,9 @@ from skit_pipelines.components import (
 def fetch_n_tag_calls(
     client_id: int,
     org_id: str,
-    start_date: str,
     lang: str,
-    end_date: str,
+    start_date: str = "",
+    end_date: str = "",
     job_ids: str = "",
     labelstudio_project_id: str = "",
     ignore_callers: str = "",
