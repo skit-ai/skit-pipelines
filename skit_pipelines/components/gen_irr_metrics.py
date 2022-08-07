@@ -34,15 +34,16 @@ def gen_irr_metrics(
         f"Generating IRR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
     )
 
-    report = intent_report(
-        pred_df[[pipeline_constants.ID, true_label_column]].rename(
-            columns={true_label_column: "intent_y"}
-        ),
-        pred_df[[pipeline_constants.ID, pred_label_column]].rename(
-            columns={pred_label_column: "intent_x"}
-        ),
-        return_output_as_dict=True,
+
+    true_labels = pred_df[[pipeline_constants.ID, true_label_column]].rename(
+        columns={true_label_column: "intent"}
     )
+
+    pred_labels = pred_df[[pipeline_constants.ID, pred_label_column]].rename(
+        columns={pred_label_column: "intent"}
+    )
+
+    report = intent_report(true_labels, pred_labels, return_output_as_dict=True)
 
     report_df = pd.DataFrame(report).T
 
