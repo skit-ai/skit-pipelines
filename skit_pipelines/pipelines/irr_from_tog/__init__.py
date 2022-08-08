@@ -65,7 +65,7 @@ def irr_from_tog(
                 "job_id": "3091",
                 "start_date": "2022-06-01",
                 "end_date": "2022-07-20",
-                "mlwr": True,
+                "mlwr": "true",
                 "slu_project_name": "indigo"
             }
 
