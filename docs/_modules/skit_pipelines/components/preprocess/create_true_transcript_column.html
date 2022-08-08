@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.preprocess.create_true_transcript_column - skit-pipelines 0.2.17 documentation</title>
+        <title>skit_pipelines.components.preprocess.create_true_transcript_column - skit-pipelines 0.2.18 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.17 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.18 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.17 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.18 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -245,7 +245,7 @@
 
 
 <div class="viewcode-block" id="create_true_transcript_labels"><a class="viewcode-back" href="../../../../skit_pipelines.components.preprocess.create_true_transcript_column.html#skit_pipelines.components.preprocess.create_true_transcript_column.create_true_transcript_labels">[docs]</a><span class="k">def</span> <span class="nf">create_true_transcript_labels</span><span class="p">(</span>
-    <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span><span class="n">true_label_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 <span class="p">):</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
@@ -255,12 +255,10 @@
         <span class="n">pick_text_from_tag</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">TRANSCRIPT_Y</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRANSCRIPT_Y</span>
-
     <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-    <span class="n">train_df</span><span class="p">[</span><span class="n">TRANSCRIPT_Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pick_text_from_tag</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;created new column: (</span><span class="si">{</span><span class="n">TRANSCRIPT_Y</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">TRANSCRIPT_Y</span><span class="p">][:</span><span class="mi">10</span><span class="p">])</span>
+    <span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pick_text_from_tag</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;created new column: (</span><span class="si">{</span><span class="n">true_label_column</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">][:</span><span class="mi">10</span><span class="p">])</span>
 
     <span class="n">train_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
