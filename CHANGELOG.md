@@ -1,8 +1,17 @@
 # Changelog
 
+## 0.2.17
+
+- [x] fix: slackbot command parser for base64 breaking when period (.) at end of text
+- [x] add: run pipelines from func, without uploading yamls + easier dev workflow
+- [x] add: asr-eval-pipeline phase 1
+- [x] update: `irr_from_tog` now has `mlwr=True` arg (which also requires `slu_project_name`) for pushing calculated eevee metrics on a tog job to ml-metrics db, intent_metrics table
+
+
 ## 0.2.16
 
 - [x] update: start_date and end_date optional for fetch_calls_pipeline, fetch_n_tag_calls, fetch_calls_n_push_to_sheets and fetch_calls_n_upload_tog_and_sheet
+
 ## 0.2.15
 
 - [x] update: `skit-labels` version bump to 0.3.27 - tag_calls and fetch_n_tag_calls uploads data in batches of batched data with retries + sleep.
