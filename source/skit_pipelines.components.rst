@@ -30,6 +30,14 @@ skit\_pipelines.components.download\_from\_s3 module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.extract\_info\_from\_dataset module
+--------------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.extract_info_from_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.extract\_tgz module
 ----------------------------------------------
 
@@ -50,6 +58,14 @@ skit\_pipelines.components.fetch\_tagged\_dataset module
 --------------------------------------------------------
 
 .. automodule:: skit_pipelines.components.fetch_tagged_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.gen\_asr\_metrics module
+---------------------------------------------------
+
+.. automodule:: skit_pipelines.components.gen_asr_metrics
    :members:
    :undoc-members:
    :show-inheritance:
@@ -82,6 +98,14 @@ skit\_pipelines.components.notification module
 ----------------------------------------------
 
 .. automodule:: skit_pipelines.components.notification
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.push\_irr\_to\_postgres module
+---------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.push_irr_to_postgres
    :members:
    :undoc-members:
    :show-inheritance:

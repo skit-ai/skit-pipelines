@@ -62,7 +62,9 @@ def push_irr_to_postgres(
             dataset_job_id = int(collected_info["dataset_job_id"])
 
             report_df_dict = report_df.to_dict("index")
-            report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"]["support"]
+            report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"][
+                "support"
+            ]
             report_df_dict["accuracy"]["precision"] = None
             report_df_dict["accuracy"]["recall"] = None
 

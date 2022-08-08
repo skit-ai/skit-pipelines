@@ -6,6 +6,7 @@ from skit_pipelines.components.extract_info_from_dataset import (
 from skit_pipelines.components.extract_tgz import extract_tgz_op
 from skit_pipelines.components.fetch_calls import fetch_calls_op
 from skit_pipelines.components.fetch_tagged_dataset import fetch_tagged_dataset_op
+from skit_pipelines.components.gen_asr_metrics import gen_asr_metrics_op
 from skit_pipelines.components.gen_confusion_matrix import gen_confusion_matrix_op
 from skit_pipelines.components.gen_irr_metrics import gen_irr_metrics_op
 from skit_pipelines.components.get_preds_voicebot_xlmr import get_preds_voicebot_xlmr_op
@@ -16,9 +17,6 @@ from skit_pipelines.components.preprocess.create_true_intent_column import (
 )
 from skit_pipelines.components.preprocess.create_true_transcript_column import (
     create_true_transcript_labels_op,
-)
-from skit_pipelines.components.gen_asr_metrics import (
-    gen_asr_metrics_op,
 )
 from skit_pipelines.components.preprocess.create_utterance_column import (
     create_utterances_op,

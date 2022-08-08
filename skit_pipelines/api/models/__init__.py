@@ -5,7 +5,7 @@ from skit_pipelines.api.models.requests import (
     StorageOptions,
     generate_schema,
     get_all_pipelines_fn,
-    get_normalized_pipelines_fn_map
+    get_normalized_pipelines_fn_map,
 )
 from skit_pipelines.api.models.responses import (
     customResponse,

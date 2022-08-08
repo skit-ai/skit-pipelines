@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.constants - skit-pipelines 0.2.12 documentation</title>
+        <title>skit_pipelines.constants - skit-pipelines 0.2.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.12 documentation</div></a>
+      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.17 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.12 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.17 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -177,6 +177,7 @@
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
@@ -185,6 +186,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
@@ -249,10 +251,18 @@
 <span class="n">CONSOLE_IAM_EMAIL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKIT_API_GATEWAY_EMAIL&quot;</span><span class="p">]</span>
 <span class="n">CONSOLE_IAM_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKIT_API_GATEWAY_PASSWORD&quot;</span><span class="p">]</span>
 
+<span class="c1"># for fsm-db</span>
 <span class="n">DB_HOST</span> <span class="o">=</span> <span class="s2">&quot;production-postgresql-slave.default&quot;</span>
 <span class="n">DB_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_PORT&quot;</span><span class="p">]</span>
 <span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_PASSWORD&quot;</span><span class="p">]</span>
 <span class="n">DB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DB_USER&quot;</span><span class="p">]</span>
+
+<span class="c1"># for metrics-db</span>
+<span class="n">ML_METRICS_DB_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_NAME&quot;</span><span class="p">]</span>
+<span class="n">ML_METRICS_DB_HOST</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_HOST&quot;</span><span class="p">]</span>
+<span class="n">ML_METRICS_DB_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_PORT&quot;</span><span class="p">]</span>
+<span class="n">ML_METRICS_DB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_USER&quot;</span><span class="p">]</span>
+<span class="n">ML_METRICS_DB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_PASSWORD&quot;</span><span class="p">]</span>
 
 <span class="n">KF_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;skit&quot;</span>
 <span class="n">DEFAULT_EXPERIMENT_NAME</span> <span class="o">=</span> <span class="s2">&quot;Default&quot;</span>
@@ -277,6 +287,7 @@
 <span class="n">DATA_ID</span> <span class="o">=</span> <span class="s2">&quot;data_id&quot;</span>
 <span class="n">INTENT_X</span> <span class="o">=</span> <span class="s2">&quot;intent_x&quot;</span>
 <span class="n">INTENT_Y</span> <span class="o">=</span> <span class="s2">&quot;intent_y&quot;</span>
+<span class="n">TRANSCRIPT_Y</span> <span class="o">=</span> <span class="s2">&quot;transcript_y&quot;</span>
 <span class="n">INTENT</span> <span class="o">=</span> <span class="s2">&quot;intent&quot;</span>
 <span class="n">STATE</span> <span class="o">=</span> <span class="s2">&quot;state&quot;</span>
 
@@ -311,6 +322,7 @@
 <span class="n">DOMAIN</span> <span class="o">=</span> <span class="s2">&quot;domain&quot;</span>
 <span class="n">COOKIES_PATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/kf_cookies.json&quot;</span>
 <span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;KUBEFLOW_GATEWAY_ENDPOINT&quot;</span><span class="p">]</span>
+<span class="n">KUBEFLOW_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;kubeflow-skit&quot;</span>
 <span class="n">COOKIE_0</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-0&quot;</span>
 <span class="n">COOKIE_1</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-1&quot;</span>
 <span class="n">COOKIE_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="n">COOKIE_0</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">COOKIE_1</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
@@ -332,6 +344,51 @@
 <span class="n">FILTER_LIST</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;webhook_uri&quot;</span><span class="p">,</span>
 <span class="p">]</span>
+
+<span class="n">REFERENCE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://metabase.skit.ai/question/2403-tagged-data?job_id=&quot;</span>
+<span class="c1"># for pushing eevee intent metrics to intent_metrics table.</span>
+<span class="n">ML_INTENT_METRICS_INSERT_SQL_QUERY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">INSERT INTO intent_metrics </span>
+<span class="s2">(</span>
+<span class="s2">    slu_name,</span>
+<span class="s2">    dataset_job_id,</span>
+<span class="s2">    language,</span>
+<span class="s2">    metric_name,</span>
+<span class="s2">    n_calls,</span>
+<span class="s2">    n_turns,</span>
+<span class="s2">    precision,</span>
+<span class="s2">    recall,</span>
+<span class="s2">    f1,</span>
+<span class="s2">    support,</span>
+<span class="s2">    created_at,  </span>
+<span class="s2">    calls_from_date,</span>
+<span class="s2">    calls_to_date,</span>
+<span class="s2">    tagged_from_date,</span>
+<span class="s2">    tagged_to_date,</span>
+<span class="s2">    reference_url,</span>
+<span class="s2">    raw</span>
+<span class="s2">)</span>
+<span class="s2">VALUES</span>
+<span class="s2">(</span>
+<span class="s2">    </span><span class="si">%(slu_name)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(dataset_job_id)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(language)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(metric_name)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(n_calls)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(n_turns)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(precision)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(recall)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(f1)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(support)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(created_at)s</span><span class="s2">,  </span>
+<span class="s2">    </span><span class="si">%(calls_from_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(calls_to_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(tagged_from_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(tagged_to_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(reference_url)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(raw)s</span><span class="s2"></span>
+<span class="s2">)</span>
+<span class="s2">&quot;&quot;&quot;</span>
 </pre></div>
         </article>
       </div>

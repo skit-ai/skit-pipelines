@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines" href="modules.html" /><link rel="prev" title="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.irr_from_tog package - skit-pipelines 0.2.14 documentation</title>
+        <title>skit_pipelines.pipelines.irr_from_tog package - skit-pipelines 0.2.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.14 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.17 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.14 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.17 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -178,6 +178,7 @@
 <li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 </ul>
 </li>
@@ -186,6 +187,7 @@
 </ul>
 </li>
 <li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
@@ -242,8 +244,9 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.irr_from_tog" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.irr_from_tog.irr_from_tog">
-<span class="sig-name descname"><span class="pre">irr_from_tog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intent_y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw.intent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlwr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/irr_from_tog.html#irr_from_tog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.irr_from_tog.irr_from_tog" title="Permalink to this definition">#</a></dt>
-<dd><p>Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.</p>
+<span class="sig-name descname"><span class="pre">irr_from_tog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intent_y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw.intent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlwr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slu_project_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/irr_from_tog.html#irr_from_tog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.irr_from_tog.irr_from_tog" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.
+When passed with mlwr=True, it pushes the intent metrics to intent_metrics table.</p>
 <p id="p-irr-from-tog">Example payload to invoke this pipeline via slack integrations:</p>
 <blockquote>
 <div><p>&#64;charon run irr_from_tog</p>
@@ -252,6 +255,20 @@
     <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4011&quot;</span><span class="p">,</span>
     <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
     <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To push tog job intent metrics to db:</p>
+<blockquote>
+<div><p>&#64;charon run irr_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span>
+    <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;3091&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-07-20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mlwr&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;slu_project_name&quot;</span><span class="p">:</span> <span class="s2">&quot;indigo&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -279,7 +296,8 @@
 <li><p><strong>timezone</strong> (<em>str</em><em>, </em><em>optional</em>) – The timezone to apply for multi-region datasets, defaults to “Asia/Kolkata”</p></li>
 <li><p><strong>true_label_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name of ground-truth which will be used for eevee intent evaluation.</p></li>
 <li><p><strong>pred_label_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Column name of SLU production predictions which will be used for eevee intent evaluation.</p></li>
-<li><p><strong>mlwr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – when True, pushes the eevee intent metrics to events DB for MLWR.</p></li>
+<li><p><strong>mlwr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – when True, pushes the eevee intent metrics to ML Metrics DB, intent_metrics table for MLWR.</p></li>
+<li><p><strong>slu_project_name</strong> (<em>str</em><em>, </em><em>optional</em>) – name of the slu deployment which we are tracking</p></li>
 <li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – A comma separated list of slack ids: “&#64;apples, &#64;orange.fruit” etc, defaults to “”</p></li>
 <li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
 <li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>

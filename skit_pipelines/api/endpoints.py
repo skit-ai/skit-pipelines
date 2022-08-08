@@ -1,6 +1,6 @@
 import json
 from datetime import timedelta
-from typing import Any, Dict, Optional, Callable
+from typing import Any, Callable, Dict, Optional
 
 import kfp
 import kfp_server_api
@@ -37,20 +37,19 @@ class RunPipelineResult:
         return "RunPipelineResult(run_id={})".format(self.run_id)
 
 
-
 def run_kfp_pipeline_func(
     kf_client: kfp.Client,
     pipeline_func: Callable,
     params: Dict[str, Any],
     experiment_name: str = const.DEFAULT_EXPERIMENT_NAME,
-    namespace: str = const.KF_NAMESPACE
+    namespace: str = const.KF_NAMESPACE,
 ) -> RunPipelineResult:
     return kf_client.create_run_from_pipeline_func(
         pipeline_func=pipeline_func,
         arguments=params,
         experiment_name=experiment_name,
         namespace=namespace,
-        enable_caching=False
+        enable_caching=False,
     )
 
 
@@ -114,18 +113,20 @@ def pipeline_run_req(
     if not (Schema := models.RequestSchemas.get(req_pipeline_name)):
         raise models.errors.kfp_api_error(
             reason="""Pipeline should be one of: {}.
-If your pipeline is present, it is not supported in the official release.""".format('\n'.join(pipelines.keys())),
+If your pipeline is present, it is not supported in the official release.""".format(
+                "\n".join(pipelines.keys())
+            ),
             status=400,
         )
 
     payload = Schema.parse_obj(payload)
-    
+
     run = run_kfp_pipeline_func(
         kf_client,
         pipeline_func=pipelines[req_pipeline_name],
         params=filter_schema(payload.dict(), const.FILTER_LIST),
     )
-    
+
     background_tasks.add_task(
         schedule_run_completion,
         client_resp=run,
@@ -151,7 +152,7 @@ async def kfp_api_exception_handler(request, exc):
 
 @app.exception_handler(pydantic.error_wrappers.ValidationError)
 async def arguments_validation_exception_handler(request, exc):
-    #TODO: give better error messages as where validation problem
+    # TODO: give better error messages as where validation problem
     return models.customResponse(
         {"message": f"{exc}"},
         status_code=400,

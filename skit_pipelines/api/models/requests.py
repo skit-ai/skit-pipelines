@@ -15,11 +15,13 @@ def get_all_pipelines_fn():
         if not pipeline_name.startswith("__") and callable(pipeline_fn)
     }
 
+
 def get_normalized_pipelines_fn_map():
     return {
         to_snake_case(pipeline_name): pipeline_fn
         for pipeline_name, pipeline_fn in get_all_pipelines_fn().items()
     }
+
 
 def generate_schema(pipeline_name, pipeline_fn):
     signature = inspect.signature(pipeline_fn)

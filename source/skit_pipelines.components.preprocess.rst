@@ -9,6 +9,7 @@ Subpackages
 
    skit_pipelines.components.preprocess.create_features
    skit_pipelines.components.preprocess.create_true_intent_column
+   skit_pipelines.components.preprocess.create_true_transcript_column
    skit_pipelines.components.preprocess.create_utterance_column
 
 Module contents
