@@ -58,7 +58,11 @@ jobs:
           --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
           --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
           --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
-          --build-arg KAFKA_INSTANCE=${{ secrets.KAFKA_INSTANCE }} -t $ECR_REPOSITORY .
+          --build-arg ML_METRICS_DB_NAME=${{ secrets.ML_METRICS_DB_NAME }}
+          --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}
+          --build-arg ML_METRICS_DB_HOST=${{ secrets.ML_METRICS_DB_HOST }}
+          --build-arg ML_METRICS_DB_USER=${{ secrets.ML_METRICS_DB_USER }}
+          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }} -t $ECR_REPOSITORY .
 
       - name: Tag and push images
         env: 
