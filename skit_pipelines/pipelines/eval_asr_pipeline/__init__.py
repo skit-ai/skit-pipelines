@@ -64,7 +64,8 @@ def eval_asr_pipeline(
 
     # Create utterance column
     preprocess_step_2_data_op = create_true_transcript_labels_op(
-        preprocess_data_op.outputs["output"]
+        preprocess_data_op.outputs["output"],
+        true_label_column
     ).after(preprocess_data_op)
 
     asr_metrics_op = gen_asr_metrics_op(

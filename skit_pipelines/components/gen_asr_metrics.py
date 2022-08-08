@@ -7,8 +7,8 @@ from skit_pipelines import constants as pipeline_constants
 def gen_asr_metrics(
     data_path: InputPath(str),
     output_path: OutputPath(str),
-    true_label_column: str = "intent_y",
-    pred_label_column: str = "intent_x",
+    true_label_column: str = "transcript_y",
+    pred_label_column: str = "utterances",
 ):
 
     import os
