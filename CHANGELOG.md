@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.18
+
+- [x] fix: bugs in eval_asr_pipeline
+
 ## 0.2.17
 
 - [x] fix: slackbot command parser for base64 breaking when period (.) at end of text
