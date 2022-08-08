@@ -5,7 +5,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def create_true_transcript_labels(
-    data_path: InputPath(str), output_path: OutputPath(str)
+    data_path: InputPath(str),true_label_column: str, output_path: OutputPath(str)
 ):
     import pandas as pd
     from loguru import logger
@@ -15,12 +15,10 @@ def create_true_transcript_labels(
         pick_text_from_tag,
     )
 
-    TRANSCRIPT_Y = pipeline_constants.TRANSCRIPT_Y
-
     train_df = pd.read_csv(data_path)
-    train_df[TRANSCRIPT_Y] = train_df.tag.apply(pick_text_from_tag)
-    logger.debug(f"created new column: ({TRANSCRIPT_Y})")
-    logger.debug(train_df[TRANSCRIPT_Y][:10])
+    train_df[true_label_column] = train_df.tag.apply(pick_text_from_tag)
+    logger.debug(f"created new column: ({true_label_column})")
+    logger.debug(train_df[true_label_column][:10])
 
     train_df.to_csv(output_path, index=False)
 
