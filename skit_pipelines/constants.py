@@ -11,6 +11,8 @@ CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]
 CONSOLE_IAM_EMAIL = os.environ["SKIT_API_GATEWAY_EMAIL"]
 CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
+AUDIO_URL_DOMAIN = os.environ["AUDIO_URL_DOMAIN"]
+
 # for fsm-db
 DB_HOST = "production-postgresql-slave.default"
 DB_PORT = os.environ["DB_PORT"]
