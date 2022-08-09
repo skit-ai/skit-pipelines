@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.19
+
+- [x] update: version bump for skit-calls and skit-labels
+- [x] update: new `AUDIO_URL_DOMAIN` secret for param in fetch_calls component
+
 ## 0.2.18
 
 - [x] fix: bugs in eval_asr_pipeline

@@ -51,6 +51,7 @@ jobs:
           --build-arg DEFAULT_SLACK_CHANNEL=${{ secrets.DEFAULT_SLACK_CHANNEL }}
           --build-arg TOG_TASK_URL=${{ secrets.TOG_TASK_URL }}
           --build-arg LABELSTUDIO_TOKEN=${{ secrets.LABELSTUDIO_TOKEN }}
+          --build-arg AUDIO_URL_DOMAIN=${{ secrets.AUDIO_URL_DOMAIN }}
           --build-arg SKIT_API_GATEWAY_PASSWORD=${{ secrets.SKIT_API_GATEWAY_PASSWORD }}
           --build-arg SKIT_API_GATEWAY_EMAIL=${{ secrets.SKIT_API_GATEWAY_EMAIL }}
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
