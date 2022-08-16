@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet - skit-pipelines 0.2.17 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet - skit-pipelines 0.2.19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.17 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.19 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.17 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.19 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -282,6 +282,101 @@
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">on_prem</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)</span>
+<span class="sd">    google sheets (call tagging and SCR tagging)</span>
+
+<span class="sd">    .. _p_fetch_calls_n_upload_tog_and_sheet:</span>
+
+<span class="sd">    Example payload to invoke via slack integrations:</span>
+
+<span class="sd">        @charon run irr_from_tog</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            {</span>
+<span class="sd">                &quot;client_id&quot;: &quot;1&quot;,</span>
+<span class="sd">                &quot;org_id&quot;:&quot;2&quot;,</span>
+<span class="sd">                &quot;lang&quot;: &quot;en&quot;,</span>
+<span class="sd">                &quot;call_quantity&quot;: 500,</span>
+<span class="sd">                &quot;job_ids&quot;: &quot;4001,4002,4003&quot;,</span>
+<span class="sd">                &quot;call_type&quot;: &quot;INBOUND&quot;,</span>
+<span class="sd">                &quot;sheet_id&quot;: &quot;1juSkziNwbEZ6-ZfNGBoy32gp_PlG_fdsohgSje1e1dI&quot;,</span>
+<span class="sd">            }</span>
+
+<span class="sd">    :param client_id: The client id as per api-gateway.</span>
+<span class="sd">    :type client_id: int</span>
+
+<span class="sd">    :param org_id: The organization id as per api-gateway.</span>
+<span class="sd">    :type org_id: str</span>
+
+<span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
+<span class="sd">    :type job_ids: str</span>
+
+<span class="sd">    :param start_date: The start date range to filter calls in YYYY-MM-DD format.</span>
+<span class="sd">    :type start_date: str</span>
+
+<span class="sd">    :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.</span>
+<span class="sd">    :type lang: str</span>
+
+<span class="sd">    :param end_date: The end date range to filter calls in YYYY-MM-DD format.</span>
+<span class="sd">    :type end_date: str</span>
+
+<span class="sd">    :param sheet_id: The sheet id of the google sheet where calls need to be uploaded for call tagging and SCR tagging</span>
+<span class="sd">    :type sheet_id: str</span>
+
+<span class="sd">    :param ignore_callers: Comma separated list of callers to ignore, defaults to &quot;&quot;</span>
+<span class="sd">    :type ignore_callers: str, optional</span>
+
+<span class="sd">    :param reported: Pick only reported calls, defaults to False</span>
+<span class="sd">    :type reported: bool</span>
+
+<span class="sd">    :param use_case: Voice bot project&#39;s use-case, defaults to &quot;&quot;</span>
+<span class="sd">    :type use_case: str, optional</span>
+
+<span class="sd">    :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to &quot;&quot;</span>
+<span class="sd">    :type flow_name: str, optional</span>
+
+<span class="sd">    :param min_duration: Call duration filter, defaults to &quot;&quot;</span>
+<span class="sd">    :type min_duration: str, optional</span>
+
+<span class="sd">    :param asr_provider: The ASR vendor (google/VASR), defaults to &quot;&quot;</span>
+<span class="sd">    :type asr_provider: str, optional</span>
+
+<span class="sd">    :param states: Filter calls in a comma separated list of states, defaults to &quot;&quot;</span>
+<span class="sd">    :type states: str, optional</span>
+
+<span class="sd">    :param start_date_offset: Offset the start date by an integer value, defaults to 0</span>
+<span class="sd">    :type start_date_offset: int, optional</span>
+
+<span class="sd">    :param end_date_offset: Offset the end date by an integer value, defaults to 0</span>
+<span class="sd">    :type end_date_offset: int, optional</span>
+
+<span class="sd">    :param start_time_offset: Offset the start time by an integer value, defaults to 0</span>
+<span class="sd">    :type start_time_offset: int, optional</span>
+
+<span class="sd">    :param end_time_offset: Offset the end time by an integer value, defaults to 0</span>
+<span class="sd">    :type end_time_offset: int, optional</span>
+
+<span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
+<span class="sd">    :type call_quantity: int, optional</span>
+
+<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to &quot;inbound&quot;</span>
+<span class="sd">    :type call_type: str, optional</span>
+
+<span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
+<span class="sd">    :type notify: str, optional</span>
+
+<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
+<span class="sd">    :type channel: str, optional</span>
+
+<span class="sd">    :param slack_thread: The slack thread to send the notification, defaults to &quot;&quot;</span>
+<span class="sd">    :type slack_thread: float, optional</span>
+
+<span class="sd">    :param on_prem: Whether the pipeline is run on prem or not, defaults to False</span>
+<span class="sd">    :type on_prem: bool, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
         <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
         <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>

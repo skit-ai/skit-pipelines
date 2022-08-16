@@ -42,6 +42,100 @@ def fetch_calls_n_upload_tog_and_sheet(
     slack_thread: str = "",
     on_prem: bool = False,
 ):
+    """
+    A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)
+    and google sheets (call tagging and SCR tagging)
+
+    .. _p_fetch_calls_n_upload_tog_and_sheet:
+
+    Example payload to invoke via slack integrations:
+
+        @charon run fetch_calls_n_upload_tog_and_sheet
+
+        .. code-block:: python
+
+            {
+                "client_id": "1",
+                "org_id":"2",
+                "lang": "en",
+                "call_quantity": 500,
+                "job_ids": "4001,4002,4003",
+                "call_type": "INBOUND",
+                "sheet_id": "1juSkziNwbEZ6-ZfNGBoy32gp_PlG_fdsohgSje1e1dI",
+            }
+
+    :param client_id: The client id as per api-gateway.
+    :type client_id: int
+
+    :param org_id: The organization id as per api-gateway.
+    :type org_id: str
+
+    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
+    :type job_ids: str
+
+    :param start_date: The start date range to filter calls in YYYY-MM-DD format.
+    :type start_date: str
+
+    :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.
+    :type lang: str
+
+    :param end_date: The end date range to filter calls in YYYY-MM-DD format.
+    :type end_date: str
+
+    :param sheet_id: The sheet id of the google sheet where calls need to be uploaded for call tagging and SCR tagging
+    :type sheet_id: str
+
+    :param ignore_callers: Comma separated list of callers to ignore, defaults to ""
+    :type ignore_callers: str, optional
+
+    :param reported: Pick only reported calls, defaults to False
+    :type reported: bool
+
+    :param use_case: Voice bot project's use-case, defaults to ""
+    :type use_case: str, optional
+
+    :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to ""
+    :type flow_name: str, optional
+
+    :param min_duration: Call duration filter, defaults to ""
+    :type min_duration: str, optional
+
+    :param asr_provider: The ASR vendor (google/VASR), defaults to ""
+    :type asr_provider: str, optional
+
+    :param states: Filter calls in a comma separated list of states, defaults to ""
+    :type states: str, optional
+
+    :param start_date_offset: Offset the start date by an integer value, defaults to 0
+    :type start_date_offset: int, optional
+
+    :param end_date_offset: Offset the end date by an integer value, defaults to 0
+    :type end_date_offset: int, optional
+
+    :param start_time_offset: Offset the start time by an integer value, defaults to 0
+    :type start_time_offset: int, optional
+
+    :param end_time_offset: Offset the end time by an integer value, defaults to 0
+    :type end_time_offset: int, optional
+
+    :param call_quantity: Number of calls to sample, defaults to 200
+    :type call_quantity: int, optional
+
+    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "inbound"
+    :type call_type: str, optional
+
+    :param notify: Whether to send a slack notification, defaults to ""
+    :type notify: str, optional
+
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
+
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
+
+    :param on_prem: Whether the pipeline is run on prem or not, defaults to False
+    :type on_prem: bool, optional
+    """
     calls = fetch_calls_op(
         client_id=client_id,
         start_date=start_date,

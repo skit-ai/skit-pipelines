@@ -245,7 +245,54 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.fetch_calls_n_upload_tog_and_sheet">
 <span class="sig-name descname"><span class="pre">fetch_calls_n_upload_tog_and_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_callers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asr_provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INBOUND'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_prem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_calls_n_upload_tog_and_sheet.html#fetch_calls_n_upload_tog_and_sheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.fetch_calls_n_upload_tog_and_sheet" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)
+google sheets (call tagging and SCR tagging)</p>
+<p id="p-fetch-calls-n-upload-tog-and-sheet">Example payload to invoke via slack integrations:</p>
+<blockquote>
+<div><p>&#64;charon run irr_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span><span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;en&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;call_quantity&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="s2">&quot;job_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;4001,4002,4003&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;call_type&quot;</span><span class="p">:</span> <span class="s2">&quot;INBOUND&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sheet_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1juSkziNwbEZ6-ZfNGBoy32gp_PlG_fdsohgSje1e1dI&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_id</strong> (<em>int</em>) – The client id as per api-gateway.</p></li>
+<li><p><strong>org_id</strong> (<em>str</em>) – The organization id as per api-gateway.</p></li>
+<li><p><strong>job_ids</strong> (<em>str</em>) – The job ids as per tog. Optional if labestudio project id is provided.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em>) – The start date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>lang</strong> (<em>str</em>) – The language code of the calls to filter. eg: en, hi, ta, te, etc.</p></li>
+<li><p><strong>end_date</strong> (<em>str</em>) – The end date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>sheet_id</strong> (<em>str</em>) – The sheet id of the google sheet where calls need to be uploaded for call tagging and SCR tagging</p></li>
+<li><p><strong>ignore_callers</strong> (<em>str</em><em>, </em><em>optional</em>) – Comma separated list of callers to ignore, defaults to “”</p></li>
+<li><p><strong>reported</strong> (<em>bool</em>) – Pick only reported calls, defaults to False</p></li>
+<li><p><strong>use_case</strong> (<em>str</em><em>, </em><em>optional</em>) – Voice bot project’s use-case, defaults to “”</p></li>
+<li><p><strong>flow_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Identifier for a whole/part of a voicebot conversation flow, defaults to “”</p></li>
+<li><p><strong>min_duration</strong> (<em>str</em><em>, </em><em>optional</em>) – Call duration filter, defaults to “”</p></li>
+<li><p><strong>asr_provider</strong> (<em>str</em><em>, </em><em>optional</em>) – The ASR vendor (google/VASR), defaults to “”</p></li>
+<li><p><strong>states</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter calls in a comma separated list of states, defaults to “”</p></li>
+<li><p><strong>start_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the start date by an integer value, defaults to 0</p></li>
+<li><p><strong>end_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the end date by an integer value, defaults to 0</p></li>
+<li><p><strong>start_time_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the start time by an integer value, defaults to 0</p></li>
+<li><p><strong>end_time_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the end time by an integer value, defaults to 0</p></li>
+<li><p><strong>call_quantity</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of calls to sample, defaults to 200</p></li>
+<li><p><strong>call_type</strong> (<em>str</em><em>, </em><em>optional</em>) – inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to “inbound”</p></li>
+<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to send a slack notification, defaults to “”</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
+<li><p><strong>slack_thread</strong> (<em>float</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
+<li><p><strong>on_prem</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the pipeline is run on prem or not, defaults to False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>
