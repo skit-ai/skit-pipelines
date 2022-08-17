@@ -1,5 +1,4 @@
 outs:
-- md5: c186ca69159f1766f661008ad9a0312b
-  size: 2054
-  isexec: true
+- md5: afacaa6f485400b7e974c40555c60a31
+  size: 2056
   path: docker_build_dev_image
