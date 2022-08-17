@@ -34,6 +34,7 @@ def eval_voicebot_xlmr_pipeline(
     channel: str = "",
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
+    alias_yaml_path: str = "",
     slack_thread: str = "",
 ):
     """
@@ -70,6 +71,7 @@ def eval_voicebot_xlmr_pipeline(
     :type slack_thread: str, optional
     """
     tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
+    alias_yaml_op = download_from_s3_op(storage_path=alias_yaml_path)
 
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
@@ -78,7 +80,8 @@ def eval_voicebot_xlmr_pipeline(
 
     # Create utterance column
     preprocess_data_op = create_true_intent_labels_op(
-        preprocess_data_op.outputs["output"]
+        preprocess_data_op.outputs["output"],
+        alias_yaml_op.outputs["output"]
     )
 
     # Normalize utterance column
