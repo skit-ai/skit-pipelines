@@ -9,49 +9,45 @@ def eevee_irr_with_yamls(
     output_path: OutputPath(str),
     true_label_column: str = "intent_y",
     pred_label_column: str = "intent_x",
-    eevee_intent_alias_yaml_s3_path: str = "",
-    eevee_intent_groups_yaml_s3_path: str = "",
-    eevee_intent_layers_yaml_s3_path: str = "",
+    eevee_intent_alias_yaml_github_path: str = "",
+    eevee_intent_groups_yaml_github_path: str = "",
+    eevee_intent_layers_yaml_github_path: str = "",
 ):
 
     import re
     import traceback
-    import tempfile
     import pickle
     from pprint import pprint
 
     import yaml
-    import boto3
+    import requests
     import pandas as pd
     from eevee.metrics import intent_report, intent_layers_report
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
 
-    s3_resource = boto3.client("s3")
-    pattern = re.compile(r"^s3://(.+?)/(.+?)$")
 
-    def get_yaml_from_s3_if_exists(eevee_yaml_s3_path: str):
+    def get_yaml_from_github_if_exists(eevee_yaml_github_path: str):
 
-        if not eevee_yaml_s3_path:
+        if not eevee_yaml_github_path:
             return None
 
         try:
-            logger.debug(f"{eevee_yaml_s3_path=}")
-            bucket, key = pattern.match(eevee_yaml_s3_path).groups()
-            logger.debug(f"{bucket=} {key=}")
+            eevee_yaml_url = f"{pipeline_constants.EEVEE_RAW_FILE_GITHUB_REPO_URL}{eevee_yaml_github_path}"
+            logger.debug(f"{eevee_yaml_url=}")
+            headers = requests.structures.CaseInsensitiveDict()
+            headers["Authorization"] = f"token {pipeline_constants.GITHUB_PERSONAL_ACCESS_TOKEN}"
 
-            with tempfile.TemporaryFile("w") as fp:
-                yaml_name = str(fp.name)
-                s3_resource.download_file(bucket, key, yaml_name)
-                
-            with open(yaml_name, "r") as fp:
-                loaded_yaml = yaml.safe_load(fp)
+            response = requests.get(eevee_yaml_url, headers=headers)
+            logger.info(response.status_code)
+            if response.status_code == requests.codes.OK:
+
+                loaded_yaml = yaml.safe_load(response.content)
                 
                 pprint(loaded_yaml)
-
                 return loaded_yaml
-            
+                
             
         except Exception as e:
             logger.exception(e)
@@ -60,9 +56,9 @@ def eevee_irr_with_yamls(
         return None
 
 
-    intent_alias = get_yaml_from_s3_if_exists(eevee_intent_alias_yaml_s3_path)
-    intent_groups = get_yaml_from_s3_if_exists(eevee_intent_groups_yaml_s3_path)
-    intent_layers = get_yaml_from_s3_if_exists(eevee_intent_layers_yaml_s3_path)
+    intent_alias = get_yaml_from_github_if_exists(eevee_intent_alias_yaml_github_path)
+    intent_groups = get_yaml_from_github_if_exists(eevee_intent_groups_yaml_github_path)
+    intent_layers = get_yaml_from_github_if_exists(eevee_intent_layers_yaml_github_path)
 
     pred_labels = pd.read_csv(data_path)
 
@@ -160,9 +156,9 @@ eevee_irr_with_yamls_op = kfp.components.create_component_from_func(
 #         output_path="metrics.pkl",
 #         true_label_column="intent_y",
 #         pred_label_column="raw.intent",
-#         eevee_intent_alias_yaml_s3_path="s3://vernacular-ml/irr-pipeline-resources/oppo/alias.yaml",
-#         eevee_intent_groups_yaml_s3_path="s3://vernacular-ml/irr-pipeline-resources/oppo/groups.yaml",
-#         eevee_intent_layers_yaml_s3_path="s3://vernacular-ml/irr-pipeline-resources/oppo/layers.yaml",
+#         eevee_intent_alias_yaml_github_path="intents/oppo/alias.yaml",
+#         eevee_intent_groups_yaml_github_path="intents/oppo/groups.yaml",
+#         eevee_intent_layers_yaml_github_path="intents/oppo/layers.yaml",
 #     )
 
 #     _ = eevee_irr_with_yamls(

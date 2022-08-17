@@ -32,9 +32,9 @@ def irr_from_tog(
     pred_label_column: str = "raw.intent",
     mlwr: bool = False,
     slu_project_name: str = "",
-    eevee_intent_alias_yaml_s3_path: str = "",
-    eevee_intent_groups_yaml_s3_path: str = "",
-    eevee_intent_layers_yaml_s3_path: str = "",
+    eevee_intent_alias_yaml_github_path: str = "",
+    eevee_intent_groups_yaml_github_path: str = "",
+    eevee_intent_layers_yaml_github_path: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -71,9 +71,9 @@ def irr_from_tog(
                 "end_date": "2022-07-20",
                 "mlwr": "true",
                 "slu_project_name": "oppo",
-                "eevee_intent_alias_yaml_s3_path": "s3://vernacular-ml/irr-pipeline-resources/oppo/alias.yaml",
-                "eevee_intent_groups_yaml_s3_path": "s3://vernacular-ml/irr-pipeline-resources/oppo/groups.yaml",
-                "eevee_intent_layers_yaml_s3_path": "s3://vernacular-ml/irr-pipeline-resources/oppo/layers.yaml"
+                "eevee_intent_alias_yaml_github_path": "intents/oppo/alias.yaml",
+                "eevee_intent_groups_yaml_github_path": "intents/oppo/groups.yaml",
+                "eevee_intent_layers_yaml_github_path": "intents/oppo/layers.yaml"
             }
 
 
@@ -136,14 +136,14 @@ def irr_from_tog(
     :param slu_project_name: name of the slu deployment which we are tracking
     :type slu_project_name: str, optional
 
-    :param eevee_intent_alias_yaml_s3_path: eevee's intent_report alias.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#aliasing
-    :type eevee_intent_alias_yaml_s3_path: str, optional
+    :param eevee_intent_alias_yaml_github_path: eevee's intent_report alias.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#aliasing. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_alias_yaml_github_path: str, optional
 
-    :param eevee_intent_groups_yaml_s3_path: eevee's intent_report groups.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#grouping
-    :type eevee_intent_groups_yaml_s3_path: str, optional
+    :param eevee_intent_groups_yaml_github_path: eevee's intent_report groups.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#grouping. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_groups_yaml_github_path: str, optional
 
-    :param eevee_intent_layers_yaml_s3_path: eevee's intent_report layers.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent
-    :type eevee_intent_layers_yaml_s3_path: str, optional
+    :param eevee_intent_layers_yaml_github_path: eevee's intent_layers_report layers.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_layers_yaml_github_path: str, optional
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
@@ -263,9 +263,9 @@ def irr_from_tog(
             preprocess_data_op.outputs["output"],
             true_label_column=true_label_column,
             pred_label_column=pred_label_column,
-            eevee_intent_alias_yaml_s3_path=eevee_intent_alias_yaml_s3_path,
-            eevee_intent_groups_yaml_s3_path=eevee_intent_groups_yaml_s3_path,
-            eevee_intent_layers_yaml_s3_path=eevee_intent_layers_yaml_s3_path,
+            eevee_intent_alias_yaml_github_path=eevee_intent_alias_yaml_github_path,
+            eevee_intent_groups_yaml_github_path=eevee_intent_groups_yaml_github_path,
+            eevee_intent_layers_yaml_github_path=eevee_intent_layers_yaml_github_path,
         ).after(preprocess_data_op)
 
         pushed_stat = push_irr_to_postgres_op(
