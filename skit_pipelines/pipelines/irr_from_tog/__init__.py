@@ -10,6 +10,7 @@ from skit_pipelines.components import (
     push_irr_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
+    eevee_irr_with_yamls_op
 )
 
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -31,6 +32,9 @@ def irr_from_tog(
     pred_label_column: str = "raw.intent",
     mlwr: bool = False,
     slu_project_name: str = "",
+    eevee_intent_alias_yaml_github_path: str = "",
+    eevee_intent_groups_yaml_github_path: str = "",
+    eevee_intent_layers_yaml_github_path: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -54,7 +58,26 @@ def irr_from_tog(
                 "end_date": "2022-08-01"
             }
 
-    To push tog job intent metrics to db:
+
+    To push tog job intent metrics to db, when using full eevee facilities like gropuing, aliasing, layers etc [RECOMMENDED]:
+
+        @charon run irr_from_tog
+
+        .. code-block:: python
+
+            {
+                "job_id": "4242",
+                "start_date": "2022-06-01",
+                "end_date": "2022-07-20",
+                "mlwr": "true",
+                "slu_project_name": "oppo",
+                "eevee_intent_alias_yaml_github_path": "intents/oppo/alias.yaml",
+                "eevee_intent_groups_yaml_github_path": "intents/oppo/groups.yaml",
+                "eevee_intent_layers_yaml_github_path": "intents/oppo/layers.yaml"
+            }
+
+
+    To push tog job intent metrics to db (without eevee yamls) & get the results same for slack:
 
         @charon run irr_from_tog
 
@@ -68,6 +91,7 @@ def irr_from_tog(
                 "mlwr": "true",
                 "slu_project_name": "indigo"
             }
+
 
     To use labelstudio:
 
@@ -112,6 +136,15 @@ def irr_from_tog(
     :param slu_project_name: name of the slu deployment which we are tracking
     :type slu_project_name: str, optional
 
+    :param eevee_intent_alias_yaml_github_path: eevee's intent_report alias.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#aliasing. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_alias_yaml_github_path: str, optional
+
+    :param eevee_intent_groups_yaml_github_path: eevee's intent_report groups.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#grouping. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_groups_yaml_github_path: str, optional
+
+    :param eevee_intent_layers_yaml_github_path: eevee's intent_layers_report layers.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :type eevee_intent_layers_yaml_github_path: str, optional
+
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
 
@@ -121,6 +154,7 @@ def irr_from_tog(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
+
 
     # gets the tog job / labelstudio dataset
     tagged_data_op = fetch_tagged_dataset_op(
@@ -140,78 +174,80 @@ def irr_from_tog(
         tagged_data_op.outputs["output"]
     ).after(tagged_data_op)
 
-    # use eevee for comparing ground-truth tog/label studio annotated values
-    # with actual production prediction values present in the same tog/label studio
-    # dataset.
-    irr_op = gen_irr_metrics_op(
-        preprocess_data_op.outputs["output"],
-        true_label_column=true_label_column,
-        pred_label_column=pred_label_column,
-    )
+    with kfp.dsl.Condition(mlwr == False, "mlwr-publish-to-slack"):
 
-    # confusion matrix on the same ground-truth tog/labelstudio dataset
-    # vs SLU production predictions
-    confusion_matrix_op = gen_confusion_matrix_op(
-        preprocess_data_op.outputs["output"],
-        true_label_column=true_label_column,
-        pred_label_column=pred_label_column,
-    )
-
-    # upload tagged dataset eevee metrics.
-    upload_irr = upload2s3_op(
-        path_on_disk=irr_op.outputs["output"],
-        reference=org_id,
-        file_type="xlmr-irr-metrics",
-        bucket=BUCKET,
-        ext=".csv",
-    ).after(irr_op)
-    upload_irr.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    # upload confusion matrix.
-    upload_cm = upload2s3_op(
-        path_on_disk=confusion_matrix_op.outputs["output"],
-        reference=org_id,
-        file_type="xlmr-confusion-matrix",
-        bucket=BUCKET,
-        ext=".csv",
-    ).after(confusion_matrix_op)
-    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_irr
-    ) as irr_check:
-        notification_text = f"Here's the IRR report."
-        code_block = f"aws s3 cp {upload_irr.output} ."
-        irr_notif = slack_notification_op(
-            notification_text,
-            channel=channel,
-            cc=notify,
-            code_block=code_block,
-            thread_id=slack_thread,
+        # use eevee for comparing ground-truth tog/label studio annotated values
+        # with actual production prediction values present in the same tog/label studio
+        # dataset.
+        irr_op = gen_irr_metrics_op(
+            preprocess_data_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
         )
-        irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+
+        # confusion matrix on the same ground-truth tog/labelstudio dataset
+        # vs SLU production predictions
+        confusion_matrix_op = gen_confusion_matrix_op(
+            preprocess_data_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
+        )
+
+        # upload tagged dataset eevee metrics.
+        upload_irr = upload2s3_op(
+            path_on_disk=irr_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-irr-metrics",
+            bucket=BUCKET,
+            ext=".csv",
+        ).after(irr_op)
+        upload_irr.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_cm
-    ) as cm_check:
-        notification_text = f"Here's the confusion matrix."
-        code_block = f"aws s3 cp {upload_cm.output} ."
-        cm_notif = slack_notification_op(
-            notification_text,
-            channel=channel,
-            cc=notify,
-            code_block=code_block,
-            thread_id=slack_thread,
-        )
-        cm_notif.execution_options.caching_strategy.max_cache_staleness = (
+        # upload confusion matrix.
+        upload_cm = upload2s3_op(
+            path_on_disk=confusion_matrix_op.outputs["output"],
+            reference=org_id,
+            file_type="xlmr-confusion-matrix",
+            bucket=BUCKET,
+            ext=".csv",
+        ).after(confusion_matrix_op)
+        upload_cm.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
+        with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+            upload_irr
+        ) as irr_check:
+            notification_text = f"Here's the IRR report."
+            code_block = f"aws s3 cp {upload_irr.output} ."
+            irr_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+        with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+            upload_cm
+        ) as cm_check:
+            notification_text = f"Here's the confusion matrix."
+            code_block = f"aws s3 cp {upload_cm.output} ."
+            cm_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            )
+            cm_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
 
     with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
 
@@ -223,12 +259,21 @@ def irr_from_tog(
             "P0D"  # disables caching
         )
 
+        yamls_irr_op = eevee_irr_with_yamls_op(
+            preprocess_data_op.outputs["output"],
+            true_label_column=true_label_column,
+            pred_label_column=pred_label_column,
+            eevee_intent_alias_yaml_github_path=eevee_intent_alias_yaml_github_path,
+            eevee_intent_groups_yaml_github_path=eevee_intent_groups_yaml_github_path,
+            eevee_intent_layers_yaml_github_path=eevee_intent_layers_yaml_github_path,
+        ).after(preprocess_data_op)
+
         pushed_stat = push_irr_to_postgres_op(
-            irr_op.outputs["output"],
+            yamls_irr_op.outputs["output"],
             extracted_info.outputs["output"],
             slu_project_name=slu_project_name,
             timezone=timezone,
-        ).after(irr_op, extracted_info)
+        ).after(yamls_irr_op, extracted_info)
         pushed_stat.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )

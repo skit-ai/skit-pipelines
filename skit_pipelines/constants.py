@@ -151,3 +151,6 @@ VALUES
     %(raw)s
 )
 """
+
+GITHUB_PERSONAL_ACCESS_TOKEN = os.environ["GITHUB_PERSONAL_ACCESS_TOKEN"]
+EEVEE_RAW_FILE_GITHUB_REPO_URL = "https://raw.githubusercontent.com/skit-ai/eevee-yamls/main/"

@@ -1,3 +1,4 @@
+from gc import collect
 import kfp
 from kfp.components import InputPath
 
@@ -5,7 +6,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def push_irr_to_postgres(
-    eevee_intent_df_path: InputPath(str),
+    eevee_intent_pkl_path: InputPath(str),
     extracted_pkl_path: InputPath(str),
     slu_project_name: str,
     timezone: str = "Asia/Kolkata",
@@ -34,39 +35,56 @@ def push_irr_to_postgres(
         )
         cur = conn.cursor()
 
-        irr_metrics_df = pd.read_csv(eevee_intent_df_path, index_col=0)
+        with open(eevee_intent_pkl_path, "rb") as fp:
+            intent_metrics = pickle.load(fp)
 
         with open(extracted_pkl_path, "rb") as fp:
             collected_info = pickle.load(fp)
 
-        metrics = {}
-        metrics["overall"] = irr_metrics_df
 
-        # TODO:
-        # grouping & aliasing breakdown
-        # layers breakdown
+        pytz_tz = pytz.timezone(timezone)
+        created_at = datetime.now(tz=pytz_tz)
+    
 
-        for category, report_df in metrics.items():
+        for category, report_df in intent_metrics.items():
 
             logger.debug(category)
-            precision = report_df.loc["weighted avg"]["precision"]
-            recall = report_df.loc["weighted avg"]["recall"]
-            f1 = report_df.loc["weighted avg"]["f1-score"]
-            support = int(report_df.loc["weighted avg"]["support"])
 
-            logger.debug(report_df.loc["weighted avg"])
+            # because eevee returning layers doesn't have weighted avg
+            # which is meaningful, therefore pushing only the raw column
+            # content (classification_report)
+            if category == "layers":
 
-            pytz_tz = pytz.timezone(timezone)
-            created_at = datetime.now(tz=pytz_tz)
+                precision = -1.0
+                recall = -1.0
+                f1 = -1.0
+                support = 0
 
-            dataset_job_id = int(collected_info["dataset_job_id"])
+                dataset_job_id = int(collected_info["dataset_job_id"])
 
-            report_df_dict = report_df.to_dict("index")
-            report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"][
-                "support"
-            ]
-            report_df_dict["accuracy"]["precision"] = None
-            report_df_dict["accuracy"]["recall"] = None
+                report_df_dict = report_df.to_dict("index")
+
+            else:
+
+                precision = report_df.loc["weighted avg"]["precision"]
+                recall = report_df.loc["weighted avg"]["recall"]
+                f1 = report_df.loc["weighted avg"]["f1-score"]
+                support = int(report_df.loc["weighted avg"]["support"])
+
+                logger.debug(report_df.loc["weighted avg"])
+
+                dataset_job_id = int(collected_info["dataset_job_id"])
+
+                report_df_dict = report_df.to_dict("index")
+
+                if "accuracy" in report_df_dict:
+                    
+                    report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"][
+                        "support"
+                    ]
+                    report_df_dict["accuracy"]["precision"] = None
+                    report_df_dict["accuracy"]["recall"] = None
+
 
             query_parameters = {
                 "slu_name": slu_project_name,
@@ -91,7 +109,10 @@ def push_irr_to_postgres(
             cur.execute(
                 pipeline_constants.ML_INTENT_METRICS_INSERT_SQL_QUERY, query_parameters
             )
-            conn.commit()
+        
+        # Make the changes to the database persistent 
+        # after the for-loop
+        conn.commit()
 
     except Exception as e:
         logger.exception(e)
@@ -109,13 +130,13 @@ push_irr_to_postgres_op = kfp.components.create_component_from_func(
 
 # if __name__ == "__main__":
 
-#     eevee_intent_df_path = "34.csv"
-#     dataset_job_id = 3091
+#     eevee_intent_metrics_path = "metrics.pkl"
+#     collected_data_path = "collected_data.pkl"
 #     language = "en"
-#     slu_project_name = "indigo"
+#     slu_project_name = "oppo"
 
 #     a = push_irr_to_postgres(
-#         eevee_intent_df_path,
-#         "saved_dictionary.pkl",
+#         eevee_intent_metrics_path,
+#         collected_data_path,
 #         slu_project_name,
 #     )
