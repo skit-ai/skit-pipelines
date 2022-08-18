@@ -62,7 +62,8 @@ jobs:
           --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}
           --build-arg ML_METRICS_DB_HOST=${{ secrets.ML_METRICS_DB_HOST }}
           --build-arg ML_METRICS_DB_USER=${{ secrets.ML_METRICS_DB_USER }}
-          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }} -t $ECR_REPOSITORY . 
+          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }} 
+          --build-arg PERSONAL_ACCESS_TOKEN_GITHUB=${{secrets.PERSONAL_ACCESS_TOKEN_GITHUB }} -t $ECR_REPOSITORY . 
           
       - name: Tag and push images
         env: 
@@ -132,7 +133,8 @@ jobs:
           --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}
           --build-arg ML_METRICS_DB_HOST=${{ secrets.ML_METRICS_DB_HOST }}
           --build-arg ML_METRICS_DB_USER=${{ secrets.ML_METRICS_DB_USER }}
-          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }} -t $US_ECR_REPOSITORY . 
+          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }}
+          --build-arg PERSONAL_ACCESS_TOKEN_GITHUB=${{secrets.PERSONAL_ACCESS_TOKEN_GITHUB }} -t $US_ECR_REPOSITORY .
  
       - name: Tag and push images
         env: 

@@ -37,7 +37,7 @@ def eevee_irr_with_yamls(
             eevee_yaml_url = f"{pipeline_constants.EEVEE_RAW_FILE_GITHUB_REPO_URL}{eevee_yaml_github_path}"
             logger.debug(f"{eevee_yaml_url=}")
             headers = requests.structures.CaseInsensitiveDict()
-            headers["Authorization"] = f"token {pipeline_constants.GITHUB_PERSONAL_ACCESS_TOKEN}"
+            headers["Authorization"] = f"token {pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}"
 
             response = requests.get(eevee_yaml_url, headers=headers)
             logger.info(response.status_code)
