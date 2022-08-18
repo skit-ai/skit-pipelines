@@ -30,6 +30,14 @@ skit\_pipelines.components.download\_from\_s3 module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.eevee\_irr\_with\_yamls module
+---------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.eevee_irr_with_yamls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.extract\_info\_from\_dataset module
 --------------------------------------------------------------
 

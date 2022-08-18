@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.21
+
+- [x] update: eevee yaml component for exhaustive possible intent metrics
+
 ## 0.2.19
 
 - [x] update: version bump for skit-calls and skit-labels

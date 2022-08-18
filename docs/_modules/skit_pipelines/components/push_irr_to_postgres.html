@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.push_irr_to_postgres - skit-pipelines 0.2.19 documentation</title>
+        <title>skit_pipelines.components.push_irr_to_postgres - skit-pipelines 0.2.21 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.19 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.21 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.19 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.21 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -238,14 +238,15 @@
         </div>
         <article role="main">
           <h1>Source code for skit_pipelines.components.push_irr_to_postgres</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+<span></span><span class="kn">from</span> <span class="nn">gc</span> <span class="kn">import</span> <span class="n">collect</span>
+<span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
 <div class="viewcode-block" id="push_irr_to_postgres"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.push_irr_to_postgres.push_irr_to_postgres">[docs]</a><span class="k">def</span> <span class="nf">push_irr_to_postgres</span><span class="p">(</span>
-    <span class="n">eevee_intent_df_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">eevee_intent_pkl_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">extracted_pkl_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">slu_project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
@@ -274,39 +275,56 @@
         <span class="p">)</span>
         <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
-        <span class="n">irr_metrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">eevee_intent_df_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">eevee_intent_pkl_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">intent_metrics</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">extracted_pkl_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="n">collected_info</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
-        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;overall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">irr_metrics_df</span>
 
-        <span class="c1"># TODO:</span>
-        <span class="c1"># grouping &amp; aliasing breakdown</span>
-        <span class="c1"># layers breakdown</span>
+        <span class="n">pytz_tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
+        <span class="n">created_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">pytz_tz</span><span class="p">)</span>
+    
 
-        <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">report_df</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">report_df</span> <span class="ow">in</span> <span class="n">intent_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">category</span><span class="p">)</span>
-            <span class="n">precision</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
-            <span class="n">recall</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span>
-            <span class="n">f1</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;f1-score&quot;</span><span class="p">]</span>
-            <span class="n">support</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;support&quot;</span><span class="p">])</span>
 
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">])</span>
+            <span class="c1"># because eevee returning layers doesn&#39;t have weighted avg</span>
+            <span class="c1"># which is meaningful, therefore pushing only the raw column</span>
+            <span class="c1"># content (classification_report)</span>
+            <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;layers&quot;</span><span class="p">:</span>
 
-            <span class="n">pytz_tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
-            <span class="n">created_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">pytz_tz</span><span class="p">)</span>
+                <span class="n">precision</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+                <span class="n">recall</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+                <span class="n">f1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+                <span class="n">support</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="n">dataset_job_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;dataset_job_id&quot;</span><span class="p">])</span>
+                <span class="n">dataset_job_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;dataset_job_id&quot;</span><span class="p">])</span>
 
-            <span class="n">report_df_dict</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
-            <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;support&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span>
-                <span class="s2">&quot;support&quot;</span>
-            <span class="p">]</span>
-            <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">report_df_dict</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">precision</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span>
+                <span class="n">recall</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span>
+                <span class="n">f1</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;f1-score&quot;</span><span class="p">]</span>
+                <span class="n">support</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span><span class="s2">&quot;support&quot;</span><span class="p">])</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">report_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">])</span>
+
+                <span class="n">dataset_job_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;dataset_job_id&quot;</span><span class="p">])</span>
+
+                <span class="n">report_df_dict</span> <span class="o">=</span> <span class="n">report_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="s2">&quot;accuracy&quot;</span> <span class="ow">in</span> <span class="n">report_df_dict</span><span class="p">:</span>
+                    
+                    <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;support&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;weighted avg&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;support&quot;</span>
+                    <span class="p">]</span>
+                    <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">report_df_dict</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">][</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
 
             <span class="n">query_parameters</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;slu_name&quot;</span><span class="p">:</span> <span class="n">slu_project_name</span><span class="p">,</span>
@@ -331,7 +349,10 @@
             <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
                 <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_INTENT_METRICS_INSERT_SQL_QUERY</span><span class="p">,</span> <span class="n">query_parameters</span>
             <span class="p">)</span>
-            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        
+        <span class="c1"># Make the changes to the database persistent </span>
+        <span class="c1"># after the for-loop</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -349,14 +370,14 @@
 
 <span class="c1"># if __name__ == &quot;__main__&quot;:</span>
 
-<span class="c1">#     eevee_intent_df_path = &quot;34.csv&quot;</span>
-<span class="c1">#     dataset_job_id = 3091</span>
+<span class="c1">#     eevee_intent_metrics_path = &quot;metrics.pkl&quot;</span>
+<span class="c1">#     collected_data_path = &quot;collected_data.pkl&quot;</span>
 <span class="c1">#     language = &quot;en&quot;</span>
-<span class="c1">#     slu_project_name = &quot;indigo&quot;</span>
+<span class="c1">#     slu_project_name = &quot;oppo&quot;</span>
 
 <span class="c1">#     a = push_irr_to_postgres(</span>
-<span class="c1">#         eevee_intent_df_path,</span>
-<span class="c1">#         &quot;saved_dictionary.pkl&quot;,</span>
+<span class="c1">#         eevee_intent_metrics_path,</span>
+<span class="c1">#         collected_data_path,</span>
 <span class="c1">#         slu_project_name,</span>
 <span class="c1">#     )</span>
 </pre></div>
