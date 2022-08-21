@@ -27,6 +27,8 @@ def irr_from_tog(
     labelstudio_project_id: str = "",
     start_date: str = "",
     end_date: str = "",
+    start_date_offset: int = 0,
+    end_date_offset: int = 0,
     timezone: str = "Asia/Kolkata",
     true_label_column: str = "intent_y",
     pred_label_column: str = "raw.intent",
@@ -121,6 +123,12 @@ def irr_from_tog(
     :param end_date: The end date range to filter calls in YYYY-MM-DD format.
     :type end_date: str
 
+    :param start_date_offset: Offset the start date by an integer value, defaults to 0
+    :type start_date_offset: int, optional
+
+    :param end_date_offset: Offset the end date by an integer value, defaults to 0
+    :type end_date_offset: int, optional
+
     :param timezone: The timezone to apply for multi-region datasets, defaults to "Asia/Kolkata"
     :type timezone: str, optional
 
@@ -163,6 +171,8 @@ def irr_from_tog(
         timezone=timezone,
         start_date=start_date,
         end_date=end_date,
+        start_date_offset=start_date_offset,
+        end_date_offset=end_date_offset,
     )
 
     tagged_data_op.execution_options.caching_strategy.max_cache_staleness = (

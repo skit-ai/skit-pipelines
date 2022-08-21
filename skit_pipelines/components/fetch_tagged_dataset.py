@@ -14,6 +14,8 @@ def fetch_tagged_dataset(
     timezone: str = "Asia/Kolkata",
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
+    start_date_offset: Optional[int] = None,
+    end_date_offset: Optional[int] = None,
 ):
     import asyncio
     import time
@@ -21,6 +23,7 @@ def fetch_tagged_dataset(
     import pandas as pd
     import pytz
     from loguru import logger
+    from skit_calls.cli import process_date_filters
     from skit_labels import constants as const
     from skit_labels import utils
     from skit_labels.commands import (
@@ -44,6 +47,12 @@ def fetch_tagged_dataset(
         task_type = const.TASK_TYPE__CONVERSATION
 
     start = time.time()
+
+    if start_date_offset or end_date_offset:
+        start_date, end_date = process_date_filters(
+                start_date_offset=start_date_offset,
+                end_date_offset=end_date_offset,
+            )
 
     if job_id:
         df_path, _ = download_dataset_from_db(
