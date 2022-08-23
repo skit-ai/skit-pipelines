@@ -5,23 +5,30 @@ from typing import Any, Callable, Dict, Optional
 import kfp
 import kfp_server_api
 import pydantic
-from fastapi import Request
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 from loguru import logger
+
+from fastapi import Depends, Request, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 
 import skit_pipelines.constants as const
 from skit_pipelines.api import (
     BackgroundTasks,
     app,
     models,
+    auth,
     run_in_threadpool,
     slack_app,
     slack_handler,
 )
 from skit_pipelines.api.slack_bot import get_message_data, make_response
 from skit_pipelines.components.notification import slack_notification
-from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
-
+from skit_pipelines.utils import (
+    filter_schema,
+    kubeflow_login,
+    normalize,
+    webhook_utils
+)
 
 class RunPipelineResult:
     def __init__(self, client, run_info):
@@ -35,6 +42,22 @@ class RunPipelineResult:
 
     def __repr__(self):
         return "RunPipelineResult(run_id={})".format(self.run_id)
+
+
+@app.post("/token", response_model=models.Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = auth.authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = auth.create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 def run_kfp_pipeline_func(
@@ -102,6 +125,7 @@ def pipeline_run_req(
     pipeline_name: str,
     payload: Dict[str, Any],
     background_tasks: BackgroundTasks,
+    _ : str = Depends(auth.valid_user)
 ):
     kf_client = kubeflow_login()
     if not kf_client.get_kfp_healthz().multi_user:
