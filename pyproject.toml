@@ -28,6 +28,9 @@ simpletransformers = "0.63.6"
 pandas = "1.4.2"
 skit-auth = "0.1.5"
 jsoncomment = "^0.4.2"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
