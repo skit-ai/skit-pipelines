@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.22
+
+- [x] add: Authentication and Authorization of requests using JWT - Oauth2
+
 ## 0.2.21
 
 - [x] update: eevee yaml component for exhaustive possible intent metrics

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.irr_from_tog - skit-pipelines 0.2.21 documentation</title>
+        <title>skit_pipelines.pipelines.irr_from_tog - skit-pipelines 0.2.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.21 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.22 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.21 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.22 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -267,6 +267,8 @@
     <span class="n">labelstudio_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">start_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">end_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
     <span class="n">true_label_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;intent_y&quot;</span><span class="p">,</span>
     <span class="n">pred_label_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raw.intent&quot;</span><span class="p">,</span>
@@ -361,6 +363,12 @@
 <span class="sd">    :param end_date: The end date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type end_date: str</span>
 
+<span class="sd">    :param start_date_offset: Offset the start date by an integer value, defaults to 0</span>
+<span class="sd">    :type start_date_offset: int, optional</span>
+
+<span class="sd">    :param end_date_offset: Offset the end date by an integer value, defaults to 0</span>
+<span class="sd">    :type end_date_offset: int, optional</span>
+
 <span class="sd">    :param timezone: The timezone to apply for multi-region datasets, defaults to &quot;Asia/Kolkata&quot;</span>
 <span class="sd">    :type timezone: str, optional</span>
 
@@ -403,6 +411,8 @@
         <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span><span class="p">,</span>
         <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
         <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+        <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
+        <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">tagged_data_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>

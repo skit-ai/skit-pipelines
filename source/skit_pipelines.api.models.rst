@@ -4,6 +4,14 @@ skit\_pipelines.api.models package
 Submodules
 ----------
 
+skit\_pipelines.api.models.auth\_models module
+----------------------------------------------
+
+.. automodule:: skit_pipelines.api.models.auth_models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.api.models.custom\_models module
 ------------------------------------------------
 

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.fetch_tagged_dataset - skit-pipelines 0.2.22 documentation</title>
+        <title>skit_pipelines.api.auth - skit-pipelines 0.2.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -237,94 +237,77 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.components.fetch_tagged_dataset</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+          <h1>Source code for skit_pipelines.api.auth</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">jose</span> <span class="kn">import</span> <span class="n">JWTError</span><span class="p">,</span> <span class="n">jwt</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span> <span class="nn">passlib.context</span> <span class="kn">import</span> <span class="n">CryptContext</span>
+<span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2PasswordBearer</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.api.models</span> <span class="kn">import</span> <span class="n">Token</span><span class="p">,</span> <span class="n">TokenData</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserInDB</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
 
-<span class="kn">import</span> <span class="nn">kfp</span>
-<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">OutputPath</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;pipeline_secrets&quot;</span><span class="p">,</span> <span class="s2">&quot;auth_config.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">auth_config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">ACCESS_TOKEN_EXPIRE_MINUTES</span> <span class="o">=</span> <span class="n">auth_config</span><span class="p">[</span><span class="s2">&quot;ACCESS_TOKEN_EXPIRE_MINUTES&quot;</span><span class="p">]</span>
+    <span class="n">CRYPT_SCHEME</span> <span class="o">=</span> <span class="n">auth_config</span><span class="p">[</span><span class="s2">&quot;PASSWORD_CRYPT_SCHEME&quot;</span><span class="p">]</span>
+    <span class="n">ALGORITHM</span> <span class="o">=</span> <span class="n">auth_config</span><span class="p">[</span><span class="s2">&quot;ALGORITHM&quot;</span><span class="p">]</span>
+    
 
-<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+<span class="n">pwd_context</span> <span class="o">=</span> <span class="n">CryptContext</span><span class="p">(</span><span class="n">schemes</span><span class="o">=</span><span class="p">[</span><span class="n">CRYPT_SCHEME</span><span class="p">],</span> <span class="n">deprecated</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+<span class="n">oauth2_scheme</span> <span class="o">=</span> <span class="n">OAuth2PasswordBearer</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;token&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="fetch_tagged_dataset"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.fetch_tagged_dataset.fetch_tagged_dataset">[docs]</a><span class="k">def</span> <span class="nf">fetch_tagged_dataset</span><span class="p">(</span>
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">job_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;conversation&quot;</span><span class="p">,</span>
-    <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
-    <span class="n">start_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">start_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">end_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">asyncio</span>
-    <span class="kn">import</span> <span class="nn">time</span>
+<div class="viewcode-block" id="verify_password"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.verify_password">[docs]</a><span class="k">def</span> <span class="nf">verify_password</span><span class="p">(</span><span class="n">plain_password</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pwd_context</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">plain_password</span><span class="p">,</span> <span class="n">hashed_password</span><span class="p">)</span></div>
 
-    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="kn">import</span> <span class="nn">pytz</span>
-    <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-    <span class="kn">from</span> <span class="nn">skit_calls.cli</span> <span class="kn">import</span> <span class="n">process_date_filters</span>
-    <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
-    <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">utils</span>
-    <span class="kn">from</span> <span class="nn">skit_labels.commands</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">download_dataset_from_db</span><span class="p">,</span>
-        <span class="n">download_dataset_from_labelstudio</span><span class="p">,</span>
+<div class="viewcode-block" id="get_users_db"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.get_users_db">[docs]</a><span class="k">def</span> <span class="nf">get_users_db</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">const</span><span class="o">.</span><span class="n">KF_USERNAME</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">const</span><span class="o">.</span><span class="n">KF_USERNAME</span><span class="p">,</span>
+            <span class="s2">&quot;hashed_password&quot;</span><span class="p">:</span> <span class="n">pwd_context</span><span class="o">.</span><span class="n">hash</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">KF_PASSWORD</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span></div>
+
+<div class="viewcode-block" id="get_user"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.get_user">[docs]</a><span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">user_dict</span> <span class="o">:=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">UserInDB</span><span class="p">(</span><span class="o">**</span><span class="n">user_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="authenticate_user"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.authenticate_user">[docs]</a><span class="k">def</span> <span class="nf">authenticate_user</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">get_users_db</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">user</span> <span class="o">:=</span> <span class="n">get_user</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">username</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">hashed_password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">user</span></div>
+
+
+<div class="viewcode-block" id="create_access_token"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.create_access_token">[docs]</a><span class="k">def</span> <span class="nf">create_access_token</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">expires_delta</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">timedelta</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">to_encode</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">expire</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">expires_delta</span> <span class="k">if</span> <span class="n">expires_delta</span> <span class="k">else</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">))</span>
+    <span class="n">to_encode</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">expire</span><span class="p">})</span>
+    <span class="n">encoded_jwt</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">to_encode</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">JWT_SECRET_KEY</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span>
     <span class="p">)</span>
-
-    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-
-    <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-
-    <span class="n">host</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_HOST</span>
-    <span class="n">port</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PORT</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PASSWORD</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_USER</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">timezone</span><span class="p">:</span>
-        <span class="n">timezone</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">task_type</span><span class="p">:</span>
-        <span class="n">task_type</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">TASK_TYPE__CONVERSATION</span>
-
-    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">start_date_offset</span> <span class="ow">or</span> <span class="n">end_date_offset</span><span class="p">:</span>
-        <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">process_date_filters</span><span class="p">(</span>
-                <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
-                <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
-            <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">job_id</span><span class="p">:</span>
-        <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">download_dataset_from_db</span><span class="p">(</span>
-            <span class="n">job_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">),</span>
-            <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">timezone</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span> <span class="k">if</span> <span class="n">timezone</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">project_id</span><span class="p">:</span>
-        <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">download_dataset_from_labelstudio</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_SVC</span><span class="p">,</span>
-                <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_TOKEN</span><span class="p">,</span>
-                <span class="n">project_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">project_id</span><span class="p">),</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either job_id or project_id must be provided&quot;</span><span class="p">)</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">encoded_jwt</span></div>
 
 
-<span class="n">fetch_tagged_dataset_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
-    <span class="n">fetch_tagged_dataset</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
-<span class="p">)</span>
+<div class="viewcode-block" id="valid_user"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.auth.valid_user">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">valid_user</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">)):</span>
+    <span class="n">credentials_exception</span> <span class="o">=</span> <span class="n">HTTPException</span><span class="p">(</span>
+        <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_401_UNAUTHORIZED</span><span class="p">,</span>
+        <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Could not validate credentials&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;WWW-Authenticate&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer&quot;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">JWT_SECRET_KEY</span><span class="p">,</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">ALGORITHM</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">username</span> <span class="o">:=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sub&quot;</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">credentials_exception</span>
+        <span class="n">token_data</span> <span class="o">=</span> <span class="n">TokenData</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">JWTError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">credentials_exception</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">get_user</span><span class="p">(</span><span class="n">get_users_db</span><span class="p">(),</span> <span class="n">username</span><span class="o">=</span><span class="n">token_data</span><span class="o">.</span><span class="n">username</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">credentials_exception</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
 </pre></div>
         </article>
       </div>

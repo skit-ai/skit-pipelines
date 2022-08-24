@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.api.endpoints - skit-pipelines 0.2.17 documentation</title>
+        <title>skit_pipelines.api.endpoints - skit-pipelines 0.2.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.17 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.22 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.17 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.22 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -245,23 +245,30 @@
 <span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">import</span> <span class="nn">kfp_server_api</span>
 <span class="kn">import</span> <span class="nn">pydantic</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Request</span>
 <span class="kn">from</span> <span class="nn">kfp_server_api.models.api_run_detail</span> <span class="kn">import</span> <span class="n">ApiRunDetail</span> <span class="k">as</span> <span class="n">kfp_ApiRunDetail</span>
 <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span> <span class="nn">fastapi.security</span> <span class="kn">import</span> <span class="n">OAuth2PasswordRequestForm</span>
 
 <span class="kn">import</span> <span class="nn">skit_pipelines.constants</span> <span class="k">as</span> <span class="nn">const</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.api</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">BackgroundTasks</span><span class="p">,</span>
     <span class="n">app</span><span class="p">,</span>
     <span class="n">models</span><span class="p">,</span>
+    <span class="n">auth</span><span class="p">,</span>
     <span class="n">run_in_threadpool</span><span class="p">,</span>
     <span class="n">slack_app</span><span class="p">,</span>
     <span class="n">slack_handler</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.api.slack_bot</span> <span class="kn">import</span> <span class="n">get_message_data</span><span class="p">,</span> <span class="n">make_response</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.components.notification</span> <span class="kn">import</span> <span class="n">slack_notification</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines.utils</span> <span class="kn">import</span> <span class="n">filter_schema</span><span class="p">,</span> <span class="n">kubeflow_login</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">webhook_utils</span>
-
+<span class="kn">from</span> <span class="nn">skit_pipelines.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">filter_schema</span><span class="p">,</span>
+    <span class="n">kubeflow_login</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="p">,</span>
+    <span class="n">webhook_utils</span>
+<span class="p">)</span>
 
 <div class="viewcode-block" id="RunPipelineResult"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.RunPipelineResult">[docs]</a><span class="k">class</span> <span class="nc">RunPipelineResult</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">run_info</span><span class="p">):</span>
@@ -275,6 +282,22 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;RunPipelineResult(run_id=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="login_for_access_token"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.login_for_access_token">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/token&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">Token</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">login_for_access_token</span><span class="p">(</span><span class="n">form_data</span><span class="p">:</span> <span class="n">OAuth2PasswordRequestForm</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">()):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">authenticate_user</span><span class="p">(</span><span class="n">form_data</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">form_data</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_401_UNAUTHORIZED</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Incorrect username or password&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;WWW-Authenticate&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
+    <span class="n">access_token_expires</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">auth</span><span class="o">.</span><span class="n">ACCESS_TOKEN_EXPIRE_MINUTES</span><span class="p">)</span>
+    <span class="n">access_token</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">create_access_token</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">},</span> <span class="n">expires_delta</span><span class="o">=</span><span class="n">access_token_expires</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;access_token&quot;</span><span class="p">:</span> <span class="n">access_token</span><span class="p">,</span> <span class="s2">&quot;token_type&quot;</span><span class="p">:</span> <span class="s2">&quot;bearer&quot;</span><span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="run_kfp_pipeline_func"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.endpoints.run_kfp_pipeline_func">[docs]</a><span class="k">def</span> <span class="nf">run_kfp_pipeline_func</span><span class="p">(</span>
@@ -342,6 +365,7 @@
     <span class="n">pipeline_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">background_tasks</span><span class="p">:</span> <span class="n">BackgroundTasks</span><span class="p">,</span>
+    <span class="n">_</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">valid_user</span><span class="p">)</span>
 <span class="p">):</span>
     <span class="n">kf_client</span> <span class="o">=</span> <span class="n">kubeflow_login</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">kf_client</span><span class="o">.</span><span class="n">get_kfp_healthz</span><span class="p">()</span><span class="o">.</span><span class="n">multi_user</span><span class="p">:</span>

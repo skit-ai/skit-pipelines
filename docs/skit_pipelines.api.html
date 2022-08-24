@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.api.models package" href="skit_pipelines.api.models.html" /><link rel="prev" title="skit_pipelines package" href="skit_pipelines.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.api package - skit-pipelines 0.2.21 documentation</title>
+        <title>skit_pipelines.api package - skit-pipelines 0.2.22 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.21 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.22 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.21 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.22 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -246,6 +246,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.api.models.html">skit_pipelines.api.models package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.api.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.api.models.html#module-skit_pipelines.api.models.auth_models">skit_pipelines.api.models.auth_models module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.api.models.html#module-skit_pipelines.api.models.custom_models">skit_pipelines.api.models.custom_models module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.api.models.html#module-skit_pipelines.api.models.errors">skit_pipelines.api.models.errors module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.api.models.html#module-skit_pipelines.api.models.requests">skit_pipelines.api.models.requests module</a></li>
@@ -258,6 +259,39 @@
 </section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="module-skit_pipelines.api.auth">
+<span id="skit-pipelines-api-auth-module"></span><h2>skit_pipelines.api.auth module<a class="headerlink" href="#module-skit_pipelines.api.auth" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.authenticate_user">
+<span class="sig-name descname"><span class="pre">authenticate_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'tog-service&#64;skit.ai':</span> <span class="pre">{'hashed_password':</span> <span class="pre">'$2b$12$gHj/oRlIjbL2gxEiQZm/TevdCvJ8BIFGOy6w4t/DbPdZJfiY/RmSi',</span> <span class="pre">'username':</span> <span class="pre">'tog-service&#64;skit.ai'}}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#authenticate_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.authenticate_user" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.create_access_token">
+<span class="sig-name descname"><span class="pre">create_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#create_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.create_access_token" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.get_user">
+<span class="sig-name descname"><span class="pre">get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#get_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.get_user" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.get_users_db">
+<span class="sig-name descname"><span class="pre">get_users_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#get_users_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.get_users_db" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.valid_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">valid_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(OAuth2PasswordBearer)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#valid_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.valid_user" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.auth.verify_password">
+<span class="sig-name descname"><span class="pre">verify_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plain_password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashed_password</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#verify_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.verify_password" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-skit_pipelines.api.endpoints">
 <span id="skit-pipelines-api-endpoints-module"></span><h2>skit_pipelines.api.endpoints module<a class="headerlink" href="#module-skit_pipelines.api.endpoints" title="Permalink to this headline">#</a></h2>
@@ -310,8 +344,13 @@ The purpose of this API is to help other people/machines know liveness of the ap
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.endpoints.login_for_access_token">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login_for_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(NoneType)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#login_for_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.login_for_access_token" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.endpoints.pipeline_run_req">
-<span class="sig-name descname"><span class="pre">pipeline_run_req</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_tasks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#pipeline_run_req"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.pipeline_run_req" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_run_req</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(valid_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/endpoints.html#pipeline_run_req"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.endpoints.pipeline_run_req" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -332,6 +371,11 @@ The purpose of this API is to help other people/machines know liveness of the ap
 </section>
 <section id="module-skit_pipelines.api.slack_bot">
 <span id="skit-pipelines-api-slack-bot-module"></span><h2>skit_pipelines.api.slack_bot module<a class="headerlink" href="#module-skit_pipelines.api.slack_bot" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.authenticate_bot">
+<span class="sig-name descname"><span class="pre">authenticate_bot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#authenticate_bot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.authenticate_bot" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.command_parser">
 <span class="sig-name descname"><span class="pre">command_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#command_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.command_parser" title="Permalink to this definition">#</a></dt>
@@ -469,13 +513,28 @@ users may send.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.make_run_requests">
+<span class="sig-name descname"><span class="pre">make_run_requests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#make_run_requests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.make_run_requests" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.read_access_token">
+<span class="sig-name descname"><span class="pre">read_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_fetch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#read_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.read_access_token" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.recurr_run_format">
 <span class="sig-name descname"><span class="pre">recurr_run_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoded_payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#recurr_run_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.recurr_run_format" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.slack_bot.run_pipeline">
-<span class="sig-name descname"><span class="pre">run_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#run_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.run_pipeline" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipeline_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/slack_bot.html#run_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.slack_bot.run_pipeline" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -544,6 +603,7 @@ users may send.</p>
 <li><a class="reference internal" href="#">skit_pipelines.api package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.api.auth">skit_pipelines.api.auth module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.api.endpoints">skit_pipelines.api.endpoints module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.api.slack_bot">skit_pipelines.api.slack_bot module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.api">Module contents</a></li>

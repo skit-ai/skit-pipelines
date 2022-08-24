@@ -12,6 +12,14 @@ Subpackages
 Submodules
 ----------
 
+skit\_pipelines.api.auth module
+-------------------------------
+
+.. automodule:: skit_pipelines.api.auth
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.api.endpoints module
 ------------------------------------
 
