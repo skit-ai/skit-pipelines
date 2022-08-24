@@ -64,6 +64,8 @@ KFP_RUN_FN = "create_run_from_pipeline_func"
 KF_USERNAME = os.environ["KF_USERNAME"]
 KF_PASSWORD = os.environ["KF_PASSWORD"]
 
+JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
+
 USERNAME_ELEMENT_ID = "signInFormUsername"
 PASSWORD_ELEMENT_ID = "signInFormPassword"
 SUBMIT_BUTTON_ID = "signInSubmitButton"
@@ -83,6 +85,7 @@ NAME = "name"
 VALUE = "value"
 DOMAIN = "domain"
 COOKIES_PATH = "/tmp/kf_cookies.json"
+ACCESS_TOKEN_PATH = "/tmp/kfp_server_token.json"
 KUBEFLOW_GATEWAY_ENDPOINT = os.environ["KUBEFLOW_GATEWAY_ENDPOINT"]
 KUBEFLOW_BUCKET = "kubeflow-skit"
 COOKIE_0 = "AWSELBAuthSessionCookie-0"

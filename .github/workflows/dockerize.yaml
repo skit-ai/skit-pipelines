@@ -56,7 +56,8 @@ jobs:
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.SKIT_API_GATEWAY_URL }}
           --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.KUBEFLOW_GATEWAY_ENDPOINT }}
           --build-arg KF_USERNAME=${{ secrets.KF_USERNAME }}
-          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }} 
+          --build-arg KF_PASSWORD=${{ secrets.KF_PASSWORD }}
+          --build-arg JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY}}
           --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
           --build-arg ML_METRICS_DB_NAME=${{ secrets.ML_METRICS_DB_NAME }}
           --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}
@@ -127,7 +128,8 @@ jobs:
           --build-arg SKIT_API_GATEWAY_URL=${{ secrets.US_SKIT_API_GATEWAY_URL }}
           --build-arg KUBEFLOW_GATEWAY_ENDPOINT=${{ secrets.US_KUBEFLOW_GATEWAY_ENDPOINT }}
           --build-arg KF_USERNAME=${{ secrets.US_KF_USERNAME }}
-          --build-arg KF_PASSWORD="${{ secrets.US_KF_PASSWORD }}" 
+          --build-arg KF_PASSWORD="${{ secrets.US_KF_PASSWORD }}"
+          --build-arg JWT_SECRET_KEY=${{ secrets.US_JWT_SECRET_KEY}}
           --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
           --build-arg ML_METRICS_DB_NAME=${{ secrets.ML_METRICS_DB_NAME }}
           --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}

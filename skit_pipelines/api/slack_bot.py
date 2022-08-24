@@ -1,14 +1,16 @@
 import base64
 import re
+import os
+from urllib.parse import urljoin
 import traceback
 from typing import Any, Dict, Tuple, Union
 
 import requests
 from jsoncomment import JsonComment
 from loguru import logger
+import skit_pipelines.constants as const
 
 json = JsonComment()
-
 CommandType = Union[str, None]
 PipelineNameType = Union[str, None]
 PayloadType = Union[Dict[str, Any], None]
@@ -51,8 +53,35 @@ def get_message_data(body: Dict[str, Any]):
     user = f"<@{user}>"
     return channel, ts, text, user
 
+def authenticate_bot():
+    payload = {
+        "username": const.KF_USERNAME,
+        "password": const.KF_PASSWORD
+    }
 
-def run_pipeline(pipeline_name, payload, channel_id, message_ts, user):
+    resp = requests.post(urljoin("http://localhost:9991/","token"), data=payload)
+    with open(const.ACCESS_TOKEN_PATH, "w") as f:
+        json.dump(resp.json(), f, indent=2)
+    
+    
+def read_access_token(token_fetch=False) -> str:
+
+    if not os.path.exists(const.ACCESS_TOKEN_PATH) or token_fetch:
+        authenticate_bot()
+    with open(const.ACCESS_TOKEN_PATH, "r") as f:
+        token = json.load(f).get("access_token")
+    return token
+
+def make_run_requests(url_path, payload, access_token):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    return requests.post(
+        url_path, json=payload, headers=headers
+    )
+    
+def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=None):
     if "channel" not in payload:
         payload["channel"] = channel_id
         payload["slack_thread"] = message_ts
@@ -60,10 +89,14 @@ def run_pipeline(pipeline_name, payload, channel_id, message_ts, user):
     payload["notify"] = (
         user if "notify" not in payload else f"{payload['notify']} ,{user}"
     )
+    url_path = f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/"
+    access_token = read_access_token()
+    res = make_run_requests(url_path, payload, access_token)
 
-    res = requests.post(
-        f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/", json=payload
-    )
+    if res.status_code == 401:
+        new_access_token = read_access_token(token_fetch=True)
+        res = make_run_requests(url_path, payload, new_access_token)
+
     if res.status_code != 200:
         return f"""
 Failed to create pipeline:
@@ -71,6 +104,7 @@ Failed to create pipeline:
 {json.dumps(res.json(), indent=2)}
 ```
 """.strip()
+
     success_message = res.json().get("response")
     run_url = success_message.get("run_url")
     name = success_message.get("name")
