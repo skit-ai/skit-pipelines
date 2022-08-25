@@ -105,6 +105,10 @@ def eevee_irr_with_yamls(
             intent_aliases=intent_alias,
             breakdown=True,
         )
+        # removing eevee's in_scope grouped metrics:
+        # https://github.com/skit-ai/eevee/blob/896f0e1536412669743b593dd2dc539161ebe23d/eevee/metrics/classification.py#L100
+        if "in_scope" in grouped_metrics_dict:
+            grouped_metrics_dict.pop("in_scope")
         metrics.update(grouped_metrics_dict)
     
 

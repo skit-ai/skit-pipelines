@@ -22,7 +22,7 @@ BUCKET = pipeline_constants.BUCKET
     description="Produces intent metrics given a tog-job/labelstudio-project.",
 )
 def irr_from_tog(
-    org_id: str,
+    org_id: str = "",
     job_id: str = "",
     labelstudio_project_id: str = "",
     start_date: str = "",
@@ -144,13 +144,13 @@ def irr_from_tog(
     :param slu_project_name: name of the slu deployment which we are tracking
     :type slu_project_name: str, optional
 
-    :param eevee_intent_alias_yaml_github_path: eevee's intent_report alias.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#aliasing. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :param eevee_intent_alias_yaml_github_path: eevee's intent_report alias.yaml, refer docs `here <https://skit-ai.github.io/eevee/metrics/intents.html#aliasing>`_ . Upload your yaml to eevee-yamls repository `here <https://github.com/skit-ai/eevee-yamls>`_ & pass the relative path of the yaml from base of the repository.
     :type eevee_intent_alias_yaml_github_path: str, optional
 
-    :param eevee_intent_groups_yaml_github_path: eevee's intent_report groups.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#grouping. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :param eevee_intent_groups_yaml_github_path: eevee's intent_report groups.yaml, refer docs `here <https://skit-ai.github.io/eevee/metrics/intents.html#grouping>`_ . Upload your yaml to eevee-yamls repository `here: <https://github.com/skit-ai/eevee-yamls>`_ & pass the relative path of the yaml from base of the repository.
     :type eevee_intent_groups_yaml_github_path: str, optional
 
-    :param eevee_intent_layers_yaml_github_path: eevee's intent_layers_report layers.yaml, refer docs here:https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent. Upload your yaml to eevee-yamls repository here: https://github.com/skit-ai/eevee-yamls & pass the path to the yaml from root of the repository.
+    :param eevee_intent_layers_yaml_github_path: eevee's intent_layers_report layers.yaml, refer docs `here <https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent>`_ . Upload your yaml to eevee-yamls repository `here <https://github.com/skit-ai/eevee-yamls>`_ & pass the relative path of the yaml from base of the repository.
     :type eevee_intent_layers_yaml_github_path: str, optional
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
