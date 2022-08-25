@@ -42,7 +42,7 @@ def fetch_calls_pipeline(
                 "start_date": "2020-01-01",
                 "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": False,
+                "reported": false,
                 "call_quantity": 200
             }
 
