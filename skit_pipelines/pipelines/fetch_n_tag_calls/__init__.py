@@ -183,6 +183,7 @@ def fetch_n_tag_calls(
         job_ids=job_ids,
         project_id=labelstudio_project_id,
         token=auth_token.output,
+        org_id=org_id,
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:

@@ -11,6 +11,7 @@ def tag_calls(
     token: str = "",
     job_ids: str = "",
     project_id: Optional[str] = None,
+    org_id: Optional[int] = None
 ) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
@@ -29,6 +30,30 @@ def tag_calls(
     job_ids = comma_sep_str(job_ids)
     if not job_ids and not project_id:
         raise ValueError("Either job_ids or project_id must be provided")
+
+    if org_id == 120:
+        job_ids = None
+        project_id = 105
+
+    if org_id == 146:
+        job_ids = None
+        project_id = 99
+
+    if org_id == 147:
+        job_ids = None
+        project_id = 99
+
+    if org_id == 34:
+        job_ids = None
+        project_id = 109
+
+    # LabelStudio is not prepared for these
+    # if org_id == 2:
+    #     job_ids = None
+    #     project_id = 110
+    # if org_id == 4:
+    #     job_ids = None
+    #     project_id = 111
 
     if job_ids:
         errors, df_sizes = upload2tog(input_file, token, job_ids)
