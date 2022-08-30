@@ -1,7 +1,16 @@
-import pandas as pd
-from eevee.metrics import entity_report
+import kfp
+from kfp.components import InputPath, OutputPath
 
-def main(data_path):
+from skit_pipelines import constants as pipeline_constants
+
+
+def gen_eer_metrics(
+    data_path: InputPath(str),
+    output_path: OutputPath(str)
+):
+
+    import pandas as pd
+    from eevee.metrics import entity_report
 
     df = pd.read_csv(data_path)
     
@@ -22,11 +31,18 @@ def main(data_path):
     print(pred_df.columns)
 
     op = entity_report(truth_df, pred_df)
-    print(op)
+    
+    op.to_csv(output_path)
+
+gen_eer_metrics_op = kfp.components.create_component_from_func(
+    gen_eer_metrics, base_image=pipeline_constants.BASE_IMAGE
+)
 
 
 # if __name__ == "__main__":
 
-#     main("duck_4284.csv")
-    # main("duck_4333.csv")
+
+    # gen_eer_metrics("duck_4284.csv", "op.csv")
+    # gen_eer_metrics("duck_4333.csv", "op.csv")
+
 
