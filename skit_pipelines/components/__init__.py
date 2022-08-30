@@ -28,3 +28,4 @@ from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
+from skit_pipelines.components.modify_tog_entities import modify_entity_tog_dataset_op
