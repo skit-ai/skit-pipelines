@@ -143,6 +143,7 @@ test_auth_kf.py
 
 .history
 *.csv
+*.pkl
 docker_build_dev_image
 tests/*
 test_*.py

@@ -25,8 +25,8 @@ def handle_failing_value_cases(value, text, duckling_req_payload):
 
     if isinstance(value, str):
         try:
-            parsed_value = parse(value)
-            return parsed_value.strftime('%Y-%m-%dT%H:%M:%S.%f')
+            _ = parse(value)
+            return value
         except Exception as e:
             logger.exception(e)
             logger.warning(traceback.format_exc())
@@ -121,10 +121,8 @@ def get_entities_from_duckling(
 
     return value
 
-def modify_truth(df: pd.DataFrame):
+def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
 
-
-    timezone = "Asia/Kolkata"
     pytz_tz = pytz.timezone(timezone)
 
     for i, row in tqdm(df.iterrows(), total=len(df), desc="making duckling hits to get entity values."):

@@ -7,6 +7,7 @@ from skit_pipelines import constants as pipeline_constants
 def modify_entity_tog_dataset(
     data_path: InputPath(str),
     output_path: OutputPath(str),
+    timezone: str = "Asia/Kolkata"
 ):
     """
     Takes a tog entity dataset and,
@@ -25,7 +26,7 @@ def modify_entity_tog_dataset(
 
     logger.info(f"duckling running at: {pipeline_constants.DUCKLING_HOST}")
 
-    mod_df = modify_entities.modify_truth(df)
+    mod_df = modify_entities.modify_truth(df, timezone)
     mod_df = modify_entities.modify_predictions(mod_df)
     mod_df.to_csv(output_path, index=False)
 
