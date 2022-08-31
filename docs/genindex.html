@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.25 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.26 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.25 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.26 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.25 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.26 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -164,6 +164,7 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -187,6 +188,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
@@ -372,6 +374,8 @@
   <h2>E</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.pipelines.eer_from_tog.html#skit_pipelines.pipelines.eer_from_tog.eer_from_tog">eer_from_tog() (in module skit_pipelines.pipelines.eer_from_tog)</a>
+</li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.eevee_irr_with_yamls.eevee_irr_with_yamls">eevee_irr_with_yamls() (in module skit_pipelines.components.eevee_irr_with_yamls)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.eevee_irr_with_yamls_op">eevee_irr_with_yamls_op() (in module skit_pipelines.components)</a>
@@ -386,10 +390,10 @@
 </li>
         <li><a href="skit_pipelines.types.html#skit_pipelines.types.tag_calls.TaggingResponse.errors">errors (TaggingResponse attribute)</a>
 </li>
-        <li><a href="skit_pipelines.pipelines.eval_asr_pipeline.html#skit_pipelines.pipelines.eval_asr_pipeline.eval_asr_pipeline">eval_asr_pipeline() (in module skit_pipelines.pipelines.eval_asr_pipeline)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.pipelines.eval_asr_pipeline.html#skit_pipelines.pipelines.eval_asr_pipeline.eval_asr_pipeline">eval_asr_pipeline() (in module skit_pipelines.pipelines.eval_asr_pipeline)</a>
+</li>
         <li><a href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline">eval_voicebot_xlmr_pipeline() (in module skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.extract_info_from_dataset.extract_info_from_dataset">extract_info_from_dataset() (in module skit_pipelines.components.extract_info_from_dataset)</a>
@@ -478,6 +482,14 @@
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_confusion_matrix.gen_confusion_matrix_op">(in module skit_pipelines.components.gen_confusion_matrix)</a>
 </li>
         </ul></li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_eer_metrics.gen_eer_metrics">gen_eer_metrics() (in module skit_pipelines.components.gen_eer_metrics)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_eer_metrics_op">gen_eer_metrics_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_eer_metrics.gen_eer_metrics_op">(in module skit_pipelines.components.gen_eer_metrics)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_irr_metrics.gen_irr_metrics">gen_irr_metrics() (in module skit_pipelines.components.gen_irr_metrics)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_irr_metrics_op">gen_irr_metrics_op() (in module skit_pipelines.components)</a>
@@ -486,12 +498,12 @@
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_irr_metrics.gen_irr_metrics_op">(in module skit_pipelines.components.gen_irr_metrics)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.generate_schema">generate_schema() (in module skit_pipelines.api.models.requests)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.get_all_pipelines_fn">get_all_pipelines_fn() (in module skit_pipelines.api.models.requests)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.get_entities_from_duckling">get_entities_from_duckling() (in module skit_pipelines.components.modify_entities.duckling_inference)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.get_kf_object_uri">get_kf_object_uri() (in module skit_pipelines.api.models.custom_models)</a>
@@ -584,8 +596,6 @@
   <h2>M</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_eer_metrics.main">main() (in module skit_pipelines.components.gen_eer_metrics)</a>
-</li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.slack_bot.make_response">make_response() (in module skit_pipelines.api.slack_bot)</a>
 </li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.slack_bot.make_run_requests">make_run_requests() (in module skit_pipelines.api.slack_bot)</a>
@@ -684,6 +694,8 @@
 </li>
           <li><a href="skit_pipelines.components.preprocess.create_utterance_column.html#module-skit_pipelines.components.preprocess.create_utterance_column.utils">skit_pipelines.components.preprocess.create_utterance_column.utils</a>
 </li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.push_eer_to_postgres">skit_pipelines.components.push_eer_to_postgres</a>
+</li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.push_irr_to_postgres">skit_pipelines.components.push_irr_to_postgres</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.read_json_key">skit_pipelines.components.read_json_key</a>
@@ -703,6 +715,8 @@
           <li><a href="skit_pipelines.html#module-skit_pipelines.constants">skit_pipelines.constants</a>
 </li>
           <li><a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines">skit_pipelines.pipelines</a>
+</li>
+          <li><a href="skit_pipelines.pipelines.eer_from_tog.html#module-skit_pipelines.pipelines.eer_from_tog">skit_pipelines.pipelines.eer_from_tog</a>
 </li>
           <li><a href="skit_pipelines.pipelines.eval_asr_pipeline.html#module-skit_pipelines.pipelines.eval_asr_pipeline">skit_pipelines.pipelines.eval_asr_pipeline</a>
 </li>
@@ -787,12 +801,20 @@
 </li>
         <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#skit_pipelines.components.preprocess.create_true_transcript_column.utils.pick_text_from_tag">pick_text_from_tag() (in module skit_pipelines.components.preprocess.create_true_transcript_column.utils)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.SlackBlockFactory.ping">ping() (SlackBlockFactory method)</a>
 </li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">pipeline_run_req() (in module skit_pipelines.api.endpoints)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres.push_eer_to_postgres">push_eer_to_postgres() (in module skit_pipelines.components.push_eer_to_postgres)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres_op">push_eer_to_postgres_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres.push_eer_to_postgres_op">(in module skit_pipelines.components.push_eer_to_postgres)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_irr_to_postgres.push_irr_to_postgres">push_irr_to_postgres() (in module skit_pipelines.components.push_irr_to_postgres)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_irr_to_postgres_op">push_irr_to_postgres_op() (in module skit_pipelines.components)</a>
@@ -1098,8 +1120,6 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#module-skit_pipelines.components.preprocess.create_true_transcript_column">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_true_transcript_column.utils
 
@@ -1107,6 +1127,8 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#module-skit_pipelines.components.preprocess.create_true_transcript_column.utils">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_utterance_column
 
@@ -1119,6 +1141,13 @@
 
         <ul>
           <li><a href="skit_pipelines.components.preprocess.create_utterance_column.html#module-skit_pipelines.components.preprocess.create_utterance_column.utils">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.components.push_eer_to_postgres
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.push_eer_to_postgres">module</a>
 </li>
         </ul></li>
         <li>
@@ -1189,6 +1218,13 @@
 
         <ul>
           <li><a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.pipelines.eer_from_tog
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.eer_from_tog.html#module-skit_pipelines.pipelines.eer_from_tog">module</a>
 </li>
         </ul></li>
         <li>

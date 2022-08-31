@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.irr_from_tog - skit-pipelines 0.2.25 documentation</title>
+        <title>skit_pipelines.pipelines.eer_from_tog - skit-pipelines 0.2.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -242,31 +242,28 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.pipelines.irr_from_tog</h1><div class="highlight"><pre>
+          <h1>Source code for skit_pipelines.pipelines.eer_from_tog</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">create_true_intent_labels_op</span><span class="p">,</span>
     <span class="n">extract_info_from_dataset_op</span><span class="p">,</span>
     <span class="n">fetch_tagged_dataset_op</span><span class="p">,</span>
-    <span class="n">gen_confusion_matrix_op</span><span class="p">,</span>
-    <span class="n">gen_irr_metrics_op</span><span class="p">,</span>
-    <span class="n">push_irr_to_postgres_op</span><span class="p">,</span>
+    <span class="n">modify_entity_tog_dataset_op</span><span class="p">,</span>
+    <span class="n">gen_eer_metrics_op</span><span class="p">,</span>
+    <span class="n">push_eer_to_postgres_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">upload2s3_op</span><span class="p">,</span>
-    <span class="n">eevee_irr_with_yamls_op</span>
 <span class="p">)</span>
 
-<span class="n">INTENT_Y</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">INTENT_Y</span>
 <span class="n">BUCKET</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span>
 
 
-<div class="viewcode-block" id="irr_from_tog"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.irr_from_tog.html#skit_pipelines.pipelines.irr_from_tog.irr_from_tog">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Eval IRR pipeline for tog &amp; labelstudio tagged datasets&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Produces intent metrics given a tog-job/labelstudio-project.&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="eer_from_tog"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.eer_from_tog.html#skit_pipelines.pipelines.eer_from_tog.eer_from_tog">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Eval EER pipeline for tog &amp; labelstudio tagged datasets&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Produces entity metrics given a tog-job/labelstudio-project.&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">irr_from_tog</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">eer_from_tog</span><span class="p">(</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">labelstudio_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -275,74 +272,66 @@
     <span class="n">start_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
-    <span class="n">true_label_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;intent_y&quot;</span><span class="p">,</span>
-    <span class="n">pred_label_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raw.intent&quot;</span><span class="p">,</span>
     <span class="n">mlwr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">slu_project_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">eevee_intent_alias_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">eevee_intent_groups_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">eevee_intent_layers_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Evaluates a given tog/labelstudio tagged intent dataset with production SLU predictions.</span>
-<span class="sd">    When passed with mlwr=True, it pushes the intent metrics to intent_metrics table.</span>
+<span class="sd">    Evaluates a given tog/labelstudio tagged entity dataset with production SLU predictions.</span>
+<span class="sd">    When passed with mlwr=True, it pushes the entity metrics to entity_metrics table.</span>
 
-<span class="sd">    .. _p_irr_from_tog:</span>
+<span class="sd">    .. _p_eer_from_tog:</span>
 
 <span class="sd">    Example payload to invoke this pipeline via slack integrations:</span>
 
-<span class="sd">        @charon run irr_from_tog</span>
+<span class="sd">        @charon run eer_from_tog</span>
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 1,</span>
-<span class="sd">                &quot;job_id&quot;: &quot;4011&quot;,</span>
+<span class="sd">                &quot;org_id&quot;: 129,</span>
+<span class="sd">                &quot;job_id&quot;: &quot;4333&quot;,</span>
 <span class="sd">                &quot;start_date&quot;: &quot;2022-06-01&quot;,</span>
 <span class="sd">                &quot;end_date&quot;: &quot;2022-08-01&quot;</span>
 <span class="sd">            }</span>
 
 
-<span class="sd">    To push tog job intent metrics to db, when using full eevee facilities like gropuing, aliasing, layers etc [RECOMMENDED]:</span>
+<span class="sd">    To push tog job entity metrics to db [RECOMMENDED]:</span>
 
-<span class="sd">        @charon run irr_from_tog</span>
+<span class="sd">        @charon run eer_from_tog</span>
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                &quot;job_id&quot;: &quot;4242&quot;,</span>
+<span class="sd">                &quot;job_id&quot;: &quot;4333&quot;,</span>
 <span class="sd">                &quot;start_date&quot;: &quot;2022-06-01&quot;,</span>
 <span class="sd">                &quot;end_date&quot;: &quot;2022-07-20&quot;,</span>
 <span class="sd">                &quot;mlwr&quot;: &quot;true&quot;,</span>
-<span class="sd">                &quot;slu_project_name&quot;: &quot;oppo&quot;,</span>
-<span class="sd">                &quot;eevee_intent_alias_yaml_github_path&quot;: &quot;intents/oppo/alias.yaml&quot;,</span>
-<span class="sd">                &quot;eevee_intent_groups_yaml_github_path&quot;: &quot;intents/oppo/groups.yaml&quot;,</span>
-<span class="sd">                &quot;eevee_intent_layers_yaml_github_path&quot;: &quot;intents/oppo/layers.yaml&quot;</span>
+<span class="sd">                &quot;slu_project_name&quot;: &quot;american_finance&quot;</span>
 <span class="sd">            }</span>
 
 
-<span class="sd">    To push tog job intent metrics to db (without eevee yamls) &amp; get the results same for slack:</span>
+<span class="sd">    To push tog job entity metrics to db (without eevee yamls) &amp; get the results same for slack:</span>
 
-<span class="sd">        @charon run irr_from_tog</span>
+<span class="sd">        @charon run eer_from_tog</span>
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 34,</span>
-<span class="sd">                &quot;job_id&quot;: &quot;3091&quot;,</span>
+<span class="sd">                &quot;org_id&quot;: 129,</span>
+<span class="sd">                &quot;job_id&quot;: &quot;4333&quot;,</span>
 <span class="sd">                &quot;start_date&quot;: &quot;2022-06-01&quot;,</span>
 <span class="sd">                &quot;end_date&quot;: &quot;2022-07-20&quot;,</span>
 <span class="sd">                &quot;mlwr&quot;: &quot;true&quot;,</span>
-<span class="sd">                &quot;slu_project_name&quot;: &quot;indigo&quot;</span>
+<span class="sd">                &quot;slu_project_name&quot;: &quot;american_finance&quot;</span>
 <span class="sd">            }</span>
 
 
 <span class="sd">    To use labelstudio:</span>
 
-<span class="sd">        @charon run irr_from_tog</span>
+<span class="sd">        @charon run eer_from_tog</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -356,10 +345,10 @@
 <span class="sd">    :param org_id: reference path to save the metrics on s3.</span>
 <span class="sd">    :type org_id: str</span>
 
-<span class="sd">    :param job_id: intent tog job IDs.</span>
+<span class="sd">    :param job_id: entity tog job IDs.</span>
 <span class="sd">    :type job_id: str</span>
 
-<span class="sd">    :param labelstudio_project_id: intent labelstudio project IDs.</span>
+<span class="sd">    :param labelstudio_project_id: entity labelstudio project IDs.</span>
 <span class="sd">    :type labelstudio_project_id: str</span>
 
 <span class="sd">    :param start_date: The start date range to filter calls in YYYY-MM-DD format.</span>
@@ -377,26 +366,11 @@
 <span class="sd">    :param timezone: The timezone to apply for multi-region datasets, defaults to &quot;Asia/Kolkata&quot;</span>
 <span class="sd">    :type timezone: str, optional</span>
 
-<span class="sd">    :param true_label_column: Column name of ground-truth which will be used for eevee intent evaluation.</span>
-<span class="sd">    :type true_label_column: str, optional</span>
-
-<span class="sd">    :param pred_label_column: Column name of SLU production predictions which will be used for eevee intent evaluation.</span>
-<span class="sd">    :type pred_label_column: str, optional</span>
-
-<span class="sd">    :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, intent_metrics table for MLWR.</span>
+<span class="sd">    :param mlwr: when True, pushes the eevee entity metrics to ML Metrics DB, entity_metrics table for MLWR.</span>
 <span class="sd">    :type use_state: bool, optional</span>
 
 <span class="sd">    :param slu_project_name: name of the slu deployment which we are tracking</span>
 <span class="sd">    :type slu_project_name: str, optional</span>
-
-<span class="sd">    :param eevee_intent_alias_yaml_github_path: eevee&#39;s intent_report alias.yaml, refer docs `here &lt;https://skit-ai.github.io/eevee/metrics/intents.html#aliasing&gt;`_ . Upload your yaml to eevee-yamls repository `here &lt;https://github.com/skit-ai/eevee-yamls&gt;`_ &amp; pass the relative path of the yaml from base of the repository.</span>
-<span class="sd">    :type eevee_intent_alias_yaml_github_path: str, optional</span>
-
-<span class="sd">    :param eevee_intent_groups_yaml_github_path: eevee&#39;s intent_report groups.yaml, refer docs `here &lt;https://skit-ai.github.io/eevee/metrics/intents.html#grouping&gt;`_ . Upload your yaml to eevee-yamls repository `here: &lt;https://github.com/skit-ai/eevee-yamls&gt;`_ &amp; pass the relative path of the yaml from base of the repository.</span>
-<span class="sd">    :type eevee_intent_groups_yaml_github_path: str, optional</span>
-
-<span class="sd">    :param eevee_intent_layers_yaml_github_path: eevee&#39;s intent_layers_report layers.yaml, refer docs `here &lt;https://skit-ai.github.io/eevee/metrics/intents.html#layers-of-an-intent&gt;`_ . Upload your yaml to eevee-yamls repository `here &lt;https://github.com/skit-ai/eevee-yamls&gt;`_ &amp; pass the relative path of the yaml from base of the repository.</span>
-<span class="sd">    :type eevee_intent_layers_yaml_github_path: str, optional</span>
 
 <span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
@@ -424,85 +398,132 @@
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="c1"># Create true label column</span>
-    <span class="n">preprocess_data_op</span> <span class="o">=</span> <span class="n">create_true_intent_labels_op</span><span class="p">(</span>
-        <span class="n">tagged_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">tagged_data_op</span><span class="p">)</span>
+
+    <span class="n">modified_df</span> <span class="o">=</span> <span class="n">modify_entity_tog_dataset_op</span><span class="p">(</span>
+        <span class="n">tagged_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span>
+    <span class="p">)</span>
+    <span class="n">modified_df</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">mlwr</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;mlwr-publish-to-slack&quot;</span><span class="p">):</span>
 
         <span class="c1"># use eevee for comparing ground-truth tog/label studio annotated values</span>
         <span class="c1"># with actual production prediction values present in the same tog/label studio</span>
         <span class="c1"># dataset.</span>
-        <span class="n">irr_op</span> <span class="o">=</span> <span class="n">gen_irr_metrics_op</span><span class="p">(</span>
-            <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-            <span class="n">true_label_column</span><span class="o">=</span><span class="n">true_label_column</span><span class="p">,</span>
-            <span class="n">pred_label_column</span><span class="o">=</span><span class="n">pred_label_column</span><span class="p">,</span>
+        <span class="n">eer_op</span> <span class="o">=</span> <span class="n">gen_eer_metrics_op</span><span class="p">(</span>
+            <span class="n">modified_df</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">eer_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
-        <span class="c1"># confusion matrix on the same ground-truth tog/labelstudio dataset</span>
-        <span class="c1"># vs SLU production predictions</span>
-        <span class="n">confusion_matrix_op</span> <span class="o">=</span> <span class="n">gen_confusion_matrix_op</span><span class="p">(</span>
-            <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-            <span class="n">true_label_column</span><span class="o">=</span><span class="n">true_label_column</span><span class="p">,</span>
-            <span class="n">pred_label_column</span><span class="o">=</span><span class="n">pred_label_column</span><span class="p">,</span>
-        <span class="p">)</span>
 
         <span class="c1"># upload tagged dataset eevee metrics.</span>
-        <span class="n">upload_irr</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">irr_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">upload_eer</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
+            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">eer_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
             <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;xlmr-irr-metrics&quot;</span><span class="p">,</span>
+            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;eevee_entity_metrics&quot;</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
             <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">irr_op</span><span class="p">)</span>
-        <span class="n">upload_irr</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_op</span><span class="p">)</span>
+        <span class="n">upload_eer</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
-        <span class="c1"># upload confusion matrix.</span>
-        <span class="n">upload_cm</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">confusion_matrix_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+
+
+        <span class="n">upload_fp</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
+            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">eer_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;fp&quot;</span><span class="p">],</span>
             <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;xlmr-confusion-matrix&quot;</span><span class="p">,</span>
+            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;eevee_eer_fp&quot;</span><span class="p">,</span>
             <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
             <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">confusion_matrix_op</span><span class="p">)</span>
-        <span class="n">upload_cm</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_op</span><span class="p">)</span>
+        <span class="n">upload_fp</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+        <span class="p">)</span>
+
+        <span class="n">upload_fn</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
+            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">eer_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;fn&quot;</span><span class="p">],</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
+            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;eevee_eer_fn&quot;</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+            <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_op</span><span class="p">)</span>
+        <span class="n">upload_fn</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+        <span class="p">)</span>
+
+
+        <span class="n">upload_mm</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
+            <span class="n">path_on_disk</span><span class="o">=</span><span class="n">eer_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mm&quot;</span><span class="p">],</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
+            <span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;eevee_eer_mm&quot;</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+            <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_op</span><span class="p">)</span>
+        <span class="n">upload_mm</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
         <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;slack_notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
-            <span class="n">upload_irr</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">irr_check</span><span class="p">:</span>
-            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the IRR report.&quot;</span>
-            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_irr</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
-            <span class="n">irr_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">upload_eer</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">eer_check</span><span class="p">:</span>
+            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the entity error report.&quot;</span>
+            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_eer</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
+            <span class="n">eer_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
                 <span class="n">notification_text</span><span class="p">,</span>
                 <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
                 <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
                 <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
                 <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">irr_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">eer_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
             <span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;slack_notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
-            <span class="n">upload_cm</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">cm_check</span><span class="p">:</span>
-            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the confusion matrix.&quot;</span>
-            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_cm</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
-            <span class="n">cm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here are the false positives.&quot;</span>
+            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_fp</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
+            <span class="n">eer_fp_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
                 <span class="n">notification_text</span><span class="p">,</span>
                 <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
                 <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
                 <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
                 <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">cm_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_notif</span><span class="p">)</span>
+            <span class="n">eer_fp_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
             <span class="p">)</span>
+
+            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here are the false negatives.&quot;</span>
+            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_fn</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
+            <span class="n">eer_fn_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+                <span class="n">notification_text</span><span class="p">,</span>
+                <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+                <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
+                <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
+                <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_notif</span><span class="p">)</span>
+            <span class="n">eer_fn_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+            <span class="p">)</span>
+
+            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here are the mismatches.&quot;</span>
+            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_mm</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
+            <span class="n">eer_mm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+                <span class="n">notification_text</span><span class="p">,</span>
+                <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+                <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
+                <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
+                <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_notif</span><span class="p">)</span>
+            <span class="n">eer_mm_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+            <span class="p">)</span>
+
+
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">mlwr</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;mlwr-publish-to-ml-metrics-db&quot;</span><span class="p">):</span>
 
@@ -514,27 +535,25 @@
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
-        <span class="n">yamls_irr_op</span> <span class="o">=</span> <span class="n">eevee_irr_with_yamls_op</span><span class="p">(</span>
-            <span class="n">preprocess_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-            <span class="n">true_label_column</span><span class="o">=</span><span class="n">true_label_column</span><span class="p">,</span>
-            <span class="n">pred_label_column</span><span class="o">=</span><span class="n">pred_label_column</span><span class="p">,</span>
-            <span class="n">eevee_intent_alias_yaml_github_path</span><span class="o">=</span><span class="n">eevee_intent_alias_yaml_github_path</span><span class="p">,</span>
-            <span class="n">eevee_intent_groups_yaml_github_path</span><span class="o">=</span><span class="n">eevee_intent_groups_yaml_github_path</span><span class="p">,</span>
-            <span class="n">eevee_intent_layers_yaml_github_path</span><span class="o">=</span><span class="n">eevee_intent_layers_yaml_github_path</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">preprocess_data_op</span><span class="p">)</span>
+        <span class="n">eer_op</span> <span class="o">=</span> <span class="n">gen_eer_metrics_op</span><span class="p">(</span>
+            <span class="n">modified_df</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">eer_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+        <span class="p">)</span>
 
-        <span class="n">pushed_stat</span> <span class="o">=</span> <span class="n">push_irr_to_postgres_op</span><span class="p">(</span>
-            <span class="n">yamls_irr_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">pushed_stat</span> <span class="o">=</span> <span class="n">push_eer_to_postgres_op</span><span class="p">(</span>
+            <span class="n">eer_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
             <span class="n">extracted_info</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
             <span class="n">slu_project_name</span><span class="o">=</span><span class="n">slu_project_name</span><span class="p">,</span>
             <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">yamls_irr_op</span><span class="p">,</span> <span class="n">extracted_info</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">eer_op</span><span class="p">,</span> <span class="n">extracted_info</span><span class="p">)</span>
         <span class="n">pushed_stat</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;irr_from_tog&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eer_from_tog&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>

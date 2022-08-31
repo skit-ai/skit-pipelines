@@ -127,6 +127,14 @@ skit\_pipelines.components.notification module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.push\_eer\_to\_postgres module
+---------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.push_eer_to_postgres
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.push\_irr\_to\_postgres module
 ---------------------------------------------------------
 

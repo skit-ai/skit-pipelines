@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.gen_eer_metrics - skit-pipelines 0.2.25 documentation</title>
+        <title>skit_pipelines.components.push_eer_to_postgres - skit-pipelines 0.2.25 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -242,66 +242,122 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.components.gen_eer_metrics</h1><div class="highlight"><pre>
+          <h1>Source code for skit_pipelines.components.push_eer_to_postgres</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
-<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span><span class="p">,</span> <span class="n">OutputPath</span>
+<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
-<div class="viewcode-block" id="gen_eer_metrics"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.gen_eer_metrics.gen_eer_metrics">[docs]</a><span class="k">def</span> <span class="nf">gen_eer_metrics</span><span class="p">(</span>
-    <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">fp_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">fn_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">mm_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+<div class="viewcode-block" id="push_eer_to_postgres"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres.push_eer_to_postgres">[docs]</a><span class="k">def</span> <span class="nf">push_eer_to_postgres</span><span class="p">(</span>
+    <span class="n">eevee_entity_metrics_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">extracted_pkl_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">slu_project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 
+    <span class="kn">import</span> <span class="nn">json</span>
+    <span class="kn">import</span> <span class="nn">pickle</span>
+    <span class="kn">import</span> <span class="nn">traceback</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="kn">from</span> <span class="nn">eevee.metrics</span> <span class="kn">import</span> <span class="n">entity_report</span>
+    <span class="kn">import</span> <span class="nn">psycopg2</span>
+    <span class="kn">import</span> <span class="nn">pytz</span>
+    <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="n">dbname</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_NAME</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_USER</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_PASSWORD</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_HOST</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_PORT</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">entity_metrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">eevee_entity_metrics_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;Entity&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">entity_metrics_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">extracted_pkl_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">collected_info</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+
+
+        <span class="n">pytz_tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
+        <span class="n">created_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">pytz_tz</span><span class="p">)</span>
     
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-    
-    <span class="n">truth_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;data_id&quot;</span><span class="p">,</span> <span class="s2">&quot;truth_entities_with_duckling&quot;</span><span class="p">]]</span>
-    <span class="n">pred_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;data_id&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted_entities_with_modifications&quot;</span><span class="p">]]</span>
 
-    <span class="n">truth_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;data_id&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;truth_entities_with_duckling&quot;</span><span class="p">:</span> <span class="s2">&quot;entities&quot;</span><span class="p">,</span>
-    <span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entity_type</span> <span class="ow">in</span> <span class="n">entity_metrics_df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">report_row</span> <span class="o">=</span> <span class="n">entity_metrics_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">entity_type</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">entity_type</span><span class="p">)</span>
 
-    <span class="n">pred_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;data_id&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;predicted_entities_with_modifications&quot;</span><span class="p">:</span> <span class="s2">&quot;entities&quot;</span><span class="p">,</span>
-    <span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">fpr</span> <span class="o">=</span> <span class="n">report_row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;FPR&quot;</span><span class="p">]</span>
+            <span class="n">fnr</span> <span class="o">=</span> <span class="n">report_row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;FNR&quot;</span><span class="p">]</span>
+            <span class="n">mmr</span> <span class="o">=</span> <span class="n">report_row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;Mismatch Rate&quot;</span><span class="p">]</span>
+            <span class="n">support</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">report_row</span><span class="p">[</span><span class="s2">&quot;Support&quot;</span><span class="p">])</span>
+            <span class="n">negatives</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">report_row</span><span class="p">[</span><span class="s2">&quot;Negatives&quot;</span><span class="p">])</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">truth_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pred_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">dataset_job_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;dataset_job_id&quot;</span><span class="p">])</span>
+            <span class="n">report_row_dict</span> <span class="o">=</span> <span class="n">report_row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 
-    <span class="n">op</span> <span class="o">=</span> <span class="n">entity_report</span><span class="p">(</span><span class="n">truth_df</span><span class="p">,</span> <span class="n">pred_df</span><span class="p">,</span> <span class="n">dump</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
-    <span class="n">op</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./fp.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fp_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./fn.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fn_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./mm.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">mm_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+            <span class="n">query_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;slu_name&quot;</span><span class="p">:</span> <span class="n">slu_project_name</span><span class="p">,</span>
+                <span class="s2">&quot;dataset_job_id&quot;</span><span class="p">:</span> <span class="n">dataset_job_id</span><span class="p">,</span>
+                <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;metric_name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_type</span><span class="si">}</span><span class="s2">-entity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;n_calls&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;n_calls&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;n_turns&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;n_turns&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;false_positive_rate&quot;</span><span class="p">:</span> <span class="n">fpr</span><span class="p">,</span>
+                <span class="s2">&quot;false_negative_rate&quot;</span><span class="p">:</span> <span class="n">fnr</span><span class="p">,</span>
+                <span class="s2">&quot;mismatch_rate&quot;</span><span class="p">:</span> <span class="n">mmr</span><span class="p">,</span>
+                <span class="s2">&quot;support&quot;</span><span class="p">:</span> <span class="n">support</span><span class="p">,</span>
+                <span class="s2">&quot;negatives&quot;</span><span class="p">:</span> <span class="n">negatives</span><span class="p">,</span>
+                <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="n">created_at</span><span class="p">,</span>
+                <span class="s2">&quot;calls_from_date&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;calls_from_date&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;calls_to_date&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;calls_to_date&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;tagged_from_date&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;tagged_from_date&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;tagged_to_date&quot;</span><span class="p">:</span> <span class="n">collected_info</span><span class="p">[</span><span class="s2">&quot;tagged_to_date&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">report_row_dict</span><span class="p">),</span>
+            <span class="p">}</span>
 
-<span class="n">gen_eer_metrics_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
-    <span class="n">gen_eer_metrics</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">query_parameters</span><span class="p">)</span>
+
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_ENTITY_METRICS_INSERT_SQL_QUERY</span><span class="p">,</span> <span class="n">query_parameters</span>
+            <span class="p">)</span>
+        
+        <span class="c1"># Make the changes to the database persistent </span>
+        <span class="c1"># after the for-loop</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">())</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="n">push_eer_to_postgres_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">push_eer_to_postgres</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
 <span class="p">)</span>
 
 
 <span class="c1"># if __name__ == &quot;__main__&quot;:</span>
 
-<span class="c1">#     gen_eer_metrics(</span>
-<span class="c1">#         data_path=&quot;duck_4284.csv&quot;, </span>
-<span class="c1">#         output_path=&quot;op.csv&quot;,</span>
-<span class="c1">#         fp_path=&quot;fp.csv&quot;,</span>
-<span class="c1">#         fn_path=&quot;fn.csv&quot;,</span>
-<span class="c1">#         mm_path=&quot;mm.csv&quot;</span>
-<span class="c1">#         )</span>
-    <span class="c1"># gen_eer_metrics(&quot;duck_4333.csv&quot;, &quot;op.csv&quot;)</span>
+<span class="c1">#     eevee_entity_metrics_path = &quot;op.csv&quot;</span>
+<span class="c1">#     collected_data_path = &quot;collected_data.pkl&quot;</span>
+<span class="c1">#     slu_project_name = &quot;american_finance&quot;</span>
 
-
+<span class="c1">#     a = push_eer_to_postgres(</span>
+<span class="c1">#         eevee_entity_metrics_path,</span>
+<span class="c1">#         collected_data_path,</span>
+<span class="c1">#         slu_project_name,</span>
+<span class="c1">#     )</span>
 </pre></div>
         </article>
       </div>

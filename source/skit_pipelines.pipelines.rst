@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   skit_pipelines.pipelines.eer_from_tog
    skit_pipelines.pipelines.eval_asr_pipeline
    skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline
    skit_pipelines.pipelines.fetch_calls_n_push_to_sheets

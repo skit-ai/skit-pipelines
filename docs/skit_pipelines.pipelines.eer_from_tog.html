@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.utils package" href="skit_pipelines.utils.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines" href="modules.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_tagged_entity_dataset package" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.types package - skit-pipelines 0.2.26 documentation</title>
+        <title>skit_pipelines.pipelines.eer_from_tog package - skit-pipelines 0.2.26 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -157,7 +157,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
@@ -166,7 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Annotated Dataset Entity Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
@@ -189,8 +189,8 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
@@ -204,7 +204,7 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">skit_pipelines.types package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.utils.html">skit_pipelines.utils package</a></li>
 </ul>
 </li>
@@ -243,40 +243,87 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-types-package">
-<h1>skit_pipelines.types package<a class="headerlink" href="#skit-pipelines-types-package" title="Permalink to this headline">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
-</section>
-<section id="module-skit_pipelines.types.tag_calls">
-<span id="skit-pipelines-types-tag-calls-module"></span><h2>skit_pipelines.types.tag_calls module<a class="headerlink" href="#module-skit_pipelines.types.tag_calls" title="Permalink to this headline">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TaggingResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse.df_sizes">
-<span class="sig-name descname"><span class="pre">df_sizes</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse.df_sizes" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 1</p>
+          <section id="skit-pipelines-pipelines-eer-from-tog-package">
+<h1>skit_pipelines.pipelines.eer_from_tog package<a class="headerlink" href="#skit-pipelines-pipelines-eer-from-tog-package" title="Permalink to this headline">#</a></h1>
+<section id="module-skit_pipelines.pipelines.eer_from_tog">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.eer_from_tog" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.pipelines.eer_from_tog.eer_from_tog">
+<span class="sig-name descname"><span class="pre">eer_from_tog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Asia/Kolkata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlwr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slu_project_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/eer_from_tog.html#eer_from_tog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.eer_from_tog.eer_from_tog" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluates a given tog/labelstudio tagged entity dataset with production SLU predictions.
+When passed with mlwr=True, it pushes the entity metrics to entity_metrics table.</p>
+<p id="p-eer-from-tog">Example payload to invoke this pipeline via slack integrations:</p>
+<blockquote>
+<div><p>&#64;charon run eer_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">129</span><span class="p">,</span>
+    <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4333&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To push tog job entity metrics to db [RECOMMENDED]:</p>
+<blockquote>
+<div><p>&#64;charon run eer_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4333&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-07-20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mlwr&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;slu_project_name&quot;</span><span class="p">:</span> <span class="s2">&quot;american_finance&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To push tog job entity metrics to db (without eevee yamls) &amp; get the results same for slack:</p>
+<blockquote>
+<div><p>&#64;charon run eer_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">129</span><span class="p">,</span>
+    <span class="s2">&quot;job_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4333&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-07-20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mlwr&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;slu_project_name&quot;</span><span class="p">:</span> <span class="s2">&quot;american_finance&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To use labelstudio:</p>
+<blockquote>
+<div><p>&#64;charon run eer_from_tog</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_id&quot;</span><span class="p">:</span> <span class="s2">&quot;61&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-06-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>org_id</strong> (<em>str</em>) – reference path to save the metrics on s3.</p></li>
+<li><p><strong>job_id</strong> (<em>str</em>) – entity tog job IDs.</p></li>
+<li><p><strong>labelstudio_project_id</strong> (<em>str</em>) – entity labelstudio project IDs.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em>) – The start date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>end_date</strong> (<em>str</em>) – The end date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>start_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the start date by an integer value, defaults to 0</p></li>
+<li><p><strong>end_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the end date by an integer value, defaults to 0</p></li>
+<li><p><strong>timezone</strong> (<em>str</em><em>, </em><em>optional</em>) – The timezone to apply for multi-region datasets, defaults to “Asia/Kolkata”</p></li>
+<li><p><strong>mlwr</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – when True, pushes the eevee entity metrics to ML Metrics DB, entity_metrics table for MLWR.</p></li>
+<li><p><strong>slu_project_name</strong> (<em>str</em><em>, </em><em>optional</em>) – name of the slu deployment which we are tracking</p></li>
+<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – A comma separated list of slack ids: “&#64;apples, &#64;orange.fruit” etc, defaults to “”</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
+<li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponse.errors">
-<span class="sig-name descname"><span class="pre">errors</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponse.errors" title="Permalink to this definition">#</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="skit_pipelines.types.tag_calls.TaggingResponseType">
-<span class="sig-name descname"><span class="pre">TaggingResponseType</span></span><a class="headerlink" href="#skit_pipelines.types.tag_calls.TaggingResponseType" title="Permalink to this definition">#</a></dt>
-<dd><p>alias of <a class="reference internal" href="#skit_pipelines.types.tag_calls.TaggingResponse" title="skit_pipelines.types.tag_calls.TaggingResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">skit_pipelines.types.tag_calls.TaggingResponse</span></code></a></p>
-</dd></dl>
-
-</section>
-<section id="module-skit_pipelines.types">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.types" title="Permalink to this headline">#</a></h2>
 </section>
 </section>
 
@@ -285,23 +332,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.utils.html">
+          <a class="next-page" href="modules.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.utils package</div>
+                <div class="title">skit_pipelines</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</div>
                 
               </div>
             </a>
@@ -337,10 +384,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.types package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.types.tag_calls">skit_pipelines.types.tag_calls module</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.types">Module contents</a></li>
+<li><a class="reference internal" href="#">skit_pipelines.pipelines.eer_from_tog package</a><ul>
+<li><a class="reference internal" href="#module-skit_pipelines.pipelines.eer_from_tog">Module contents</a></li>
 </ul>
 </li>
 </ul>

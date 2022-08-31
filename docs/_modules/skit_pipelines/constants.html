@@ -165,6 +165,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -188,6 +189,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
@@ -394,6 +396,50 @@
 <span class="s2">    </span><span class="si">%(tagged_from_date)s</span><span class="s2">,</span>
 <span class="s2">    </span><span class="si">%(tagged_to_date)s</span><span class="s2">,</span>
 <span class="s2">    </span><span class="si">%(reference_url)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(raw)s</span><span class="s2"></span>
+<span class="s2">)</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># for pushing eevee entity metrics to entity_metrics table.</span>
+<span class="n">ML_ENTITY_METRICS_INSERT_SQL_QUERY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">INSERT INTO entity_metrics </span>
+<span class="s2">(</span>
+<span class="s2">    slu_name,</span>
+<span class="s2">    dataset_job_id,</span>
+<span class="s2">    language,</span>
+<span class="s2">    metric_name,</span>
+<span class="s2">    n_calls,</span>
+<span class="s2">    n_turns,</span>
+<span class="s2">    false_positive_rate,</span>
+<span class="s2">    false_negative_rate,</span>
+<span class="s2">    mismatch_rate,</span>
+<span class="s2">    support,</span>
+<span class="s2">    negatives,</span>
+<span class="s2">    created_at,  </span>
+<span class="s2">    calls_from_date,</span>
+<span class="s2">    calls_to_date,</span>
+<span class="s2">    tagged_from_date,</span>
+<span class="s2">    tagged_to_date,</span>
+<span class="s2">    raw</span>
+<span class="s2">)</span>
+<span class="s2">VALUES</span>
+<span class="s2">(</span>
+<span class="s2">    </span><span class="si">%(slu_name)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(dataset_job_id)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(language)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(metric_name)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(n_calls)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(n_turns)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(false_positive_rate)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(false_negative_rate)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(mismatch_rate)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(support)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(negatives)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(created_at)s</span><span class="s2">,  </span>
+<span class="s2">    </span><span class="si">%(calls_from_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(calls_to_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(tagged_from_date)s</span><span class="s2">,</span>
+<span class="s2">    </span><span class="si">%(tagged_to_date)s</span><span class="s2">,</span>
 <span class="s2">    </span><span class="si">%(raw)s</span><span class="s2"></span>
 <span class="s2">)</span>
 <span class="s2">&quot;&quot;&quot;</span>

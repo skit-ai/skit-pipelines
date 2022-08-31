@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.26
+- [x] add: eer pipelines (#55)
+
 ## 0.2.25
 - [x] add: fetch_tagged_entity_dataset pipeline. (#54)
 
