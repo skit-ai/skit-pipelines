@@ -155,6 +155,52 @@ VALUES
 )
 """
 
+# for pushing eevee entity metrics to entity_metrics table.
+ML_ENTITY_METRICS_INSERT_SQL_QUERY = """
+INSERT INTO entity_metrics 
+(
+    slu_name,
+    dataset_job_id,
+    language,
+    metric_name,
+    n_calls,
+    n_turns,
+    false_positive_rate,
+    false_negative_rate,
+    mismatch_rate,
+    support,
+    negatives,
+    created_at,  
+    calls_from_date,
+    calls_to_date,
+    tagged_from_date,
+    tagged_to_date,
+    reference_url,
+    raw
+)
+VALUES
+(
+    %(slu_name)s,
+    %(dataset_job_id)s,
+    %(language)s,
+    %(metric_name)s,
+    %(n_calls)s,
+    %(n_turns)s,
+    %(false_positive_rate)s,
+    %(false_negative_rate)s,
+    %(mismatch_rate)s,
+    %(support)s,
+    %(negatives)s,
+    %(created_at)s,  
+    %(calls_from_date)s,
+    %(calls_to_date)s,
+    %(tagged_from_date)s,
+    %(tagged_to_date)s,
+    %(reference_url)s,
+    %(raw)s
+)
+"""
+
 PERSONAL_ACCESS_TOKEN_GITHUB = os.environ["PERSONAL_ACCESS_TOKEN_GITHUB"]
 EEVEE_RAW_FILE_GITHUB_REPO_URL = "https://raw.githubusercontent.com/skit-ai/eevee-yamls/main/"
 
