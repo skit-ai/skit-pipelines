@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   skit_pipelines.components.modify_entities
    skit_pipelines.components.preprocess
    skit_pipelines.components.tag_calls
    skit_pipelines.components.upload2sheet
@@ -86,6 +87,14 @@ skit\_pipelines.components.gen\_confusion\_matrix module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.gen\_eer\_metrics module
+---------------------------------------------------
+
+.. automodule:: skit_pipelines.components.gen_eer_metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.gen\_irr\_metrics module
 ---------------------------------------------------
 
@@ -98,6 +107,14 @@ skit\_pipelines.components.get\_preds\_voicebot\_xlmr module
 ------------------------------------------------------------
 
 .. automodule:: skit_pipelines.components.get_preds_voicebot_xlmr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.modify\_tog\_entities module
+-------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.modify_tog_entities
    :members:
    :undoc-members:
    :show-inheritance:
