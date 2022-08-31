@@ -47,7 +47,6 @@ gen_eer_metrics_op = kfp.components.create_component_from_func(
 
 # if __name__ == "__main__":
 
-
 #     gen_eer_metrics(
 #         data_path="duck_4284.csv", 
 #         output_path="op.csv",

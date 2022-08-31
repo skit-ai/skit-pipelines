@@ -123,7 +123,6 @@ def get_entities_from_duckling(
 
 def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
 
-
     pytz_tz = pytz.timezone(timezone)
 
     for i, row in tqdm(df.iterrows(), total=len(df), desc="making duckling hits to get entity values."):

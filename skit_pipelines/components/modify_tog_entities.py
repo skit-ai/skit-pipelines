@@ -36,7 +36,7 @@ modify_entity_tog_dataset_op = kfp.components.create_component_from_func(
 )
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    modify_entity_tog_dataset("4284.csv", "duck_4284.csv")
+#     modify_entity_tog_dataset("4284.csv", "duck_4284.csv")
 

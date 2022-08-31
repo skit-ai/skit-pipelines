@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.24
+- [x] update: force route tagging requests to labelstudio. (#53)
+
 ## 0.2.23
 - [x] add: offset for pulling last n days fetch_tagged_dataset op, and thus used in irr_from_tog pipeline (#49)
 
