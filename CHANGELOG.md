@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.25
+- [x] add: fetch_tagged_entity_dataset pipeline. (#54)
+
 ## 0.2.24
 - [x] update: force route tagging requests to labelstudio. (#53)
 
