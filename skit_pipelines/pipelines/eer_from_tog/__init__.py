@@ -156,6 +156,7 @@ def eer_from_tog(
 
     modified_df = modify_entity_tog_dataset_op(
         tagged_data_op.outputs["output"],
+        timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -187,6 +188,41 @@ def eer_from_tog(
         )
 
 
+
+        upload_fp = upload2s3_op(
+            path_on_disk=eer_op.outputs["fp"],
+            reference=org_id,
+            file_type="eevee_eer_fp",
+            bucket=BUCKET,
+            ext=".csv",
+        ).after(eer_op)
+        upload_fp.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
+        upload_fn = upload2s3_op(
+            path_on_disk=eer_op.outputs["fn"],
+            reference=org_id,
+            file_type="eevee_eer_fn",
+            bucket=BUCKET,
+            ext=".csv",
+        ).after(eer_op)
+        upload_fn.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
+
+        upload_mm = upload2s3_op(
+            path_on_disk=eer_op.outputs["mm"],
+            reference=org_id,
+            file_type="eevee_eer_mm",
+            bucket=BUCKET,
+            ext=".csv",
+        ).after(eer_op)
+        upload_mm.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
         with kfp.dsl.Condition(notify != "", name="slack_notify").after(
             upload_eer
         ) as eer_check:
@@ -203,6 +239,46 @@ def eer_from_tog(
                 "P0D"  # disables caching
             )
 
+            notification_text = f"Here are the false positives."
+            code_block = f"aws s3 cp {upload_fp.output} ."
+            eer_fp_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            ).after(eer_notif)
+            eer_fp_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+            notification_text = f"Here are the false negatives."
+            code_block = f"aws s3 cp {upload_fn.output} ."
+            eer_fn_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            ).after(eer_notif)
+            eer_fn_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+            notification_text = f"Here are the mismatches."
+            code_block = f"aws s3 cp {upload_mm.output} ."
+            eer_mm_notif = slack_notification_op(
+                notification_text,
+                channel=channel,
+                cc=notify,
+                code_block=code_block,
+                thread_id=slack_thread,
+            ).after(eer_notif)
+            eer_mm_notif.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+
 
     with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
 
@@ -213,7 +289,6 @@ def eer_from_tog(
         extracted_info.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
-
 
         eer_op = gen_eer_metrics_op(
             modified_df.outputs["output"],

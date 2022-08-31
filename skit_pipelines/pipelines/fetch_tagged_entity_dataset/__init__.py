@@ -91,6 +91,7 @@ def fetch_tagged_entities_dataset(
 
     modified_df = modify_entity_tog_dataset_op(
         tagged_df.outputs["output"],
+        timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
