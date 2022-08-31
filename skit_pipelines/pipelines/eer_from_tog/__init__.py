@@ -6,12 +6,11 @@ from skit_pipelines.components import (
     fetch_tagged_dataset_op,
     modify_entity_tog_dataset_op,
     gen_eer_metrics_op,
-    # push_irr_to_postgres_op,
+    push_eer_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
 )
 
-INTENT_Y = pipeline_constants.INTENT_Y
 BUCKET = pipeline_constants.BUCKET
 
 
@@ -54,7 +53,7 @@ def eer_from_tog(
             }
 
 
-    To push tog job intent metrics to db [RECOMMENDED]:
+    To push tog job entity metrics to db [RECOMMENDED]:
 
         @charon run eer_from_tog
 
@@ -101,10 +100,10 @@ def eer_from_tog(
     :param org_id: reference path to save the metrics on s3.
     :type org_id: str
 
-    :param job_id: intent tog job IDs.
+    :param job_id: entity tog job IDs.
     :type job_id: str
 
-    :param labelstudio_project_id: intent labelstudio project IDs.
+    :param labelstudio_project_id: entity labelstudio project IDs.
     :type labelstudio_project_id: str
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
@@ -122,7 +121,7 @@ def eer_from_tog(
     :param timezone: The timezone to apply for multi-region datasets, defaults to "Asia/Kolkata"
     :type timezone: str, optional
 
-    :param mlwr: when True, pushes the eevee intent metrics to ML Metrics DB, intent_metrics table for MLWR.
+    :param mlwr: when True, pushes the eevee entity metrics to ML Metrics DB, entity_metrics table for MLWR.
     :type use_state: bool, optional
 
     :param slu_project_name: name of the slu deployment which we are tracking
@@ -205,27 +204,33 @@ def eer_from_tog(
             )
 
 
-    # with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
+    with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
 
-    #     extracted_info = extract_info_from_dataset_op(
-    #         tagged_data_op.outputs["output"],
-    #         timezone=timezone,
-    #     ).after(tagged_data_op)
-    #     extracted_info.execution_options.caching_strategy.max_cache_staleness = (
-    #         "P0D"  # disables caching
-    #     )
+        extracted_info = extract_info_from_dataset_op(
+            tagged_data_op.outputs["output"],
+            timezone=timezone,
+        ).after(tagged_data_op)
+        extracted_info.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
 
 
+        eer_op = gen_eer_metrics_op(
+            modified_df.outputs["output"],
+        )
+        eer_op.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
 
-    #     pushed_stat = push_eer_to_postgres_op(
-    #         yamls_irr_op.outputs["output"],
-    #         extracted_info.outputs["output"],
-    #         slu_project_name=slu_project_name,
-    #         timezone=timezone,
-    #     ).after(yamls_irr_op, extracted_info)
-    #     pushed_stat.execution_options.caching_strategy.max_cache_staleness = (
-    #         "P0D"  # disables caching
-    #     )
+        pushed_stat = push_eer_to_postgres_op(
+            eer_op.outputs["output"],
+            extracted_info.outputs["output"],
+            slu_project_name=slu_project_name,
+            timezone=timezone,
+        ).after(eer_op, extracted_info)
+        pushed_stat.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
 
 
 __all__ = ["eer_from_tog"]
