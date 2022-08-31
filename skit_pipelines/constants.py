@@ -175,7 +175,6 @@ INSERT INTO entity_metrics
     calls_to_date,
     tagged_from_date,
     tagged_to_date,
-    reference_url,
     raw
 )
 VALUES
@@ -196,7 +195,6 @@ VALUES
     %(calls_to_date)s,
     %(tagged_from_date)s,
     %(tagged_to_date)s,
-    %(reference_url)s,
     %(raw)s
 )
 """

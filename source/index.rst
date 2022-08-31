@@ -19,6 +19,7 @@ skit-pipelines
    XLMR Intent evaluation <./skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline>
    Annotated Dataset Intent Evaluation <./skit_pipelines.pipelines.irr_from_tog>
    Download tagged entity dataset <./skit_pipelines.pipelines.fetch_tagged_entity_dataset>
+   Annotated Dataset Entity Evaluation <./skit_pipelines.pipelines.eer_from_tog>
 
 .. toctree::
    :maxdepth: 1
@@ -80,6 +81,8 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 | 7 | :ref:`Annotated Dataset Intent Evaluation <p_irr_from_tog>`                     |
 +--+----------------------------------------------------------------------------------+
 | 8 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
++--+----------------------------------------------------------------------------------+
+| 9 | :ref:`Annotated Dataset Entity Evaluation <p_eer_from_tog>`                     |
 +--+----------------------------------------------------------------------------------+
 
 Project strucuture

@@ -102,14 +102,14 @@ push_eer_to_postgres_op = kfp.components.create_component_from_func(
 )
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    eevee_entity_metrics_path = "op.csv"
-    collected_data_path = "collected_data.pkl"
-    slu_project_name = "american_finance"
+#     eevee_entity_metrics_path = "op.csv"
+#     collected_data_path = "collected_data.pkl"
+#     slu_project_name = "american_finance"
 
-    a = push_eer_to_postgres(
-        eevee_entity_metrics_path,
-        collected_data_path,
-        slu_project_name,
-    )
+#     a = push_eer_to_postgres(
+#         eevee_entity_metrics_path,
+#         collected_data_path,
+#         slu_project_name,
+#     )

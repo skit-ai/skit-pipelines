@@ -30,3 +30,4 @@ from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
 from skit_pipelines.components.modify_tog_entities import modify_entity_tog_dataset_op
 from skit_pipelines.components.gen_eer_metrics import gen_eer_metrics_op
+from skit_pipelines.components.push_eer_to_postgres import push_eer_to_postgres_op
