@@ -14,7 +14,7 @@ def gen_eer_metrics(
 
     import pandas as pd
     from eevee.metrics import entity_report
-
+    
     df = pd.read_csv(data_path)
     
     truth_df = df[["data_id", "truth_entities_with_duckling"]]

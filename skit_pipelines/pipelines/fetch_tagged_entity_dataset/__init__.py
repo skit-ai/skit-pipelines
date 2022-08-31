@@ -13,7 +13,7 @@ from skit_pipelines.components import (
     name="Fetch Tagged Entities Dataset Pipeline",
     description="fetches tagged entity dataset from tog & does few modifications for eval",
 )
-def fetch_tagged_entities_dataset(
+def fetch_tagged_entity_dataset(
     org_id: str,
     job_id: str = "",
     labelstudio_project_id: str = "",
@@ -28,11 +28,11 @@ def fetch_tagged_entities_dataset(
     """
     A pipeline to fetch tagged entity dataset wiht modifications ready for eval.
 
-    .. _p_fetch_tagged_entities_dataset:
+    .. _p_fetch_tagged_entity_dataset:
 
     Example payload to invoke via slack integrations:
 
-        @charon run fetch_tagged_entities_dataset
+        @charon run fetch_tagged_entity_dataset
 
         .. code-block:: python
 
@@ -45,7 +45,7 @@ def fetch_tagged_entities_dataset(
 
     To use labelstudio:
 
-        @charon run fetch_tagged_calls_dataset
+        @charon run fetch_tagged_entity_dataset
 
         .. code-block:: python
 
@@ -77,6 +77,9 @@ def fetch_tagged_entities_dataset(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
+    
+    
+    
     tagged_df = fetch_tagged_dataset_op(
         job_id=job_id,
         project_id=labelstudio_project_id,
