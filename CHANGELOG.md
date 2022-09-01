@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.27
+- [x] fix: org_id type being different across components.
+
 ## 0.2.26
 - [x] add: eer pipelines (#55)
 
