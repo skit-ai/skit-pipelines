@@ -32,29 +32,30 @@ def tag_calls(
     if not job_ids and not project_id:
         raise ValueError("Either job_ids or project_id must be provided")
 
-    if org_id == 120:
-        job_ids = None
-        project_id = 105
+    if not project_id:
+        if org_id == 120:
+            job_ids = None
+            project_id = 105
 
-    if org_id == 146:
-        job_ids = None
-        project_id = 99
+        if org_id == 146:
+            job_ids = None
+            project_id = 99
 
-    if org_id == 147:
-        job_ids = None
-        project_id = 99
+        if org_id == 147:
+            job_ids = None
+            project_id = 99
 
-    if org_id == 34:
-        job_ids = None
-        project_id = 109
+        if org_id == 34:
+            job_ids = None
+            project_id = 109
 
-    # LabelStudio is not prepared for these
-    # if org_id == 2:
-    #     job_ids = None
-    #     project_id = 110
-    # if org_id == 4:
-    #     job_ids = None
-    #     project_id = 111
+        # LabelStudio is not prepared for these
+        # if org_id == 2:
+        #     job_ids = None
+        #     project_id = 110
+        # if org_id == 4:
+        #     job_ids = None
+        #     project_id = 111
 
     if job_ids:
         errors, df_sizes = upload2tog(input_file, token, job_ids)
