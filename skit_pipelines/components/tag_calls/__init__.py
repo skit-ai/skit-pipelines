@@ -26,13 +26,13 @@ def tag_calls(
     df_size_string = ""
     errors = []
     df_sizes = []
-    org_id = int(org_id)
+    org_id = int(org_id) if org_id else org_id
     
     job_ids = comma_sep_str(job_ids)
     if not job_ids and not project_id:
         raise ValueError("Either job_ids or project_id must be provided")
 
-    if not project_id:
+    if not project_id and org_id:
         if org_id == 120:
             job_ids = None
             project_id = 105

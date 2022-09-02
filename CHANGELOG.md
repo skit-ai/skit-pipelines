@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.28
+- [x] fix: if not project_id present then only force routes for selected clients - tag_calls.
+
 ## 0.2.27
 - [x] fix: org_id type being different across components.
 
