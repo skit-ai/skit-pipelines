@@ -1,0 +1,9 @@
+asr_config:
+  execution_type: default
+  references:
+    - provider: AZURE
+      recognition_config:
+        language_code: hi
+        sample_rate_hertz: 8000
+        max_alternatives: 10
+        model: default
