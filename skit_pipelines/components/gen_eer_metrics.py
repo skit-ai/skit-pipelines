@@ -54,6 +54,5 @@ gen_eer_metrics_op = kfp.components.create_component_from_func(
 #         fn_path="fn.csv",
 #         mm_path="mm.csv"
 #         )
-    # gen_eer_metrics("duck_4333.csv", "op.csv")
 
 
