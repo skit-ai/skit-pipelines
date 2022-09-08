@@ -1,6 +1,7 @@
 import os
 
 BASE_IMAGE = os.environ["BASE_IMAGE"]
+KALDI_IMAGE = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning:latest"
 CUDA_P38_IMAGE = os.environ["CUDA_IMAGE"]
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]

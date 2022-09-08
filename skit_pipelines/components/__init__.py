@@ -11,6 +11,7 @@ from skit_pipelines.components.gen_confusion_matrix import gen_confusion_matrix_
 from skit_pipelines.components.gen_irr_metrics import gen_irr_metrics_op
 from skit_pipelines.components.get_preds_voicebot_xlmr import get_preds_voicebot_xlmr_op
 from skit_pipelines.components.notification import slack_notification_op
+from skit_pipelines.components.asr_tune import asr_tune_op
 from skit_pipelines.components.preprocess.create_features import create_features_op
 from skit_pipelines.components.preprocess.create_true_intent_column import (
     create_true_intent_labels_op,

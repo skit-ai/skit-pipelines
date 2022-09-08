@@ -8,6 +8,11 @@ from skit_pipelines.pipelines.fetch_calls_n_push_to_sheets import (
 from skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet import (
     fetch_calls_n_upload_tog_and_sheet,
 )
+
+from skit_pipelines.pipelines.asr_tune import (
+    asr_tune,
+)
+
 from skit_pipelines.pipelines.fetch_calls_pipeline import fetch_calls_pipeline
 from skit_pipelines.pipelines.fetch_n_tag_calls import fetch_n_tag_calls
 from skit_pipelines.pipelines.fetch_tagged_calls_dataset import (
