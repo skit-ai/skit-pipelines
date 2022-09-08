@@ -1,8 +1,8 @@
 import os
 
 BASE_IMAGE = os.environ["BASE_IMAGE"]
-KALDI_IMAGE = "536612919621.dkr.ecr.ap-south-1.amazonaws.com/vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning:latest"
-CUDA_P38_IMAGE = os.environ["CUDA_IMAGE"]
+CUDA_IMAGE = os.environ["CUDA_IMAGE"]
+KALDI_IMAGE = os.environ["KALDI_IMAGE"]
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]
 SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
@@ -206,3 +206,13 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 )
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
+
+class ASR_TUNE:
+    BASE_PATH = "~"
+    RECIPE = "s3"
+    LANGS = {"en": "english", "hi": "hindi"}
+    PHONEMIZERS = {
+        "en": "models/models36/en_with_hindi_phones/en-hi-ipa-model",
+        "hi": "~/unified-parser/unified-parser",
+    }
+    NNET_SUFFIX = {"en": "1a", "hi": "1a"}

@@ -5,7 +5,8 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     asr_tune_op,
-    download_from_s3_op,
+    download_directory_from_s3_op,
+    download_file_from_s3_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -35,18 +36,18 @@ def asr_tune(
     """
     TODO: Docstring.
     """
-    corpus_op = download_from_s3_op(storage_path=corpus_path)
-    val_corpus_op = download_from_s3_op(storage_path=val_corpus_path)
-    augment_wordlist_op = download_from_s3_op(storage_path=augment_wordlist_path)
-    remove_wordlist_op = download_from_s3_op(storage_path=remove_wordlist_path)
+    corpus_op = download_file_from_s3_op(storage_path=corpus_path)
+    val_corpus_op = download_file_from_s3_op(storage_path=val_corpus_path)
+    augment_wordlist_op = download_file_from_s3_op(storage_path=augment_wordlist_path)
+    remove_wordlist_op = download_file_from_s3_op(storage_path=remove_wordlist_path)
 
     # create a component that can make sure:
     # 1. target_model_path does not already exist.
     # 2. target_model_path is a valid s3 path.
     # TODO: check_s3_path_does_not_exist_op(target_model_path)
 
-    base_model_op = download_from_s3_op(storage_path=base_model_path, recursive=True)
-    general_lm_op = download_from_s3_op(storage_path=general_lm_path)
+    base_model_op = download_directory_from_s3_op(storage_path=base_model_path)
+    general_lm_op = download_file_from_s3_op(storage_path=general_lm_path)
 
     tune_op = asr_tune_op(
         corpus_op.outputs["output"],
