@@ -77,9 +77,7 @@ def fetch_tagged_entity_dataset(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-    
-    
-    
+
     tagged_df = fetch_tagged_dataset_op(
         job_id=job_id,
         project_id=labelstudio_project_id,
@@ -93,8 +91,7 @@ def fetch_tagged_entity_dataset(
     )
 
     modified_df = modify_entity_tog_dataset_op(
-        tagged_df.outputs["output"],
-        timezone=timezone
+        tagged_df.outputs["output"], timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

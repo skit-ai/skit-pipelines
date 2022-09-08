@@ -18,5 +18,5 @@ RequestSchemas = {
     for pipeline_name, pipeline_fn in get_all_pipelines_fn().items()
 }
 
-from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
 import skit_pipelines.api.auth as auth
+from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB

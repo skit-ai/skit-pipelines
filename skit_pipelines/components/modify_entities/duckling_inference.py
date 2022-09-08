@@ -1,20 +1,19 @@
 import json
-from datetime import datetime
 import traceback
-from tqdm import tqdm
-
-import requests
-import pytz
-import pandas as pd
-from dateutil.parser import parse
+from datetime import datetime
 from typing import List
+
+import pandas as pd
+import pytz
+import requests
+from dateutil.parser import parse
 from loguru import logger
+from tqdm import tqdm
 
 from skit_pipelines import constants as pipeline_constants
 
 
 def handle_failing_value_cases(value, text, duckling_req_payload):
-
 
     # edge cases where date/time comes out as integer with duckling
     if isinstance(value, int):
@@ -32,28 +31,31 @@ def handle_failing_value_cases(value, text, duckling_req_payload):
             logger.warning(traceback.format_exc())
             logger.warning(f"duckling predicted {value} for the payload: ")
             logger.info(str(duckling_req_payload))
-        
+
             try:
                 parsed_datetime = parse(text)
                 logger.debug(str(parsed_datetime))
-                return parsed_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')
+                return parsed_datetime.strftime("%Y-%m-%dT%H:%M:%S.%f")
             except Exception as e:
                 logger.exception(e)
                 logger.warning(traceback.format_exc())
-                logger.warning(f"dateutil tried to extract date from {text}, but failed")
+                logger.warning(
+                    f"dateutil tried to extract date from {text}, but failed"
+                )
                 logger.info(str(duckling_req_payload))
                 return None
 
     return value
 
+
 def create_duckling_payload(
-        text: str,
-        dimensions : List[str],
-        reference_time = None,
-        locale = "en_IN",
-        use_latent = False,
-        timezone: str = "Asia/Kolkata"
-    ):
+    text: str,
+    dimensions: List[str],
+    reference_time=None,
+    locale="en_IN",
+    use_latent=False,
+    timezone: str = "Asia/Kolkata",
+):
 
     payload = {
         "text": text,
@@ -66,15 +68,12 @@ def create_duckling_payload(
 
     return payload
 
-def get_entities_from_duckling(
-    text, reftime, dimensions, locale, timezone, pytz_tz
-):
+
+def get_entities_from_duckling(text, reftime, dimensions, locale, timezone, pytz_tz):
 
     # using duckling for time, date & datetime tagged types only.
 
-    headers = {
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-            }
+    headers = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}
 
     duckling_req_payload = create_duckling_payload(
         text=text,
@@ -82,13 +81,17 @@ def get_entities_from_duckling(
         reference_time=reftime,
         locale=locale,
         use_latent=True,
-        timezone=timezone
+        timezone=timezone,
     )
 
     # pprint(duckling_req_payload)
 
-    response = requests.post(f'http://{pipeline_constants.DUCKLING_HOST}/parse', headers=headers, data=duckling_req_payload)
-    # print(response.status_code) 
+    response = requests.post(
+        f"http://{pipeline_constants.DUCKLING_HOST}/parse",
+        headers=headers,
+        data=duckling_req_payload,
+    )
+    # print(response.status_code)
     value = None
 
     if response.status_code == 200:
@@ -121,11 +124,14 @@ def get_entities_from_duckling(
 
     return value
 
+
 def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
 
     pytz_tz = pytz.timezone(timezone)
 
-    for i, row in tqdm(df.iterrows(), total=len(df), desc="making duckling hits to get entity values."):
+    for i, row in tqdm(
+        df.iterrows(), total=len(df), desc="making duckling hits to get entity values."
+    ):
 
         try:
             tog_job_lang = row["raw.language"]
@@ -154,7 +160,7 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
                 if (not entity_type) or (not entity_region_tagged_text):
                     continue
 
-                entity_region_tagged_text = entity_region_tagged_text.replace("~","")
+                entity_region_tagged_text = entity_region_tagged_text.replace("~", "")
                 entity_value = None
 
                 if entity_type in ["date", "time", "datetime"]:
@@ -165,10 +171,12 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
                         dimensions,
                         locale,
                         timezone,
-                        pytz_tz
+                        pytz_tz,
                     )
                     if entity_value is None:
-                        logger.warning(f"for {entity_region_tagged_text = } & {entity_type = } duckling predictions are not included.")
+                        logger.warning(
+                            f"for {entity_region_tagged_text = } & {entity_type = } duckling predictions are not included."
+                        )
                         continue
 
                 elif "/" in tag["type"]:
@@ -177,21 +185,22 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
                 else:
                     entity_value = entity_region_tagged_text
 
-
                 if entity_type and entity_value:
-                    tagged_entities.append({
-                        "type": entity_type,
-                        "value": entity_value,
-                        "text": entity_region_tagged_text,
-                    })
-
+                    tagged_entities.append(
+                        {
+                            "type": entity_type,
+                            "value": entity_value,
+                            "text": entity_region_tagged_text,
+                        }
+                    )
 
         except Exception as e:
             logger.error(e)
-            logger.error(traceback.format_exc())      
+            logger.error(traceback.format_exc())
 
         if tagged_entities:
-            df.loc[i, "truth_entities_with_duckling"] = json.dumps(tagged_entities, ensure_ascii=False) 
+            df.loc[i, "truth_entities_with_duckling"] = json.dumps(
+                tagged_entities, ensure_ascii=False
+            )
 
     return df
-    

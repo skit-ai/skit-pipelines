@@ -1,13 +1,14 @@
 import base64
-import re
 import os
-from urllib.parse import urljoin
+import re
 import traceback
 from typing import Any, Dict, Tuple, Union
+from urllib.parse import urljoin
 
 import requests
 from jsoncomment import JsonComment
 from loguru import logger
+
 import skit_pipelines.constants as const
 
 json = JsonComment()
@@ -53,17 +54,15 @@ def get_message_data(body: Dict[str, Any]):
     user = f"<@{user}>"
     return channel, ts, text, user
 
-def authenticate_bot():
-    payload = {
-        "username": const.KF_USERNAME,
-        "password": const.KF_PASSWORD
-    }
 
-    resp = requests.post(urljoin("http://localhost:9991/","token"), data=payload)
+def authenticate_bot():
+    payload = {"username": const.KF_USERNAME, "password": const.KF_PASSWORD}
+
+    resp = requests.post(urljoin("http://localhost:9991/", "token"), data=payload)
     with open(const.ACCESS_TOKEN_PATH, "w") as f:
         json.dump(resp.json(), f, indent=2)
-    
-    
+
+
 def read_access_token(token_fetch=False) -> str:
 
     if not os.path.exists(const.ACCESS_TOKEN_PATH) or token_fetch:
@@ -72,15 +71,15 @@ def read_access_token(token_fetch=False) -> str:
         token = json.load(f).get("access_token")
     return token
 
+
 def make_run_requests(url_path, payload, access_token):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {access_token}"
+        "Authorization": f"Bearer {access_token}",
     }
-    return requests.post(
-        url_path, json=payload, headers=headers
-    )
-    
+    return requests.post(url_path, json=payload, headers=headers)
+
+
 def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=None):
     if "channel" not in payload:
         payload["channel"] = channel_id

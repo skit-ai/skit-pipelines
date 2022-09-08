@@ -3,6 +3,7 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     create_true_intent_labels_op,
+    eevee_irr_with_yamls_op,
     extract_info_from_dataset_op,
     fetch_tagged_dataset_op,
     gen_confusion_matrix_op,
@@ -10,7 +11,6 @@ from skit_pipelines.components import (
     push_irr_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
-    eevee_irr_with_yamls_op
 )
 
 INTENT_Y = pipeline_constants.INTENT_Y
@@ -162,7 +162,6 @@ def irr_from_tog(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-
 
     # gets the tog job / labelstudio dataset
     tagged_data_op = fetch_tagged_dataset_op(

@@ -1,13 +1,15 @@
 import json
 from typing import Union
-import skit_pipelines.constants as const
+
 from pydantic import BaseModel
 
+import skit_pipelines.constants as const
 
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
@@ -15,6 +17,7 @@ class TokenData(BaseModel):
 
 class User(BaseModel):
     username: str
-    
+
+
 class UserInDB(User):
     hashed_password: str

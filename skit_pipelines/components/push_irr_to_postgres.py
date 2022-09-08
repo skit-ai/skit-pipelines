@@ -1,4 +1,5 @@
 from gc import collect
+
 import kfp
 from kfp.components import InputPath
 
@@ -41,10 +42,8 @@ def push_irr_to_postgres(
         with open(extracted_pkl_path, "rb") as fp:
             collected_info = pickle.load(fp)
 
-
         pytz_tz = pytz.timezone(timezone)
         created_at = datetime.now(tz=pytz_tz)
-    
 
         for category, report_df in intent_metrics.items():
 
@@ -78,13 +77,12 @@ def push_irr_to_postgres(
                 report_df_dict = report_df.to_dict("index")
 
                 if "accuracy" in report_df_dict:
-                    
-                    report_df_dict["accuracy"]["support"] = report_df_dict["weighted avg"][
-                        "support"
-                    ]
+
+                    report_df_dict["accuracy"]["support"] = report_df_dict[
+                        "weighted avg"
+                    ]["support"]
                     report_df_dict["accuracy"]["precision"] = None
                     report_df_dict["accuracy"]["recall"] = None
-
 
             query_parameters = {
                 "slu_name": slu_project_name,
@@ -109,8 +107,8 @@ def push_irr_to_postgres(
             cur.execute(
                 pipeline_constants.ML_INTENT_METRICS_INSERT_SQL_QUERY, query_parameters
             )
-        
-        # Make the changes to the database persistent 
+
+        # Make the changes to the database persistent
         # after the for-loop
         conn.commit()
 

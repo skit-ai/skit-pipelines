@@ -1,7 +1,10 @@
 import os
 
+ECR_REGISTRY = os.environ['ECR_REGISTRY']
 BASE_IMAGE = os.environ["BASE_IMAGE"]
-CUDA_P38_IMAGE = os.environ["CUDA_IMAGE"]
+CUDA_IMAGE = os.environ["CUDA_IMAGE"]
+KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
+KALDI_IMAGE = f"{ECR_REGISTRY}/{KALDI_REPOSITORY}:latest"
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]
 SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
@@ -200,6 +203,18 @@ VALUES
 """
 
 PERSONAL_ACCESS_TOKEN_GITHUB = os.environ["PERSONAL_ACCESS_TOKEN_GITHUB"]
-EEVEE_RAW_FILE_GITHUB_REPO_URL = "https://raw.githubusercontent.com/skit-ai/eevee-yamls/main/"
+EEVEE_RAW_FILE_GITHUB_REPO_URL = (
+    "https://raw.githubusercontent.com/skit-ai/eevee-yamls/main/"
+)
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
+
+class ASR_TUNE:
+    BASE_PATH = "~"
+    RECIPE = "s3"
+    LANGS = {"en": "english", "hi": "hindi"}
+    PHONEMIZERS = {
+        "en": "models/models36/en_with_hindi_phones/en-hi-ipa-model",
+        "hi": "~/unified-parser/unified-parser",
+    }
+    NNET_SUFFIX = {"en": "1a", "hi": "1a"}
