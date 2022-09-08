@@ -20,7 +20,7 @@ def download_from_s3(
     if storage_options:
         storage_options = StorageOptions(**json.loads(storage_options))
         storage_path = create_storage_path(storage_options, storage_path)
-
+    
     logger.debug(f"{storage_path=}")
     bucket, key = pattern.match(storage_path).groups()
     logger.debug(f"{bucket=} {key=}")
