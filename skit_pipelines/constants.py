@@ -1,8 +1,10 @@
 import os
 
+ECR_REGISTRY = os.environ['ECR_REGISTRY']
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 CUDA_IMAGE = os.environ["CUDA_IMAGE"]
-KALDI_IMAGE = os.environ["KALDI_IMAGE"]
+KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
+KALDI_IMAGE = f"{ECR_REGISTRY}/{KALDI_REPOSITORY}:latest"
 BUCKET = os.environ["BUCKET"]
 SLACK_TOKEN = os.environ["SLACK_TOKEN"]
 SLACK_SIGNING_SECRET = os.environ["SLACK_SIGNING_SECRET"]
