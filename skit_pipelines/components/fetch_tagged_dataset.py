@@ -50,9 +50,9 @@ def fetch_tagged_dataset(
 
     if start_date_offset or end_date_offset:
         start_date, end_date = process_date_filters(
-                start_date_offset=start_date_offset,
-                end_date_offset=end_date_offset,
-            )
+            start_date_offset=start_date_offset,
+            end_date_offset=end_date_offset,
+        )
 
     if job_id:
         df_path, _ = download_dataset_from_db(

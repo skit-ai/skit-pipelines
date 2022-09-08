@@ -4,8 +4,8 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     extract_info_from_dataset_op,
     fetch_tagged_dataset_op,
-    modify_entity_tog_dataset_op,
     gen_eer_metrics_op,
+    modify_entity_tog_dataset_op,
     push_eer_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
@@ -137,7 +137,6 @@ def eer_from_tog(
     :type slack_thread: str, optional
     """
 
-
     # gets the tog job / labelstudio dataset
     tagged_data_op = fetch_tagged_dataset_op(
         job_id=job_id,
@@ -153,10 +152,8 @@ def eer_from_tog(
         "P0D"  # disables caching
     )
 
-
     modified_df = modify_entity_tog_dataset_op(
-        tagged_data_op.outputs["output"],
-        timezone=timezone
+        tagged_data_op.outputs["output"], timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -174,7 +171,6 @@ def eer_from_tog(
             "P0D"  # disables caching
         )
 
-
         # upload tagged dataset eevee metrics.
         upload_eer = upload2s3_op(
             path_on_disk=eer_op.outputs["output"],
@@ -186,8 +182,6 @@ def eer_from_tog(
         upload_eer.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
-
-
 
         upload_fp = upload2s3_op(
             path_on_disk=eer_op.outputs["fp"],
@@ -210,7 +204,6 @@ def eer_from_tog(
         upload_fn.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
-
 
         upload_mm = upload2s3_op(
             path_on_disk=eer_op.outputs["mm"],
@@ -277,8 +270,6 @@ def eer_from_tog(
             eer_mm_notif.execution_options.caching_strategy.max_cache_staleness = (
                 "P0D"  # disables caching
             )
-
-
 
     with kfp.dsl.Condition(mlwr == True, "mlwr-publish-to-ml-metrics-db"):
 

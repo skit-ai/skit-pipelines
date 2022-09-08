@@ -7,14 +7,13 @@ from skit_pipelines import constants as pipeline_constants
 def modify_entity_tog_dataset(
     data_path: InputPath(str),
     output_path: OutputPath(str),
-    timezone: str = "Asia/Kolkata"
+    timezone: str = "Asia/Kolkata",
 ):
     """
     Takes a tog entity dataset and,
     1) hits duckling service for inference on ground-truth
     2) modifies the predicted entity structure to be consistent
     """
-
 
     import pandas as pd
     from loguru import logger

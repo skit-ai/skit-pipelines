@@ -5,30 +5,25 @@ from typing import Any, Callable, Dict, Optional
 import kfp
 import kfp_server_api
 import pydantic
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordRequestForm
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
 from loguru import logger
-
-from fastapi import Depends, Request, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 
 import skit_pipelines.constants as const
 from skit_pipelines.api import (
     BackgroundTasks,
     app,
-    models,
     auth,
+    models,
     run_in_threadpool,
     slack_app,
     slack_handler,
 )
 from skit_pipelines.api.slack_bot import get_message_data, make_response
 from skit_pipelines.components.notification import slack_notification
-from skit_pipelines.utils import (
-    filter_schema,
-    kubeflow_login,
-    normalize,
-    webhook_utils
-)
+from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils
+
 
 class RunPipelineResult:
     def __init__(self, client, run_info):
@@ -125,7 +120,7 @@ def pipeline_run_req(
     pipeline_name: str,
     payload: Dict[str, Any],
     background_tasks: BackgroundTasks,
-    _ : str = Depends(auth.valid_user)
+    _: str = Depends(auth.valid_user),
 ):
     kf_client = kubeflow_login()
     if not kf_client.get_kfp_healthz().multi_user:

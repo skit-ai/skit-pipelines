@@ -40,10 +40,8 @@ def push_eer_to_postgres(
         with open(extracted_pkl_path, "rb") as fp:
             collected_info = pickle.load(fp)
 
-
         pytz_tz = pytz.timezone(timezone)
         created_at = datetime.now(tz=pytz_tz)
-    
 
         for entity_type in entity_metrics_df.index:
             report_row = entity_metrics_df.loc[entity_type]
@@ -83,8 +81,8 @@ def push_eer_to_postgres(
             cur.execute(
                 pipeline_constants.ML_ENTITY_METRICS_INSERT_SQL_QUERY, query_parameters
             )
-        
-        # Make the changes to the database persistent 
+
+        # Make the changes to the database persistent
         # after the for-loop
         conn.commit()
 

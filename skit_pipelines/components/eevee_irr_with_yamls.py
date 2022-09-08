@@ -14,19 +14,18 @@ def eevee_irr_with_yamls(
     eevee_intent_layers_yaml_github_path: str = "",
 ):
 
+    import pickle
     import re
     import traceback
-    import pickle
     from pprint import pprint
 
-    import yaml
-    import requests
     import pandas as pd
-    from eevee.metrics import intent_report, intent_layers_report
+    import requests
+    import yaml
+    from eevee.metrics import intent_layers_report, intent_report
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
-
 
     def get_yaml_from_github_if_exists(eevee_yaml_github_path: str):
 
@@ -37,24 +36,24 @@ def eevee_irr_with_yamls(
             eevee_yaml_url = f"{pipeline_constants.EEVEE_RAW_FILE_GITHUB_REPO_URL}{eevee_yaml_github_path}"
             logger.debug(f"{eevee_yaml_url=}")
             headers = requests.structures.CaseInsensitiveDict()
-            headers["Authorization"] = f"token {pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}"
+            headers[
+                "Authorization"
+            ] = f"token {pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}"
 
             response = requests.get(eevee_yaml_url, headers=headers)
             logger.info(response.status_code)
             if response.status_code == requests.codes.OK:
 
                 loaded_yaml = yaml.safe_load(response.content)
-                
+
                 pprint(loaded_yaml)
                 return loaded_yaml
-                
-            
+
         except Exception as e:
             logger.exception(e)
             print(traceback.print_exc())
 
         return None
-
 
     intent_alias = get_yaml_from_github_if_exists(eevee_intent_alias_yaml_github_path)
     intent_groups = get_yaml_from_github_if_exists(eevee_intent_groups_yaml_github_path)
@@ -110,7 +109,6 @@ def eevee_irr_with_yamls(
         if "in_scope" in grouped_metrics_dict:
             grouped_metrics_dict.pop("in_scope")
         metrics.update(grouped_metrics_dict)
-    
 
     layers_dict = {}
     if intent_layers:
@@ -124,7 +122,6 @@ def eevee_irr_with_yamls(
         metrics["layers"] = pd.DataFrame(layers_dict)
         pprint(metrics["layers"])
 
-
     pprint(metrics)
 
     logger.debug("key intents collected: ")
@@ -134,16 +131,15 @@ def eevee_irr_with_yamls(
 
     # removes "-intent", "_intents" at the end of the grouping
     # "inscop_intents" -> "inscope"
-    # removes `-`, `_` before `intent`, and optional (s) in 
+    # removes `-`, `_` before `intent`, and optional (s) in
     # the end.
     for key, value in metrics.items():
-        key = re.sub('[-_]?intent(s)?', '', key, flags=re.I)
+        key = re.sub("[-_]?intent(s)?", "", key, flags=re.I)
         modified_metrics[key] = value
 
     logger.debug("modified key names of intents collected: ")
     logger.debug(modified_metrics.keys())
-        
-    
+
     with open(output_path, "wb") as f:
         pickle.dump(modified_metrics, f)
 
