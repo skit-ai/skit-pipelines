@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: all test secrets compile_pipes pipes docs dev dev_image
+.PHONY: all test secrets compile_pipes pipes docs dev start_server
 
 BASE := skit_pipelines/pipelines
 BLANK := 
@@ -39,6 +39,9 @@ docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
 	@cp source/index.rst README.rst
+
+start_server:
+	@source secrets/env.sh && task serve
 
 pipes: secrets compile_pipes
 all: lint pipes docs
