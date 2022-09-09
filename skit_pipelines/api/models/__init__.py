@@ -7,6 +7,9 @@ from skit_pipelines.api.models.requests import (
     get_all_pipelines_fn,
     get_normalized_pipelines_fn_map,
 )
+from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
+import skit_pipelines.api.auth as auth
+
 from skit_pipelines.api.models.responses import (
     customResponse,
     statusWiseResponse,
@@ -18,5 +21,3 @@ RequestSchemas = {
     for pipeline_name, pipeline_fn in get_all_pipelines_fn().items()
 }
 
-import skit_pipelines.api.auth as auth
-from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
