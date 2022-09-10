@@ -1,5 +1,5 @@
 import inspect
-from typing import Optional
+from typing import Dict, Optional
 
 from pydantic import BaseModel, create_model, validator
 
@@ -15,6 +15,12 @@ def get_all_pipelines_fn():
         if not pipeline_name.startswith("__") and callable(pipeline_fn)
     }
 
+def set_nodegroup_for_pipelines(pipeline_fn):
+    source_code = inspect.getsourcelines(pipeline_fn)
+    for line in source_code[0]:
+        if ".set_gpu_limit(" in line:
+            return const.GPU_NODE_LABEL
+    return const.CPU_NODE_LABEL
 
 def get_normalized_pipelines_fn_map():
     return {

@@ -218,3 +218,8 @@ class ASR_TUNE:
         "hi": "~/unified-parser/unified-parser",
     }
     NNET_SUFFIX = {"en": "1a", "hi": "1a"}
+
+#K8s
+POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
+CPU_NODE_LABEL = "m5.xlarge"
+GPU_NODE_LABEL = "g4dn.xlarge"
