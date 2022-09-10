@@ -12,7 +12,7 @@
 
 You can test out components via pytest (recommended) or atleast build them interactively on ipython.
 
-To develop locally, **always have an image built first** which will serve as `base image` to run the pipeline in this case. `make dev tag=<feature_x_tag>` would help you do this. It'll build an image and start the pipelines server. Now from next time onwards you can do just `make dev` and it'll automatically pick up last tagged image you had as `base image` and start the server. Whenever you'd again like to have a new image built and have the pipelines using that, run `make dev tag=<some_other_feature_tag>` and from there on new tag will be picked up. Here we are using a mono-image setup for pipelines.
+To develop locally, **always have an image built first** which will serve as `base image` to run the pipeline in this case. `make dev tag=<feature_x_tag>` would help you do this. It'll build an image and start the pipelines server. Now from next time onwards you can do just `make dev` and it'll automatically pick up last tagged image you had as `base image` and start the server. Whenever you'd again like to have a new image built and have the pipelines use that, run `make dev tag=<some_other_feature_tag>` and from there on new tag will be picked up. Here we are using a mono-image setup for pipelines.
 
 Once server starts then one can test a pipeline by doing:
  ```bash
