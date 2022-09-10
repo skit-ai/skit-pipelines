@@ -10,18 +10,20 @@
 6. run `make secrets`.
 7. run `source secrets/env.sh` this will setup the environment with secret variables.
 
-To develop locally, just run `task serve`. This will host a fastapi server on your development environment.
 You can test out components via pytest (recommended) or atleast build them interactively on ipython.
 
-To test locally developed breaking changes, just run `make dev tag=<feature_x_tag_1>` where replace feature_x_tag_1 value with anything you want, this is to get away from kubeflow's image caching as here we are using a mono-image setup for pipelines. This will build, push new image with your tag and start the server with appropriate env vars. 
-Once server is started then one can make requests where `request.json` should contain your parameters for the pipeline:
-```
-curl --header "Content-Type: application/json" --request POST --data @request.json http://0.0.0.0:9991/skit/pipelines/run/<your new pipeline name>/
-```
+To develop locally, **always have an image built first** which will serve as `base image` to run the pipeline in this case. `make dev tag=<feature_x_tag>` would help you do this. It'll build an image and start the pipelines server. Now from next time onwards you can do just `make dev` and it'll automatically pick up last tagged image you had as `base image` and start the server. Whenever you'd again like to have a new image built and have the pipelines using that, run `make dev tag=<some_other_feature_tag>` and from there on new tag will be picked up. Here we are using a mono-image setup for pipelines.
 
+Once server starts then one can test a pipeline by doing:
+ ```bash
+ task run_pipeline --pipeline-name=<your_pipeline_name> --params-file=<json_file_path_for_pipeline_params>
+ ```
+One can do `task run_pipeline -h` to know more.
+
+### Workflow YAMLs 
 Running `make pipes`  will build the pipeline yamls in the `build/` directory which can be used to upload for a new official pipeline release in Kubeflow.
 
-### Component Anatomy
+## Component Anatomy
 
 We use this project as a base image for all our pipelines. This helps us re-use a lot of code that we couldn't otherwise.
 However to make use of this we will decide on conventions.
@@ -49,7 +51,7 @@ def metadata2accuracy(metadata: str) -> float:
 ```
 
 The import statement is within the component because kubeflow while compiling, will take the function body as the source code for the container.
-We maintain reusable functions in the `skit-pipelines.utls` or `skit-pipelines.components.*` packages. Any modification to these functions will require a new image build.
+We maintain reusable functions in the `skit-pipelines.utils` or `skit-pipelines.components.*` packages. Any modification to these functions will require a new image build.
 
 ## Soft Release
 

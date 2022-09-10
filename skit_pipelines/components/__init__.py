@@ -1,6 +1,10 @@
 from skit_pipelines.components.asr_tune import asr_tune_op
 from skit_pipelines.components.auth import org_auth_token_op
-from skit_pipelines.components.download_from_s3 import download_from_s3_op
+from skit_pipelines.components.download_from_s3 import (
+    download_csv_from_s3_op,
+    download_file_from_s3_op,
+    download_directory_from_s3_op
+)
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
 from skit_pipelines.components.extract_info_from_dataset import (
     extract_info_from_dataset_op,

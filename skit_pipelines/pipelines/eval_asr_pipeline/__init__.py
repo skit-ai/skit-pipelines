@@ -4,7 +4,7 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     create_true_transcript_labels_op,
     create_utterances_op,
-    download_from_s3_op,
+    download_csv_from_s3_op,
     gen_asr_metrics_op,
     slack_notification_op,
     upload2s3_op,
@@ -55,7 +55,7 @@ def eval_asr_pipeline(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-    tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
+    tagged_data_op = download_csv_from_s3_op(storage_path=s3_path_data)
 
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(

@@ -42,6 +42,7 @@ sphinx-copybutton = "0.3.1"
 sphinx-autodoc-typehints = "1.16.0"
 furo = "^2022.4.7"
 taskipy = "^1.10.2"
+docopt = "^0.6.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -56,3 +57,4 @@ filterwarnings = [
 
 [tool.taskipy.tasks]
 serve = "uvicorn skit_pipelines.api.endpoints:app --proxy-headers --host 0.0.0.0 --port 9991 --workers 1 --reload"
+run_pipeline = "source secrets/env.sh && python run_pipeline.py"

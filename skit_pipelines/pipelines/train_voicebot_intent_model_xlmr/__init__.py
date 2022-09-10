@@ -5,7 +5,7 @@ from skit_pipelines.components import (
     create_features_op,
     create_true_intent_labels_op,
     create_utterances_op,
-    download_from_s3_op,
+    download_file_from_s3_op,
     slack_notification_op,
     train_voicebot_xlmr_op,
     upload2s3_op,
@@ -134,7 +134,7 @@ def train_voicebot_intent_model_xlmr(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-    tagged_data_op = download_from_s3_op(
+    tagged_data_op = download_file_from_s3_op(
         storage_path=dataset_path, storage_options=storage_options
     )
 

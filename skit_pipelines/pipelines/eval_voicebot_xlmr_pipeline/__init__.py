@@ -5,7 +5,8 @@ from skit_pipelines.components import (
     create_features_op,
     create_true_intent_labels_op,
     create_utterances_op,
-    download_from_s3_op,
+    download_csv_from_s3_op,
+    download_file_from_s3_op,
     gen_confusion_matrix_op,
     gen_irr_metrics_op,
     get_preds_voicebot_xlmr_op,
@@ -69,7 +70,7 @@ def eval_voicebot_xlmr_pipeline(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
     """
-    tagged_data_op = download_from_s3_op(storage_path=s3_path_data)
+    tagged_data_op = download_csv_from_s3_op(storage_path=s3_path_data)
 
     # Create true label column
     preprocess_data_op = create_utterances_op(tagged_data_op.outputs["output"]).after(
@@ -87,7 +88,7 @@ def eval_voicebot_xlmr_pipeline(
     )
 
     with kfp.dsl.Condition(s3_path_model != "", "model_present") as model_present:
-        loaded_model_op = download_from_s3_op(storage_path=s3_path_model)
+        loaded_model_op = download_file_from_s3_op(storage_path=s3_path_model)
         # get predictions from the model
         pred_op = get_preds_voicebot_xlmr_op(
             preprocess_data_op.outputs["output"],
