@@ -7,6 +7,7 @@ from skit_pipelines import constants as pipeline_constants
 def download_csv_from_s3(
     *,
     storage_path: str,
+    empty_possible: bool = False,
     output_path: OutputPath(str),
 ) -> None:
     import json
@@ -27,7 +28,7 @@ def download_csv_from_s3(
 
     logger.debug(f"{storage_path=}")
 
-    if not storage_path:
+    if not storage_path and empty_possible:
         pd.DataFrame().to_csv(output_path, index=False)
         return
 
