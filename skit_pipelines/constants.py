@@ -223,3 +223,18 @@ class ASR_TUNE:
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
 CPU_NODE_LABEL = "m5.xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
+
+# VCS
+GITLAB = "gitlab.com"
+GITLAB_SLU_PROJECT_PATH = "vernacularai/ai/clients"
+GITLAB_USER = "automation"
+GITLAB_USER_EMAIL = "automation@skit.ai"
+GITLAB_PRIVATE_TOKEN = os.environ["PERSONAL_ACCESS_TOKEN_GITLAB"]
+
+
+def GET_GITLAB_REPO_URL(
+    repo_name: str, project_path: str, user: str, token: str
+) -> str:
+    return f"https://{user}:{token}@{GITLAB}/{project_path}/{repo_name}.git"
+
+GITHUB = "github.com"
