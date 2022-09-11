@@ -16,6 +16,7 @@ def fetch_tagged_dataset(
     end_date: Optional[str] = None,
     start_date_offset: Optional[int] = None,
     end_date_offset: Optional[int] = None,
+    empty_possible: bool = False,
 ):
     import asyncio
     import time
@@ -32,6 +33,7 @@ def fetch_tagged_dataset(
     )
 
     from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
 
@@ -47,6 +49,7 @@ def fetch_tagged_dataset(
         task_type = const.TASK_TYPE__CONVERSATION
 
     start = time.time()
+    df_paths = []
 
     if start_date_offset or end_date_offset:
         start_date, end_date = process_date_filters(
@@ -55,30 +58,42 @@ def fetch_tagged_dataset(
         )
 
     if job_id:
-        df_path, _ = download_dataset_from_db(
-            job_id=int(job_id),
-            task_type=task_type or None,
-            timezone=pytz.timezone(timezone) if timezone else None,
-            start_date=start_date or None,
-            end_date=end_date or None,
-            host=host,
-            port=port,
-            password=password,
-            user=user,
-        )
-    elif project_id:
-        df_path, _ = asyncio.run(
-            download_dataset_from_labelstudio(
-                url=pipeline_constants.LABELSTUDIO_SVC,
-                token=pipeline_constants.LABELSTUDIO_TOKEN,
-                project_id=int(project_id),
+        job_ids = comma_sep_str(job_id)
+        for job_id in job_ids:
+            df_path, _ = download_dataset_from_db(
+                job_id=int(job_id),
+                task_type=task_type or None,
+                timezone=pytz.timezone(timezone) if timezone else None,
+                start_date=start_date or None,
+                end_date=end_date or None,
+                host=host,
+                port=port,
+                password=password,
+                user=user,
             )
-        )
+            df_paths.append(df_path)
+
+    elif project_id:
+        project_ids = comma_sep_str(project_id)
+        for project_id in project_ids:
+            df_path, _ = asyncio.run(
+                download_dataset_from_labelstudio(
+                    url=pipeline_constants.LABELSTUDIO_SVC,
+                    token=pipeline_constants.LABELSTUDIO_TOKEN,
+                    project_id=int(project_id),
+                )
+            )
+            df_paths.append(df_path)
+
     else:
-        raise ValueError("Either job_id or project_id must be provided")
+        if not empty_possible:
+            raise ValueError("Either job_id or project_id must be provided")
+        else:
+            pd.DataFrame().to_csv(output_path, index=False)
+            return
 
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
-    df = pd.read_csv(df_path)
+    df = pd.concat([pd.read_csv(df_path) for df_path in df_paths])
     df.to_csv(output_path, index=False)
 
 
