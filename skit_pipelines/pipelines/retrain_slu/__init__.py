@@ -160,7 +160,6 @@ def retrain_slu(
     
     notification_text = f"{repo_name} SLU has been retrained. New version - {retrained_op.output}"
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op):
-        code_block = f"aws s3 cp {retrained_op.output} ."
         task_no_cache = slack_notification_op(
             notification_text,
             channel=channel,
