@@ -5,6 +5,7 @@ from skit_pipelines.components.download_from_s3 import (
     download_file_from_s3_op,
     download_directory_from_s3_op
 )
+from skit_pipelines.components.download_repo import download_repo_op
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
 from skit_pipelines.components.extract_info_from_dataset import (
     extract_info_from_dataset_op,
@@ -36,3 +37,4 @@ from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
+from skit_pipelines.components.retrain_slu_from_repo import retrain_slu_from_repo_op
