@@ -36,8 +36,14 @@ def transcription_pipeline(
 
     :param data_s3_path: S3 path of the data in CSV
     :type: str
-    :param config_s3_path: The config yaml to be used by blaze. Refer to (https://github.com/skit-ai/blaze#config).
+    :param config_s3_path: the config yaml to be used by blaze. Refer to (https://github.com/skit-ai/blaze#config) for more info.
     :type: str
+    :param audio_sample_rate: audio sample rate / frequency of output audios. (default "8k").
+    :type: str
+    :param audio_download_workers: maximum workers while downloading the audios (default 30).
+    :type: int
+    :param transcription_concurrency: maximum workers while transcribing the audios (default 8).
+    :type: int
     """
     # Download CSV files with audio
     original_data_op = download_csv_from_s3_op(storage_path = data_s3_path)
