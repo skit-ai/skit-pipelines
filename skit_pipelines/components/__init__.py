@@ -37,4 +37,8 @@ from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
+
 from skit_pipelines.components.retrain_slu_from_repo import retrain_slu_from_repo_op
+from skit_pipelines.components.audio_download import download_audio_wavs_op
+from skit_pipelines.components.asr_transcription import audio_transcription_op
+from skit_pipelines.components.merge_transcription import overlay_transcription_csv_op

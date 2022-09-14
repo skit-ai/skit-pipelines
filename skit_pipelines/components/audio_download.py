@@ -1,0 +1,18 @@
+import kfp
+
+from skit_pipelines import constants as pipeline_constants
+from kfp.components import OutputPath, InputPath
+
+def download_audio_wavs(
+    audio_data_path: InputPath(str),
+    audio_sample_rate: str,
+    audio_download_workers: int,
+    output_path: OutputPath(str),
+) -> None:
+    import os
+    os.system("apt update && apt -y install ffmpeg")
+    os.system(f"./johnny -input {audio_data_path} -output {output_path} -rate {audio_sample_rate} -workers {audio_download_workers}")
+
+download_audio_wavs_op = kfp.components.create_component_from_func(
+    download_audio_wavs, base_image = pipeline_constants.BASE_IMAGE
+)
