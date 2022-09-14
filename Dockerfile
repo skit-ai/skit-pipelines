@@ -43,6 +43,15 @@ COPY . .
 
 RUN poetry install --no-dev
 
+# install johnny.
+RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
+    | grep "\"browser_download_url.*linux-amd64.tar.gz\"" \
+    | cut -d : -f 2,3 | tr -d \" \
+    | wget -qi - -O johnny.tar.gz \
+    && tar -xvzf johnny.tar.gz \
+    && pwd \
+    && ls -lat .
+
 ARG BASE_IMAGE
 ARG CUDA_IMAGE
 ARG ECR_REGISTRY
