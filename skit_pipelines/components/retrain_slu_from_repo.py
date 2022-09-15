@@ -82,11 +82,11 @@ def retrain_slu_from_repo(
     # TODO create slu alias-data command - not imp rn
 
     os.chdir(slu_path)
+    repo = git.Repo(".")
     author = git.Actor(pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL)
     committer = git.Actor(pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL)
     repo.config_writer().set_value("user", "name", pipeline_constants.GITLAB_USER).release()
     repo.config_writer().set_value("user", "email", pipeline_constants.GITLAB_USER_EMAIL).release()
-    repo = git.Repo(".")
 
     try:
         tagged_df = pd.read_csv(annotated_job_data_path)
