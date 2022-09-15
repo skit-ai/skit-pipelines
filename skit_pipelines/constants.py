@@ -211,15 +211,6 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
 
-class ASR_TUNE:
-    BASE_PATH = "~"
-    RECIPE = "s3"
-    LANGS = {"en": "english", "hi": "hindi"}
-    PHONEMIZERS = {
-        "en": "models/models36/en_with_hindi_phones/en-hi-ipa-model",
-        "hi": "~/unified-parser/unified-parser",
-    }
-    NNET_SUFFIX = {"en": "1a", "hi": "1a"}
 
 
 # K8s
