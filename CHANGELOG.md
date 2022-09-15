@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.2.31
+- [x] fix: pipeline_constants not defined error in asr_tune component (#63)
 ## 0.2.30
 - [x] fix: empty_possible param for download_file_from_s3 component
 
