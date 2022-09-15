@@ -37,6 +37,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: dvc get https://github.com/skit-ai/skit-calls secrets && dvc pull pipeline_secrets && docker build
           --build-arg ECR_REGISTRY=$ECR_REGISTRY
+          --build-arg REGION="ap-south-1"
           --build-arg BASE_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY:$RELEASE_VERSION
           --build-arg DB_HOST=${{ secrets.DB_HOST }}
           --build-arg DB_PORT=${{ secrets.DB_PORT }}
@@ -111,6 +112,7 @@ jobs:
           US_ECR_REPOSITORY: ${{ secrets.US_ECR_REPOSITORY }}
         run: dvc get https://github.com/skit-ai/skit-calls secrets && dvc pull pipeline_secrets && docker build
           --build-arg ECR_REGISTRY=$US_ECR_REGISTRY
+          --build-arg REGION="us-east-1"
           --build-arg BASE_IMAGE=$US_ECR_REGISTRY/$US_ECR_REPOSITORY:$RELEASE_VERSION
           --build-arg DB_HOST=${{ secrets.US_DB_HOST }}
           --build-arg DB_PORT=${{ secrets.US_DB_PORT }}

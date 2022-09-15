@@ -1,6 +1,7 @@
 import os
 
 ECR_REGISTRY = os.environ["ECR_REGISTRY"]
+REGION = os.environ["REGION"]
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 CUDA_IMAGE = os.environ["CUDA_IMAGE"]
 KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
@@ -222,8 +223,10 @@ class ASR_TUNE:
 
 
 # K8s
+US_EAST_1 = "us-east-1"
+AP_SOUTH_1 = "ap-south-1"
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
-CPU_NODE_LABEL = "m5.xlarge"
+CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
 
 # VCS
