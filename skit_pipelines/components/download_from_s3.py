@@ -49,6 +49,7 @@ def download_file_from_s3(
     *,
     storage_path: str,
     storage_options: str = "",
+    empty_possible: bool = False,
     output_path: OutputPath(str),
 ) -> None:
     import json
@@ -70,6 +71,13 @@ def download_file_from_s3(
     if storage_options:
         storage_options = StorageOptions(**json.loads(storage_options))
         storage_path = create_storage_path(storage_options, storage_path)
+
+    if (not storage_options) and empty_possible:
+        logger.debug(
+            f"storage_path was empty, placing an empty file on output_path = {output_path}"
+        )
+        open(output_path, "w").close()
+        return
 
     logger.debug(f"{storage_path=}")
     bucket, key = pattern.match(storage_path).groups()
