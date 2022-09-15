@@ -51,7 +51,7 @@ def retrain_slu(
 
             {
                 "repo_name": "slu_repo_name",
-                "repo_branch: "master",
+                "repo_branch": "master",
                 "dataset_path": "s3://bucket-name/path1/to1/data1.csv,s3://bucket-name/path2/to2/data2.csv",
                 "job_ids": "4011,4012",
                 "labelstudio_project_ids": "10,13",

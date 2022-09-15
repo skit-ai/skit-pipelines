@@ -31,19 +31,31 @@ def transcription_pipeline(
 ):
 
     """
-    A pipeline to transcribe the audio files using different ASRs
-    .. _p_transcripe_audio:
+    A pipeline to transcribe the audio files present in a dataset using different ASRs.
+    
+    .. _p_transcription_pipeline:
+    
+    Example payload to invoke via slack integrations:
+
+        @charon run transcription_pipeline
+
+        .. code-block:: python
+
+            {
+                
+            }
 
     :param data_s3_path: S3 path of the data in CSV
-    :type: str
+    :type data_s3_path: str
     :param config_s3_path: the config yaml to be used by blaze. Refer to (https://github.com/skit-ai/blaze#config) for more info.
-    :type: str
+    :type config_s3_path: str
     :param audio_sample_rate: audio sample rate / frequency of output audios. (default "8k").
-    :type: str
+    :type audio_sample_rate: str
     :param audio_download_workers: maximum workers while downloading the audios (default 30).
-    :type: int
+    :type audio_download_workers: int
     :param transcription_concurrency: maximum workers while transcribing the audios (default 8).
-    :type: int
+    :type transcription_concurrency: int
+    
     """
     # Download CSV files with audio
     original_data_op = download_csv_from_s3_op(storage_path = data_s3_path)
