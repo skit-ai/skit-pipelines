@@ -32,11 +32,15 @@ def asr_tune(
             else:
                 print(f"return code: {code}, but tolerant is set as {tolerant}")
 
-    BASE_PATH = pipeline_constants.ASR_TUNE.BASE_PATH
-    RECIPE = pipeline_constants.ASR_TUNE.RECIPE
-    LANGS = pipeline_constants.ASR_TUNE.LANGS
-    PHONEMIZERS = pipeline_constants.ASR_TUNE.PHONEMIZERS
-    NNET_SUFFIX = pipeline_constants.ASR_TUNE.NNET_SUFFIX
+
+    BASE_PATH = "~"
+    RECIPE = "s3"
+    LANGS = {"en": "english", "hi": "hindi"}
+    PHONEMIZERS = {
+        "en": "models/models36/en_with_hindi_phones/en-hi-ipa-model",
+        "hi": "~/unified-parser/unified-parser",
+    }
+    NNET_SUFFIX = {"en": "1a", "hi": "1a"}
 
     exec_shell(
         f"wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh && bash Miniconda3-py37_4.12.0-Linux-x86_64.sh -b"
