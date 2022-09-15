@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.34
+- [x] fix: again pipeline_constants not defined error in asr_tune component (#65)
+
 ## 0.2.32
 - [x] fix: regionwise nodeselector for pipelines
 
