@@ -35,11 +35,11 @@ def retrain_slu_from_repo(
 
     execute_cli = lambda cmd: subprocess.run(cmd.split())
     create_dataset_path = lambda version, dataset_type: os.path.join(
-            "data",
-            version,
-            "classification/datasets",
-            dataset_type + pipeline_constants.CSV_FILE,
-        )
+        "data",
+        version,
+        "classification/datasets",
+        dataset_type + pipeline_constants.CSV_FILE,
+    )
 
     remove_intents = comma_sep_str(remove_intents)
     no_annotated_job = False
@@ -83,10 +83,18 @@ def retrain_slu_from_repo(
 
     os.chdir(slu_path)
     repo = git.Repo(".")
-    author = git.Actor(pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL)
-    committer = git.Actor(pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL)
-    repo.config_writer().set_value("user", "name", pipeline_constants.GITLAB_USER).release()
-    repo.config_writer().set_value("user", "email", pipeline_constants.GITLAB_USER_EMAIL).release()
+    author = git.Actor(
+        pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL
+    )
+    committer = git.Actor(
+        pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL
+    )
+    repo.config_writer().set_value(
+        "user", "name", pipeline_constants.GITLAB_USER
+    ).release()
+    repo.config_writer().set_value(
+        "user", "email", pipeline_constants.GITLAB_USER_EMAIL
+    ).release()
 
     try:
         tagged_df = pd.read_csv(annotated_job_data_path)
@@ -94,7 +102,9 @@ def retrain_slu_from_repo(
             pick_1st_tag
         )
     except pd.errors.EmptyDataError:
-        logger.warning("No data found in given annotated jobs, check if data is tagged or job_ids are missing!")
+        logger.warning(
+            "No data found in given annotated jobs, check if data is tagged or job_ids are missing!"
+        )
         no_annotated_job = True
     try:
         s3_df = pd.read_csv(s3_data_path)
@@ -105,7 +115,9 @@ def retrain_slu_from_repo(
     except pd.errors.EmptyDataError:
         logger.warning("No csv file from S3 found!")
         if no_annotated_job:
-            raise ValueError("Either data from job_ids or s3_path has to be available for retraining to continue.")
+            raise ValueError(
+                "Either data from job_ids or s3_path has to be available for retraining to continue."
+            )
 
     try:
         _, tagged_data_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
@@ -119,9 +131,13 @@ def retrain_slu_from_repo(
         current_slu_version = get_slu_version()
         new_slu_version = smol_version_bump(current_slu_version)
         execute_cli(f"slu setup-dirs --version {new_slu_version}")
-        
-        current_train_path = create_dataset_path(current_slu_version, pipeline_constants.TRAIN)
-        current_test_path = create_dataset_path(current_slu_version, pipeline_constants.TEST)
+
+        current_train_path = create_dataset_path(
+            current_slu_version, pipeline_constants.TRAIN
+        )
+        current_test_path = create_dataset_path(
+            current_slu_version, pipeline_constants.TEST
+        )
 
         new_train_path = create_dataset_path(new_slu_version, pipeline_constants.TRAIN)
         new_test_path = create_dataset_path(new_slu_version, pipeline_constants.TEST)
@@ -164,9 +180,11 @@ def retrain_slu_from_repo(
             execute_cli(f"slu test --version {new_slu_version}")
 
         logger.info("After training untracked files:", repo.untracked_files)
-        
+
         repo.index.add(["config/"])
-        repo.index.commit(f"Trained {new_slu_version} model", author=author, committer=committer)  # TODO - add more info like dataset used and all
+        repo.index.commit(
+            f"Trained {new_slu_version} model", author=author, committer=committer
+        )  # TODO - add more info like dataset used and all
 
         execute_cli(f"slu release --version {new_slu_version} --auto")
 
@@ -174,6 +192,7 @@ def retrain_slu_from_repo(
         logger.error(f"{e}: Given {branch=} doesn't exist in the repo")
 
     return new_slu_version
+
 
 retrain_slu_from_repo_op = kfp.components.create_component_from_func(
     retrain_slu_from_repo, base_image=pipeline_constants.BASE_IMAGE

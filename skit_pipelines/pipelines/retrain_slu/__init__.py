@@ -37,7 +37,7 @@ def retrain_slu(
     channel: str = "",
     slack_thread: str = "",
 ):
-    
+
     """
     A pipeline to retrain an existing SLU model.
 
@@ -67,7 +67,7 @@ def retrain_slu(
 
     :param repo_name: SLU repository name under /vernacularai/ai/clients org in gitlab.
     :type repo_name: str
-    
+
     :param repo_branch: The branch name in the SLU repository one wants to use, defaults to master.
     :type repo_name: str, optional
 
@@ -85,19 +85,19 @@ def retrain_slu(
 
     :param job_start_date: The start date range (YYYY-MM-DD) to filter tagged data.
     :type job_start_date: str, optional
-    
+
     :param job_end_date: The end date range (YYYY-MM-DD) to filter tagged data
     :type job_end_date: str, optional
-    
+
     :param remove_intents: Comma separated list of intents to remove from dataset while training.
     :type remove_intents: str, optional
-    
+
     :param use_previous_dataset: Before retraining combines new dataset with last dataset the model was trained on, defaults to True.
     :type use_previous_dataset: bool, optional
-    
+
     :param train_split_percent: Percentage of new data one should train the model on, defaults to 85.
     :type train_split_percent: int, optional
-    
+
     :param stratify: For stratified splitting of dataset into train and test set, defaults to False.
     :type stratify: bool, optional
 
@@ -109,12 +109,10 @@ def retrain_slu(
 
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
-    
+
     """
 
-    tagged_s3_data_op = download_csv_from_s3_op(
-        storage_path=dataset_path
-    )
+    tagged_s3_data_op = download_csv_from_s3_op(storage_path=dataset_path)
     tagged_s3_data_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
@@ -151,14 +149,15 @@ def retrain_slu(
         train_split_percent=train_split_percent,
         stratify=stratify,
         epochs=epochs,
-        
     )
     retrained_op.set_gpu_limit(1)
-    
+
     # TODO use namedtuple and return more information
     # TODO return cicd pipeline url using gitlab api for manual trigger
-    
-    notification_text = f"{repo_name} SLU has been retrained. New version - {retrained_op.output}"
+
+    notification_text = (
+        f"{repo_name} SLU has been retrained. New version - {retrained_op.output}"
+    )
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op):
         task_no_cache = slack_notification_op(
             notification_text,
@@ -170,5 +169,6 @@ def retrain_slu(
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["retrain_slu"]

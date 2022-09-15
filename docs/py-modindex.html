@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Python Module Index - skit-pipelines 0.2.26 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Python Module Index - skit-pipelines 0.2.28 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.26 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.26 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -188,6 +190,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
@@ -198,8 +201,10 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
@@ -329,6 +334,24 @@
   <tr class="cg-1">
     <td></td>
     <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_transcription"><code class="xref">skit_pipelines.components.asr_transcription</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_tune"><code class="xref">skit_pipelines.components.asr_tune</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.audio_download"><code class="xref">skit_pipelines.components.audio_download</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
         <a href="skit_pipelines.components.html#module-skit_pipelines.components.auth"><code class="xref">skit_pipelines.components.auth</code></a></td><td>
     <em></em></td>
   </tr>
@@ -336,6 +359,12 @@
     <td></td>
     <td>&#160;&#160;&#160;
         <a href="skit_pipelines.components.html#module-skit_pipelines.components.download_from_s3"><code class="xref">skit_pipelines.components.download_from_s3</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.download_repo"><code class="xref">skit_pipelines.components.download_repo</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">
@@ -396,6 +425,12 @@
     <td></td>
     <td>&#160;&#160;&#160;
         <a href="skit_pipelines.components.html#module-skit_pipelines.components.get_preds_voicebot_xlmr"><code class="xref">skit_pipelines.components.get_preds_voicebot_xlmr</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.merge_transcription"><code class="xref">skit_pipelines.components.merge_transcription</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">
@@ -503,19 +538,13 @@
   <tr class="cg-1">
     <td></td>
     <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.components.html#module-skit_pipelines.components.retrain_slu_from_repo"><code class="xref">skit_pipelines.components.retrain_slu_from_repo</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
         <a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls"><code class="xref">skit_pipelines.components.tag_calls</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.labelstudio"><code class="xref">skit_pipelines.components.tag_calls.labelstudio</code></a></td><td>
-    <em></em></td>
-  </tr>
-  <tr class="cg-1">
-    <td></td>
-    <td>&#160;&#160;&#160;
-        <a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.tog"><code class="xref">skit_pipelines.components.tag_calls.tog</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">
@@ -546,6 +575,12 @@
     <td></td>
     <td>&#160;&#160;&#160;
         <a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines"><code class="xref">skit_pipelines.pipelines</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.pipelines.asr_tune.html#module-skit_pipelines.pipelines.asr_tune"><code class="xref">skit_pipelines.pipelines.asr_tune</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">
@@ -611,6 +646,12 @@
   <tr class="cg-1">
     <td></td>
     <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.pipelines.retrain_slu.html#module-skit_pipelines.pipelines.retrain_slu"><code class="xref">skit_pipelines.pipelines.retrain_slu</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
         <a href="skit_pipelines.pipelines.tag_calls.html#module-skit_pipelines.pipelines.tag_calls"><code class="xref">skit_pipelines.pipelines.tag_calls</code></a></td><td>
     <em></em></td>
   </tr>
@@ -618,6 +659,12 @@
     <td></td>
     <td>&#160;&#160;&#160;
         <a href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr"><code class="xref">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.pipelines.transcription_pipeline.html#module-skit_pipelines.pipelines.transcription_pipeline"><code class="xref">skit_pipelines.pipelines.transcription_pipeline</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">
@@ -642,6 +689,12 @@
     <td></td>
     <td>&#160;&#160;&#160;
         <a href="skit_pipelines.utils.html#module-skit_pipelines.utils.cookies"><code class="xref">skit_pipelines.utils.cookies</code></a></td><td>
+    <em></em></td>
+  </tr>
+  <tr class="cg-1">
+    <td></td>
+    <td>&#160;&#160;&#160;
+        <a href="skit_pipelines.utils.html#module-skit_pipelines.utils.k8s"><code class="xref">skit_pipelines.utils.k8s</code></a></td><td>
     <em></em></td>
   </tr>
   <tr class="cg-1">

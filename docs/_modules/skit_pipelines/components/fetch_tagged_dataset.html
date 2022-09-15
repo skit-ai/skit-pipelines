@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.fetch_tagged_dataset - skit-pipelines 0.2.25 documentation</title>
+        <title>skit_pipelines.components.fetch_tagged_dataset - skit-pipelines 0.2.28 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.25 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.25 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -189,6 +190,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
@@ -199,8 +201,10 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../skit_pipelines.types.html">skit_pipelines.types package</a></li>
@@ -261,6 +265,7 @@
     <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">start_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">empty_possible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="kn">import</span> <span class="nn">asyncio</span>
     <span class="kn">import</span> <span class="nn">time</span>
@@ -277,6 +282,7 @@
     <span class="p">)</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
     <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
 
@@ -292,38 +298,51 @@
         <span class="n">task_type</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">TASK_TYPE__CONVERSATION</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">df_paths</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">if</span> <span class="n">start_date_offset</span> <span class="ow">or</span> <span class="n">end_date_offset</span><span class="p">:</span>
         <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">process_date_filters</span><span class="p">(</span>
-                <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
-                <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
+            <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">job_id</span><span class="p">:</span>
-        <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">download_dataset_from_db</span><span class="p">(</span>
-            <span class="n">job_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">),</span>
-            <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">timezone</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span> <span class="k">if</span> <span class="n">timezone</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">project_id</span><span class="p">:</span>
-        <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">download_dataset_from_labelstudio</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_SVC</span><span class="p">,</span>
-                <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_TOKEN</span><span class="p">,</span>
-                <span class="n">project_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">project_id</span><span class="p">),</span>
+        <span class="n">job_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">:</span>
+            <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">download_dataset_from_db</span><span class="p">(</span>
+                <span class="n">job_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">),</span>
+                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">timezone</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span> <span class="k">if</span> <span class="n">timezone</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="p">)</span>
+            <span class="n">df_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">project_id</span><span class="p">:</span>
+        <span class="n">project_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">project_id</span> <span class="ow">in</span> <span class="n">project_ids</span><span class="p">:</span>
+            <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">download_dataset_from_labelstudio</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_SVC</span><span class="p">,</span>
+                    <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">LABELSTUDIO_TOKEN</span><span class="p">,</span>
+                    <span class="n">project_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">project_id</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">df_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either job_id or project_id must be provided&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">empty_possible</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either job_id or project_id must be provided&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">df_path</span> <span class="ow">in</span> <span class="n">df_paths</span><span class="p">])</span>
     <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 

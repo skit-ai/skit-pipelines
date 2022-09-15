@@ -1,7 +1,8 @@
 import kfp
-
 from kfp.components import InputPath, OutputPath
+
 from skit_pipelines import constants as pipeline_constants
+
 
 def audio_transcription(
     audios_dir_path: InputPath(str),
@@ -10,8 +11,10 @@ def audio_transcription(
     concurrency: int,
 ) -> None:
     import os
+
     from skit_pipelines import constants as pipeline_constants
-    def exec_shell(cmd: str, tolerant: bool = False, print_command = True):
+
+    def exec_shell(cmd: str, tolerant: bool = False, print_command=True):
         import subprocess
         import sys
 
@@ -31,7 +34,11 @@ def audio_transcription(
                 raise Exception(f"command {cmd} failed with non-zero code: {code}")
             else:
                 print(f"return code: {code}, but tolerant is set as {tolerant}")
-    exec_shell(f"git clone https://{pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}@github.com/skit-ai/blaze.git",print_command=False)
+
+    exec_shell(
+        f"git clone https://{pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}@github.com/skit-ai/blaze.git",
+        print_command=False,
+    )
 
     exec_shell("conda create -n condaenv python=3.8")
     exec_shell("echo 'conda activate condaenv' >> ~/.bashrc")
@@ -41,8 +48,11 @@ def audio_transcription(
     exec_shell("source ~/.bashrc && pip install poetry")
 
     exec_shell(f"source ~/.bashrc && cd blaze && poetry install --no-dev")
-    exec_shell(f"source ~/.bashrc && cd blaze && poetry run blaze {audios_dir_path} {config_path} {output_path} --concurrency={concurrency}")
+    exec_shell(
+        f"source ~/.bashrc && cd blaze && poetry run blaze {audios_dir_path} {config_path} {output_path} --concurrency={concurrency}"
+    )
+
 
 audio_transcription_op = kfp.components.create_component_from_func(
-    audio_transcription, base_image = pipeline_constants.BASE_IMAGE
+    audio_transcription, base_image=pipeline_constants.BASE_IMAGE
 )

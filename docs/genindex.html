@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.26 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.28 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.26 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.26 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -165,6 +165,8 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -188,6 +190,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
@@ -198,8 +201,10 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
@@ -252,12 +257,36 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.auth_models.Token.access_token">access_token (Token attribute)</a>
 </li>
+        <li><a href="skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.modify_predictions.adjust_interval_values">adjust_interval_values() (in module skit_pipelines.components.modify_entities.modify_predictions)</a>
+</li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.arguments_validation_exception_handler">arguments_validation_exception_handler() (in module skit_pipelines.api.endpoints)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.artifact_node_to_uri">artifact_node_to_uri() (in module skit_pipelines.api.models.custom_models)</a>
 </li>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE">ASR_TUNE (class in skit_pipelines.constants)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.asr_tune.asr_tune">asr_tune() (in module skit_pipelines.components.asr_tune)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.asr_tune.html#skit_pipelines.pipelines.asr_tune.asr_tune">(in module skit_pipelines.pipelines.asr_tune)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.asr_tune_op">asr_tune_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.asr_tune.asr_tune_op">(in module skit_pipelines.components.asr_tune)</a>
+</li>
+        </ul></li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.asr_transcription.audio_transcription">audio_transcription() (in module skit_pipelines.components.asr_transcription)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.audio_transcription_op">audio_transcription_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.asr_transcription.audio_transcription_op">(in module skit_pipelines.components.asr_transcription)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.slack_bot.authenticate_bot">authenticate_bot() (in module skit_pipelines.api.slack_bot)</a>
 </li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.auth.authenticate_user">authenticate_user() (in module skit_pipelines.api.auth)</a>
@@ -270,12 +299,14 @@
   <h2>B</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.BaseRequestSchema">BaseRequestSchema (class in skit_pipelines.api.models.requests)</a>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE.BASE_PATH">BASE_PATH (ASR_TUNE attribute)</a>
 </li>
-        <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.StorageOptions.bucket">bucket (StorageOptions attribute)</a>
+        <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.BaseRequestSchema">BaseRequestSchema (class in skit_pipelines.api.models.requests)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.StorageOptions.bucket">bucket (StorageOptions attribute)</a>
+</li>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.SlackBlockFactory.build">build() (SlackBlockFactory method)</a>
 </li>
         <li><a href="skit_pipelines.components.preprocess.create_utterance_column.html#skit_pipelines.components.preprocess.create_utterance_column.utils.build_utterance">build_utterance() (in module skit_pipelines.components.preprocess.create_utterance_column.utils)</a>
@@ -356,14 +387,46 @@
 </li>
         <li><a href="skit_pipelines.types.html#skit_pipelines.types.tag_calls.TaggingResponse.df_sizes">df_sizes (TaggingResponse attribute)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_from_s3">download_from_s3() (in module skit_pipelines.components.download_from_s3)</a>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.audio_download.download_audio_wavs">download_audio_wavs() (in module skit_pipelines.components.audio_download)</a>
 </li>
-        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3_op">download_from_s3_op() (in module skit_pipelines.components)</a>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_audio_wavs_op">download_audio_wavs_op() (in module skit_pipelines.components)</a>
 
         <ul>
-          <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_from_s3_op">(in module skit_pipelines.components.download_from_s3)</a>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.audio_download.download_audio_wavs_op">(in module skit_pipelines.components.audio_download)</a>
+</li>
+        </ul></li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_csv_from_s3">download_csv_from_s3() (in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_csv_from_s3_op">download_csv_from_s3_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_csv_from_s3_op">(in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_directory_from_s3">download_directory_from_s3() (in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_directory_from_s3_op">download_directory_from_s3_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_directory_from_s3_op">(in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        </ul></li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_file_from_s3">download_file_from_s3() (in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_file_from_s3_op">download_file_from_s3_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_from_s3.download_file_from_s3_op">(in module skit_pipelines.components.download_from_s3)</a>
+</li>
+        </ul></li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_repo.download_repo">download_repo() (in module skit_pipelines.components.download_repo)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_repo_op">download_repo_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.download_repo.download_repo_op">(in module skit_pipelines.components.download_repo)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -498,19 +561,23 @@
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.gen_irr_metrics.gen_irr_metrics_op">(in module skit_pipelines.components.gen_irr_metrics)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.generate_schema">generate_schema() (in module skit_pipelines.api.models.requests)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.get_all_pipelines_fn">get_all_pipelines_fn() (in module skit_pipelines.api.models.requests)</a>
 </li>
         <li><a href="skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.get_entities_from_duckling">get_entities_from_duckling() (in module skit_pipelines.components.modify_entities.duckling_inference)</a>
+</li>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.GET_GITLAB_REPO_URL">GET_GITLAB_REPO_URL() (in module skit_pipelines.constants)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.get_kf_object_uri">get_kf_object_uri() (in module skit_pipelines.api.models.custom_models)</a>
 </li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.slack_bot.get_message_data">get_message_data() (in module skit_pipelines.api.slack_bot)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.get_normalized_pipelines_fn_map">get_normalized_pipelines_fn_map() (in module skit_pipelines.api.models.requests)</a>
+</li>
+        <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.k8s.get_pipeline_config_kfp">get_pipeline_config_kfp() (in module skit_pipelines.utils.k8s)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.get_preds_voicebot_xlmr.get_preds_voicebot_xlmr">get_preds_voicebot_xlmr() (in module skit_pipelines.components.get_preds_voicebot_xlmr)</a>
 </li>
@@ -582,10 +649,12 @@
   <h2>L</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.cookies.load_cookies">load_cookies() (in module skit_pipelines.utils.cookies)</a>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE.LANGS">LANGS (ASR_TUNE attribute)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.cookies.load_cookies">load_cookies() (in module skit_pipelines.utils.cookies)</a>
+</li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.login_for_access_token">login_for_access_token() (in module skit_pipelines.api.endpoints)</a>
 </li>
     </ul></td>
@@ -642,9 +711,17 @@
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components">skit_pipelines.components</a>
 </li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_transcription">skit_pipelines.components.asr_transcription</a>
+</li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_tune">skit_pipelines.components.asr_tune</a>
+</li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.audio_download">skit_pipelines.components.audio_download</a>
+</li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.auth">skit_pipelines.components.auth</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.download_from_s3">skit_pipelines.components.download_from_s3</a>
+</li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.download_repo">skit_pipelines.components.download_repo</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.eevee_irr_with_yamls">skit_pipelines.components.eevee_irr_with_yamls</a>
 </li>
@@ -665,6 +742,8 @@
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.gen_irr_metrics">skit_pipelines.components.gen_irr_metrics</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.get_preds_voicebot_xlmr">skit_pipelines.components.get_preds_voicebot_xlmr</a>
+</li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.merge_transcription">skit_pipelines.components.merge_transcription</a>
 </li>
           <li><a href="skit_pipelines.components.modify_entities.html#module-skit_pipelines.components.modify_entities">skit_pipelines.components.modify_entities</a>
 </li>
@@ -700,11 +779,9 @@
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.read_json_key">skit_pipelines.components.read_json_key</a>
 </li>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.retrain_slu_from_repo">skit_pipelines.components.retrain_slu_from_repo</a>
+</li>
           <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls">skit_pipelines.components.tag_calls</a>
-</li>
-          <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.labelstudio">skit_pipelines.components.tag_calls.labelstudio</a>
-</li>
-          <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.tog">skit_pipelines.components.tag_calls.tog</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.train_voicebot_xlmr">skit_pipelines.components.train_voicebot_xlmr</a>
 </li>
@@ -715,6 +792,8 @@
           <li><a href="skit_pipelines.html#module-skit_pipelines.constants">skit_pipelines.constants</a>
 </li>
           <li><a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines">skit_pipelines.pipelines</a>
+</li>
+          <li><a href="skit_pipelines.pipelines.asr_tune.html#module-skit_pipelines.pipelines.asr_tune">skit_pipelines.pipelines.asr_tune</a>
 </li>
           <li><a href="skit_pipelines.pipelines.eer_from_tog.html#module-skit_pipelines.pipelines.eer_from_tog">skit_pipelines.pipelines.eer_from_tog</a>
 </li>
@@ -736,9 +815,13 @@
 </li>
           <li><a href="skit_pipelines.pipelines.irr_from_tog.html#module-skit_pipelines.pipelines.irr_from_tog">skit_pipelines.pipelines.irr_from_tog</a>
 </li>
+          <li><a href="skit_pipelines.pipelines.retrain_slu.html#module-skit_pipelines.pipelines.retrain_slu">skit_pipelines.pipelines.retrain_slu</a>
+</li>
           <li><a href="skit_pipelines.pipelines.tag_calls.html#module-skit_pipelines.pipelines.tag_calls">skit_pipelines.pipelines.tag_calls</a>
 </li>
           <li><a href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr</a>
+</li>
+          <li><a href="skit_pipelines.pipelines.transcription_pipeline.html#module-skit_pipelines.pipelines.transcription_pipeline">skit_pipelines.pipelines.transcription_pipeline</a>
 </li>
           <li><a href="skit_pipelines.types.html#module-skit_pipelines.types">skit_pipelines.types</a>
 </li>
@@ -747,6 +830,8 @@
           <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils">skit_pipelines.utils</a>
 </li>
           <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils.cookies">skit_pipelines.utils.cookies</a>
+</li>
+          <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils.k8s">skit_pipelines.utils.k8s</a>
 </li>
           <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils.login">skit_pipelines.utils.login</a>
 </li>
@@ -765,6 +850,10 @@
   <h2>N</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE.NNET_SUFFIX">NNET_SUFFIX (ASR_TUNE attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.normalize.non_blank">non_blank() (in module skit_pipelines.utils.normalize)</a>
 </li>
     </ul></td>
@@ -777,12 +866,20 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.auth.org_auth_token">org_auth_token() (in module skit_pipelines.components.auth)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.org_auth_token_op">org_auth_token_op() (in module skit_pipelines.components)</a>
 
         <ul>
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.auth.org_auth_token_op">(in module skit_pipelines.components.auth)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.merge_transcription.overlay_transcription_csv">overlay_transcription_csv() (in module skit_pipelines.components.merge_transcription)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.overlay_transcription_csv_op">overlay_transcription_csv_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.merge_transcription.overlay_transcription_csv_op">(in module skit_pipelines.components.merge_transcription)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -797,16 +894,18 @@
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.ParseRunResponse">ParseRunResponse (class in skit_pipelines.api.models.custom_models)</a>
 </li>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE.PHONEMIZERS">PHONEMIZERS (ASR_TUNE attribute)</a>
+</li>
         <li><a href="skit_pipelines.components.preprocess.create_true_intent_column.html#skit_pipelines.components.preprocess.create_true_intent_column.utils.pick_1st_tag">pick_1st_tag() (in module skit_pipelines.components.preprocess.create_true_intent_column.utils)</a>
 </li>
         <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#skit_pipelines.components.preprocess.create_true_transcript_column.utils.pick_text_from_tag">pick_text_from_tag() (in module skit_pipelines.components.preprocess.create_true_transcript_column.utils)</a>
 </li>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.SlackBlockFactory.ping">ping() (SlackBlockFactory method)</a>
 </li>
-        <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">pipeline_run_req() (in module skit_pipelines.api.endpoints)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">pipeline_run_req() (in module skit_pipelines.api.endpoints)</a>
+</li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres.push_eer_to_postgres">push_eer_to_postgres() (in module skit_pipelines.components.push_eer_to_postgres)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres_op">push_eer_to_postgres_op() (in module skit_pipelines.components)</a>
@@ -841,10 +940,22 @@
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.read_json_key.read_json_key_op">(in module skit_pipelines.components.read_json_key)</a>
 </li>
         </ul></li>
+        <li><a href="skit_pipelines.html#skit_pipelines.constants.ASR_TUNE.RECIPE">RECIPE (ASR_TUNE attribute)</a>
+</li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.slack_bot.recurr_run_format">recurr_run_format() (in module skit_pipelines.api.slack_bot)</a>
+</li>
+        <li><a href="skit_pipelines.pipelines.retrain_slu.html#skit_pipelines.pipelines.retrain_slu.retrain_slu">retrain_slu() (in module skit_pipelines.pipelines.retrain_slu)</a>
+</li>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo">retrain_slu_from_repo() (in module skit_pipelines.components.retrain_slu_from_repo)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.retrain_slu_from_repo_op">retrain_slu_from_repo_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo_op">(in module skit_pipelines.components.retrain_slu_from_repo)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.components.preprocess.create_features.html#skit_pipelines.components.preprocess.create_features.utils.row2features">row2features() (in module skit_pipelines.components.preprocess.create_features.utils)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.responses.StatusResponseModel.run_id">run_id (StatusResponseModel attribute)</a>
@@ -870,6 +981,8 @@
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.schedule_run_completion">schedule_run_completion() (in module skit_pipelines.api.endpoints)</a>
 </li>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.webhook.send_webhook_request">send_webhook_request() (in module skit_pipelines.utils.webhook)</a>
+</li>
+        <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.set_nodegroup_for_pipelines">set_nodegroup_for_pipelines() (in module skit_pipelines.api.models.requests)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.ParseRunResponse.set_state">set_state() (ParseRunResponse method)</a>
 </li>
@@ -960,6 +1073,27 @@
 </li>
         </ul></li>
         <li>
+    skit_pipelines.components.asr_transcription
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_transcription">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.components.asr_tune
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.asr_tune">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.components.audio_download
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.audio_download">module</a>
+</li>
+        </ul></li>
+        <li>
     skit_pipelines.components.auth
 
         <ul>
@@ -971,6 +1105,13 @@
 
         <ul>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.download_from_s3">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.components.download_repo
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.download_repo">module</a>
 </li>
         </ul></li>
         <li>
@@ -1044,6 +1185,13 @@
 </li>
         </ul></li>
         <li>
+    skit_pipelines.components.merge_transcription
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.merge_transcription">module</a>
+</li>
+        </ul></li>
+        <li>
     skit_pipelines.components.modify_entities
 
         <ul>
@@ -1113,6 +1261,8 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_intent_column.html#module-skit_pipelines.components.preprocess.create_true_intent_column.utils">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_true_transcript_column
 
@@ -1127,8 +1277,6 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#module-skit_pipelines.components.preprocess.create_true_transcript_column.utils">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_utterance_column
 
@@ -1165,24 +1313,17 @@
 </li>
         </ul></li>
         <li>
+    skit_pipelines.components.retrain_slu_from_repo
+
+        <ul>
+          <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.retrain_slu_from_repo">module</a>
+</li>
+        </ul></li>
+        <li>
     skit_pipelines.components.tag_calls
 
         <ul>
           <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls">module</a>
-</li>
-        </ul></li>
-        <li>
-    skit_pipelines.components.tag_calls.labelstudio
-
-        <ul>
-          <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.labelstudio">module</a>
-</li>
-        </ul></li>
-        <li>
-    skit_pipelines.components.tag_calls.tog
-
-        <ul>
-          <li><a href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.tog">module</a>
 </li>
         </ul></li>
         <li>
@@ -1218,6 +1359,13 @@
 
         <ul>
           <li><a href="skit_pipelines.pipelines.html#module-skit_pipelines.pipelines">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.pipelines.asr_tune
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.asr_tune.html#module-skit_pipelines.pipelines.asr_tune">module</a>
 </li>
         </ul></li>
         <li>
@@ -1291,6 +1439,13 @@
 </li>
         </ul></li>
         <li>
+    skit_pipelines.pipelines.retrain_slu
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.retrain_slu.html#module-skit_pipelines.pipelines.retrain_slu">module</a>
+</li>
+        </ul></li>
+        <li>
     skit_pipelines.pipelines.tag_calls
 
         <ul>
@@ -1302,6 +1457,13 @@
 
         <ul>
           <li><a href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.pipelines.transcription_pipeline
+
+        <ul>
+          <li><a href="skit_pipelines.pipelines.transcription_pipeline.html#module-skit_pipelines.pipelines.transcription_pipeline">module</a>
 </li>
         </ul></li>
         <li>
@@ -1330,6 +1492,13 @@
 
         <ul>
           <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils.cookies">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.utils.k8s
+
+        <ul>
+          <li><a href="skit_pipelines.utils.html#module-skit_pipelines.utils.k8s">module</a>
 </li>
         </ul></li>
         <li>
@@ -1410,10 +1579,10 @@
 </li>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.normalize.to_camel_case">to_camel_case() (in module skit_pipelines.utils.normalize)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.utils.html#skit_pipelines.utils.normalize.to_snake_case">to_snake_case() (in module skit_pipelines.utils.normalize)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.auth_models.Token">Token (class in skit_pipelines.api.models.auth_models)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.auth_models.Token.token_type">token_type (Token attribute)</a>
@@ -1430,6 +1599,8 @@
           <li><a href="skit_pipelines.components.html#skit_pipelines.components.train_voicebot_xlmr.train_voicebot_xlmr_op">(in module skit_pipelines.components.train_voicebot_xlmr)</a>
 </li>
         </ul></li>
+        <li><a href="skit_pipelines.pipelines.transcription_pipeline.html#skit_pipelines.pipelines.transcription_pipeline.transcription_pipeline">transcription_pipeline() (in module skit_pipelines.pipelines.transcription_pipeline)</a>
+</li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.BaseRequestSchema.transform_none">transform_none() (BaseRequestSchema class method)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.requests.StorageOptions.type">type (StorageOptions attribute)</a>
@@ -1442,8 +1613,6 @@
   <h2>U</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.components.tag_calls.html#skit_pipelines.components.tag_calls.labelstudio.upload2labelstudio">upload2labelstudio() (in module skit_pipelines.components.tag_calls.labelstudio)</a>
-</li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.upload2s3.upload2s3">upload2s3() (in module skit_pipelines.components.upload2s3)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.upload2s3_op">upload2s3_op() (in module skit_pipelines.components)</a>
@@ -1462,8 +1631,6 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="skit_pipelines.components.tag_calls.html#skit_pipelines.components.tag_calls.tog.upload2tog">upload2tog() (in module skit_pipelines.components.tag_calls.tog)</a>
-</li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.responses.StatusResponseModel.uris">uris (StatusResponseModel attribute)</a>
 </li>
         <li><a href="skit_pipelines.api.models.html#skit_pipelines.api.models.auth_models.User">User (class in skit_pipelines.api.models.auth_models)</a>

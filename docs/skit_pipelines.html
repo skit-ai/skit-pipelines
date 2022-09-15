@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.api package" href="skit_pipelines.api.html" /><link rel="prev" title="skit_pipelines" href="modules.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines package - skit-pipelines 0.2.26 documentation</title>
+        <title>skit_pipelines package - skit-pipelines 0.2.28 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.26 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.26 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -167,6 +167,8 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
@@ -190,6 +192,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
@@ -200,8 +203,10 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.types.html">skit_pipelines.types package</a></li>
@@ -286,8 +291,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.labelstudio">skit_pipelines.components.tag_calls.labelstudio module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls.tog">skit_pipelines.components.tag_calls.tog module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#skit-pipelines-components-tag-calls-labelstudio-module">skit_pipelines.components.tag_calls.labelstudio module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#skit-pipelines-components-tag-calls-tog-module">skit_pipelines.components.tag_calls.tog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html#module-skit_pipelines.components.tag_calls">Module contents</a></li>
 </ul>
 </li>
@@ -298,8 +303,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.asr_transcription">skit_pipelines.components.asr_transcription module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.asr_tune">skit_pipelines.components.asr_tune module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.audio_download">skit_pipelines.components.audio_download module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.auth">skit_pipelines.components.auth module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.download_from_s3">skit_pipelines.components.download_from_s3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.download_repo">skit_pipelines.components.download_repo module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.eevee_irr_with_yamls">skit_pipelines.components.eevee_irr_with_yamls module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.extract_info_from_dataset">skit_pipelines.components.extract_info_from_dataset module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.extract_tgz">skit_pipelines.components.extract_tgz module</a></li>
@@ -310,11 +319,13 @@
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.gen_eer_metrics">skit_pipelines.components.gen_eer_metrics module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.gen_irr_metrics">skit_pipelines.components.gen_irr_metrics module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.get_preds_voicebot_xlmr">skit_pipelines.components.get_preds_voicebot_xlmr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.merge_transcription">skit_pipelines.components.merge_transcription module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.modify_tog_entities">skit_pipelines.components.modify_tog_entities module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.notification">skit_pipelines.components.notification module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.push_eer_to_postgres">skit_pipelines.components.push_eer_to_postgres module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.push_irr_to_postgres">skit_pipelines.components.push_irr_to_postgres module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.read_json_key">skit_pipelines.components.read_json_key module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.retrain_slu_from_repo">skit_pipelines.components.retrain_slu_from_repo module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.train_voicebot_xlmr">skit_pipelines.components.train_voicebot_xlmr module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components.upload2s3">skit_pipelines.components.upload2s3 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.components.html#module-skit_pipelines.components">Module contents</a></li>
@@ -322,6 +333,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.pipelines.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html#module-skit_pipelines.pipelines.asr_tune">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html#module-skit_pipelines.pipelines.eer_from_tog">Module contents</a></li>
 </ul>
@@ -362,12 +377,20 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html#module-skit_pipelines.pipelines.irr_from_tog">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html#module-skit_pipelines.pipelines.retrain_slu">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html#module-skit_pipelines.pipelines.tag_calls">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html#module-skit_pipelines.pipelines.train_voicebot_intent_model_xlmr">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html#module-skit_pipelines.pipelines.transcription_pipeline">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -384,6 +407,7 @@
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.utils.html">skit_pipelines.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#module-skit_pipelines.utils.cookies">skit_pipelines.utils.cookies module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#module-skit_pipelines.utils.k8s">skit_pipelines.utils.k8s module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#module-skit_pipelines.utils.login">skit_pipelines.utils.login module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#module-skit_pipelines.utils.normalize">skit_pipelines.utils.normalize module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="skit_pipelines.utils.html#module-skit_pipelines.utils.storage">skit_pipelines.utils.storage module</a></li>
@@ -399,10 +423,51 @@
 </section>
 <section id="module-skit_pipelines.constants">
 <span id="skit-pipelines-constants-module"></span><h2>skit_pipelines.constants module<a class="headerlink" href="#module-skit_pipelines.constants" title="Permalink to this headline">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ASR_TUNE</span></span><a class="reference internal" href="_modules/skit_pipelines/constants.html#ASR_TUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE.BASE_PATH">
+<span class="sig-name descname"><span class="pre">BASE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'~'</span></em><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE.BASE_PATH" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE.LANGS">
+<span class="sig-name descname"><span class="pre">LANGS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'en':</span> <span class="pre">'english',</span> <span class="pre">'hi':</span> <span class="pre">'hindi'}</span></em><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE.LANGS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE.NNET_SUFFIX">
+<span class="sig-name descname"><span class="pre">NNET_SUFFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'en':</span> <span class="pre">'1a',</span> <span class="pre">'hi':</span> <span class="pre">'1a'}</span></em><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE.NNET_SUFFIX" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE.PHONEMIZERS">
+<span class="sig-name descname"><span class="pre">PHONEMIZERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'en':</span> <span class="pre">'models/models36/en_with_hindi_phones/en-hi-ipa-model',</span> <span class="pre">'hi':</span> <span class="pre">'~/unified-parser/unified-parser'}</span></em><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE.PHONEMIZERS" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.constants.ASR_TUNE.RECIPE">
+<span class="sig-name descname"><span class="pre">RECIPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'s3'</span></em><a class="headerlink" href="#skit_pipelines.constants.ASR_TUNE.RECIPE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.constants.CONSTRUCT_COOKIE_TOKEN">
 <span class="sig-name descname"><span class="pre">CONSTRUCT_COOKIE_TOKEN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookie_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/constants.html#CONSTRUCT_COOKIE_TOKEN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.constants.CONSTRUCT_COOKIE_TOKEN" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.constants.GET_GITLAB_REPO_URL">
+<span class="sig-name descname"><span class="pre">GET_GITLAB_REPO_URL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/constants.html#GET_GITLAB_REPO_URL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.constants.GET_GITLAB_REPO_URL" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.constants.GET_RUN_URL">

@@ -15,6 +15,30 @@ Subpackages
 Submodules
 ----------
 
+skit\_pipelines.components.asr\_transcription module
+----------------------------------------------------
+
+.. automodule:: skit_pipelines.components.asr_transcription
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.asr\_tune module
+-------------------------------------------
+
+.. automodule:: skit_pipelines.components.asr_tune
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.audio\_download module
+-------------------------------------------------
+
+.. automodule:: skit_pipelines.components.audio_download
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.auth module
 --------------------------------------
 
@@ -27,6 +51,14 @@ skit\_pipelines.components.download\_from\_s3 module
 ----------------------------------------------------
 
 .. automodule:: skit_pipelines.components.download_from_s3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.download\_repo module
+------------------------------------------------
+
+.. automodule:: skit_pipelines.components.download_repo
    :members:
    :undoc-members:
    :show-inheritance:
@@ -111,6 +143,14 @@ skit\_pipelines.components.get\_preds\_voicebot\_xlmr module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.merge\_transcription module
+------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.merge_transcription
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.modify\_tog\_entities module
 -------------------------------------------------------
 
@@ -147,6 +187,14 @@ skit\_pipelines.components.read\_json\_key module
 -------------------------------------------------
 
 .. automodule:: skit_pipelines.components.read_json_key
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.retrain\_slu\_from\_repo module
+----------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.retrain_slu_from_repo
    :members:
    :undoc-members:
    :show-inheritance:

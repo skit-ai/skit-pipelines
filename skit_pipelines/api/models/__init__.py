@@ -1,4 +1,6 @@
+import skit_pipelines.api.auth as auth
 import skit_pipelines.api.models.errors as errors
+from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
 from skit_pipelines.api.models.custom_models import ParseRunResponse
 from skit_pipelines.api.models.requests import (
     BaseRequestSchema,
@@ -8,9 +10,6 @@ from skit_pipelines.api.models.requests import (
     get_normalized_pipelines_fn_map,
     set_nodegroup_for_pipelines,
 )
-from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
-import skit_pipelines.api.auth as auth
-
 from skit_pipelines.api.models.responses import (
     customResponse,
     statusWiseResponse,

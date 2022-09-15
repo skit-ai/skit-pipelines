@@ -22,7 +22,13 @@ from skit_pipelines.api import (
 )
 from skit_pipelines.api.slack_bot import get_message_data, make_response
 from skit_pipelines.components.notification import slack_notification
-from skit_pipelines.utils import filter_schema, kubeflow_login, normalize, webhook_utils, get_pipeline_config_kfp
+from skit_pipelines.utils import (
+    filter_schema,
+    get_pipeline_config_kfp,
+    kubeflow_login,
+    normalize,
+    webhook_utils,
+)
 
 
 class RunPipelineResult:
@@ -69,7 +75,7 @@ def run_kfp_pipeline_func(
         experiment_name=experiment_name,
         namespace=namespace,
         enable_caching=False,
-        pipeline_conf=get_pipeline_config_kfp(pipeline_name)
+        pipeline_conf=get_pipeline_config_kfp(pipeline_name),
     )
 
 
@@ -146,7 +152,7 @@ If your pipeline is present, it is not supported in the official release.""".for
         kf_client,
         pipeline_func=pipelines[req_pipeline_name],
         params=filter_schema(payload.dict(), const.FILTER_LIST),
-        pipeline_name=req_pipeline_name
+        pipeline_name=req_pipeline_name,
     )
 
     background_tasks.add_task(

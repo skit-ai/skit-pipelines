@@ -19,10 +19,9 @@ from skit_pipelines.pipelines.fetch_tagged_entity_dataset import (
     fetch_tagged_entity_dataset,
 )
 from skit_pipelines.pipelines.irr_from_tog import irr_from_tog
+from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.train_voicebot_intent_model_xlmr import (
     train_voicebot_intent_model_xlmr,
 )
-
-from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline

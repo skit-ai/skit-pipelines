@@ -1,0 +1,502 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
+        <title>skit_pipelines.components.asr_tune - skit-pipelines 0.2.28 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">Train XLMR model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">skit_pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../skit_pipelines.html">skit_pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.api.html">skit_pipelines.api package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.api.models.html">skit_pipelines.api.models package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../skit_pipelines.types.html">skit_pipelines.types package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../skit_pipelines.utils.html">skit_pipelines.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for skit_pipelines.components.asr_tune</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span><span class="p">,</span> <span class="n">OutputPath</span>
+
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+
+
+<div class="viewcode-block" id="asr_tune"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.asr_tune.asr_tune">[docs]</a><span class="k">def</span> <span class="nf">asr_tune</span><span class="p">(</span>
+    <span class="n">corpus_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">val_corpus_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">augment_wordlist_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">remove_wordlist_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">base_model_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">general_lm_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exec_shell</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tolerant</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;executing: </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+            <span class="s2">&quot;source ~/.bashrc &amp;&amp; &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">executable</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">code</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tolerant</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;command </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2"> failed with non-zero code: </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;return code: </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">, but tolerant is set as </span><span class="si">{</span><span class="n">tolerant</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">BASE_PATH</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ASR_TUNE</span><span class="o">.</span><span class="n">BASE_PATH</span>
+    <span class="n">RECIPE</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ASR_TUNE</span><span class="o">.</span><span class="n">RECIPE</span>
+    <span class="n">LANGS</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ASR_TUNE</span><span class="o">.</span><span class="n">LANGS</span>
+    <span class="n">PHONEMIZERS</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ASR_TUNE</span><span class="o">.</span><span class="n">PHONEMIZERS</span>
+    <span class="n">NNET_SUFFIX</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ASR_TUNE</span><span class="o">.</span><span class="n">NNET_SUFFIX</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-x86_64.sh &amp;&amp; bash Miniconda3-py37_4.12.0-Linux-x86_64.sh -b&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo &#39;export KALDI_ROOT=/opt/kaldi/&#39; &gt;&gt; ~/.bashrc&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo &#39;source ~/kaldi/recipes/s3/path.sh&#39; &gt;&gt; ~/.bashrc&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo &#39;export PATH=/root/miniconda3/bin/:$PATH&#39; &gt;&gt; ~/.bashrc&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="s2">&quot;echo &#39;export PYTHONIOENCODING=utf8 &amp;&amp; export LC_ALL=C.UTF-8 &amp;&amp; export LANG=C.UTF-8&#39; &gt;&gt; ~/.bashrc&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;conda init bash&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;conda create -n condaenv python=3.6.5&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo &#39;conda activate condaenv&#39; &gt;&gt; ~/.bashrc&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo $PATH&quot;</span><span class="p">)</span>
+    <span class="c1"># exec_shell(&quot;conda install python=3.6&quot;)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;conda install -n condaenv git pip&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;python --version&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;python3 --version&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;pip --version&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;pip3 --version&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;pip install poetry==1.1.13&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;which poetry&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;pip install setuptools==58&quot;</span><span class="p">)</span>
+
+    <span class="c1"># __clone_kaldi</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/kaldi &amp;&amp; git pull&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/kaldi &amp;&amp; pip install -r requirements.txt&quot;</span><span class="p">)</span>
+    <span class="c1"># __clone_corprep</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/corprep &amp;&amp; poetry install&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/corprep &amp;&amp; poetry run pip3 install -U nltk&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/g2p &amp;&amp; poetry install&quot;</span><span class="p">)</span>
+
+    <span class="c1"># NOTE: might need to run all the `__setup` things here.</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">corpus_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/corpus.txt&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">val_corpus_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/corpus.val.txt&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">augment_wordlist_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/vocab.augment.txt&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">remove_wordlist_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/vocab.remove.txt&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp -R </span><span class="si">{</span><span class="n">base_model_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/model&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">general_lm_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/lm_general.arpa&quot;</span><span class="p">)</span>
+    <span class="n">recipe_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/kaldi/recipes/</span><span class="si">{</span><span class="n">RECIPE</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/model/exp </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/exp&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/model/data </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">BASE_PATH</span><span class="si">}</span><span class="s2">/data/* </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ls -lat </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/&quot;</span><span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd ~/corprep &amp;&amp; python ~/kaldi/scripts/corpus/fix_corpus.py ~/corprep/data/processed/</span><span class="si">{</span><span class="n">LANGS</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span><span class="si">}</span><span class="s2">.yaml </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/corpus.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd ~/corprep &amp;&amp; poetry run python ~/kaldi/scripts/corpus/fix_corpus.py ~/corprep/data/processed/</span><span class="si">{</span><span class="n">LANGS</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span><span class="si">}</span><span class="s2">.yaml </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/corpus.val.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/ &amp;&amp; python3 ~/kaldi/scripts/corpus/uniq_words.py corpus.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/ &amp;&amp; mv corpus.words.txt vocab.txt&quot;</span><span class="p">)</span>
+
+    <span class="c1"># process the augment wordlist</span>
+    <span class="n">augment_wordlist</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;vocab.txt&quot;</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/kaldi &amp;&amp; pip3 install -r requirements.txt&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; less dict/lexicon.txt | grep -v &#39;&lt;SIL&gt;&#39; | grep -v &#39;&lt;UNK&gt;&#39; &gt; dict/lexicon_filt.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; python3 ~/kaldi/scripts/lexicon/lexicon_txt_to_csv.py dict/lexicon_filt.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; cp dict/lexicon_filt.csv dict/lexicon.csv&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># exec_shell(f&quot;cd {BASE_PATH}/g2p &amp;&amp; poetry install&quot;)</span>
+
+    <span class="k">if</span> <span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span><span class="p">:</span>
+        <span class="c1"># generate phonemes</span>
+        <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/lexicons&quot;</span><span class="p">)</span>
+        <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/g2p &amp;&amp; poetry run pip3 install -r ~/kaldi/requirements.txt&quot;</span><span class="p">)</span>
+        <span class="n">exec_shell</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cd ~/g2p &amp;&amp; poetry run python3 ~/kaldi/scripts/lexicon/words_to_lexicon.py </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/</span><span class="si">{</span><span class="n">augment_wordlist</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/lexicons/lexicon.csv --sequitur-model </span><span class="si">{</span><span class="n">PHONEMIZERS</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">lang</span> <span class="o">==</span> <span class="s2">&quot;hi&quot;</span><span class="p">:</span>
+        <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/lexicons&quot;</span><span class="p">)</span>
+        <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/g2p &amp;&amp; pip3 install -r ~/kaldi/requirements.txt&quot;</span><span class="p">)</span>
+        <span class="n">exec_shell</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cd ~/g2p &amp;&amp; poetry run python3 ~/kaldi/scripts/lexicon/words_to_lexicon.py </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/</span><span class="si">{</span><span class="n">augment_wordlist</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/lexicons/ext.lexicon.csv --unified-parser </span><span class="si">{</span><span class="n">PHONEMIZERS</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="s2">&quot;language specified does not have phonemization configured&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; cp dict/lexicon.csv lexicons/orig.lexicon.csv&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; python3 ~/kaldi/scripts/lexicon/merge_lexicons.py lexicons lexicon_ext.csv&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># process the remove wordlist</span>
+    <span class="n">lexicon_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;lexicon_ext.csv&quot;</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; cp </span><span class="si">{</span><span class="n">lexicon_path</span><span class="si">}</span><span class="s2"> tmp_lexicon.csv&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; python ~/kaldi/scripts/lexicon/remove_words.py --inplace tmp_lexicon.csv </span><span class="si">{</span><span class="n">remove_wordlist_path</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; cp -nf tmp_lexicon.csv lexicon_ext.csv&quot;</span><span class="p">)</span>
+
+    <span class="n">dict_dir</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;dict_ext&quot;</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local &amp;&amp; python3 ~/kaldi/scripts/lexicon/lexicon_csv_to_txt.py lexicon_ext.csv&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/kaldi&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/</span><span class="si">{</span><span class="n">dict_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;cd ~/kaldi &amp;&amp; python3 -c &quot;import scripts.artefacts.prepare_dict as prep; prep.gen_phones(</span><span class="se">\\</span><span class="s1">&quot;recipes/</span><span class="si">{</span><span class="n">RECIPE</span><span class="si">}</span><span class="s1">/data/local/lexicon_ext.txt</span><span class="se">\\</span><span class="s1">&quot;,</span><span class="se">\\</span><span class="s1">&quot;recipes/</span><span class="si">{</span><span class="n">RECIPE</span><span class="si">}</span><span class="se">\\</span><span class="s1">&quot;,dict=</span><span class="se">\\</span><span class="s1">&quot;</span><span class="si">{</span><span class="n">dict_dir</span><span class="si">}</span><span class="se">\\</span><span class="s1">&quot;)&quot;&#39;</span>
+    <span class="p">)</span>
+
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2"> &amp;&amp; cp data/local/corpus.txt data/local/corpus_ext.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;mkdir ~/kaldi/tools/extras/ &amp;&amp; cp ~/kaldi/extras/install_liblbfgs.sh ~/kaldi/tools/extras/&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd ~/kaldi/tools &amp;&amp; ./install_srilm.sh somename someorg someuser@somedomain.com&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="s2">&quot;echo &#39;source ~/kaldi/tools/env.sh&#39; &gt;&gt; ~/.bashrc&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="s2">&quot;apt update &amp;&amp; apt install -y libatlas-base-dev &amp;&amp; apt install -y bsdutils &amp;&amp; apt install -y bsdmainutils&quot;</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ls </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/lm_general.arpa&quot;</span><span class="p">,</span> <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;ls -lat </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/tmp_general_100k/lm_general.arpa&quot;</span><span class="p">,</span>
+        <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ls -lat </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/tmp_ext/lm.arpa&quot;</span><span class="p">,</span> <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;ls -lat </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/tmp_domain_ext/lm.arpa&quot;</span><span class="p">,</span> <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ls -lat </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/data/local/tmp_ext/&quot;</span><span class="p">,</span> <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2"> &amp;&amp; ./lm/tune_lm_domain.sh --mode ext --val-text corpus.val.txt --general-lm data/local/lm_general.arpa&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># recipe_path = f&quot;~/kaldi/recipes/{RECIPE}&quot;</span>
+
+    <span class="c1"># graph creation: Creates final HCLG.fst graph (with new L,G.fst)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;cd </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s1"> &amp;&amp; ./scripts/run_test.sh --create-hclg true --test-sets &quot;&quot; --lang lang_ext --graph-dir graph_ext&#39;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># model_upload_task = Task(cmd=[</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/kaldi&quot;</span><span class="p">)</span>
+
+    <span class="c1"># move final model to output_path</span>
+    <span class="n">target_uri</span> <span class="o">=</span> <span class="s2">&quot;s3://dummy_bucket/dummy_path&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;s3://&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="c1"># need to run the model_to_bucket.sh script as it prepares the model for uploading.</span>
+    <span class="n">exec_shell</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;cd ~/kaldi &amp;&amp; ./scripts/model_to_bucket.sh recipes/</span><span class="si">{</span><span class="n">RECIPE</span><span class="si">}</span><span class="s2"> ext tdnn</span><span class="si">{</span><span class="n">NNET_SUFFIX</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span><span class="si">}</span><span class="s2">_sp_online tree_a_sp AWS </span><span class="si">{</span><span class="n">target_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">tolerant</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">exec_shell</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cd ~/kaldi &amp;&amp; mv </span><span class="si">{</span><span class="n">recipe_path</span><span class="si">}</span><span class="s2">/model </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">asr_tune_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">asr_tune</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KALDI_IMAGE</span>
+<span class="p">)</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    </body>
+</html>

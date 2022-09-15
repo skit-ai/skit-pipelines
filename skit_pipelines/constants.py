@@ -1,6 +1,6 @@
 import os
 
-ECR_REGISTRY = os.environ['ECR_REGISTRY']
+ECR_REGISTRY = os.environ["ECR_REGISTRY"]
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 CUDA_IMAGE = os.environ["CUDA_IMAGE"]
 KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
@@ -209,6 +209,7 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
+
 class ASR_TUNE:
     BASE_PATH = "~"
     RECIPE = "s3"
@@ -219,7 +220,8 @@ class ASR_TUNE:
     }
     NNET_SUFFIX = {"en": "1a", "hi": "1a"}
 
-#K8s
+
+# K8s
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
 CPU_NODE_LABEL = "m5.xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
@@ -236,5 +238,6 @@ def GET_GITLAB_REPO_URL(
     repo_name: str, project_path: str, user: str, token: str
 ) -> str:
     return f"https://{user}:{token}@{GITLAB}/{project_path}/{repo_name}.git"
+
 
 GITHUB = "github.com"
