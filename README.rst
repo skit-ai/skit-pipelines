@@ -20,6 +20,8 @@ skit-pipelines
    Annotated Dataset Intent Evaluation <./skit_pipelines.pipelines.irr_from_tog>
    Download tagged entity dataset <./skit_pipelines.pipelines.fetch_tagged_entity_dataset>
    Annotated Dataset Entity Evaluation <./skit_pipelines.pipelines.eer_from_tog>
+   Retrain SLU <./skit_pipelines.pipelines.retrain_slu>
+   Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
 
 .. toctree::
    :maxdepth: 1
@@ -83,6 +85,10 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 | 8 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
 +--+----------------------------------------------------------------------------------+
 | 9 | :ref:`Annotated Dataset Entity Evaluation <p_eer_from_tog>`                     |
++--+----------------------------------------------------------------------------------+
+| 10| :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
++--+----------------------------------------------------------------------------------+
+| 11| :ref:`Retrain SLU <p_retrain_slu>`                                              |
 +--+----------------------------------------------------------------------------------+
 
 

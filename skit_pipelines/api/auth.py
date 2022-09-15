@@ -9,7 +9,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from skit_pipelines import constants as const
-from skit_pipelines.api.models import Token, TokenData, User, UserInDB
+from skit_pipelines.api.models.auth_models import Token, TokenData, User, UserInDB
 
 with open(os.path.join("pipeline_secrets", "auth_config.json")) as f:
     auth_config = json.load(f)

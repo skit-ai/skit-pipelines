@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.29
+- [x] fix: involving nan + adjusting for interval types - `fetch_tagged_entity_dataset` pipeline
+- [x] add: lm tuning pipeline (#58)
+- [x] update: `download_from_s3` component into downstream components
+- [x] add: auto nodeselector based on pipeline type - cpu/gpu (#60)
+- [x] update: fetch data from multiple job/project ids at once (combined data) (#61)
+- [x] add: Transcription Pipeline V1 (#56)
+- [x] add: `retrain_slu` pipeline for automated SLU retraining with deployment tracked using gitlab. (#62)
+
 ## 0.2.28
 - [x] fix: if not project_id present then only force routes for selected clients - tag_calls.
 
