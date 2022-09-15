@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.30
+- [x] fix: empty_possible param for download_file_from_s3 component
+
 ## 0.2.29
 - [x] fix: involving nan + adjusting for interval types - `fetch_tagged_entity_dataset` pipeline
 - [x] add: lm tuning pipeline (#58)
