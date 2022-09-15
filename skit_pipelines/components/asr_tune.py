@@ -14,6 +14,7 @@ def asr_tune(
     output_path: OutputPath(str),
     lang: str,
 ) -> None:
+    from skit_pipelines import constants as pipeline_constants
     def exec_shell(cmd: str, tolerant: bool = False):
         import subprocess
         import sys
