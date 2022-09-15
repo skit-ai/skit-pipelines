@@ -7,6 +7,7 @@ from skit_pipelines.components import (
     asr_tune_op,
     download_directory_from_s3_op,
     download_file_from_s3_op,
+    fetch_tagged_dataset_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -24,8 +25,10 @@ def asr_tune(
     base_model_path: str,
     general_lm_path: str,
     target_model_path: str,
-    corpus_path: str,
-    val_corpus_path: str,
+    corpus_path: str = "",
+    val_corpus_path: str = "",
+    corpus_tog_job_ids: str = "",
+    val_corpus_tog_job_ids: str = "",
     augment_wordlist_path: str = "",
     remove_wordlist_path: str = "",
     storage_options: str = '{"type": "s3","bucket": "vernacular-asr-models"}',
@@ -36,10 +39,8 @@ def asr_tune(
     """
     TODO: Docstring.
     """
-    corpus_op = download_file_from_s3_op(storage_path=corpus_path)
-    val_corpus_op = download_file_from_s3_op(storage_path=val_corpus_path)
-    augment_wordlist_op = download_file_from_s3_op(storage_path=augment_wordlist_path, empty_possible=True)
-    remove_wordlist_op = download_file_from_s3_op(storage_path=remove_wordlist_path, empty_possible=True)
+    augment_wordlist_op = download_file_from_s3_op(storage_path=augment_wordlist_path)
+    remove_wordlist_op = download_file_from_s3_op(storage_path=remove_wordlist_path)
 
     # create a component that can make sure:
     # 1. target_model_path does not already exist.
@@ -49,15 +50,35 @@ def asr_tune(
     base_model_op = download_directory_from_s3_op(storage_path=base_model_path)
     general_lm_op = download_file_from_s3_op(storage_path=general_lm_path)
 
-    tune_op = asr_tune_op(
-        corpus_op.outputs["output"],
-        val_corpus_op.outputs["output"],
-        augment_wordlist_op.outputs["output"],
-        remove_wordlist_op.outputs["output"],
-        base_model_op.outputs["output"],
-        general_lm_op.outputs["output"],
-        lang=lang,
-    ).set_ephemeral_storage_limit("20G")
+    with kfp.dsl.Condition(corpus_path == "", "corpus_path"):
+        corpus_tog_by_job_id = fetch_tagged_dataset_op(
+            job_id=corpus_tog_job_ids,
+        )
+        val_corpus_tog_by_job_id = fetch_tagged_dataset_op(
+            job_id=val_corpus_tog_job_ids,
+        )
+        tune_op = asr_tune_op(
+            corpus_tog_by_job_id.outputs["output"],
+            val_corpus_tog_by_job_id.outputs["output"],
+            augment_wordlist_op.outputs["output"],
+            remove_wordlist_op.outputs["output"],
+            base_model_op.outputs["output"],
+            general_lm_op.outputs["output"],
+            lang=lang,
+        ).set_ephemeral_storage_limit("20G")
+
+    with kfp.dsl.Condition(corpus_tog_job_ids == "", "corpus_path"):
+        corpus_op = download_file_from_s3_op(storage_path=corpus_path)
+        val_corpus_op = download_file_from_s3_op(storage_path=val_corpus_path)
+        tune_op = asr_tune_op(
+            corpus_op.outputs["output"],
+            val_corpus_op.outputs["output"],
+            augment_wordlist_op.outputs["output"],
+            remove_wordlist_op.outputs["output"],
+            base_model_op.outputs["output"],
+            general_lm_op.outputs["output"],
+            lang=lang,
+        ).set_ephemeral_storage_limit("20G")
 
     upload = upload2s3_op(
         path_on_disk=tune_op.outputs["output"],
