@@ -4,6 +4,8 @@ ECR_REGISTRY = os.environ["ECR_REGISTRY"]
 REGION = os.environ["REGION"]
 BASE_IMAGE = os.environ["BASE_IMAGE"]
 CUDA_IMAGE = os.environ["CUDA_IMAGE"]
+US_EAST_1 = "us-east-1"
+AP_SOUTH_1 = "ap-south-1"
 KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
 KALDI_IMAGE = f"{ECR_REGISTRY}/{KALDI_REPOSITORY}:latest"
 BUCKET = os.environ["BUCKET"]
@@ -96,7 +98,7 @@ COOKIE_0 = "AWSELBAuthSessionCookie-0"
 COOKIE_1 = "AWSELBAuthSessionCookie-1"
 COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
 PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
-LABELSTUDIO_SVC = "https://labelstudio.skit.ai"
+LABELSTUDIO_SVC = "https://labelstudio.skit.ai" if REGION == AP_SOUTH_1 else "https://labelstudio.us.skit.ai"
 LABELSTUDIO_TOKEN = os.environ["LABELSTUDIO_TOKEN"]
 
 
@@ -214,11 +216,12 @@ DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
 
 # K8s
-US_EAST_1 = "us-east-1"
-AP_SOUTH_1 = "ap-south-1"
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
 CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
+
+# Bots
+SLACK_BOT_NAME = "charon" if REGION == AP_SOUTH_1 else "charon-us"
 
 # VCS
 GITLAB = "gitlab.com"

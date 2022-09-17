@@ -115,7 +115,7 @@ def recurr_run_format(
 ):
     return f"""
 To create a recurring run of {pipeline_name} use:
-```/remind #bots "@charon run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>```
+```/remind {const.DEFAULT_CHANNEL} "@{const.SLACK_BOT_NAME} run {pipeline_name} b64_{encoded_payload}" <In ten minutes/30 May/Every Tuesday>```
 """
 
 
