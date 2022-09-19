@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.utils - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.utils - skit-pipelines 0.2.35 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.35 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.35 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -253,9 +254,10 @@
 
 <span class="kn">import</span> <span class="nn">skit_pipelines.utils.cookies</span> <span class="k">as</span> <span class="nn">cookie_utils</span>
 <span class="kn">import</span> <span class="nn">skit_pipelines.utils.webhook</span> <span class="k">as</span> <span class="nn">webhook_utils</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.utils.k8s</span> <span class="kn">import</span> <span class="n">get_pipeline_config_kfp</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.utils.login</span> <span class="kn">import</span> <span class="n">kubeflow_login</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.utils.storage</span> <span class="kn">import</span> <span class="n">create_storage_path</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines.utils.k8s</span> <span class="kn">import</span> <span class="n">get_pipeline_config_kfp</span>
+
 
 <div class="viewcode-block" id="create_file_name"><a class="viewcode-back" href="../../skit_pipelines.utils.html#skit_pipelines.utils.create_file_name">[docs]</a><span class="k">def</span> <span class="nf">create_file_name</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">reference</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>

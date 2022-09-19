@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.transcription_pipeline - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.pipelines.transcription_pipeline - skit-pipelines 0.2.35 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.35 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.35 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -249,8 +250,8 @@
           <h1>Source code for skit_pipelines.pipelines.transcription_pipeline</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">audio_transcription_op</span><span class="p">,</span>
     <span class="n">download_audio_wavs_op</span><span class="p">,</span>
@@ -263,6 +264,7 @@
 
 <span class="n">BUCKET</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span>
 
+
 <div class="viewcode-block" id="transcription_pipeline"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.transcription_pipeline.html#skit_pipelines.pipelines.transcription_pipeline.transcription_pipeline">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Transcription Pipeline&quot;</span><span class="p">,</span>
     <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Transcribe the audio data using the mentioned ASR models&quot;</span><span class="p">,</span>
@@ -271,9 +273,9 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">data_s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">config_s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">audio_sample_rate</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;8k&quot;</span><span class="p">,</span>
-    <span class="n">audio_download_workers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-    <span class="n">transcription_concurrency</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">audio_sample_rate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8k&quot;</span><span class="p">,</span>
+    <span class="n">audio_download_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">transcription_concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -281,9 +283,9 @@
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to transcribe the audio files present in a dataset using different ASRs.</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. _p_transcription_pipeline:</span>
-<span class="sd">    </span>
+
 <span class="sd">    Example payload to invoke via slack integrations:</span>
 
 <span class="sd">        @charon run transcription_pipeline</span>
@@ -291,7 +293,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            {</span>
-<span class="sd">                </span>
+
 <span class="sd">            }</span>
 
 <span class="sd">    :param data_s3_path: S3 path of the data in CSV</span>
@@ -304,48 +306,55 @@
 <span class="sd">    :type audio_download_workers: int</span>
 <span class="sd">    :param transcription_concurrency: maximum workers while transcribing the audios (default 8).</span>
 <span class="sd">    :type transcription_concurrency: int</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Download CSV files with audio</span>
-    <span class="n">original_data_op</span> <span class="o">=</span> <span class="n">download_csv_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span> <span class="o">=</span> <span class="n">data_s3_path</span><span class="p">)</span>
+    <span class="n">original_data_op</span> <span class="o">=</span> <span class="n">download_csv_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">data_s3_path</span><span class="p">)</span>
     <span class="n">original_data_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
-    <span class="n">config_data_op</span> <span class="o">=</span> <span class="n">download_file_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span> <span class="o">=</span> <span class="n">config_s3_path</span><span class="p">)</span>
+    <span class="n">config_data_op</span> <span class="o">=</span> <span class="n">download_file_from_s3_op</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">config_s3_path</span><span class="p">)</span>
     <span class="n">config_data_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
     <span class="c1"># Download audio files from CSV</span>
-    <span class="n">audio_wavs_op</span> <span class="o">=</span> <span class="n">download_audio_wavs_op</span><span class="p">(</span><span class="n">original_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">audio_sample_rate</span><span class="p">,</span> <span class="n">audio_download_workers</span><span class="p">)</span>
+    <span class="n">audio_wavs_op</span> <span class="o">=</span> <span class="n">download_audio_wavs_op</span><span class="p">(</span>
+        <span class="n">original_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">audio_sample_rate</span><span class="p">,</span> <span class="n">audio_download_workers</span>
+    <span class="p">)</span>
 
     <span class="c1"># Transcribing</span>
-    <span class="n">transcribed_sqlite_op</span> <span class="o">=</span> <span class="n">audio_transcription_op</span><span class="p">(</span><span class="n">audio_wavs_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">config_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">concurrency</span><span class="o">=</span><span class="n">transcription_concurrency</span><span class="p">)</span>
-    
+    <span class="n">transcribed_sqlite_op</span> <span class="o">=</span> <span class="n">audio_transcription_op</span><span class="p">(</span>
+        <span class="n">audio_wavs_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">config_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">concurrency</span><span class="o">=</span><span class="n">transcription_concurrency</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="c1"># overlay the original csv (original_data_op) with the new transcriptions (transcribed_sqlite_op)</span>
-    <span class="n">overlayed_data_op</span> <span class="o">=</span> <span class="n">overlay_transcription_csv_op</span><span class="p">(</span><span class="n">transcribed_sqlite_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">original_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+    <span class="n">overlayed_data_op</span> <span class="o">=</span> <span class="n">overlay_transcription_csv_op</span><span class="p">(</span>
+        <span class="n">transcribed_sqlite_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">original_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="c1"># Returning S3 path</span>
     <span class="n">audio_s3_path</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-        <span class="n">path_on_disk</span> <span class="o">=</span> <span class="n">overlayed_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-        <span class="n">bucket</span> <span class="o">=</span> <span class="n">BUCKET</span><span class="p">,</span>
-        <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;.csv&quot;</span>
+        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">overlayed_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span>
     <span class="p">)</span>
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;slack_notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
-            <span class="n">audio_s3_path</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">audio_check</span><span class="p">:</span>
-            <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the CSV after transcription.&quot;</span>
-            <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">audio_s3_path</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
-            <span class="n">audio_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
-                <span class="n">notification_text</span><span class="p">,</span>
-                <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-                <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
-                <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
-                <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">audio_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-            <span class="p">)</span></div>
+        <span class="n">audio_s3_path</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">audio_check</span><span class="p">:</span>
+        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the CSV after transcription.&quot;</span>
+        <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">audio_s3_path</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
+        <span class="n">audio_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">notification_text</span><span class="p">,</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+            <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
+            <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
+            <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">audio_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+        <span class="p">)</span></div>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;transcription_pipeline&quot;</span><span class="p">]</span>
 </pre></div>

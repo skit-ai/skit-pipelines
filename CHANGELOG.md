@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.35
+- [x] add: slack bots and channels based on cluster region
+
 ## 0.2.34
 - [x] fix: again pipeline_constants not defined error in asr_tune component (#65)
 
