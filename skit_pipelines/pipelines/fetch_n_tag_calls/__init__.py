@@ -55,7 +55,7 @@ def fetch_n_tag_calls(
                 "start_date": "2020-01-01",
                 "lang": "en",
                 "end_date": "2020-01-01",
-                "reported": False,
+                "reported": false,
                 "job_ids": "4011,4012,4013",
                 "call_quantity": 200
             }
@@ -67,13 +67,15 @@ def fetch_n_tag_calls(
         .. code-block:: python
 
             {
-                "client_id": 1,
-                "start_date": "2020-01-01",
+                "org_id": 34,
+                "client_id": 41,
+                "start_date": "2022-09-16",
+                "end_date": "2022-09-19",
                 "lang": "en",
-                "end_date": "2020-01-01",
-                "reported": False,
-                "labelstudio_project_id": "40",
-                "call_quantity": 200
+                "reported": false,
+                "labelstudio_project_id": "135",
+                "call_quantity": 1000,
+                "flow_name" : "indigo_domain_tuning_english"
             }
 
     :param client_id: The client id as per api-gateway.
