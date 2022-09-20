@@ -131,7 +131,7 @@ push_irr_to_postgres_op = kfp.components.create_component_from_func(
 #     eevee_intent_metrics_path = "metrics.pkl"
 #     collected_data_path = "collected_data.pkl"
 #     language = "en"
-#     slu_project_name = "oppo"
+#     slu_project_name = "indigo"
 
 #     a = push_irr_to_postgres(
 #         eevee_intent_metrics_path,

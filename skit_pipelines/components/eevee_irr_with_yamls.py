@@ -12,6 +12,8 @@ def eevee_irr_with_yamls(
     eevee_intent_alias_yaml_github_path: str = "",
     eevee_intent_groups_yaml_github_path: str = "",
     eevee_intent_layers_yaml_github_path: str = "",
+    tog_job_id = None,
+    labelstudio_project_id = None,
 ):
 
     import pickle
@@ -70,6 +72,15 @@ def eevee_irr_with_yamls(
         and pipeline_constants.DATA_ID in pred_labels_columns
     ):
         pred_labels[pipeline_constants.ID] = pred_labels[pipeline_constants.DATA_ID]
+
+
+    if labelstudio_project_id:
+        true_label_column =  "tag"
+        pred_label_column = "intent"
+    if tog_job_id:
+        true_label_column = "intent_y"
+        pred_label_column = "raw.intent"
+
 
     logger.debug(
         f"Generating IRR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
@@ -159,11 +170,23 @@ eevee_irr_with_yamls_op = kfp.components.create_component_from_func(
 #         eevee_intent_alias_yaml_github_path="intents/oppo/alias.yaml",
 #         eevee_intent_groups_yaml_github_path="intents/oppo/groups.yaml",
 #         eevee_intent_layers_yaml_github_path="intents/oppo/layers.yaml",
+#         tog_job_id=4242,
 #     )
 
-#     _ = eevee_irr_with_yamls(
-#         data_path="mod_4242.csv",
-#         output_path="metrics.pkl",
-#         true_label_column="intent_y",
-#         pred_label_column="raw.intent",
-#     )
+    # _ = eevee_irr_with_yamls(
+    #     data_path="mod_4242.csv",
+    #     output_path="metrics.pkl",
+    #     true_label_column="intent_y",
+    #     pred_label_column="raw.intent",
+    #     tog_job_id=4242,
+    # )
+
+    # _ = eevee_irr_with_yamls(
+    #     data_path="l34.csv",
+    #     output_path="metrics.pkl",
+    #     true_label_column="tag",
+    #     pred_label_column="intent",
+    #     eevee_intent_alias_yaml_github_path="intents/indigo/alias.yaml",
+    #     eevee_intent_groups_yaml_github_path="intents/indigo/groups.yaml",
+    #     labelstudio_project_id=116
+    # )
