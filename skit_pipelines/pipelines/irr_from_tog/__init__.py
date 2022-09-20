@@ -263,6 +263,8 @@ def irr_from_tog(
         extracted_info = extract_info_from_dataset_op(
             tagged_data_op.outputs["output"],
             timezone=timezone,
+            tog_job_id=job_id,
+            labelstudio_project_id=labelstudio_project_id,
         ).after(tagged_data_op)
         extracted_info.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
@@ -275,6 +277,8 @@ def irr_from_tog(
             eevee_intent_alias_yaml_github_path=eevee_intent_alias_yaml_github_path,
             eevee_intent_groups_yaml_github_path=eevee_intent_groups_yaml_github_path,
             eevee_intent_layers_yaml_github_path=eevee_intent_layers_yaml_github_path,
+            tog_job_id=job_id,
+            labelstudio_project_id=labelstudio_project_id
         ).after(preprocess_data_op)
 
         pushed_stat = push_irr_to_postgres_op(
