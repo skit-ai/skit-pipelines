@@ -30,6 +30,9 @@ from skit_pipelines.components.preprocess.create_true_intent_column import (
 from skit_pipelines.components.preprocess.create_true_transcript_column import (
     create_true_transcript_labels_op,
 )
+from skit_pipelines.components.preprocess.process_true_transcript_column import (
+    process_true_transcript_labels_op,
+)
 from skit_pipelines.components.preprocess.create_utterance_column import (
     create_utterances_op,
 )

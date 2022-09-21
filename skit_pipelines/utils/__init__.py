@@ -15,7 +15,7 @@ def create_file_name(reference: str, file_type: str, ext=".csv") -> str:
         "project",
         str(reference),
         datetime.now().strftime("%Y-%m-%d"),
-        f"{reference}-{datetime.now().strftime('%Y-%m-%d')}-{file_type}{ext}",
+        f"{reference}-{datetime.now().strftime('%H-%M-%S')}-{file_type}{ext}",
     )
 
 
