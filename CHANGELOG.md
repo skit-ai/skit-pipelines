@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.36
+- [x] update: irr fixes for labelstudio datasets (#66)
+
 ## 0.2.35
 - [x] add: slack bots and channels based on cluster region
 
