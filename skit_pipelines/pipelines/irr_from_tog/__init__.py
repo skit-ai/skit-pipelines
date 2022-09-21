@@ -180,7 +180,9 @@ def irr_from_tog(
 
     # Create true label column
     preprocess_data_op = create_true_intent_labels_op(
-        tagged_data_op.outputs["output"]
+        tagged_data_op.outputs["output"],
+        tog_job_id=job_id,
+        labelstudio_project_id=labelstudio_project_id
     ).after(tagged_data_op)
 
     with kfp.dsl.Condition(mlwr == False, "mlwr-publish-to-slack"):
