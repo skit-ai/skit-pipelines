@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.38
+- [x] update: secrets + us ml metrics db env vars
+- [x] update: upload2s3 upload directories, asr_tune uploads directory and process true transcript in asr_eval_pipeline (#69)
+
 ## 0.2.37
 - [x] fix: preprocess step skipped for lablestudio (#68)
 
