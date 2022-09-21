@@ -135,11 +135,11 @@ jobs:
           --build-arg KF_PASSWORD="${{ secrets.US_KF_PASSWORD }}"
           --build-arg JWT_SECRET_KEY=${{ secrets.US_JWT_SECRET_KEY}}
           --build-arg GOOGLE_SHEETS_CREDENTIALS=${{ secrets.GOOGLE_SHEETS_CREDENTIALS }} 
-          --build-arg ML_METRICS_DB_NAME=${{ secrets.ML_METRICS_DB_NAME }}
-          --build-arg ML_METRICS_DB_PORT=${{ secrets.ML_METRICS_DB_PORT }}
-          --build-arg ML_METRICS_DB_HOST=${{ secrets.ML_METRICS_DB_HOST }}
-          --build-arg ML_METRICS_DB_USER=${{ secrets.ML_METRICS_DB_USER }}
-          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }}
+          --build-arg ML_METRICS_DB_NAME=${{ secrets.US_ML_METRICS_DB_NAME }}
+          --build-arg ML_METRICS_DB_PORT=${{ secrets.US_ML_METRICS_DB_PORT }}
+          --build-arg ML_METRICS_DB_HOST=${{ secrets.US_ML_METRICS_DB_HOST }}
+          --build-arg ML_METRICS_DB_USER=${{ secrets.US_ML_METRICS_DB_USER }}
+          --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.US_ML_METRICS_DB_PASSWORD }}
           --build-arg PERSONAL_ACCESS_TOKEN_GITHUB=${{secrets.PERSONAL_ACCESS_TOKEN_GITHUB }}
           --build-arg PERSONAL_ACCESS_TOKEN_GITLAB=${{secrets.PERSONAL_ACCESS_TOKEN_GITLAB }}
           --build-arg DUCKLING_HOST="${{ secrets.DUCKLING_HOST }}" -t $US_ECR_REPOSITORY .
