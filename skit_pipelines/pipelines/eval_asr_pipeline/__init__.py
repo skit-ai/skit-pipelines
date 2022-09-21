@@ -6,6 +6,7 @@ from skit_pipelines.components import (
     create_utterances_op,
     download_csv_from_s3_op,
     gen_asr_metrics_op,
+    process_true_transcript_labels_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -67,8 +68,12 @@ def eval_asr_pipeline(
         preprocess_data_op.outputs["output"], true_label_column
     ).after(preprocess_data_op)
 
+    preprocess_step_3_data_op = process_true_transcript_labels_op(
+        preprocess_step_2_data_op.outputs["output"], true_label_column,
+    ).after(preprocess_step_2_data_op)
+
     asr_metrics_op = gen_asr_metrics_op(
-        preprocess_step_2_data_op.outputs["output"],
+        preprocess_step_3_data_op.outputs["output"],
         true_label_column=true_label_column,
         pred_label_column=pred_label_column,
     )
@@ -78,8 +83,9 @@ def eval_asr_pipeline(
         path_on_disk=asr_metrics_op.outputs["output"],
         reference=org_id,
         file_type="asr-metrics",
-        ext=".tgz",
         bucket=BUCKET,
+        ext="",
+        upload_as_directory=True,
     )
     upload_metrics.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
