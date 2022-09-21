@@ -61,9 +61,10 @@ def asr_tune(
 
     upload = upload2s3_op(
         path_on_disk=tune_op.outputs["output"],
-        bucket=BUCKET,
         output_path=target_model_path,
         storage_options=storage_options,
+        ext="",
+        upload_as_directory=True,
     )
     upload.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
