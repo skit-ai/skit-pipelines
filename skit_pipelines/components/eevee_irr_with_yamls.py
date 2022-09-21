@@ -74,11 +74,11 @@ def eevee_irr_with_yamls(
         pred_labels[pipeline_constants.ID] = pred_labels[pipeline_constants.DATA_ID]
 
 
+    true_label_column =  pipeline_constants.INTENT_Y
+
     if labelstudio_project_id:
-        true_label_column =  "tag"
         pred_label_column = "intent"
     if tog_job_id:
-        true_label_column = "intent_y"
         pred_label_column = "raw.intent"
 
 
@@ -160,7 +160,7 @@ eevee_irr_with_yamls_op = kfp.components.create_component_from_func(
 )
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
 #     _ = eevee_irr_with_yamls(
 #         data_path="mod_4242.csv",
@@ -190,3 +190,13 @@ eevee_irr_with_yamls_op = kfp.components.create_component_from_func(
     #     eevee_intent_groups_yaml_github_path="intents/indigo/groups.yaml",
     #     labelstudio_project_id=116
     # )
+
+    _ = eevee_irr_with_yamls(
+        data_path="sbi.csv",
+        output_path="metrics.pkl",
+        true_label_column="tag",
+        pred_label_column="intent",
+        # eevee_intent_alias_yaml_github_path="intents/indigo/alias.yaml",
+        # eevee_intent_groups_yaml_github_path="intents/indigo/groups.yaml",
+        labelstudio_project_id=152
+    )
