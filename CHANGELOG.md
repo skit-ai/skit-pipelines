@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.37
+- [x] fix: preprocess step skipped for lablestudio (#68)
+
 ## 0.2.36
 - [x] update: irr fixes for labelstudio datasets (#66)
 
