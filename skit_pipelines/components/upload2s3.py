@@ -14,7 +14,7 @@ def upload2s3(
     ext: str = ".csv",
     output_path: str = "",
     storage_options: str = "",
-    upload_as_directory: bool = True,
+    upload_as_directory: bool = False,
 ) -> str:
     import json
     import os
