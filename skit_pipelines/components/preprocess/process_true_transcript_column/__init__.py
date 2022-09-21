@@ -7,19 +7,24 @@ from skit_pipelines import constants as pipeline_constants
 def process_true_transcript_labels(
     data_path: InputPath(str), true_label_column: str, output_path: OutputPath(str)
 ):
-    import pandas as pd
-    from loguru import logger
     import re
 
+    import pandas as pd
+    from loguru import logger
+
     from skit_pipelines import constants as pipeline_constants
+
     def process_true_transcript(transcript):
-        if type(transcript) != str: return ""
-        return re.sub(r'\<[^)]*?\>', '', transcript).strip()
+        if type(transcript) != str:
+            return ""
+        return re.sub(r"\<[^)]*?\>", "", transcript).strip()
 
     train_df = pd.read_csv(data_path)
     logger.debug("before processing:")
     logger.debug(train_df[true_label_column][:15])
-    train_df[true_label_column] = train_df[true_label_column].apply(process_true_transcript)
+    train_df[true_label_column] = train_df[true_label_column].apply(
+        process_true_transcript
+    )
     logger.debug("after processing:")
     logger.debug(train_df[true_label_column][:15])
 

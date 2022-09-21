@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.irr_from_tog package" href="skit_pipelines.pipelines.irr_from_tog.html" /><link rel="prev" title="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.tag_calls package" href="skit_pipelines.components.tag_calls.html" /><link rel="prev" title="skit_pipelines.components.preprocess.create_utterance_column package" href="skit_pipelines.components.preprocess.create_utterance_column.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package - skit-pipelines 0.2.38 documentation</title>
+        <title>skit_pipelines.components.preprocess.process_true_transcript_column package - skit-pipelines 0.2.38 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -157,13 +157,13 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">Train XLMR model</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">XLMR Intent evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">XLMR Intent evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
@@ -178,25 +178,25 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.api.models.html">skit_pipelines.api.models package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
-<li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4 current has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
+<li class="toctree-l5 current current-page"><a class="current reference internal" href="#">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.html">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_push_to_sheets.html">skit_pipelines.pipelines.fetch_calls_n_push_to_sheets package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
@@ -249,39 +249,19 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-pipelines-eval-voicebot-xlmr-pipeline-package">
-<h1>skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package<a class="headerlink" href="#skit-pipelines-pipelines-eval-voicebot-xlmr-pipeline-package" title="Permalink to this headline">#</a></h1>
-<section id="module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline" title="Permalink to this headline">#</a></h2>
+          <section id="skit-pipelines-components-preprocess-process-true-transcript-column-package">
+<h1>skit_pipelines.components.preprocess.process_true_transcript_column package<a class="headerlink" href="#skit-pipelines-components-preprocess-process-true-transcript-column-package" title="Permalink to this headline">#</a></h1>
+<section id="module-skit_pipelines.components.preprocess.process_true_transcript_column">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.preprocess.process_true_transcript_column" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline">
-<span class="sig-name descname"><span class="pre">eval_voicebot_xlmr_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xlm-roberta-base'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intent_y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_label_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raw.intent'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/eval_voicebot_xlmr_pipeline.html#eval_voicebot_xlmr_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline.eval_voicebot_xlmr_pipeline" title="Permalink to this definition">#</a></dt>
-<dd><p>Evaluates an XLM Roberta model on given dataset.</p>
-<p id="p-eval-voicebot-xlmr-pipeline">Example payload to invoke this pipeline via slack integrations:</p>
-<blockquote>
-<div><p>&#64;charon run eval_voicebot_xlmr_pipeline</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;s3_path_data&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/data/&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;s3_path_model&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/model/&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="s2">&quot;org&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;use_state&quot;</span><span class="p">:</span> <span class="kc">False</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>s3_path_data</strong> (<em>str</em>) – S3 path to a tagged dataset (.csv).</p></li>
-<li><p><strong>s3_path_model</strong> (<em>str</em>) – S3 path to a trained model. Optional.</p></li>
-<li><p><strong>org_id</strong> (<em>str</em>) – reference path to save the metrics.</p></li>
-<li><p><strong>use_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use the XLMR model with state encoding?, defaults to True</p></li>
-<li><p><strong>model_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The flavour of the BERT model, defaults to “xlm-roberta-base”</p></li>
-<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
-<li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
-</ul>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels">
+<span class="sig-name descname"><span class="pre">process_true_transcript_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/preprocess/process_true_transcript_column.html#process_true_transcript_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels_op">
+<span class="sig-name descname"><span class="pre">process_true_transcript_labels_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels_op" title="Permalink to this definition">#</a></dt>
+<dd><p>Process true transcript labels</p>
 </dd></dl>
 
 </section>
@@ -292,23 +272,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.pipelines.irr_from_tog.html">
+          <a class="next-page" href="skit_pipelines.components.tag_calls.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.pipelines.irr_from_tog package</div>
+                <div class="title">skit_pipelines.components.tag_calls package</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">
+          <a class="prev-page" href="skit_pipelines.components.preprocess.create_utterance_column.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</div>
+                <div class="title">skit_pipelines.components.preprocess.create_utterance_column package</div>
                 
               </div>
             </a>
@@ -344,8 +324,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline package</a><ul>
-<li><a class="reference internal" href="#module-skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline">Module contents</a></li>
+<li><a class="reference internal" href="#">skit_pipelines.components.preprocess.process_true_transcript_column package</a><ul>
+<li><a class="reference internal" href="#module-skit_pipelines.components.preprocess.process_true_transcript_column">Module contents</a></li>
 </ul>
 </li>
 </ul>

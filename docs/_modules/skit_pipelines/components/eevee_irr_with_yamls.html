@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.eevee_irr_with_yamls - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.components.eevee_irr_with_yamls - skit-pipelines 0.2.38 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.38 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.38 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -183,6 +184,7 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -261,6 +263,8 @@
     <span class="n">eevee_intent_alias_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">eevee_intent_groups_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">eevee_intent_layers_yaml_github_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">tog_job_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">labelstudio_project_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="kn">import</span> <span class="nn">pickle</span>
@@ -319,6 +323,15 @@
         <span class="ow">and</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA_ID</span> <span class="ow">in</span> <span class="n">pred_labels_columns</span>
     <span class="p">):</span>
         <span class="n">pred_labels</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ID</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_labels</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA_ID</span><span class="p">]</span>
+
+
+    <span class="n">true_label_column</span> <span class="o">=</span>  <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">INTENT_Y</span>
+
+    <span class="k">if</span> <span class="n">labelstudio_project_id</span><span class="p">:</span>
+        <span class="n">pred_label_column</span> <span class="o">=</span> <span class="s2">&quot;intent&quot;</span>
+    <span class="k">if</span> <span class="n">tog_job_id</span><span class="p">:</span>
+        <span class="n">pred_label_column</span> <span class="o">=</span> <span class="s2">&quot;raw.intent&quot;</span>
+
 
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;Generating IRR report on true_label col = (</span><span class="si">{</span><span class="n">true_label_column</span><span class="si">}</span><span class="s2">) and pred_label col = (</span><span class="si">{</span><span class="n">pred_label_column</span><span class="si">}</span><span class="s2">)&quot;</span>
@@ -398,7 +411,7 @@
 <span class="p">)</span>
 
 
-<span class="c1"># if __name__ == &quot;__main__&quot;:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
 <span class="c1">#     _ = eevee_irr_with_yamls(</span>
 <span class="c1">#         data_path=&quot;mod_4242.csv&quot;,</span>
@@ -408,14 +421,36 @@
 <span class="c1">#         eevee_intent_alias_yaml_github_path=&quot;intents/oppo/alias.yaml&quot;,</span>
 <span class="c1">#         eevee_intent_groups_yaml_github_path=&quot;intents/oppo/groups.yaml&quot;,</span>
 <span class="c1">#         eevee_intent_layers_yaml_github_path=&quot;intents/oppo/layers.yaml&quot;,</span>
+<span class="c1">#         tog_job_id=4242,</span>
 <span class="c1">#     )</span>
 
-<span class="c1">#     _ = eevee_irr_with_yamls(</span>
-<span class="c1">#         data_path=&quot;mod_4242.csv&quot;,</span>
-<span class="c1">#         output_path=&quot;metrics.pkl&quot;,</span>
-<span class="c1">#         true_label_column=&quot;intent_y&quot;,</span>
-<span class="c1">#         pred_label_column=&quot;raw.intent&quot;,</span>
-<span class="c1">#     )</span>
+    <span class="c1"># _ = eevee_irr_with_yamls(</span>
+    <span class="c1">#     data_path=&quot;mod_4242.csv&quot;,</span>
+    <span class="c1">#     output_path=&quot;metrics.pkl&quot;,</span>
+    <span class="c1">#     true_label_column=&quot;intent_y&quot;,</span>
+    <span class="c1">#     pred_label_column=&quot;raw.intent&quot;,</span>
+    <span class="c1">#     tog_job_id=4242,</span>
+    <span class="c1"># )</span>
+
+    <span class="c1"># _ = eevee_irr_with_yamls(</span>
+    <span class="c1">#     data_path=&quot;l34.csv&quot;,</span>
+    <span class="c1">#     output_path=&quot;metrics.pkl&quot;,</span>
+    <span class="c1">#     true_label_column=&quot;tag&quot;,</span>
+    <span class="c1">#     pred_label_column=&quot;intent&quot;,</span>
+    <span class="c1">#     eevee_intent_alias_yaml_github_path=&quot;intents/indigo/alias.yaml&quot;,</span>
+    <span class="c1">#     eevee_intent_groups_yaml_github_path=&quot;intents/indigo/groups.yaml&quot;,</span>
+    <span class="c1">#     labelstudio_project_id=116</span>
+    <span class="c1"># )</span>
+
+    <span class="n">_</span> <span class="o">=</span> <span class="n">eevee_irr_with_yamls</span><span class="p">(</span>
+        <span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;sbi.csv&quot;</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;metrics.pkl&quot;</span><span class="p">,</span>
+        <span class="n">true_label_column</span><span class="o">=</span><span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+        <span class="n">pred_label_column</span><span class="o">=</span><span class="s2">&quot;intent&quot;</span><span class="p">,</span>
+        <span class="c1"># eevee_intent_alias_yaml_github_path=&quot;intents/indigo/alias.yaml&quot;,</span>
+        <span class="c1"># eevee_intent_groups_yaml_github_path=&quot;intents/indigo/groups.yaml&quot;,</span>
+        <span class="n">labelstudio_project_id</span><span class="o">=</span><span class="mi">152</span>
+    <span class="p">)</span>
 </pre></div>
         </article>
       </div>

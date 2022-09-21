@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.extract_info_from_dataset - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.components.extract_info_from_dataset - skit-pipelines 0.2.38 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.38 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.38 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -183,6 +184,7 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -247,14 +249,19 @@
         </div>
         <article role="main">
           <h1>Source code for skit_pipelines.components.extract_info_from_dataset</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+<span></span><span class="kn">from</span> <span class="nn">cProfile</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span><span class="p">,</span> <span class="n">OutputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
 <div class="viewcode-block" id="extract_info_from_dataset"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.extract_info_from_dataset.extract_info_from_dataset">[docs]</a><span class="k">def</span> <span class="nf">extract_info_from_dataset</span><span class="p">(</span>
-    <span class="n">dataset_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">dataset_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> 
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> 
+    <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tog_job_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">labelstudio_project_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="kn">import</span> <span class="nn">pickle</span>
@@ -275,20 +282,30 @@
         <span class="n">datetime_without_tz</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datetime_str</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pytz_tz</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">datetime_without_tz</span><span class="p">)</span>
 
-    <span class="n">language</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;raw.language&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">job_id</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;job_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">language</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;raw.language&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;raw.language&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">labelstudio_project_id</span><span class="p">:</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">labelstudio_project_id</span>
+    <span class="k">if</span> <span class="n">tog_job_id</span><span class="p">:</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">tog_job_id</span>
+
     <span class="n">n_calls</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;call_uuid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
     <span class="n">n_turns</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;conversation_uuid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
-    <span class="n">min_tagged_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;tagged_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">max_tagged_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;tagged_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="s2">&quot;tagged_time&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">min_tagged_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;tagged_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">max_tagged_time</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;tagged_time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">min_tagged_time</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">min_tagged_time</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
+        <span class="n">max_tagged_time</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">max_tagged_time</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">min_tagged_time</span><span class="p">,</span> <span class="n">max_tagged_time</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
     <span class="n">min_reftime</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;reftime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="n">max_reftime</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;reftime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
     <span class="n">min_reftime</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">min_reftime</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
     <span class="n">max_reftime</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">max_reftime</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
-
-    <span class="n">min_tagged_time</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">min_tagged_time</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
-    <span class="n">max_tagged_time</span> <span class="o">=</span> <span class="n">give_appropriate_datetime</span><span class="p">(</span><span class="n">max_tagged_time</span><span class="p">,</span> <span class="n">pytz_tz</span><span class="p">)</span>
 
     <span class="n">duplicated_conversations</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;conversation_uuid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">duplicated_conversations</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -319,10 +336,18 @@
 <span class="c1"># if __name__ == &quot;__main__&quot;:</span>
 
 <span class="c1">#     extract_info_from_dataset(</span>
-<span class="c1">#         dataset_path=&quot;4333.csv&quot;,</span>
+<span class="c1">#         dataset_path=&quot;l34.csv&quot;,</span>
 <span class="c1">#         output_path=&quot;collected_data.pkl&quot;,</span>
-<span class="c1">#         timezone=&quot;Asia/Kolkata&quot;</span>
+<span class="c1">#         timezone=&quot;Asia/Kolkata&quot;,</span>
+<span class="c1">#         labelstudio_project_id=116,</span>
 <span class="c1">#     )</span>
+
+    <span class="c1"># extract_info_from_dataset(</span>
+    <span class="c1">#     dataset_path=&quot;4333.csv&quot;,</span>
+    <span class="c1">#     output_path=&quot;collected_data.pkl&quot;,</span>
+    <span class="c1">#     timezone=&quot;Asia/Kolkata&quot;,</span>
+    <span class="c1">#     tog_job_id=4333,</span>
+    <span class="c1"># )</span>
 </pre></div>
         </article>
       </div>

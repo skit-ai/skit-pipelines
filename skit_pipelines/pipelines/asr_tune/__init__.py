@@ -38,8 +38,12 @@ def asr_tune(
     """
     corpus_op = download_file_from_s3_op(storage_path=corpus_path)
     val_corpus_op = download_file_from_s3_op(storage_path=val_corpus_path)
-    augment_wordlist_op = download_file_from_s3_op(storage_path=augment_wordlist_path, empty_possible=True)
-    remove_wordlist_op = download_file_from_s3_op(storage_path=remove_wordlist_path, empty_possible=True)
+    augment_wordlist_op = download_file_from_s3_op(
+        storage_path=augment_wordlist_path, empty_possible=True
+    )
+    remove_wordlist_op = download_file_from_s3_op(
+        storage_path=remove_wordlist_path, empty_possible=True
+    )
 
     # create a component that can make sure:
     # 1. target_model_path does not already exist.

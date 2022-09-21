@@ -14,7 +14,6 @@ def asr_tune(
     output_path: OutputPath(str),
     lang: str,
 ) -> None:
-    
     def exec_shell(cmd: str, tolerant: bool = False):
         import subprocess
         import sys
@@ -32,7 +31,6 @@ def asr_tune(
                 raise Exception(f"command {cmd} failed with non-zero code: {code}")
             else:
                 print(f"return code: {code}, but tolerant is set as {tolerant}")
-
 
     BASE_PATH = "~"
     RECIPE = "s3"

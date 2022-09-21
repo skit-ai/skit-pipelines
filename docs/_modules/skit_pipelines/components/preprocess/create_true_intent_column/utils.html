@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../../genindex.html" /><link rel="search" title="Search" href="../../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.preprocess.create_true_intent_column.utils - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.components.preprocess.create_true_intent_column.utils - skit-pipelines 0.2.38 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../../../../index.html"><div class="brand">skit-pipelines 0.2.38 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.38 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -183,6 +184,7 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../../../skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -251,10 +253,31 @@
 
 
 <div class="viewcode-block" id="pick_1st_tag"><a class="viewcode-back" href="../../../../../skit_pipelines.components.preprocess.create_true_intent_column.html#skit_pipelines.components.preprocess.create_true_intent_column.utils.pick_1st_tag">[docs]</a><span class="k">def</span> <span class="nf">pick_1st_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
-        <span class="n">tag</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">tag</span>
-        <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+
+        <span class="c1"># if tag was applied json twice while serializing</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        
+        <span class="c1"># since lablestudio and tog can have more than one tags</span>
+        <span class="c1"># for the same datapoint, we access only the first element</span>
+        <span class="c1"># from the json array</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+
+            <span class="c1"># labelstudio way of extracting the first intent</span>
+            <span class="k">if</span> <span class="s2">&quot;choices&quot;</span> <span class="ow">in</span> <span class="n">tag</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># tog way of extracting the first intent</span>
+            <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">tag</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+
     <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">tag</span></div>
 </pre></div>

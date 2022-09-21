@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.preprocess.create_true_intent_column - skit-pipelines 0.2.38 documentation</title>
+        <title>skit_pipelines.components.preprocess.process_true_transcript_column - skit-pipelines 0.2.38 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -248,42 +248,38 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.components.preprocess.create_true_intent_column</h1><div class="highlight"><pre>
+          <h1>Source code for skit_pipelines.components.preprocess.process_true_transcript_column</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span><span class="p">,</span> <span class="n">OutputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
-<div class="viewcode-block" id="create_intent_labels"><a class="viewcode-back" href="../../../../skit_pipelines.components.preprocess.create_true_intent_column.html#skit_pipelines.components.preprocess.create_true_intent_column.create_intent_labels">[docs]</a><span class="k">def</span> <span class="nf">create_intent_labels</span><span class="p">(</span>
-    <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> 
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="process_true_transcript_labels"><a class="viewcode-back" href="../../../../skit_pipelines.components.preprocess.process_true_transcript_column.html#skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels">[docs]</a><span class="k">def</span> <span class="nf">process_true_transcript_labels</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">true_label_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="p">):</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+    <span class="kn">import</span> <span class="nn">re</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-    <span class="kn">from</span> <span class="nn">skit_pipelines.components.preprocess.create_true_intent_column.utils</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">pick_1st_tag</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">INTENT_Y</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">INTENT_Y</span>
+    <span class="k">def</span> <span class="nf">process_true_transcript</span><span class="p">(</span><span class="n">transcript</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\&lt;[^)]*?\&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">transcript</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-    <span class="n">train_df</span><span class="p">[</span><span class="n">INTENT_Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pick_1st_tag</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">intent_y</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
-    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;before processing:&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">][:</span><span class="mi">15</span><span class="p">])</span>
+    <span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">process_true_transcript</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;after processing:&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">true_label_column</span><span class="p">][:</span><span class="mi">15</span><span class="p">])</span>
+
     <span class="n">train_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<span class="n">create_true_intent_labels_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
-    <span class="n">create_intent_labels</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
+<span class="n">process_true_transcript_labels_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">process_true_transcript_labels</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
 <span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-
-    <span class="n">create_intent_labels</span><span class="p">(</span><span class="s2">&quot;87.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;bleh.csv&quot;</span><span class="p">)</span>
 </pre></div>
         </article>
       </div>

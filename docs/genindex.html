@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.35 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/><title>Index - skit-pipelines 0.2.38 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.35 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.38 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +146,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.35 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.38 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -183,6 +183,7 @@
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -767,6 +768,8 @@
 </li>
           <li><a href="skit_pipelines.components.preprocess.create_utterance_column.html#module-skit_pipelines.components.preprocess.create_utterance_column.utils">skit_pipelines.components.preprocess.create_utterance_column.utils</a>
 </li>
+          <li><a href="skit_pipelines.components.preprocess.process_true_transcript_column.html#module-skit_pipelines.components.preprocess.process_true_transcript_column">skit_pipelines.components.preprocess.process_true_transcript_column</a>
+</li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.push_eer_to_postgres">skit_pipelines.components.push_eer_to_postgres</a>
 </li>
           <li><a href="skit_pipelines.components.html#module-skit_pipelines.components.push_irr_to_postgres">skit_pipelines.components.push_irr_to_postgres</a>
@@ -892,8 +895,16 @@
 </li>
         <li><a href="skit_pipelines.api.html#skit_pipelines.api.endpoints.pipeline_run_req">pipeline_run_req() (in module skit_pipelines.api.endpoints)</a>
 </li>
+        <li><a href="skit_pipelines.components.preprocess.process_true_transcript_column.html#skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels">process_true_transcript_labels() (in module skit_pipelines.components.preprocess.process_true_transcript_column)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="skit_pipelines.components.html#skit_pipelines.components.process_true_transcript_labels_op">process_true_transcript_labels_op() (in module skit_pipelines.components)</a>
+
+        <ul>
+          <li><a href="skit_pipelines.components.preprocess.process_true_transcript_column.html#skit_pipelines.components.preprocess.process_true_transcript_column.process_true_transcript_labels_op">(in module skit_pipelines.components.preprocess.process_true_transcript_column)</a>
+</li>
+        </ul></li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres.push_eer_to_postgres">push_eer_to_postgres() (in module skit_pipelines.components.push_eer_to_postgres)</a>
 </li>
         <li><a href="skit_pipelines.components.html#skit_pipelines.components.push_eer_to_postgres_op">push_eer_to_postgres_op() (in module skit_pipelines.components)</a>
@@ -1247,8 +1258,6 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_intent_column.html#module-skit_pipelines.components.preprocess.create_true_intent_column.utils">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_true_transcript_column
 
@@ -1256,6 +1265,8 @@
           <li><a href="skit_pipelines.components.preprocess.create_true_transcript_column.html#module-skit_pipelines.components.preprocess.create_true_transcript_column">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     skit_pipelines.components.preprocess.create_true_transcript_column.utils
 
@@ -1275,6 +1286,13 @@
 
         <ul>
           <li><a href="skit_pipelines.components.preprocess.create_utterance_column.html#module-skit_pipelines.components.preprocess.create_utterance_column.utils">module</a>
+</li>
+        </ul></li>
+        <li>
+    skit_pipelines.components.preprocess.process_true_transcript_column
+
+        <ul>
+          <li><a href="skit_pipelines.components.preprocess.process_true_transcript_column.html#module-skit_pipelines.components.preprocess.process_true_transcript_column">module</a>
 </li>
         </ul></li>
         <li>

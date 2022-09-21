@@ -26,11 +26,13 @@ def upload2s3(
 
     from skit_pipelines.api.models import StorageOptions
     from skit_pipelines.utils import create_file_name
-    
-    def upload_s3_folder(s3_resource,bucket,path_on_disk,upload_path):
-        for root,dirs,files in os.walk(path_on_disk):
+
+    def upload_s3_folder(s3_resource, bucket, path_on_disk, upload_path):
+        for root, dirs, files in os.walk(path_on_disk):
             for file in files:
-                s3_resource.upload_file(os.path.join(root,file), bucket, os.path.join(upload_path,file))
+                s3_resource.upload_file(
+                    os.path.join(root, file), bucket, os.path.join(upload_path, file)
+                )
 
     s3_resource = boto3.client("s3")
 
@@ -51,7 +53,7 @@ def upload2s3(
     if not upload_as_directory:
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
     else:
-        upload_s3_folder(s3_resource,bucket,path_on_disk,upload_path)
+        upload_s3_folder(s3_resource, bucket, path_on_disk, upload_path)
 
     s3_path = f"s3://{bucket}/{upload_path}"
     logger.debug(f"Uploaded {path_on_disk} to {upload_path}")

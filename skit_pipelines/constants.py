@@ -98,7 +98,11 @@ COOKIE_0 = "AWSELBAuthSessionCookie-0"
 COOKIE_1 = "AWSELBAuthSessionCookie-1"
 COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
 PIPELINE_HOST_URL = f"https://{KUBEFLOW_GATEWAY_ENDPOINT}/pipeline"
-LABELSTUDIO_SVC = "https://labelstudio.skit.ai" if REGION == AP_SOUTH_1 else "https://labelstudio.us.skit.ai"
+LABELSTUDIO_SVC = (
+    "https://labelstudio.skit.ai"
+    if REGION == AP_SOUTH_1
+    else "https://labelstudio.us.skit.ai"
+)
 LABELSTUDIO_TOKEN = os.environ["LABELSTUDIO_TOKEN"]
 
 
@@ -211,8 +215,6 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 )
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
-
-
 
 
 # K8s

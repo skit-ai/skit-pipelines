@@ -5,9 +5,9 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def create_intent_labels(
-    data_path: InputPath(str), 
+    data_path: InputPath(str),
     output_path: OutputPath(str),
-    ):
+):
     import pandas as pd
     from loguru import logger
 
@@ -21,7 +21,7 @@ def create_intent_labels(
     train_df = pd.read_csv(data_path)
     train_df[INTENT_Y] = train_df.tag.apply(pick_1st_tag)
     logger.debug(train_df.intent_y[:10])
-    
+
     train_df.to_csv(output_path, index=False)
 
 
