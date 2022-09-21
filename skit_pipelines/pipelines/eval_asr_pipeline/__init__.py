@@ -78,8 +78,9 @@ def eval_asr_pipeline(
         path_on_disk=asr_metrics_op.outputs["output"],
         reference=org_id,
         file_type="asr-metrics",
-        ext=".tgz",
         bucket=BUCKET,
+        ext="",
+        upload_as_directory=True,
     )
     upload_metrics.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
