@@ -5,9 +5,12 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     asr_tune_op,
+    create_true_transcript_labels_op,
     download_directory_from_s3_op,
     download_file_from_s3_op,
+    extract_true_transcript_labels_to_txt_op,
     fetch_tagged_dataset_op,
+    process_true_transcript_labels_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -55,25 +58,25 @@ def asr_tune(
     general_lm_op = download_file_from_s3_op(storage_path=general_lm_path)
 
     with kfp.dsl.Condition(corpus_path == "", "corpus_path"):
-        corpus_tog_by_job_id = fetch_tagged_dataset_op(
+        corpus_op = fetch_tagged_dataset_op(
             job_id=corpus_tog_job_ids,
         )
-        val_corpus_tog_by_job_id = fetch_tagged_dataset_op(
+        val_corpus_op = fetch_tagged_dataset_op(
             job_id=val_corpus_tog_job_ids,
         )
-        tune_op = asr_tune_op(
-            corpus_tog_by_job_id.outputs["output"],
-            val_corpus_tog_by_job_id.outputs["output"],
-            augment_wordlist_op.outputs["output"],
-            remove_wordlist_op.outputs["output"],
-            base_model_op.outputs["output"],
-            general_lm_op.outputs["output"],
-            lang=lang,
-        ).set_ephemeral_storage_limit("20G")
-
-    with kfp.dsl.Condition(corpus_tog_job_ids == "", "corpus_path"):
-        corpus_op = download_file_from_s3_op(storage_path=corpus_path)
-        val_corpus_op = download_file_from_s3_op(storage_path=val_corpus_path)
+        true_label_column = "transctipt_y"
+        corpus_op = create_true_transcript_labels_op(corpus_op.outputs["output"], true_label_column)
+        corpus_op = process_true_transcript_labels_op(
+            corpus_op.outputs["output"],
+            true_label_column,
+        )
+        corpus_op = extract_true_transcript_labels_to_txt_op(corpus_op.outputs["output"], true_label_column)
+        val_corpus_op = create_true_transcript_labels_op(val_corpus_op.outputs["output"], true_label_column)
+        val_corpus_op = process_true_transcript_labels_op(
+            val_corpus_op.outputs["output"],
+            true_label_column,
+        )
+        val_corpus_op = extract_true_transcript_labels_to_txt_op(val_corpus_op.outputs["output"], true_label_column)
         tune_op = asr_tune_op(
             corpus_op.outputs["output"],
             val_corpus_op.outputs["output"],
@@ -83,19 +86,46 @@ def asr_tune(
             general_lm_op.outputs["output"],
             lang=lang,
         ).set_ephemeral_storage_limit("20G")
+        tune_op.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+        upload = upload2s3_op(
+            path_on_disk=tune_op.outputs["output"],
+            output_path=target_model_path,
+            storage_options=storage_options,
+            ext="",
+            upload_as_directory=True,
+        ).after(tune_op)
+        upload.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+    with kfp.dsl.Condition(corpus_tog_job_ids == "", "corpus_tog_job_ids"):
+        corpus_op_2 = download_file_from_s3_op(storage_path=corpus_path)
+        val_corpus_op_2 = download_file_from_s3_op(storage_path=val_corpus_path)
+        tune_op_2 = asr_tune_op(
+            corpus_op_2.outputs["output"],
+            val_corpus_op_2.outputs["output"],
+            augment_wordlist_op.outputs["output"],
+            remove_wordlist_op.outputs["output"],
+            base_model_op.outputs["output"],
+            general_lm_op.outputs["output"],
+            lang=lang,
+        ).set_ephemeral_storage_limit("20G")
+        tune_op_2.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+        upload_2 = upload2s3_op(
+            path_on_disk=tune_op_2.outputs["output"],
+            output_path=target_model_path,
+            storage_options=storage_options,
+            ext="",
+            upload_as_directory=True,
+        ).after(tune_op_2)
+        upload_2.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
 
-    upload = upload2s3_op(
-        path_on_disk=tune_op.outputs["output"],
-        output_path=target_model_path,
-        storage_options=storage_options,
-        ext="",
-        upload_as_directory=True,
-    )
-    upload.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    with kfp.dsl.Condition(notify != "", "notify").after(upload) as upload_check:
+    with kfp.dsl.Condition(notify != "", "notify").after(upload,upload_2) as upload_check:
         notification_text = f"The ASR Tuning pipeline is completed."
         tune_notif = slack_notification_op(
             notification_text, channel=channel, cc=notify, thread_id=slack_thread
