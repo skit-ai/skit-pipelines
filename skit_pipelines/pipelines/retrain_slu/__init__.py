@@ -5,7 +5,9 @@ from skit_pipelines.components import (
     download_csv_from_s3_op,
     download_repo_op,
     fetch_tagged_dataset_op,
+    download_yaml_op,
     retrain_slu_from_repo_op,
+    upload2s3_op,
     slack_notification_op,
 )
 
@@ -13,7 +15,9 @@ UTTERANCES = pipeline_constants.UTTERANCES
 INTENT_Y = pipeline_constants.INTENT_Y
 BUCKET = pipeline_constants.BUCKET
 CSV_FILE = pipeline_constants.CSV_FILE
-
+CPU_NODE_LABEL = pipeline_constants.CPU_NODE_LABEL
+GPU_NODE_LABEL = pipeline_constants.GPU_NODE_LABEL
+NODESELECTOR_LABEL = pipeline_constants.POD_NODE_SELECTOR_LABEL
 
 @kfp.dsl.pipeline(
     name="SLU retraining Pipeline",
@@ -29,6 +33,8 @@ def retrain_slu(
     job_start_date: str = "",
     job_end_date: str = "",
     remove_intents: str = "",
+    alias_yaml_path: str = "",
+    initial_training: bool = False,
     use_previous_dataset: bool = True,
     epochs: int = 10,
     train_split_percent: int = 85,
@@ -44,6 +50,20 @@ def retrain_slu(
     .. _p_retrain_slu:
 
     Example payload to invoke via slack integrations:
+
+    A minimal example:
+        
+        @charon run retrain_slu
+
+        .. code-block:: python
+
+            {
+                "repo_name": "slu_repo_name",
+                "labelstudio_project_ids": "10,13"
+            }
+
+
+    A full available parameters example:
 
         @charon run retrain_slu
 
@@ -62,6 +82,20 @@ def retrain_slu(
                 "train_split_percent": 85,
                 "stratify": False,
                 "epochs": 10,
+            }
+
+
+    Training an SLU for first time example:
+
+        @charon run retrain_slu
+
+        .. code-block:: python
+
+            {
+                "repo_name": "slu_repo_name",
+                "repo_branch": "master",
+                "labelstudio_project_ids": "10,13",
+                "initial_training": true
             }
 
 
@@ -91,6 +125,9 @@ def retrain_slu(
 
     :param remove_intents: Comma separated list of intents to remove from dataset while training.
     :type remove_intents: str, optional
+
+    :param initial_training: Set to true only if you're training a model for the first time, defaults to False.
+    :type initial_training: bool, optional
 
     :param use_previous_dataset: Before retraining combines new dataset with last dataset the model was trained on, defaults to True.
     :type use_previous_dataset: bool, optional
@@ -139,31 +176,86 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
+    downloaded_alias_yaml_op = download_yaml_op(
+        git_host_name=pipeline_constants.GITHUB,
+        yaml_path=alias_yaml_path,
+    )
+
     retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_repo_op.outputs["repo"],
+        downloaded_alias_yaml_op.outputs["output"],
+        bucket=BUCKET,
+        repo_name=repo_name,
         branch=repo_branch,
         remove_intents=remove_intents,
         use_previous_dataset=use_previous_dataset,
         train_split_percent=train_split_percent,
         stratify=stratify,
         epochs=epochs,
+        initial_training=initial_training,
+        job_ids=job_ids,
+        labelstudio_project_ids=labelstudio_project_ids,
+        s3_paths=dataset_path,
     )
-    retrained_op.set_gpu_limit(1)
+    retrained_op.set_gpu_limit(1) \
+                .add_node_selector_constraint(label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL)
 
-    # TODO use namedtuple and return more information
-    # TODO return cicd pipeline url using gitlab api for manual trigger
-
-    notification_text = (
-        f"{repo_name} SLU has been retrained. New version - {retrained_op.output}"
+    # upload test set metrics.
+    upload_cf = upload2s3_op(
+        path_on_disk=retrained_op.outputs["output_classification_report"],
+        reference=repo_name,
+        file_type="test_classification_report",
+        bucket=BUCKET,
+        ext=".csv",
     )
+
+    upload_cm = upload2s3_op(
+        path_on_disk=retrained_op.outputs["output_confusion_matrix"],
+        reference=repo_name,
+        file_type="test_confusion_matrix",
+        bucket=BUCKET,
+        ext=".csv",
+    )
+    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_cf) as irr_check:
+        notification_text = f"Here's the IRR report."
+        code_block = f"aws s3 cp {upload_cf.output} ."
+        irr_notif = slack_notification_op(
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
+        )
+        irr_notif.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_cm) as cm_check:
+        notification_text = f"Here's the confusion matrix."
+        code_block = f"aws s3 cp {upload_cm.output} ."
+        cm_notif = slack_notification_op(
+            notification_text,
+            channel=channel,
+            cc=notify,
+            code_block=code_block,
+            thread_id=slack_thread,
+        )
+        cm_notif.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op):
+        notification_text = (f"{repo_name} SLU has been retrained")
         task_no_cache = slack_notification_op(
             notification_text,
             channel=channel,
             cc=notify,
-            # code_block=code_block,
             thread_id=slack_thread,
         )
         task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
