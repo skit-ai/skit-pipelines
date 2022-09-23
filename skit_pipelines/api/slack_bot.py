@@ -80,7 +80,7 @@ def make_run_requests(url_path, payload, access_token):
     return requests.post(url_path, json=payload, headers=headers)
 
 
-def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=None):
+def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=None, server_port: int = 9991):
     if "channel" not in payload:
         payload["channel"] = channel_id
         payload["slack_thread"] = message_ts
@@ -88,7 +88,7 @@ def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=
     payload["notify"] = (
         user if "notify" not in payload else f"{payload['notify']} ,{user}"
     )
-    url_path = f"http://localhost:9991/skit/pipelines/run/{pipeline_name}/"
+    url_path = f"http://localhost:{server_port}/skit/pipelines/run/{pipeline_name}/"
     access_token = read_access_token()
     res = make_run_requests(url_path, payload, access_token)
 
