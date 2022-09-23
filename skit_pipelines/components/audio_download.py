@@ -12,7 +12,6 @@ def download_audio_wavs(
 ) -> None:
     import os
 
-    os.system("apt update && apt -y install ffmpeg")
     os.system(
         f"./johnny -input {audio_data_path} -output {output_path} -rate {audio_sample_rate} -workers {audio_download_workers}"
     )
