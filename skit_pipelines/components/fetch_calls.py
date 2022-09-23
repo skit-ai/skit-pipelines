@@ -25,9 +25,11 @@ def fetch_calls(
     asr_provider: Optional[str] = None,
     states: Optional[str] = None,
     on_prem: bool = False,
+    remove_empty_audios: bool = True,
 ) -> str:
     import tempfile
-    import time
+    import time, os
+    import pandas as pd
 
     from loguru import logger
     from skit_calls import calls
@@ -36,8 +38,9 @@ def fetch_calls(
     from skit_calls.cli import process_date_filters, to_datetime, validate_date_ranges
 
     from skit_pipelines import constants as pipeline_constants
-    from skit_pipelines.components import upload2s3
+    from skit_pipelines.components import upload2s3, download_audio_wavs
     from skit_pipelines.utils.normalize import comma_sep_str
+
 
     utils.configure_logger(7)
     start_date = to_datetime(start_date)
@@ -84,6 +87,28 @@ def fetch_calls(
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
+
+    def remove_empty_audios(df: pd.DataFrame, df_path: str):
+        audios_dir_path = tempfile.mkdtemp()
+        download_audio_wavs(
+            audio_data_path=df_path,
+            output_path=audios_dir_path,
+            audio_sample_rate="8k",
+            audio_download_workers=30,
+        )
+        df = df[~df.audio_url.isna()]
+
+        # to keep the audio uuids as wav file name
+        df["audio_filename"] = df.audio_url.apply(lambda url: url.split("/")[-1].split(".")[0] + pipeline_constants.WAV_FILE)
+        # to get a set of valid wav audio files
+        unique_valid_audio_files = set(path_ for path_ in os.listdir(audios_dir_path))
+        df[df["audio_filename"].apply(
+            lambda file_name: file_name in unique_valid_audio_files
+        )].drop('audio_file_name', axis=1).to_csv(df_path, index=False)
+
+    if remove_empty_audios:
+        remove_empty_audios(df=maybe_df, df_path=file_path)
+
 
     s3_path = upload2s3(
         file_path,

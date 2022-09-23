@@ -26,7 +26,7 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
 ENV DISPLAY=:99
 
 RUN apt-get -y update\
-    && apt-get -y install libblas-dev liblapack-dev gfortran
+    && apt-get -y install libblas-dev liblapack-dev gfortran ffmpeg
 
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
@@ -41,7 +41,7 @@ RUN poetry install --no-dev
 
 COPY . .
 
-RUN poetry install --no-dev
+RUN pip install -U setuptools && poetry install --no-dev
 
 # install johnny.
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \

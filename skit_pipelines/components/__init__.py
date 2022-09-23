@@ -1,6 +1,6 @@
 from skit_pipelines.components.asr_transcription import audio_transcription_op
 from skit_pipelines.components.asr_tune import asr_tune_op
-from skit_pipelines.components.audio_download import download_audio_wavs_op
+from skit_pipelines.components.audio_download import download_audio_wavs_op, download_audio_wavs
 from skit_pipelines.components.auth import org_auth_token_op
 from skit_pipelines.components.download_from_s3 import (
     download_csv_from_s3_op,
