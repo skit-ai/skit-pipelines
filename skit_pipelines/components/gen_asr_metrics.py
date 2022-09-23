@@ -19,7 +19,9 @@ def gen_asr_metrics(
     from tabulate import tabulate
 
     from skit_pipelines import constants as pipeline_constants
-
+    def force_to_str(s):
+        if type(s) == str: return s
+        return "[]"
     pred_df = pd.read_csv(data_path)
 
     pred_df_columns = set(pred_df)
@@ -35,6 +37,8 @@ def gen_asr_metrics(
     logger.debug(
         f"Generating ASR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
     )
+
+    pred_df[pred_label_column] = pred_df[pred_label_column].apply(force_to_str)
 
     report, breakdown, ops = asr_report(
         pred_df[[pipeline_constants.ID, true_label_column]].rename(
