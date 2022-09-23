@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.39
+- [x] update: Asr tune pipeline enhancements (#70
+
 ## 0.2.38
 - [x] update: secrets + us ml metrics db env vars
 - [x] update: upload2s3 upload directories, asr_tune uploads directory and process true transcript in asr_eval_pipeline (#69)
