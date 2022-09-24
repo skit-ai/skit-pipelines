@@ -21,7 +21,7 @@ from skit_pipelines.components.gen_eer_metrics import gen_eer_metrics_op
 from skit_pipelines.components.gen_irr_metrics import gen_irr_metrics_op
 from skit_pipelines.components.get_preds_voicebot_xlmr import get_preds_voicebot_xlmr_op
 from skit_pipelines.components.merge_transcription import overlay_transcription_csv_op
-from skit_pipelines.components.modify_tog_entities import modify_entity_tog_dataset_op
+from skit_pipelines.components.modify_tagged_entities import modify_entity_dataset_op
 from skit_pipelines.components.notification import slack_notification_op
 from skit_pipelines.components.preprocess.create_features import create_features_op
 from skit_pipelines.components.preprocess.create_true_intent_column import (

@@ -17,12 +17,12 @@ def gen_eer_metrics(
 
     df = pd.read_csv(data_path)
 
-    truth_df = df[["data_id", "truth_entities_with_duckling"]]
-    pred_df = df[["data_id", "predicted_entities_with_modifications"]]
+    truth_df = df[["conversation_uuid", "truth_entities_with_duckling"]]
+    pred_df = df[["conversation_uuid", "predicted_entities_with_modifications"]]
 
     truth_df.rename(
         columns={
-            "data_id": "id",
+            "conversation_uuid": "id",
             "truth_entities_with_duckling": "entities",
         },
         inplace=True,
@@ -30,7 +30,7 @@ def gen_eer_metrics(
 
     pred_df.rename(
         columns={
-            "data_id": "id",
+            "conversation_uuid": "id",
             "predicted_entities_with_modifications": "entities",
         },
         inplace=True,
@@ -56,7 +56,15 @@ gen_eer_metrics_op = kfp.components.create_component_from_func(
 
 #     gen_eer_metrics(
 #         data_path="duck_4284.csv",
-#         output_path="op.csv",
+#         output_path="opt.csv",
+#         fp_path="fp.csv",
+#         fn_path="fn.csv",
+#         mm_path="mm.csv"
+#         )
+
+#     gen_eer_metrics(
+#         data_path="duck_l2.csv",
+#         output_path="opl.csv",
 #         fp_path="fp.csv",
 #         fn_path="fn.csv",
 #         mm_path="mm.csv"
