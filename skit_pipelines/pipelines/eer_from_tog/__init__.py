@@ -5,7 +5,7 @@ from skit_pipelines.components import (
     extract_info_from_dataset_op,
     fetch_tagged_dataset_op,
     gen_eer_metrics_op,
-    modify_entity_tog_dataset_op,
+    modify_entity_dataset_op,
     push_eer_to_postgres_op,
     slack_notification_op,
     upload2s3_op,
@@ -152,8 +152,11 @@ def eer_from_tog(
         "P0D"  # disables caching
     )
 
-    modified_df = modify_entity_tog_dataset_op(
-        tagged_data_op.outputs["output"], timezone=timezone
+    modified_df = modify_entity_dataset_op(
+        tagged_data_op.outputs["output"], 
+        tog_job_id=job_id,
+        labelstudio_project_id=labelstudio_project_id,
+        timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
@@ -276,6 +279,8 @@ def eer_from_tog(
         extracted_info = extract_info_from_dataset_op(
             tagged_data_op.outputs["output"],
             timezone=timezone,
+            tog_job_id=job_id,
+            labelstudio_project_id=labelstudio_project_id,
         ).after(tagged_data_op)
         extracted_info.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching

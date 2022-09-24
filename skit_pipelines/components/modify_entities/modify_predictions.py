@@ -27,11 +27,18 @@ def adjust_interval_values(interval_value: Dict):
         return interval_value
 
 
-def modify_predictions(df: pd.DataFrame):
+def modify_predictions(df: pd.DataFrame, ds_source: str):
+
+
+    if ds_source == "tog":
+        entity_column = "raw.entities"
+    elif ds_source == "labelstudio":
+        entity_column = "entities"
+
 
     for idx, predicted_entities in tqdm(
-        df["raw.entities"].iteritems(),
-        total=len(df["raw.entities"]),
+        df[entity_column].iteritems(),
+        total=len(df[entity_column]),
         desc="modifiying predicted entities structure.",
     ):
 

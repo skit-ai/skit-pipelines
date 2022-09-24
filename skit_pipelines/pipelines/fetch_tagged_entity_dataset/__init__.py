@@ -3,7 +3,7 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_tagged_dataset_op,
-    modify_entity_tog_dataset_op,
+    modify_entity_dataset_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -90,8 +90,11 @@ def fetch_tagged_entity_dataset(
         "P0D"  # disables caching
     )
 
-    modified_df = modify_entity_tog_dataset_op(
-        tagged_df.outputs["output"], timezone=timezone
+    modified_df = modify_entity_dataset_op(
+        tagged_df.outputs["output"], 
+        tog_job_id=job_id,
+        labelstudio_project_id=labelstudio_project_id,
+        timezone=timezone
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

@@ -1,7 +1,7 @@
 import json
 import traceback
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 import pandas as pd
 import pytz
@@ -125,46 +125,113 @@ def get_entities_from_duckling(text, reftime, dimensions, locale, timezone, pytz
     return value
 
 
-def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
+def extract_truth_in_labelstudio(labelstudio_tag_json):
+
+
+    tagged_entities = []
+
+    if not isinstance(labelstudio_tag_json, str):
+        return tagged_entities
+    
+    ls_entities = json.loads(labelstudio_tag_json)
+
+    for ls_entity in  ls_entities:
+
+        tagged_text = None
+        tagged_entity_type = None
+
+        tagged_text = ls_entity.get("text")
+        
+        if "labels" in ls_entity and isinstance(ls_entity["labels"], list) and ls_entity["labels"]:
+            tagged_entity_type = ls_entity["labels"][0].lower()
+
+
+        if tagged_text and tagged_text:
+
+            tagged_entities.append({
+                    "type": tagged_entity_type,
+                    "text": tagged_text,
+                })
+
+
+    return tagged_entities
+
+
+def extract_truth_in_tog(tog_tag_json):
+
+
+    tagged_entities = []
+
+    if not isinstance(tog_tag_json, str):
+        return tagged_entities
+
+    tog_entities = json.loads(tog_tag_json)
+
+    for tog_entity in tog_entities:
+
+        tagged_text = tog_entity.get("text")
+        tagged_entity_type = tog_entity.get("type", "").lower()
+
+        if tagged_text and tagged_text:
+
+            tagged_entities.append({
+                    "type": tagged_entity_type,
+                    "text": tagged_text,
+                })
+
+
+    return tagged_entities
+
+
+
+def modify_truth(df: pd.DataFrame, ds_source: str, timezone: str = "Asia/Kolkata"):
 
     pytz_tz = pytz.timezone(timezone)
+
+    if ds_source == "tog":
+        language = df.iloc[0]["raw.language"]
+        df["extracted_tagged_entities"] = df["tag"].apply(extract_truth_in_tog)
+    elif ds_source == "labelstudio":
+        language = df.iloc[0]["language"]
+        df["extracted_tagged_entities"] = df["ls_entities"].apply(extract_truth_in_labelstudio)
+
 
     for i, row in tqdm(
         df.iterrows(), total=len(df), desc="making duckling hits to get entity values."
     ):
 
         try:
-            tog_job_lang = row["raw.language"]
-
+            
             datetime_without_tz = parse(row["reftime"]).replace(tzinfo=None)
             reftime = pytz_tz.localize(datetime_without_tz)
             reftime = int(reftime.timestamp() * 1000)
 
-            if tog_job_lang == "en":
+            if "US" in language or timezone != "Asia/Kolkata":
+                locale = "en_US"
+            elif language.startswith("en"):
                 locale = "en_IN"
             else:
-                locale = tog_job_lang
+                locale = language
 
-            tags = json.loads(row["tag"])
+            tagged_entities = row["extracted_tagged_entities"]
 
-            if not tags:
+            if not tagged_entities:
                 continue
 
-            tagged_entities = []
+            value_added_tagged_entities = []
 
-            for tag in tags:
+            for tag in tagged_entities:
 
-                entity_type = tag["type"].lower()
+                entity_type = tag["type"]
                 entity_region_tagged_text = tag["text"]
-
-                if (not entity_type) or (not entity_region_tagged_text):
-                    continue
 
                 entity_region_tagged_text = entity_region_tagged_text.replace("~", "")
                 entity_value = None
 
                 if entity_type in ["date", "time", "datetime"]:
+                    
                     dimensions = [entity_type]
+
                     entity_value = get_entities_from_duckling(
                         entity_region_tagged_text,
                         reftime,
@@ -175,7 +242,7 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
                     )
                     if entity_value is None:
                         logger.warning(
-                            f"for {entity_region_tagged_text = } & {entity_type = } duckling predictions are not included."
+                            f"for {entity_region_tagged_text = } & {entity_type = } duckling predictions are not included because duckling returned None."
                         )
                         continue
 
@@ -186,7 +253,7 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
                     entity_value = entity_region_tagged_text
 
                 if entity_type and entity_value:
-                    tagged_entities.append(
+                    value_added_tagged_entities.append(
                         {
                             "type": entity_type,
                             "value": entity_value,
@@ -198,9 +265,9 @@ def modify_truth(df: pd.DataFrame, timezone: str = "Asia/Kolkata"):
             logger.error(e)
             logger.error(traceback.format_exc())
 
-        if tagged_entities:
+        if value_added_tagged_entities:
             df.loc[i, "truth_entities_with_duckling"] = json.dumps(
-                tagged_entities, ensure_ascii=False
+                value_added_tagged_entities, ensure_ascii=False
             )
 
     return df
