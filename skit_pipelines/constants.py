@@ -241,3 +241,7 @@ def GET_GITLAB_REPO_URL(
 
 
 GITHUB = "github.com"
+
+
+CLASSIFICATION_REPORT = "classification_report"
+FULL_CONFUSION_MATRIX = "full_confusion_matrix"
