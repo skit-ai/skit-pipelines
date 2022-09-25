@@ -23,7 +23,7 @@ def retrain_slu_from_repo(
     labelstudio_project_ids: str = "",
     s3_paths: str = "",
     output_classification_report_path: OutputPath(str),
-    output_confusion_matrix_path: OutputPath(str)
+    output_confusion_matrix_path: OutputPath(str),
 ):
     import os
     import subprocess
@@ -31,8 +31,8 @@ def retrain_slu_from_repo(
     from typing import Dict, List
 
     import git
-    import yaml
     import pandas as pd
+    import yaml
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
@@ -41,8 +41,8 @@ def retrain_slu_from_repo(
     )
     from skit_pipelines.utils.normalize import comma_sep_str
 
-
     execute_cli = lambda cmd: subprocess.run(cmd.split())
+
     def execute_cli_output(cmd):
         popen = subprocess.Popen(
             cmd.split(), stdout=subprocess.PIPE, universal_newlines=True
@@ -60,13 +60,15 @@ def retrain_slu_from_repo(
         "classification/datasets",
         dataset_type + pipeline_constants.CSV_FILE,
     )
-   
+
     def get_metrics_path(version, metric_type):
         metrics_dir = os.path.join("data", version, "classification/metrics")
         metrics_dir_walk = os.walk(metrics_dir)
         return os.path.join(
-            metrics_dir, next(metrics_dir_walk)[1][0], next(metrics_dir_walk)[1][0],
-            metric_type + pipeline_constants.CSV_FILE
+            metrics_dir,
+            next(metrics_dir_walk)[1][0],
+            next(metrics_dir_walk)[1][0],
+            metric_type + pipeline_constants.CSV_FILE,
         )
 
     remove_intents = comma_sep_str(remove_intents)
@@ -92,7 +94,9 @@ def retrain_slu_from_repo(
         )
 
     def alias_dataset(
-        dataset_path: str, alias_yaml_path: str, intent_col: str = pipeline_constants.TAG
+        dataset_path: str,
+        alias_yaml_path: str,
+        intent_col: str = pipeline_constants.TAG,
     ) -> None:
         reverse_alias_config = {}
         with open(alias_yaml_path, "r") as yaml_file:
@@ -106,9 +110,15 @@ def retrain_slu_from_repo(
             dataset_path, index=False
         )
 
-    data_info = f"{job_ids=}" if job_ids else '' + \
-                f" {labelstudio_project_ids=}" if labelstudio_project_ids else '' + \
-                f" {s3_paths=}" if s3_paths else ''
+    data_info = (
+        f"{job_ids=}"
+        if job_ids
+        else "" + f" {labelstudio_project_ids=}"
+        if labelstudio_project_ids
+        else "" + f" {s3_paths=}"
+        if s3_paths
+        else ""
+    )
 
     os.chdir(slu_path)
     repo = git.Repo(".")
@@ -164,15 +174,19 @@ def retrain_slu_from_repo(
             execute_cli(f"slu setup-dirs --version {current_slu_version}")
             execute_cli(f"dvc init")
             execute_cli(f"dvc add data")
-            execute_cli(f"dvc remote add -d s3remote s3://{bucket}/clients/{repo_name}/")
-            use_previous_dataset=False
+            execute_cli(
+                f"dvc remote add -d s3remote s3://{bucket}/clients/{repo_name}/"
+            )
+            use_previous_dataset = False
 
         elif not initial_training and os.path.exists("data.dvc"):
             execute_cli("dvc pull data.dvc")
 
         else:
-            raise ValueError(f"Discrepancy between setting {initial_training=} and repo containing data.dvc")
-        
+            raise ValueError(
+                f"Discrepancy between setting {initial_training=} and repo containing data.dvc"
+            )
+
         execute_cli(f"slu setup-dirs --version {new_slu_version}")
 
         current_train_path = create_dataset_path(
@@ -202,7 +216,7 @@ def retrain_slu_from_repo(
                     execute_cli(
                         f"slu combine-data --out {new_test_path} {current_test_path} {new_test_path}"
                     )
-            
+
         else:
             # don't split dataset - use all as train set
             if use_previous_dataset:
@@ -213,7 +227,7 @@ def retrain_slu_from_repo(
             else:
                 # copy new dataset to new path
                 execute_cli(f"cp {tagged_data_path} {new_train_path}")
-            # copy old test dataset to new path  
+            # copy old test dataset to new path
             execute_cli(f"cp {current_test_path} {new_test_path}")
 
         # alias and filter on new train set
@@ -229,21 +243,33 @@ def retrain_slu_from_repo(
         if os.path.exists(current_test_path):
             test_df = pd.read_csv(new_test_path)
             if "raw.intent" in test_df:
-                test_df.rename(columns={"raw.intent": "intent"}).to_csv(new_test_path, index=False)
+                test_df.rename(columns={"raw.intent": "intent"}).to_csv(
+                    new_test_path, index=False
+                )
 
             execute_cli(f"slu test --version {new_slu_version}")
-            if (classification_report_path := get_metrics_path(new_slu_version, pipeline_constants.CLASSIFICATION_REPORT)):
-                execute_cli(f"cp {classification_report_path} {output_classification_report_path}")
-            
-            if (confusion_matrix_path := get_metrics_path(new_slu_version, pipeline_constants.FULL_CONFUSION_MATRIX)):
-                execute_cli(f"cp {confusion_matrix_path} {output_confusion_matrix_path}")
+            if classification_report_path := get_metrics_path(
+                new_slu_version, pipeline_constants.CLASSIFICATION_REPORT
+            ):
+                execute_cli(
+                    f"cp {classification_report_path} {output_classification_report_path}"
+                )
+
+            if confusion_matrix_path := get_metrics_path(
+                new_slu_version, pipeline_constants.FULL_CONFUSION_MATRIX
+            ):
+                execute_cli(
+                    f"cp {confusion_matrix_path} {output_confusion_matrix_path}"
+                )
 
         execute_cli(f"git status")
         repo.git.add(all=True)
         execute_cli(f"git status")
-        
+
         repo.index.commit(
-            f"Trained {new_slu_version} model using {data_info}", author=author, committer=committer
+            f"Trained {new_slu_version} model using {data_info}",
+            author=author,
+            committer=committer,
         )
 
         execute_cli(f"slu release --version {new_slu_version} --auto")

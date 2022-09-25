@@ -65,18 +65,26 @@ def asr_tune(
             job_id=val_corpus_tog_job_ids,
         )
         true_label_column = "transctipt_y"
-        corpus_op = create_true_transcript_labels_op(corpus_op.outputs["output"], true_label_column)
+        corpus_op = create_true_transcript_labels_op(
+            corpus_op.outputs["output"], true_label_column
+        )
         corpus_op = process_true_transcript_labels_op(
             corpus_op.outputs["output"],
             true_label_column,
         )
-        corpus_op = extract_true_transcript_labels_to_txt_op(corpus_op.outputs["output"], true_label_column)
-        val_corpus_op = create_true_transcript_labels_op(val_corpus_op.outputs["output"], true_label_column)
+        corpus_op = extract_true_transcript_labels_to_txt_op(
+            corpus_op.outputs["output"], true_label_column
+        )
+        val_corpus_op = create_true_transcript_labels_op(
+            val_corpus_op.outputs["output"], true_label_column
+        )
         val_corpus_op = process_true_transcript_labels_op(
             val_corpus_op.outputs["output"],
             true_label_column,
         )
-        val_corpus_op = extract_true_transcript_labels_to_txt_op(val_corpus_op.outputs["output"], true_label_column)
+        val_corpus_op = extract_true_transcript_labels_to_txt_op(
+            val_corpus_op.outputs["output"], true_label_column
+        )
         tune_op = asr_tune_op(
             corpus_op.outputs["output"],
             val_corpus_op.outputs["output"],
@@ -125,7 +133,9 @@ def asr_tune(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", "notify").after(upload,upload_2) as upload_check:
+    with kfp.dsl.Condition(notify != "", "notify").after(
+        upload, upload_2
+    ) as upload_check:
         notification_text = f"The ASR Tuning pipeline is completed."
         tune_notif = slack_notification_op(
             notification_text, channel=channel, cc=notify, thread_id=slack_thread

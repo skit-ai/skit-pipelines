@@ -80,7 +80,14 @@ def make_run_requests(url_path, payload, access_token):
     return requests.post(url_path, json=payload, headers=headers)
 
 
-def run_pipeline(pipeline_name, payload, channel_id=None, message_ts=None, user=None, server_port: int = 9991):
+def run_pipeline(
+    pipeline_name,
+    payload,
+    channel_id=None,
+    message_ts=None,
+    user=None,
+    server_port: int = 9991,
+):
     if "channel" not in payload:
         payload["channel"] = channel_id
         payload["slack_thread"] = message_ts

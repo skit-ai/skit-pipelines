@@ -63,6 +63,14 @@ skit\_pipelines.components.download\_repo module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.download\_yaml module
+------------------------------------------------
+
+.. automodule:: skit_pipelines.components.download_yaml
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.eevee\_irr\_with\_yamls module
 ---------------------------------------------------------
 
@@ -151,10 +159,10 @@ skit\_pipelines.components.merge\_transcription module
    :undoc-members:
    :show-inheritance:
 
-skit\_pipelines.components.modify\_tog\_entities module
--------------------------------------------------------
+skit\_pipelines.components.modify\_tagged\_entities module
+----------------------------------------------------------
 
-.. automodule:: skit_pipelines.components.modify_tog_entities
+.. automodule:: skit_pipelines.components.modify_tagged_entities
    :members:
    :undoc-members:
    :show-inheritance:

@@ -153,10 +153,10 @@ def eer_from_tog(
     )
 
     modified_df = modify_entity_dataset_op(
-        tagged_data_op.outputs["output"], 
+        tagged_data_op.outputs["output"],
         tog_job_id=job_id,
         labelstudio_project_id=labelstudio_project_id,
-        timezone=timezone
+        timezone=timezone,
     )
     modified_df.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

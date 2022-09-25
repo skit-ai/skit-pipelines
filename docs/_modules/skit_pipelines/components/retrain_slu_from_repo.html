@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.35 documentation</title>
+        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.39 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.35 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.39 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.35 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.39 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -184,6 +184,8 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt.html">skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -248,9 +250,7 @@
         </div>
         <article role="main">
           <h1>Source code for skit_pipelines.components.retrain_slu_from_repo</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">distutils.util</span> <span class="kn">import</span> <span class="n">execute</span>
-
-<span class="kn">import</span> <span class="nn">kfp</span>
+<span></span><span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span><span class="p">,</span> <span class="n">OutputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
@@ -261,13 +261,22 @@
     <span class="n">s3_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">annotated_job_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">slu_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">intent_alias_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">remove_intents</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">use_previous_dataset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">train_split_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">85</span><span class="p">,</span>
     <span class="n">stratify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">initial_training</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">labelstudio_project_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">s3_paths</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">output_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">output_confusion_matrix_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+<span class="p">):</span>
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">import</span> <span class="nn">subprocess</span>
     <span class="kn">import</span> <span class="nn">tempfile</span>
@@ -275,6 +284,7 @@
 
     <span class="kn">import</span> <span class="nn">git</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="kn">import</span> <span class="nn">yaml</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
@@ -284,15 +294,6 @@
     <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
     <span class="n">execute_cli</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-    <span class="n">create_dataset_path</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">version</span><span class="p">,</span> <span class="n">dataset_type</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="p">,</span>
-        <span class="s2">&quot;classification/datasets&quot;</span><span class="p">,</span>
-        <span class="n">dataset_type</span> <span class="o">+</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">remove_intents</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">remove_intents</span><span class="p">)</span>
-    <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">execute_cli_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
         <span class="n">popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
@@ -302,34 +303,74 @@
             <span class="k">yield</span> <span class="n">stdout_line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">popen</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">return_code</span> <span class="o">=</span> <span class="n">popen</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
         <span class="k">if</span> <span class="n">return_code</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">(</span><span class="n">return_code</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+    <span class="n">create_dataset_path</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">version</span><span class="p">,</span> <span class="n">dataset_type</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">,</span>
+        <span class="s2">&quot;classification/datasets&quot;</span><span class="p">,</span>
+        <span class="n">dataset_type</span> <span class="o">+</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_metrics_path</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">metric_type</span><span class="p">):</span>
+        <span class="n">metrics_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="s2">&quot;classification/metrics&quot;</span><span class="p">)</span>
+        <span class="n">metrics_dir_walk</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">metrics_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">metrics_dir</span><span class="p">,</span>
+            <span class="nb">next</span><span class="p">(</span><span class="n">metrics_dir_walk</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="nb">next</span><span class="p">(</span><span class="n">metrics_dir_walk</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">metric_type</span> <span class="o">+</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">remove_intents</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">remove_intents</span><span class="p">)</span>
+    <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">get_slu_version</span><span class="p">():</span>
         <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">execute_cli_output</span><span class="p">(</span><span class="s2">&quot;poetry version -s&quot;</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">smol_version_bump</span><span class="p">(</span><span class="n">version</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">smol_version_bump</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="o">*</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">child</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">return</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">version</span> <span class="k">if</span> <span class="n">skip</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">filter_dataset</span><span class="p">(</span>
         <span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">remove_intents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">intent_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filtering: </span><span class="si">{</span><span class="n">dataset_path</span><span class="si">=}</span><span class="se">\n</span><span class="s2">while </span><span class="si">{</span><span class="n">remove_intents</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span>
         <span class="n">dataset</span><span class="p">[</span><span class="o">~</span><span class="n">dataset</span><span class="p">[</span><span class="n">intent_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">remove_intents</span><span class="p">)]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
             <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">alias_dataset</span><span class="p">(</span>
-        <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">alias_intents_config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+        <span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">alias_yaml_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">intent_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="n">reverse_alias_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">alias_yaml_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yaml_file</span><span class="p">:</span>
+            <span class="n">alias_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">map_to</span><span class="p">,</span> <span class="n">map_from_values</span> <span class="ow">in</span> <span class="n">alias_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">map_from</span> <span class="ow">in</span> <span class="n">map_from_values</span><span class="p">:</span>
+                <span class="n">reverse_alias_config</span><span class="p">[</span><span class="n">map_from</span><span class="p">]</span> <span class="o">=</span> <span class="n">map_to</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;aliasing: </span><span class="si">{</span><span class="n">dataset_path</span><span class="si">=}</span><span class="s2"> with config=</span><span class="si">{</span><span class="n">reverse_alias_config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="n">intent_col</span><span class="p">:</span> <span class="n">reverse_alias_config</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+            <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
-    <span class="c1"># TODO create slu alias-data command - not imp rn</span>
+    <span class="n">data_info</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">job_ids</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">labelstudio_project_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">labelstudio_project_ids</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">s3_paths</span><span class="si">=}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">s3_paths</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">slu_path</span><span class="p">)</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -377,9 +418,27 @@
 
         <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;pip install poetry -U&quot;</span><span class="p">)</span>
         <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;poetry install&quot;</span><span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
+
         <span class="n">current_slu_version</span> <span class="o">=</span> <span class="n">get_slu_version</span><span class="p">()</span>
-        <span class="n">new_slu_version</span> <span class="o">=</span> <span class="n">smol_version_bump</span><span class="p">(</span><span class="n">current_slu_version</span><span class="p">)</span>
+        <span class="n">new_slu_version</span> <span class="o">=</span> <span class="n">smol_version_bump</span><span class="p">(</span><span class="n">current_slu_version</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="n">initial_training</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu setup-dirs --version </span><span class="si">{</span><span class="n">current_slu_version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dvc init&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dvc add data&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;dvc remote add -d s3remote s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/clients/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">/&quot;</span>
+            <span class="p">)</span>
+            <span class="n">use_previous_dataset</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">initial_training</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">):</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Discrepancy between setting </span><span class="si">{</span><span class="n">initial_training</span><span class="si">=}</span><span class="s2"> and repo containing data.dvc&quot;</span>
+            <span class="p">)</span>
+
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu setup-dirs --version </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">current_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
@@ -409,10 +468,9 @@
                     <span class="n">execute_cli</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;slu combine-data --out </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">current_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="p">)</span>
-                <span class="c1"># apply filter on new test dataset</span>
-                <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># don&#39;t split dataset</span>
+            <span class="c1"># don&#39;t split dataset - use all as train set</span>
             <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
                 <span class="c1"># combine with older train dataset</span>
                 <span class="n">execute_cli</span><span class="p">(</span>
@@ -421,27 +479,55 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># copy new dataset to new path</span>
                 <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># apply filter on new train dataset</span>
-            <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
-        <span class="c1"># if alias then alias new train and new test set</span>
+            <span class="c1"># copy old test dataset to new path</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">current_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+        <span class="c1"># alias and filter on new train set</span>
+        <span class="n">alias_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
+        <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
+
+        <span class="c1"># apply filter on new test dataset</span>
+        <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
+        <span class="n">alias_dataset</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
+
+        <span class="c1"># training begins</span>
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu train --version </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2"> --epochs </span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">current_test_path</span><span class="p">):</span>
+            <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;raw.intent&quot;</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>
+                <span class="n">test_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw.intent&quot;</span><span class="p">:</span> <span class="s2">&quot;intent&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                    <span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu test --version </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">classification_report_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
+                <span class="n">new_slu_version</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CLASSIFICATION_REPORT</span>
+            <span class="p">):</span>
+                <span class="n">execute_cli</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">classification_report_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;After training untracked files:&quot;</span><span class="p">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">untracked_files</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">confusion_matrix_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
+                <span class="n">new_slu_version</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">FULL_CONFUSION_MATRIX</span>
+            <span class="p">):</span>
+                <span class="n">execute_cli</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">confusion_matrix_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
 
-        <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s2">&quot;config/&quot;</span><span class="p">])</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
+
         <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Trained </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2"> model&quot;</span><span class="p">,</span> <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span> <span class="n">committer</span><span class="o">=</span><span class="n">committer</span>
-        <span class="p">)</span>  <span class="c1"># TODO - add more info like dataset used and all</span>
+            <span class="sa">f</span><span class="s2">&quot;Trained </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2"> model using </span><span class="si">{</span><span class="n">data_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
+            <span class="n">committer</span><span class="o">=</span><span class="n">committer</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu release --version </span><span class="si">{</span><span class="n">new_slu_version</span><span class="si">}</span><span class="s2"> --auto&quot;</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">git</span><span class="o">.</span><span class="n">GitCommandError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: Given </span><span class="si">{</span><span class="n">branch</span><span class="si">=}</span><span class="s2"> doesn&#39;t exist in the repo&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">new_slu_version</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: Given </span><span class="si">{</span><span class="n">branch</span><span class="si">=}</span><span class="s2"> doesn&#39;t exist in the repo&quot;</span><span class="p">)</span></div>
 
 
 <span class="n">retrain_slu_from_repo_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>

@@ -19,9 +19,12 @@ def gen_asr_metrics(
     from tabulate import tabulate
 
     from skit_pipelines import constants as pipeline_constants
+
     def force_to_str(s):
-        if type(s) == str: return s
+        if type(s) == str:
+            return s
         return "[]"
+
     pred_df = pd.read_csv(data_path)
 
     pred_df_columns = set(pred_df)

@@ -127,38 +127,40 @@ def get_entities_from_duckling(text, reftime, dimensions, locale, timezone, pytz
 
 def extract_truth_in_labelstudio(labelstudio_tag_json):
 
-
     tagged_entities = []
 
     if not isinstance(labelstudio_tag_json, str):
         return tagged_entities
-    
+
     ls_entities = json.loads(labelstudio_tag_json)
 
-    for ls_entity in  ls_entities:
+    for ls_entity in ls_entities:
 
         tagged_text = None
         tagged_entity_type = None
 
         tagged_text = ls_entity.get("text")
-        
-        if "labels" in ls_entity and isinstance(ls_entity["labels"], list) and ls_entity["labels"]:
-            tagged_entity_type = ls_entity["labels"][0].lower()
 
+        if (
+            "labels" in ls_entity
+            and isinstance(ls_entity["labels"], list)
+            and ls_entity["labels"]
+        ):
+            tagged_entity_type = ls_entity["labels"][0].lower()
 
         if tagged_text and tagged_text:
 
-            tagged_entities.append({
+            tagged_entities.append(
+                {
                     "type": tagged_entity_type,
                     "text": tagged_text,
-                })
-
+                }
+            )
 
     return tagged_entities
 
 
 def extract_truth_in_tog(tog_tag_json):
-
 
     tagged_entities = []
 
@@ -174,14 +176,14 @@ def extract_truth_in_tog(tog_tag_json):
 
         if tagged_text and tagged_text:
 
-            tagged_entities.append({
+            tagged_entities.append(
+                {
                     "type": tagged_entity_type,
                     "text": tagged_text,
-                })
-
+                }
+            )
 
     return tagged_entities
-
 
 
 def modify_truth(df: pd.DataFrame, ds_source: str, timezone: str = "Asia/Kolkata"):
@@ -193,15 +195,16 @@ def modify_truth(df: pd.DataFrame, ds_source: str, timezone: str = "Asia/Kolkata
         df["extracted_tagged_entities"] = df["tag"].apply(extract_truth_in_tog)
     elif ds_source == "labelstudio":
         language = df.iloc[0]["language"]
-        df["extracted_tagged_entities"] = df["ls_entities"].apply(extract_truth_in_labelstudio)
-
+        df["extracted_tagged_entities"] = df["ls_entities"].apply(
+            extract_truth_in_labelstudio
+        )
 
     for i, row in tqdm(
         df.iterrows(), total=len(df), desc="making duckling hits to get entity values."
     ):
 
         try:
-            
+
             datetime_without_tz = parse(row["reftime"]).replace(tzinfo=None)
             reftime = pytz_tz.localize(datetime_without_tz)
             reftime = int(reftime.timestamp() * 1000)
@@ -229,7 +232,7 @@ def modify_truth(df: pd.DataFrame, ds_source: str, timezone: str = "Asia/Kolkata
                 entity_value = None
 
                 if entity_type in ["date", "time", "datetime"]:
-                    
+
                     dimensions = [entity_type]
 
                     entity_value = get_entities_from_duckling(

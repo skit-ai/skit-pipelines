@@ -4,11 +4,11 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     download_csv_from_s3_op,
     download_repo_op,
-    fetch_tagged_dataset_op,
     download_yaml_op,
+    fetch_tagged_dataset_op,
     retrain_slu_from_repo_op,
-    upload2s3_op,
     slack_notification_op,
+    upload2s3_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -18,6 +18,7 @@ CSV_FILE = pipeline_constants.CSV_FILE
 CPU_NODE_LABEL = pipeline_constants.CPU_NODE_LABEL
 GPU_NODE_LABEL = pipeline_constants.GPU_NODE_LABEL
 NODESELECTOR_LABEL = pipeline_constants.POD_NODE_SELECTOR_LABEL
+
 
 @kfp.dsl.pipeline(
     name="SLU retraining Pipeline",
@@ -52,7 +53,7 @@ def retrain_slu(
     Example payload to invoke via slack integrations:
 
     A minimal example:
-        
+
         @charon run retrain_slu
 
         .. code-block:: python
@@ -199,8 +200,9 @@ def retrain_slu(
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
     )
-    retrained_op.set_gpu_limit(1) \
-                .add_node_selector_constraint(label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL)
+    retrained_op.set_gpu_limit(1).add_node_selector_constraint(
+        label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
+    )
 
     # upload test set metrics.
     upload_cf = upload2s3_op(
@@ -222,7 +224,9 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_cf) as irr_check:
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+        upload_cf
+    ) as irr_check:
         notification_text = f"Here's the IRR report."
         code_block = f"aws s3 cp {upload_cf.output} ."
         irr_notif = slack_notification_op(
@@ -236,7 +240,9 @@ def retrain_slu(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(upload_cm) as cm_check:
+    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
+        upload_cm
+    ) as cm_check:
         notification_text = f"Here's the confusion matrix."
         code_block = f"aws s3 cp {upload_cm.output} ."
         cm_notif = slack_notification_op(
@@ -251,7 +257,7 @@ def retrain_slu(
         )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op):
-        notification_text = (f"{repo_name} SLU has been retrained")
+        notification_text = f"{repo_name} SLU has been retrained"
         task_no_cache = slack_notification_op(
             notification_text,
             channel=channel,

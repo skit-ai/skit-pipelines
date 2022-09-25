@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.modify_entities.duckling_inference - skit-pipelines 0.2.28 documentation</title>
+        <title>skit_pipelines.components.modify_entities.duckling_inference - skit-pipelines 0.2.39 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.28 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.39 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.28 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.39 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.irr_from_tog.html">Annotated Dataset Intent Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
@@ -183,6 +184,8 @@
 <li class="toctree-l5"><a class="reference internal" href="../../../../skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../../skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../../../../skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../../skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt.html">skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../../../../skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
@@ -250,7 +253,7 @@
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">pytz</span>
@@ -374,46 +377,116 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="modify_truth"><a class="viewcode-back" href="../../../../skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.modify_truth">[docs]</a><span class="k">def</span> <span class="nf">modify_truth</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="extract_truth_in_labelstudio"><a class="viewcode-back" href="../../../../skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.extract_truth_in_labelstudio">[docs]</a><span class="k">def</span> <span class="nf">extract_truth_in_labelstudio</span><span class="p">(</span><span class="n">labelstudio_tag_json</span><span class="p">):</span>
+
+    <span class="n">tagged_entities</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labelstudio_tag_json</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tagged_entities</span>
+
+    <span class="n">ls_entities</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">labelstudio_tag_json</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ls_entity</span> <span class="ow">in</span> <span class="n">ls_entities</span><span class="p">:</span>
+
+        <span class="n">tagged_text</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">tagged_entity_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">tagged_text</span> <span class="o">=</span> <span class="n">ls_entity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;labels&quot;</span> <span class="ow">in</span> <span class="n">ls_entity</span>
+            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ls_entity</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">ls_entity</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">tagged_entity_type</span> <span class="o">=</span> <span class="n">ls_entity</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">tagged_text</span> <span class="ow">and</span> <span class="n">tagged_text</span><span class="p">:</span>
+
+            <span class="n">tagged_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">tagged_entity_type</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">tagged_text</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tagged_entities</span></div>
+
+
+<div class="viewcode-block" id="extract_truth_in_tog"><a class="viewcode-back" href="../../../../skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.extract_truth_in_tog">[docs]</a><span class="k">def</span> <span class="nf">extract_truth_in_tog</span><span class="p">(</span><span class="n">tog_tag_json</span><span class="p">):</span>
+
+    <span class="n">tagged_entities</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tog_tag_json</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tagged_entities</span>
+
+    <span class="n">tog_entities</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tog_tag_json</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">tog_entity</span> <span class="ow">in</span> <span class="n">tog_entities</span><span class="p">:</span>
+
+        <span class="n">tagged_text</span> <span class="o">=</span> <span class="n">tog_entity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+        <span class="n">tagged_entity_type</span> <span class="o">=</span> <span class="n">tog_entity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">tagged_text</span> <span class="ow">and</span> <span class="n">tagged_text</span><span class="p">:</span>
+
+            <span class="n">tagged_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">tagged_entity_type</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">tagged_text</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tagged_entities</span></div>
+
+
+<div class="viewcode-block" id="modify_truth"><a class="viewcode-back" href="../../../../skit_pipelines.components.modify_entities.html#skit_pipelines.components.modify_entities.duckling_inference.modify_truth">[docs]</a><span class="k">def</span> <span class="nf">modify_truth</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ds_source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">):</span>
 
     <span class="n">pytz_tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ds_source</span> <span class="o">==</span> <span class="s2">&quot;tog&quot;</span><span class="p">:</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;raw.language&quot;</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;extracted_tagged_entities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">extract_truth_in_tog</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ds_source</span> <span class="o">==</span> <span class="s2">&quot;labelstudio&quot;</span><span class="p">:</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;language&quot;</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;extracted_tagged_entities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ls_entities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="n">extract_truth_in_labelstudio</span>
+        <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
         <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;making duckling hits to get entity values.&quot;</span>
     <span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">tog_job_lang</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;raw.language&quot;</span><span class="p">]</span>
 
             <span class="n">datetime_without_tz</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;reftime&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">reftime</span> <span class="o">=</span> <span class="n">pytz_tz</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">datetime_without_tz</span><span class="p">)</span>
             <span class="n">reftime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">reftime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">tog_job_lang</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;US&quot;</span> <span class="ow">in</span> <span class="n">language</span> <span class="ow">or</span> <span class="n">timezone</span> <span class="o">!=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">:</span>
+                <span class="n">locale</span> <span class="o">=</span> <span class="s2">&quot;en_US&quot;</span>
+            <span class="k">elif</span> <span class="n">language</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">):</span>
                 <span class="n">locale</span> <span class="o">=</span> <span class="s2">&quot;en_IN&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">locale</span> <span class="o">=</span> <span class="n">tog_job_lang</span>
+                <span class="n">locale</span> <span class="o">=</span> <span class="n">language</span>
 
-            <span class="n">tags</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">])</span>
+            <span class="n">tagged_entities</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;extracted_tagged_entities&quot;</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tagged_entities</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="n">tagged_entities</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">value_added_tagged_entities</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tagged_entities</span><span class="p">:</span>
 
-                <span class="n">entity_type</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">entity_type</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
                 <span class="n">entity_region_tagged_text</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">entity_type</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">entity_region_tagged_text</span><span class="p">):</span>
-                    <span class="k">continue</span>
 
                 <span class="n">entity_region_tagged_text</span> <span class="o">=</span> <span class="n">entity_region_tagged_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
                 <span class="n">entity_value</span> <span class="o">=</span> <span class="kc">None</span>
 
                 <span class="k">if</span> <span class="n">entity_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">]:</span>
+
                     <span class="n">dimensions</span> <span class="o">=</span> <span class="p">[</span><span class="n">entity_type</span><span class="p">]</span>
+
                     <span class="n">entity_value</span> <span class="o">=</span> <span class="n">get_entities_from_duckling</span><span class="p">(</span>
                         <span class="n">entity_region_tagged_text</span><span class="p">,</span>
                         <span class="n">reftime</span><span class="p">,</span>
@@ -424,7 +497,7 @@
                     <span class="p">)</span>
                     <span class="k">if</span> <span class="n">entity_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;for </span><span class="si">{</span><span class="n">entity_region_tagged_text</span> <span class="si">= }</span><span class="s2"> &amp; </span><span class="si">{</span><span class="n">entity_type</span> <span class="si">= }</span><span class="s2"> duckling predictions are not included.&quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;for </span><span class="si">{</span><span class="n">entity_region_tagged_text</span> <span class="si">= }</span><span class="s2"> &amp; </span><span class="si">{</span><span class="n">entity_type</span> <span class="si">= }</span><span class="s2"> duckling predictions are not included because duckling returned None.&quot;</span>
                         <span class="p">)</span>
                         <span class="k">continue</span>
 
@@ -435,7 +508,7 @@
                     <span class="n">entity_value</span> <span class="o">=</span> <span class="n">entity_region_tagged_text</span>
 
                 <span class="k">if</span> <span class="n">entity_type</span> <span class="ow">and</span> <span class="n">entity_value</span><span class="p">:</span>
-                    <span class="n">tagged_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">value_added_tagged_entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="p">{</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">entity_type</span><span class="p">,</span>
                             <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">entity_value</span><span class="p">,</span>
@@ -447,9 +520,9 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
 
-        <span class="k">if</span> <span class="n">tagged_entities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value_added_tagged_entities</span><span class="p">:</span>
             <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;truth_entities_with_duckling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
-                <span class="n">tagged_entities</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">value_added_tagged_entities</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>

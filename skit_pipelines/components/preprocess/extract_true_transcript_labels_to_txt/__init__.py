@@ -9,16 +9,19 @@ def extract_true_transcript_labels_to_txt(
 ):
     import pandas as pd
     from loguru import logger
+
     def get_str(s):
-        if type(s) == str: return s
+        if type(s) == str:
+            return s
         return ""
+
     train_df = pd.read_csv(data_path)
     contents = "\n".join(train_df[true_label_column].apply(get_str))
     logger.debug("extracting true transcripts:")
     logger.debug("\n".join(train_df[true_label_column].iloc[:10].apply(get_str)))
-    
-    with open(output_path,"wt") as f:
-        print(contents,file=f)
+
+    with open(output_path, "wt") as f:
+        print(contents, file=f)
 
 
 extract_true_transcript_labels_to_txt_op = kfp.components.create_component_from_func(
