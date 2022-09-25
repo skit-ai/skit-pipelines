@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.40
+- [x] update: force utterances as str in gen_asr_metrics component (#71)
+- [x] add: checks for 0 byte audios before uploading for tagging (#72)
+- [x] add: custom port support while testing pipeline
+- [x] update: Extending `retrain_slu` pipeline features (#73)
+- [x] fix: entity pipelines supporting labelstudio datasets (#74)
+
 ## 0.2.39
 - [x] update: Asr tune pipeline enhancements (#70
 
