@@ -108,7 +108,7 @@ def fetch_calls(
             df["audio_filename"].apply(
                 lambda file_name: file_name in unique_valid_audio_files
             )
-        ].drop("audio_file_name", axis=1).to_csv(df_path, index=False)
+        ].drop("audio_filename", axis=1).to_csv(df_path, index=False)
 
     if remove_empty_audios:
         remove_empty_audios(df=maybe_df, df_path=file_path)
