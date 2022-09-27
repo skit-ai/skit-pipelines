@@ -242,7 +242,7 @@ def retrain_slu_from_repo(
         execute_cli(f"slu train --version {new_slu_version} --epochs {epochs}")
         if os.path.exists(current_test_path):
             test_df = pd.read_csv(new_test_path)
-            if "raw.intent" in test_df:
+            if "raw.intent" in test_df and "intent" not in test_df:
                 test_df.rename(columns={"raw.intent": "intent"}).to_csv(
                     new_test_path, index=False
                 )
