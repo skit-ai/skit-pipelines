@@ -548,13 +548,13 @@ xxhash = "*"
 [package.extras]
 vision = ["Pillow (>=6.2.1)"]
 torch = ["torch"]
-tests = ["importlib-resources", "librosa", "Pillow (>=6.2.1)", "six (>=1.15.0,<1.16.0)", "Werkzeug (>=1.0.1)", "texttable (>=1.6.3)", "tldextract (>=3.1.0)", "requests-file (>=1.5.1)", "toml (>=0.10.1)", "seqeval", "scipy", "scikit-learn", "sacrebleu", "rouge-score (<0.0.7)", "mauve-text", "jiwer", "bert-score (>=0.3.6)", "sacremoses", "sentencepiece", "zstandard", "tldextract", "py7zr", "openpyxl", "nltk", "mwparserfromhell", "lz4", "lxml", "langdetect", "h5py", "conllu", "bs4", "transformers", "soundfile", "torchaudio", "torch", "tensorflow (>=2.3,!=2.6.0,!=2.6.1)", "s3fs (>=2021.11.1)", "rarfile (>=4.0)", "moto[s3,server] (==2.0.4)", "fsspec", "faiss-cpu (>=1.6.4)", "botocore (>=1.22.8)", "boto3 (>=1.19.8)", "aiobotocore (>=2.0.1)", "elasticsearch (<8.0.0)", "apache-beam (>=2.26.0)", "pytest-xdist", "pytest-datadir", "pytest", "absl-py"]
+tests = ["importlib-resources", "librosa", "Pillow (>=6.2.1)", "six (>=1.15.0,<1.16.0)", "Werkzeug (>=1.0.1)", "texttable (>=1.6.3)", "tldextract (>=3.1.0)", "requests-file (>=1.5.1)", "toml (>=0.10.1)", "seqeval", "scipy", "scikit-learn", "sacrebleu", "rouge-score (<0.0.7)", "mauve-text", "jiwer", "bert-score (>=0.3.6)", "sacremoses", "sentencepiece", "zstandard", "tldextract", "py7zr", "openpyxl", "nltk", "mwparserfromhell", "lz4", "lxml", "langdetect", "h5py", "conllu", "bs4", "transformers", "soundfile", "torchaudio", "torch", "tensorflow (>=2.3,!=2.6.0,!=2.6.1)", "s3fs (>=2021.11.1)", "rarfile (>=4.0)", "moto[server,s3] (==2.0.4)", "fsspec", "faiss-cpu (>=1.6.4)", "botocore (>=1.22.8)", "boto3 (>=1.19.8)", "aiobotocore (>=2.0.1)", "elasticsearch (<8.0.0)", "apache-beam (>=2.26.0)", "pytest-xdist", "pytest-datadir", "pytest", "absl-py"]
 tensorflow_gpu = ["tensorflow-gpu (>=2.2.0,!=2.6.0,!=2.6.1)"]
 tensorflow = ["tensorflow (>=2.2.0,!=2.6.0,!=2.6.1)"]
 s3 = ["s3fs", "botocore", "boto3", "fsspec"]
 quality = ["pyyaml (>=5.3.1)", "isort (>=5.0.0)", "flake8 (>=3.8.3)", "black (>=22.0,<23.0)"]
 docs = ["s3fs"]
-dev = ["importlib-resources", "pyyaml (>=5.3.1)", "isort (>=5.0.0)", "flake8 (>=3.8.3)", "black (>=22.0,<23.0)", "librosa", "Pillow (>=6.2.1)", "six (>=1.15.0,<1.16.0)", "Werkzeug (>=1.0.1)", "texttable (>=1.6.3)", "tldextract (>=3.1.0)", "requests-file (>=1.5.1)", "toml (>=0.10.1)", "seqeval", "scipy", "scikit-learn", "sacrebleu", "rouge-score (<0.0.7)", "mauve-text", "jiwer", "bert-score (>=0.3.6)", "sacremoses", "sentencepiece", "zstandard", "tldextract", "py7zr", "openpyxl", "nltk", "mwparserfromhell", "lz4", "lxml", "langdetect", "h5py", "conllu", "bs4", "transformers", "soundfile", "torchaudio", "torch", "tensorflow (>=2.3,!=2.6.0,!=2.6.1)", "s3fs (>=2021.11.1)", "rarfile (>=4.0)", "moto[s3,server] (==2.0.4)", "fsspec", "faiss-cpu (>=1.6.4)", "botocore (>=1.22.8)", "boto3 (>=1.19.8)", "aiobotocore (>=2.0.1)", "elasticsearch (<8.0.0)", "apache-beam (>=2.26.0)", "pytest-xdist", "pytest-datadir", "pytest", "absl-py"]
+dev = ["importlib-resources", "pyyaml (>=5.3.1)", "isort (>=5.0.0)", "flake8 (>=3.8.3)", "black (>=22.0,<23.0)", "librosa", "Pillow (>=6.2.1)", "six (>=1.15.0,<1.16.0)", "Werkzeug (>=1.0.1)", "texttable (>=1.6.3)", "tldextract (>=3.1.0)", "requests-file (>=1.5.1)", "toml (>=0.10.1)", "seqeval", "scipy", "scikit-learn", "sacrebleu", "rouge-score (<0.0.7)", "mauve-text", "jiwer", "bert-score (>=0.3.6)", "sacremoses", "sentencepiece", "zstandard", "tldextract", "py7zr", "openpyxl", "nltk", "mwparserfromhell", "lz4", "lxml", "langdetect", "h5py", "conllu", "bs4", "transformers", "soundfile", "torchaudio", "torch", "tensorflow (>=2.3,!=2.6.0,!=2.6.1)", "s3fs (>=2021.11.1)", "rarfile (>=4.0)", "moto[server,s3] (==2.0.4)", "fsspec", "faiss-cpu (>=1.6.4)", "botocore (>=1.22.8)", "boto3 (>=1.19.8)", "aiobotocore (>=2.0.1)", "elasticsearch (<8.0.0)", "apache-beam (>=2.26.0)", "pytest-xdist", "pytest-datadir", "pytest", "absl-py"]
 benchmarks = ["transformers (==3.0.2)", "torch (==1.6.0)", "tensorflow (==2.3.0)", "numpy (==1.18.5)"]
 audio = ["librosa"]
 apache-beam = ["apache-beam (>=2.26.0)"]
@@ -2892,7 +2892,7 @@ tqdm = "4.62.1"
 
 [[package]]
 name = "skit-labels"
-version = "0.3.28"
+version = "0.3.29"
 description = "Command line tool for interacting with labelled datasets at skit.ai."
 category = "main"
 optional = false
@@ -3844,7 +3844,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "c3a2ee2cc69b52f3b87d8bc586afb5fd6ebf229071bc7441a28f0cab03100a8d"
+content-hash = "b2752a97f3d0b5d7e3ad170e4dc399ad755b0151ce2381fcef2d9846ae98d3c8"
 
 [metadata.files]
 absl-py = [
@@ -5972,8 +5972,8 @@ skit-calls = [
     {file = "skit_calls-0.2.22-py3-none-any.whl", hash = "sha256:5e5cf62264edec56af4e76d0fe8818a70d95a11a0418ff108210a336597c15ba"},
 ]
 skit-labels = [
-    {file = "skit-labels-0.3.28.tar.gz", hash = "sha256:59c7de6de8e2ac8ce5801ee0bf3549c75b49bc8cf0d07322494d4965040ed1f4"},
-    {file = "skit_labels-0.3.28-py3-none-any.whl", hash = "sha256:3c82a5a3ce100128de245ce0b36573af3b06436b2eb7d4ce23291be8c6b51415"},
+    {file = "skit-labels-0.3.29.tar.gz", hash = "sha256:f2cd26209fbce31acb1e68f9f1095169a48f364c5d251cf2c83b5e3c6467ef91"},
+    {file = "skit_labels-0.3.29-py3-none-any.whl", hash = "sha256:001c78bd180133fa146fb2f459fa67ebfbfc01d0bf7367f3a4ca3981be94c5ec"},
 ]
 slack-bolt = [
     {file = "slack_bolt-1.14.0-py2.py3-none-any.whl", hash = "sha256:86acccfb668ae57d553126cfb46ab694893e71aa7d3f78af597464d4148b4fcb"},
