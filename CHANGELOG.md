@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.42
+- [x] update: skit-labels version bump 0.3.29
+- [x] update: discrepancy check for raw.intent and intent column for test dataset in retrain_slu_from_repo component
+
 ## 0.2.40
 - [x] update: force utterances as str in gen_asr_metrics component (#71)
 - [x] add: checks for 0 byte audios before uploading for tagging (#72)
