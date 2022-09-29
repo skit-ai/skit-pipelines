@@ -24,7 +24,7 @@ def retrain_slu_from_repo(
     s3_paths: str = "",
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
-):
+) -> str:
     import os
     import subprocess
     import tempfile
@@ -34,6 +34,7 @@ def retrain_slu_from_repo(
     import pandas as pd
     import yaml
     from loguru import logger
+    from datetime import datetime
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
@@ -42,27 +43,14 @@ def retrain_slu_from_repo(
     from skit_pipelines.utils.normalize import comma_sep_str
 
     execute_cli = lambda cmd: subprocess.run(cmd.split())
-
-    def execute_cli_output(cmd):
-        popen = subprocess.Popen(
-            cmd.split(), stdout=subprocess.PIPE, universal_newlines=True
-        )
-        for stdout_line in iter(popen.stdout.readline, ""):
-            yield stdout_line.rstrip("\n")
-        popen.stdout.close()
-        return_code = popen.wait()
-        if return_code:
-            raise subprocess.CalledProcessError(return_code, cmd)
-
-    create_dataset_path = lambda version, dataset_type: os.path.join(
-        "data",
-        version,
+    create_dataset_path = lambda data_type, dataset_type: os.path.join(
+        data_type,
         "classification/datasets",
         dataset_type + pipeline_constants.CSV_FILE,
     )
 
-    def get_metrics_path(version, metric_type):
-        metrics_dir = os.path.join("data", version, "classification/metrics")
+    def get_metrics_path(metric_type: str, data_type: str = pipeline_constants.DATA):
+        metrics_dir = os.path.join(data_type, "classification/metrics")
         metrics_dir_walk = os.walk(metrics_dir)
         return os.path.join(
             metrics_dir,
@@ -73,14 +61,6 @@ def retrain_slu_from_repo(
 
     remove_intents = comma_sep_str(remove_intents)
     no_annotated_job = False
-
-    def get_slu_version():
-        return next(execute_cli_output("poetry version -s"))
-
-    def smol_version_bump(version, skip=False):
-        *parent, child = version.split(".")
-        parent.append(str(int(child) + 1))
-        return version if skip else ".".join(parent)
 
     def filter_dataset(
         dataset_path: str,
@@ -163,17 +143,17 @@ def retrain_slu_from_repo(
         tagged_df.to_csv(tagged_data_path, index=False)
 
         repo.git.checkout(branch)
+        new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+        #checkout to new branch
+        repo.git.checkout("-b", new_branch)
 
         execute_cli("pip install poetry -U")
-        execute_cli("poetry install")
-
-        current_slu_version = get_slu_version()
-        new_slu_version = smol_version_bump(current_slu_version, skip=initial_training)
+        execute_cli("make install")
 
         if not os.path.exists("data.dvc") and initial_training:
-            execute_cli(f"slu setup-dirs --version {current_slu_version}")
-            execute_cli(f"dvc init")
-            execute_cli(f"dvc add data")
+            execute_cli("slu setup-dirs")
+            execute_cli("dvc init")
+            execute_cli(f"dvc add {pipeline_constants.DATA}")
             execute_cli(
                 f"dvc remote add -d s3remote s3://{bucket}/clients/{repo_name}/"
             )
@@ -181,40 +161,40 @@ def retrain_slu_from_repo(
 
         elif not initial_training and os.path.exists("data.dvc"):
             execute_cli("dvc pull data.dvc")
-
+            execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
+            execute_cli("slu setup-dirs")
+            
         else:
             raise ValueError(
                 f"Discrepancy between setting {initial_training=} and repo containing data.dvc"
             )
-
-        execute_cli(f"slu setup-dirs --version {new_slu_version}")
-
-        current_train_path = create_dataset_path(
-            current_slu_version, pipeline_constants.TRAIN
+        
+        old_train_path = create_dataset_path(
+            pipeline_constants.OLD_DATA, pipeline_constants.TRAIN
         )
-        current_test_path = create_dataset_path(
-            current_slu_version, pipeline_constants.TEST
+        old_test_path = create_dataset_path(
+            pipeline_constants.OLD_DATA, pipeline_constants.TEST
         )
 
-        new_train_path = create_dataset_path(new_slu_version, pipeline_constants.TRAIN)
-        new_test_path = create_dataset_path(new_slu_version, pipeline_constants.TEST)
+        new_train_path = create_dataset_path(pipeline_constants.DATA, pipeline_constants.TRAIN)
+        new_test_path = create_dataset_path(pipeline_constants.DATA, pipeline_constants.TEST)
 
         execute_cli("ls data")
 
         if train_split_percent < 100:
             # split into train and test
             execute_cli(
-                f"slu split-data --version {new_slu_version} --train-size {train_split_percent/100}{' --stratify' if stratify else ''} --file {tagged_data_path}"
+                f"slu split-data --train-size {train_split_percent/100}{' --stratify' if stratify else ''} --file {tagged_data_path}"
             )
             if use_previous_dataset:
                 # combine with older train set
                 execute_cli(
-                    f"slu combine-data --out {new_train_path} {current_train_path} {new_train_path}"
+                    f"slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
                 )
-                if os.path.exists(current_test_path):
+                if os.path.exists(old_test_path):
                     # combine with older test set
                     execute_cli(
-                        f"slu combine-data --out {new_test_path} {current_test_path} {new_test_path}"
+                        f"slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
                     )
 
         else:
@@ -222,13 +202,13 @@ def retrain_slu_from_repo(
             if use_previous_dataset:
                 # combine with older train dataset
                 execute_cli(
-                    f"slu combine-data --out {new_train_path} {current_train_path} {tagged_data_path}"
+                    f"slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
                 )
             else:
                 # copy new dataset to new path
                 execute_cli(f"cp {tagged_data_path} {new_train_path}")
             # copy old test dataset to new path
-            execute_cli(f"cp {current_test_path} {new_test_path}")
+            execute_cli(f"cp {old_test_path} {new_test_path}")
 
         # alias and filter on new train set
         alias_dataset(new_train_path, intent_alias_path)
@@ -239,44 +219,47 @@ def retrain_slu_from_repo(
         alias_dataset(new_test_path, intent_alias_path)
 
         # training begins
-        execute_cli(f"slu train --version {new_slu_version} --epochs {epochs}")
-        if os.path.exists(current_test_path):
+        execute_cli(f"slu train --epochs {epochs}")
+        if os.path.exists(old_test_path):
             test_df = pd.read_csv(new_test_path)
             if "raw.intent" in test_df and "intent" not in test_df:
                 test_df.rename(columns={"raw.intent": "intent"}).to_csv(
                     new_test_path, index=False
                 )
 
-            execute_cli(f"slu test --version {new_slu_version}")
+            execute_cli(f"slu test")
             if classification_report_path := get_metrics_path(
-                new_slu_version, pipeline_constants.CLASSIFICATION_REPORT
+                pipeline_constants.CLASSIFICATION_REPORT
             ):
                 execute_cli(
                     f"cp {classification_report_path} {output_classification_report_path}"
                 )
 
             if confusion_matrix_path := get_metrics_path(
-                new_slu_version, pipeline_constants.FULL_CONFUSION_MATRIX
+                pipeline_constants.FULL_CONFUSION_MATRIX
             ):
                 execute_cli(
                     f"cp {confusion_matrix_path} {output_confusion_matrix_path}"
                 )
 
+        if os.path.exists(pipeline_constants.OLD_DATA):
+            execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
+        
         execute_cli(f"git status")
         repo.git.add(all=True)
         execute_cli(f"git status")
 
         repo.index.commit(
-            f"Trained {new_slu_version} model using {data_info}",
+            f"Trained XLMR model using {data_info}",
             author=author,
             committer=committer,
         )
-
-        execute_cli(f"slu release --version {new_slu_version} --auto")
-
+        repo.git.push("origin", new_branch)
+        
     except git.GitCommandError as e:
         logger.error(f"{e}: Given {branch=} doesn't exist in the repo")
 
+    return new_branch
 
 retrain_slu_from_repo_op = kfp.components.create_component_from_func(
     retrain_slu_from_repo, base_image=pipeline_constants.BASE_IMAGE

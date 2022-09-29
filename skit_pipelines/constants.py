@@ -59,6 +59,8 @@ INTENT_Y = "intent_y"
 TRANSCRIPT_Y = "transcript_y"
 INTENT = "intent"
 STATE = "state"
+DATA = "data"
+OLD_DATA = "old_data"
 
 START_TOKEN = "<s>"
 END_TOKEN = "</s>"

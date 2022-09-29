@@ -9,6 +9,7 @@ from skit_pipelines.components import (
     retrain_slu_from_repo_op,
     slack_notification_op,
     upload2s3_op,
+    create_mr_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -78,7 +79,8 @@ def retrain_slu(
                 "labelstudio_project_ids": "10,13",
                 "job_start_date": "2022-08-01",
                 "job_end_date": "2022-09-19",
-                "remove_intents": "_confirm_,_oos_,audio_speech_unclear,ood"
+                "remove_intents": "_confirm_,_oos_,audio_speech_unclear,ood",
+                "alias_yaml_path": "intents/oppo/alias.yaml",
                 "use_previous_dataset": True,
                 "train_split_percent": 85,
                 "stratify": False,
@@ -127,6 +129,9 @@ def retrain_slu(
     :param remove_intents: Comma separated list of intents to remove from dataset while training.
     :type remove_intents: str, optional
 
+    :param alias_yaml_path: eevee's intent_report alias.yaml, refer docs `here <https://skit-ai.github.io/eevee/metrics/intents.html#aliasing>`_ . Upload your yaml to eevee-yamls repository `here <https://github.com/skit-ai/eevee-yamls>`_ & pass the relative path of the yaml from base of the repository.
+    :type alias_yaml_path: str, optional
+    
     :param initial_training: Set to true only if you're training a model for the first time, defaults to False.
     :type initial_training: bool, optional
 
@@ -224,9 +229,30 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
+    mr_response_op = create_mr_op(
+        git_host_name=pipeline_constants.GITLAB,
+        repo_name=repo_name,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+        target_branch="staging",
+        source_branch=retrained_op.outputs["output"],
+        mr_title="Auto retrained changes"
+    )
+
+    with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
+        notification_text = f"Finished training {repo_name} SLU, please review <{mr_response_op.output}|this MR>"
+        task_no_cache = slack_notification_op(
+            notification_text,
+            channel=channel,
+            cc=notify,
+            thread_id=slack_thread,
+        )
+        task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
+            "P0D"  # disables caching
+        )
+
     with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_cf
-    ) as irr_check:
+        upload_cf, upload_cm
+    ):
         notification_text = f"Here's the IRR report."
         code_block = f"aws s3 cp {upload_cf.output} ."
         irr_notif = slack_notification_op(
@@ -240,9 +266,6 @@ def retrain_slu(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_cm
-    ) as cm_check:
         notification_text = f"Here's the confusion matrix."
         code_block = f"aws s3 cp {upload_cm.output} ."
         cm_notif = slack_notification_op(
@@ -256,17 +279,6 @@ def retrain_slu(
             "P0D"  # disables caching
         )
 
-    with kfp.dsl.Condition(notify != "", "notify").after(retrained_op):
-        notification_text = f"{repo_name} SLU has been retrained"
-        task_no_cache = slack_notification_op(
-            notification_text,
-            channel=channel,
-            cc=notify,
-            thread_id=slack_thread,
-        )
-        task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
-        )
-
+    
 
 __all__ = ["retrain_slu"]
