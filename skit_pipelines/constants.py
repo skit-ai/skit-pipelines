@@ -228,7 +228,8 @@ SLACK_BOT_NAME = "charon" if REGION == AP_SOUTH_1 else "charon-us"
 
 # VCS
 GITLAB = "gitlab.com"
-GITLAB_SLU_PROJECT_PATH = "vernacularai/ai/clients"
+GITLAB_API_BASE = f"https://{GITLAB}/api/v4/projects/"
+GITLAB_SLU_PROJECT_PATH = "skit-ai/slu"
 GITLAB_USER = "automation"
 GITLAB_USER_EMAIL = "automation@skit.ai"
 GITLAB_PRIVATE_TOKEN = os.environ["PERSONAL_ACCESS_TOKEN_GITLAB"]
