@@ -47,6 +47,14 @@ skit\_pipelines.components.auth module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.create\_mr module
+--------------------------------------------
+
+.. automodule:: skit_pipelines.components.create_mr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.download\_from\_s3 module
 ----------------------------------------------------
 

@@ -2,6 +2,7 @@ import kfp
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
+    create_mr_op,
     download_csv_from_s3_op,
     download_repo_op,
     download_yaml_op,
@@ -9,7 +10,6 @@ from skit_pipelines.components import (
     retrain_slu_from_repo_op,
     slack_notification_op,
     upload2s3_op,
-    create_mr_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -131,7 +131,7 @@ def retrain_slu(
 
     :param alias_yaml_path: eevee's intent_report alias.yaml, refer docs `here <https://skit-ai.github.io/eevee/metrics/intents.html#aliasing>`_ . Upload your yaml to eevee-yamls repository `here <https://github.com/skit-ai/eevee-yamls>`_ & pass the relative path of the yaml from base of the repository.
     :type alias_yaml_path: str, optional
-    
+
     :param initial_training: Set to true only if you're training a model for the first time, defaults to False.
     :type initial_training: bool, optional
 
@@ -235,7 +235,7 @@ def retrain_slu(
         project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
         target_branch="staging",
         source_branch=retrained_op.outputs["output"],
-        mr_title="Auto retrained changes"
+        mr_title="Auto retrained changes",
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
@@ -279,6 +279,5 @@ def retrain_slu(
             "P0D"  # disables caching
         )
 
-    
 
 __all__ = ["retrain_slu"]

@@ -28,13 +28,13 @@ def retrain_slu_from_repo(
     import os
     import subprocess
     import tempfile
+    from datetime import datetime
     from typing import Dict, List
 
     import git
     import pandas as pd
     import yaml
     from loguru import logger
-    from datetime import datetime
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
@@ -144,7 +144,7 @@ def retrain_slu_from_repo(
 
         repo.git.checkout(branch)
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
-        #checkout to new branch
+        # checkout to new branch
         repo.git.checkout("-b", new_branch)
 
         execute_cli("pip install poetry -U")
@@ -163,12 +163,12 @@ def retrain_slu_from_repo(
             execute_cli("dvc pull data.dvc")
             execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
             execute_cli("slu setup-dirs")
-            
+
         else:
             raise ValueError(
                 f"Discrepancy between setting {initial_training=} and repo containing data.dvc"
             )
-        
+
         old_train_path = create_dataset_path(
             pipeline_constants.OLD_DATA, pipeline_constants.TRAIN
         )
@@ -176,8 +176,12 @@ def retrain_slu_from_repo(
             pipeline_constants.OLD_DATA, pipeline_constants.TEST
         )
 
-        new_train_path = create_dataset_path(pipeline_constants.DATA, pipeline_constants.TRAIN)
-        new_test_path = create_dataset_path(pipeline_constants.DATA, pipeline_constants.TEST)
+        new_train_path = create_dataset_path(
+            pipeline_constants.DATA, pipeline_constants.TRAIN
+        )
+        new_test_path = create_dataset_path(
+            pipeline_constants.DATA, pipeline_constants.TEST
+        )
 
         execute_cli("ls data")
 
@@ -244,7 +248,7 @@ def retrain_slu_from_repo(
 
         if os.path.exists(pipeline_constants.OLD_DATA):
             execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
-        
+
         execute_cli(f"git status")
         repo.git.add(all=True)
         execute_cli(f"git status")
@@ -255,11 +259,12 @@ def retrain_slu_from_repo(
             committer=committer,
         )
         repo.git.push("origin", new_branch)
-        
+
     except git.GitCommandError as e:
         logger.error(f"{e}: Given {branch=} doesn't exist in the repo")
 
     return new_branch
+
 
 retrain_slu_from_repo_op = kfp.components.create_component_from_func(
     retrain_slu_from_repo, base_image=pipeline_constants.BASE_IMAGE

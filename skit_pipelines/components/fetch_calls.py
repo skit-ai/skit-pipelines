@@ -98,7 +98,7 @@ def fetch_calls(
         )
         if not df.size:
             raise ValueError("No calls found for the above parameters")
-        
+
         df = df[~df.audio_url.isna()]
 
         # to keep the audio uuids as wav file name

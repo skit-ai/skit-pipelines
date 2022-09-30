@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.retrain_slu - skit-pipelines 0.2.39 documentation</title>
+        <title>skit_pipelines.pipelines.retrain_slu - skit-pipelines 0.2.43 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.39 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.39 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -261,6 +261,7 @@
     <span class="n">retrain_slu_from_repo_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">upload2s3_op</span><span class="p">,</span>
+    <span class="n">create_mr_op</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">UTTERANCES</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">UTTERANCES</span>
@@ -330,7 +331,8 @@
 <span class="sd">                &quot;labelstudio_project_ids&quot;: &quot;10,13&quot;,</span>
 <span class="sd">                &quot;job_start_date&quot;: &quot;2022-08-01&quot;,</span>
 <span class="sd">                &quot;job_end_date&quot;: &quot;2022-09-19&quot;,</span>
-<span class="sd">                &quot;remove_intents&quot;: &quot;_confirm_,_oos_,audio_speech_unclear,ood&quot;</span>
+<span class="sd">                &quot;remove_intents&quot;: &quot;_confirm_,_oos_,audio_speech_unclear,ood&quot;,</span>
+<span class="sd">                &quot;alias_yaml_path&quot;: &quot;intents/oppo/alias.yaml&quot;,</span>
 <span class="sd">                &quot;use_previous_dataset&quot;: True,</span>
 <span class="sd">                &quot;train_split_percent&quot;: 85,</span>
 <span class="sd">                &quot;stratify&quot;: False,</span>
@@ -379,6 +381,9 @@
 <span class="sd">    :param remove_intents: Comma separated list of intents to remove from dataset while training.</span>
 <span class="sd">    :type remove_intents: str, optional</span>
 
+<span class="sd">    :param alias_yaml_path: eevee&#39;s intent_report alias.yaml, refer docs `here &lt;https://skit-ai.github.io/eevee/metrics/intents.html#aliasing&gt;`_ . Upload your yaml to eevee-yamls repository `here &lt;https://github.com/skit-ai/eevee-yamls&gt;`_ &amp; pass the relative path of the yaml from base of the repository.</span>
+<span class="sd">    :type alias_yaml_path: str, optional</span>
+<span class="sd">    </span>
 <span class="sd">    :param initial_training: Set to true only if you&#39;re training a model for the first time, defaults to False.</span>
 <span class="sd">    :type initial_training: bool, optional</span>
 
@@ -476,9 +481,30 @@
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
+    <span class="n">mr_response_op</span> <span class="o">=</span> <span class="n">create_mr_op</span><span class="p">(</span>
+        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
+        <span class="n">target_branch</span><span class="o">=</span><span class="s2">&quot;staging&quot;</span><span class="p">,</span>
+        <span class="n">source_branch</span><span class="o">=</span><span class="n">retrained_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">mr_title</span><span class="o">=</span><span class="s2">&quot;Auto retrained changes&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">retrained_op</span><span class="p">,</span> <span class="n">mr_response_op</span><span class="p">):</span>
+        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Finished training </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> SLU, please review &lt;</span><span class="si">{</span><span class="n">mr_response_op</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2">|this MR&gt;&quot;</span>
+        <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
+            <span class="n">notification_text</span><span class="p">,</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+            <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
+            <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+        <span class="p">)</span>
+
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;slack_notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
-        <span class="n">upload_cf</span>
-    <span class="p">)</span> <span class="k">as</span> <span class="n">irr_check</span><span class="p">:</span>
+        <span class="n">upload_cf</span><span class="p">,</span> <span class="n">upload_cm</span>
+    <span class="p">):</span>
         <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the IRR report.&quot;</span>
         <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_cf</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
         <span class="n">irr_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
@@ -492,9 +518,6 @@
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;slack_notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span>
-        <span class="n">upload_cm</span>
-    <span class="p">)</span> <span class="k">as</span> <span class="n">cm_check</span><span class="p">:</span>
         <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here&#39;s the confusion matrix.&quot;</span>
         <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">upload_cm</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
         <span class="n">cm_notif</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
@@ -506,20 +529,9 @@
         <span class="p">)</span>
         <span class="n">cm_notif</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-        <span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">retrained_op</span><span class="p">):</span>
-        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> SLU has been retrained&quot;</span>
-        <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
-            <span class="n">notification_text</span><span class="p">,</span>
-            <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-            <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
-            <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
 
+    
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;retrain_slu&quot;</span><span class="p">]</span>
 </pre></div>

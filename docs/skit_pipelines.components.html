@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.modify_entities package" href="skit_pipelines.components.modify_entities.html" /><link rel="prev" title="skit_pipelines.api.models package" href="skit_pipelines.api.models.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components package - skit-pipelines 0.2.40 documentation</title>
+        <title>skit_pipelines.components package - skit-pipelines 0.2.43 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.40 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.40 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -394,6 +394,25 @@
 <dt class="sig sig-object py" id="skit_pipelines.components.auth.org_auth_token_op">
 <span class="sig-name descname"><span class="pre">org_auth_token_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.auth.org_auth_token_op" title="Permalink to this definition">#</a></dt>
 <dd><p>Org auth token</p>
+</dd></dl>
+
+</section>
+<section id="module-skit_pipelines.components.create_mr">
+<span id="skit-pipelines-components-create-mr-module"></span><h2>skit_pipelines.components.create_mr module<a class="headerlink" href="#module-skit_pipelines.components.create_mr" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.create_mr.create_mr">
+<span class="sig-name descname"><span class="pre">create_mr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">git_host_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_branch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_branch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mr_title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/create_mr.html#create_mr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.create_mr.create_mr" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.create_mr.create_mr_op">
+<span class="sig-name descname"><span class="pre">create_mr_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">git_host_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mr_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.create_mr.create_mr_op" title="Permalink to this definition">#</a></dt>
+<dd><p>Create mr</p>
 </dd></dl>
 
 </section>
@@ -736,7 +755,12 @@ Send a message on any channel.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo">
 <span class="sig-name descname"><span class="pre">retrain_slu_from_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotated_job_data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slu_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intent_alias_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_intents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_previous_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_split_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_classification_report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_confusion_matrix_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/retrain_slu_from_repo.html#retrain_slu_from_repo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo_op">
@@ -819,6 +843,12 @@ Send a message on any channel.</p>
 <dt class="sig sig-object py" id="skit_pipelines.components.create_features_op">
 <span class="sig-name descname"><span class="pre">create_features_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'train'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.create_features_op" title="Permalink to this definition">#</a></dt>
 <dd><p>Create features</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.create_mr_op">
+<span class="sig-name descname"><span class="pre">create_mr_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">git_host_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mr_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.create_mr_op" title="Permalink to this definition">#</a></dt>
+<dd><p>Create mr</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1089,6 +1119,7 @@ Send a message on any channel.</p>
 <li><a class="reference internal" href="#module-skit_pipelines.components.asr_tune">skit_pipelines.components.asr_tune module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.components.audio_download">skit_pipelines.components.audio_download module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.components.auth">skit_pipelines.components.auth module</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.components.create_mr">skit_pipelines.components.create_mr module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.components.download_from_s3">skit_pipelines.components.download_from_s3 module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.components.download_repo">skit_pipelines.components.download_repo module</a></li>
 <li><a class="reference internal" href="#module-skit_pipelines.components.download_yaml">skit_pipelines.components.download_yaml module</a></li>
