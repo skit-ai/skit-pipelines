@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.43
+- [x] update: `retrain_slu` pipeline changes to align with new Deployment CI/CD for SLU (#76)
+- [x] add: raise exception when no calls found/csv empty (#75)
+
 ## 0.2.42
 - [x] update: skit-labels version bump 0.3.29
 - [x] update: discrepancy check for raw.intent and intent column for test dataset in retrain_slu_from_repo component
