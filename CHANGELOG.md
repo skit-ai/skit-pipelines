@@ -1,4 +1,7 @@
 # Changelog
+
+## 0.2.45
+- [x] fix: training pipeline bug
 ## 0.2.44
 - [x] update: gitlab token secret
 
