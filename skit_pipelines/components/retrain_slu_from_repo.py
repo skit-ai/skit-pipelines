@@ -224,12 +224,15 @@ def retrain_slu_from_repo(
 
         # training begins
         execute_cli(f"slu train --epochs {epochs}")
-        if os.path.exists(old_test_path):
+        if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
-            if "raw.intent" in test_df and "intent" not in test_df:
-                test_df.rename(columns={"raw.intent": "intent"}).to_csv(
-                    new_test_path, index=False
-                )
+            if "intent" not in test_df: #TODO: remove on phase 2 cicd release
+                if "raw.intent" in test_df:
+                    test_df.rename(columns={"raw.intent": "intent"}).to_csv(
+                        new_test_path, index=False
+                    )
+                else:
+                    test_df["intent"] = []
 
             execute_cli(f"slu test")
             if classification_report_path := get_metrics_path(
@@ -248,7 +251,10 @@ def retrain_slu_from_repo(
 
         if os.path.exists(pipeline_constants.OLD_DATA):
             execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
-
+        
+        execute_cli("dvc add data")
+        execute_cli("dvc push data")
+        
         execute_cli(f"git status")
         repo.git.add(all=True)
         execute_cli(f"git status")
