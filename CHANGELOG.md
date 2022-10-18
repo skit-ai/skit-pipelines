@@ -1,4 +1,6 @@
 # Changelog
+## 0.2.44
+- [x] update: gitlab token secret
 
 ## 0.2.43
 - [x] update: `retrain_slu` pipeline changes to align with new Deployment CI/CD for SLU (#76)
