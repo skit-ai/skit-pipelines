@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.46
+- [x] update: for pipeines using `fetch_calls` component, call_type defaults to "inbound" and "outbound" both
+- [x] update: skit-calls version bump to 0.2.23 
+
 ## 0.2.45
 - [x] fix: training pipeline bug
 ## 0.2.44
