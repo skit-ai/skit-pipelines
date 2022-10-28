@@ -29,7 +29,7 @@ def fetch_n_tag_calls(
     states: str = "",
     reported: bool = False,
     call_quantity: int = 200,
-    call_type: str = "INBOUND",
+    call_type: str = "",
     start_date_offset: int = 0,
     end_date_offset: int = 0,
     start_time_offset: int = 0,
@@ -135,7 +135,7 @@ def fetch_n_tag_calls(
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
-    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "inbound"
+    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
     :type call_type: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""

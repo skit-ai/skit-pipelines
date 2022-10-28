@@ -59,7 +59,7 @@ def fetch_calls(
     if not call_quantity:
         call_quantity = const.DEFAULT_CALL_QUANTITY
     if not call_type:
-        call_type = const.INBOUND
+        call_type = [const.INBOUND, const.OUTBOUND]
     if not ignore_callers:
         ignore_callers = const.DEFAULT_IGNORE_CALLERS_LIST
 

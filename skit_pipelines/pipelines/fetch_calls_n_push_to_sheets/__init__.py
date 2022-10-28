@@ -29,7 +29,7 @@ def fetch_calls_n_push_to_sheets(
     end_time_offset: int = 0,
     reported: bool = False,
     call_quantity: int = 200,
-    call_type: str = "INBOUND",
+    call_type: str = "",
     sheet_id: str = "",
     notify: str = "",
     channel: str = "",

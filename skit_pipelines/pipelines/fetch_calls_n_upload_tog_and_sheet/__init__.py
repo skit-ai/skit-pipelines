@@ -35,7 +35,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     reported: bool = False,
     states: str = "",
     call_quantity: int = 200,
-    call_type: str = "INBOUND",
+    call_type: str = "",
     sheet_id: str = "",
     notify: str = "",
     channel: str = "",
@@ -121,7 +121,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
-    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to "inbound"
+    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to "inbound and outbound" both
     :type call_type: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""
