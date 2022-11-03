@@ -12,13 +12,22 @@
 
 You can test out components via pytest (recommended) or atleast build them interactively on ipython.
 
-To develop locally, **always have an image built first** which will serve as `base image` to run the pipeline in this case. `make dev tag=<feature_x_tag>` would help you do this. It'll build an image and start the pipelines server. Now from next time onwards you can do just `make dev` and it'll automatically pick up last tagged image you had as `base image` and start the server. Whenever you'd again like to have a new image built and have the pipelines use that, run `make dev tag=<some_other_feature_tag>` and from there on new tag will be picked up. Here we are using a mono-image setup for pipelines.
+To develop locally, **always have an image built first** which will serve as `base image` to run the pipeline in this case. `make dev tag=<feature_x_tag>` would help you do this. It'll build an image and start the pipelines server. Now from next time onwards you can do just `make dev` and it'll automatically pick up last tagged image you had as `base image` and start the server, so for any pipeline/component code level changes you won't have to create a new tag and `make dev` will take care till starting the server. Whenever you'd again like to have a new image built and have the pipelines use that, run `make dev tag=<some_other_feature_tag>` and from there on new tag will be picked up. Here we are using a mono-image setup for pipelines.
 
 Once server starts then one can test a pipeline by doing:
  ```bash
  task run_pipeline --pipeline-name=<your_pipeline_name> --params-file=<json_file_path_for_pipeline_params>
  ```
 One can do `task run_pipeline -h` to know more.
+
+**Do not** create tags for development and testing purposes.
+
+
+## Breaking changes
+Whenever a breaking change happens while developing, you'll have to build the image with a new tag e.g `make dev tag=<new_feature>`
+
+- Changing schema of pipelines or components.
+- Server code changes: Things that modify the APIs, slack command parsing etc.
 
 ### Workflow YAMLs 
 Running `make pipes`  will build the pipeline yamls in the `build/` directory which can be used to upload for a new official pipeline release in Kubeflow.
