@@ -57,8 +57,8 @@ def fetch_tagged_dataset(
             end_date_offset=end_date_offset,
         )
 
-    if job_id:
-        job_ids = comma_sep_str(job_id)
+    if job_id or project_id:
+        job_ids = comma_sep_str(job_id or project_id) #tog or labelstudio
         for job_id in job_ids:
             df_path, _ = download_dataset_from_db(
                 job_id=int(job_id),
@@ -70,21 +70,10 @@ def fetch_tagged_dataset(
                 port=port,
                 password=password,
                 user=user,
+                db=const.LABELSTUIO_DB if project_id else "tog",
             )
             df_paths.append(df_path)
-
-    elif project_id:
-        project_ids = comma_sep_str(project_id)
-        for project_id in project_ids:
-            df_path, _ = asyncio.run(
-                download_dataset_from_labelstudio(
-                    url=pipeline_constants.LABELSTUDIO_SVC,
-                    token=pipeline_constants.LABELSTUDIO_TOKEN,
-                    project_id=int(project_id),
-                )
-            )
-            df_paths.append(df_path)
-
+        
     else:
         if not empty_possible:
             raise ValueError("Either job_id or project_id must be provided")
