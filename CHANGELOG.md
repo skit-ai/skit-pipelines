@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.48
+- [x] update: single function handling both tog and labelstudio data fetching - skit-labels version bump
+- [x] update: skit-calls version bump to 0.2.24
+
 ## 0.2.47
 - [x] fix: call_type bug for inbound/outbound only
 - [x] fix: downgrade google-auth-oauthlib to 0.4.6 (#77)
