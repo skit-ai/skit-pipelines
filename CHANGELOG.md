@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.50
+- [x] add: fetch_tagged_data_from_labelstore pipeline (#79)
+- [x] fix: intent column placeholder for slu train pipeline
+
 ## 0.2.49
 - [x] fix: upstream changes made by fetch_tagged_dataset component (#78)
 

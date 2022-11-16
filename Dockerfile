@@ -41,7 +41,7 @@ RUN poetry install --no-dev
 
 COPY . .
 
-RUN pip install -U setuptools && poetry install --no-dev
+RUN pip install -U setuptools poetry && poetry install --no-dev
 
 # install johnny.
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
