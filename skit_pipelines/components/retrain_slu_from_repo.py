@@ -232,7 +232,7 @@ def retrain_slu_from_repo(
                         new_test_path, index=False
                     )
                 else:
-                    test_df["intent"] = []
+                    test_df["intent"] = ""
 
             execute_cli(f"slu test")
             if classification_report_path := get_metrics_path(
