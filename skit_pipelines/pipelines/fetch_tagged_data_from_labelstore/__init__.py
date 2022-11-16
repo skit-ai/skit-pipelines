@@ -9,8 +9,8 @@ from skit_pipelines.components import (
 
 
 @kfp.dsl.pipeline(
-    name="Fetch and push for calls to gogole sheets pipeline",
-    description="fetches calls from production db with respective arguments and uploads calls to google sheets for Call tagging",
+    name="Fetch annotated data from label store",
+    description="A pipeline aimed at querying intent, entity, and transcriptions that happen across Skit",
 )
 def fetch_tagged_data_from_labelstore(
     flow_id: str,
@@ -22,6 +22,7 @@ def fetch_tagged_data_from_labelstore(
     slack_thread: str = "",
 ):
     """
+    A pipeline aimed at querying intent, entity, and transcriptions that happen across Skit
 
     .. _p_fetch_tagged_data_from_labelstore:
 
@@ -58,7 +59,6 @@ def fetch_tagged_data_from_labelstore(
 
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: float, optional
-
     """
     tagged_df = fetch_tagged_data_label_store_op(
         flow_id=flow_id, start_date=start_date, end_date=end_date, limit=limit
@@ -97,4 +97,4 @@ def fetch_tagged_data_from_labelstore(
         )
 
 
-__all__ = ["run_fetch_iet_tagged_data"]
+__all__ = ["run_fetch_tagged_data_from_labelstore"]
