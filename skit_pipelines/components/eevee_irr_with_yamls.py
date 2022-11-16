@@ -75,10 +75,7 @@ def eevee_irr_with_yamls(
 
     true_label_column = pipeline_constants.INTENT_Y
 
-    if labelstudio_project_id:
-        pred_label_column = "intent"
-    if tog_job_id:
-        pred_label_column = "raw.intent"
+    pred_label_column = "raw.intent"
 
     logger.debug(
         f"Generating IRR report on true_label col = ({true_label_column}) and pred_label col = ({pred_label_column})"
@@ -189,12 +186,22 @@ if __name__ == "__main__":
     #     labelstudio_project_id=116
     # )
 
+    # _ = eevee_irr_with_yamls(
+    #     data_path="sbi.csv",
+    #     output_path="metrics.pkl",
+    #     true_label_column="tag",
+    #     pred_label_column="intent",
+    #     # eevee_intent_alias_yaml_github_path="intents/indigo/alias.yaml",
+    #     # eevee_intent_groups_yaml_github_path="intents/indigo/groups.yaml",
+    #     labelstudio_project_id=152,
+    # )
+
     _ = eevee_irr_with_yamls(
-        data_path="sbi.csv",
+        data_path="bleh.csv",
         output_path="metrics.pkl",
         true_label_column="tag",
         pred_label_column="intent",
         # eevee_intent_alias_yaml_github_path="intents/indigo/alias.yaml",
         # eevee_intent_groups_yaml_github_path="intents/indigo/groups.yaml",
-        labelstudio_project_id=152,
+        labelstudio_project_id=116,
     )
