@@ -33,6 +33,7 @@ python-multipart = "^0.0.5"
 GitPython = "^3.1.27"
 google-auth-oauthlib = "0.4.6"
 skit-calls = "0.2.24"
+SQLAlchemy = "1.4.42"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"

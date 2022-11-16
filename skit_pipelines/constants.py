@@ -248,3 +248,8 @@ GITHUB = "github.com"
 
 CLASSIFICATION_REPORT = "classification_report"
 FULL_CONFUSION_MATRIX = "full_confusion_matrix"
+
+GET_ANNOTATIONS_LABEL_STORE = "pipeline_secrets/get_annotations_label_store.sql"
+GET_CALL_CONTEXT_LABEL_STORE = "pipeline_secrets/get_call_context_label_store.sql"
+LABEL_STUDIO_DB_NAME = "label_studio"
+WAREHOUSE_DB_NAME = "warehouse"
