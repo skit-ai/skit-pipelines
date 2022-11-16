@@ -257,6 +257,37 @@
 <h1>skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package<a class="headerlink" href="#skit-pipelines-pipelines-fetch-tagged-data-from-labelstore-package" title="Permalink to this headline">#</a></h1>
 <section id="module-skit_pipelines.pipelines.fetch_tagged_data_from_labelstore">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.fetch_tagged_data_from_labelstore" title="Permalink to this headline">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.fetch_tagged_data_from_labelstore">
+<span class="sig-name descname"><span class="pre">fetch_tagged_data_from_labelstore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_tagged_data_from_labelstore.html#fetch_tagged_data_from_labelstore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.fetch_tagged_data_from_labelstore" title="Permalink to this definition">#</a></dt>
+<dd><p>A pipeline aimed at querying intent, entity, and transcriptions that happen across Skit</p>
+<p id="p-fetch-tagged-data-from-labelstore">Example payload to invoke via slack integrations:</p>
+<blockquote>
+<div><p>&#64;charon run fetch_tagged_data_from_labelstore</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;flow_id&quot;</span><span class="p">:</span> <span class="s2">&quot;294&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-12&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-16&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flow_id</strong> (<em>str</em>) – The id of the flow from which annotated data should be queried</p></li>
+<li><p><strong>start_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The start date range (YYYY-MM-DD) to filter tagged data. defaults to yesterday</p></li>
+<li><p><strong>end_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The end date range (YYYY-MM-DD) to filter tagged data, defaults to today</p></li>
+<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of annotations to fetch, defaults to 200</p></li>
+<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to send a slack notification, defaults to “”</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
+<li><p><strong>slack_thread</strong> (<em>float</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 

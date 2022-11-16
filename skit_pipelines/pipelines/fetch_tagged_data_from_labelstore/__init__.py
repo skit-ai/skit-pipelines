@@ -42,11 +42,11 @@ def fetch_tagged_data_from_labelstore(
     :param flow_id: The id of the flow from which annotated data should be queried
     :type flow_id: str
 
-    :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.
-    :type start_date: str
+    :param start_date: The start date range (YYYY-MM-DD) to filter tagged data. defaults to yesterday
+    :type start_date: str, optional
 
-    :param end_date: The end date range (YYYY-MM-DD) to filter tagged data
-    :type end_date: str
+    :param end_date: The end date range (YYYY-MM-DD) to filter tagged data, defaults to today
+    :type end_date: str, optional
 
     :param limit: Number of annotations to fetch, defaults to 200
     :type limit: int, optional
@@ -97,4 +97,4 @@ def fetch_tagged_data_from_labelstore(
         )
 
 
-__all__ = ["run_fetch_tagged_data_from_labelstore"]
+__all__ = ["fetch_tagged_data_from_labelstore"]
