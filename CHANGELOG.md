@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.49
+- [x] fix: upstream changes made by fetch_tagged_dataset component (#78)
+
 ## 0.2.48
 - [x] update: single function handling both tog and labelstudio data fetching - skit-labels version bump
 - [x] update: skit-calls version bump to 0.2.24
