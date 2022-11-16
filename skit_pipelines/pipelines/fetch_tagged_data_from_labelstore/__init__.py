@@ -21,6 +21,45 @@ def fetch_tagged_data_from_labelstore(
     channel: str = "",
     slack_thread: str = "",
 ):
+    """
+
+    .. _p_fetch_tagged_data_from_labelstore:
+
+    Example payload to invoke via slack integrations:
+
+        @charon run fetch_tagged_data_from_labelstore
+
+        .. code-block:: python
+
+            {
+                "flow_id": "294",
+                "limit": 20,
+                "start_date": "2022-11-12",
+                "end_date": "2022-11-16",
+            }
+
+    :param flow_id: The id of the flow from which annotated data should be queried
+    :type flow_id: str
+
+    :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.
+    :type start_date: str
+
+    :param end_date: The end date range (YYYY-MM-DD) to filter tagged data
+    :type end_date: str
+
+    :param limit: Number of annotations to fetch, defaults to 200
+    :type limit: int, optional
+
+    :param notify: Whether to send a slack notification, defaults to ""
+    :type notify: str, optional
+
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
+
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
+
+    """
     tagged_df = fetch_tagged_data_label_store_op(
         flow_id=flow_id, start_date=start_date, end_date=end_date, limit=limit
     )

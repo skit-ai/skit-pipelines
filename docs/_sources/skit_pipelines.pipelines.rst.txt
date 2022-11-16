@@ -16,6 +16,7 @@ Subpackages
    skit_pipelines.pipelines.fetch_calls_pipeline
    skit_pipelines.pipelines.fetch_n_tag_calls
    skit_pipelines.pipelines.fetch_tagged_calls_dataset
+   skit_pipelines.pipelines.fetch_tagged_data_from_labelstore
    skit_pipelines.pipelines.fetch_tagged_entity_dataset
    skit_pipelines.pipelines.irr_from_tog
    skit_pipelines.pipelines.retrain_slu
