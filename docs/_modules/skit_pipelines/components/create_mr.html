@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.create_mr - skit-pipelines 0.2.43 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
+        <title>skit_pipelines.components.create_mr - skit-pipelines 0.2.49 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.49 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.49 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -178,6 +178,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
@@ -202,6 +203,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
@@ -251,6 +253,7 @@
         <article role="main">
           <h1>Source code for skit_pipelines.components.create_mr</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">wsgiref</span> <span class="kn">import</span> <span class="n">headers</span>
+
 <span class="kn">import</span> <span class="nn">kfp</span>
 <span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">OutputPath</span>
 
@@ -258,33 +261,38 @@
 
 
 <div class="viewcode-block" id="create_mr"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.create_mr.create_mr">[docs]</a><span class="k">def</span> <span class="nf">create_mr</span><span class="p">(</span>
-    <span class="o">*</span><span class="p">,</span> <span class="n">git_host_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">git_host_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">target_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">source_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">mr_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">requests</span>
     <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+
+    <span class="kn">import</span> <span class="nn">requests</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
 
     <span class="k">if</span> <span class="n">git_host_name</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">:</span>
-        <span class="n">URL</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">GITLAB_API_BASE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">)</span> <span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/merge_requests?&quot;</span>
-        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;PRIVATE-TOKEN&quot;</span><span class="p">:</span> <span class="n">const</span><span class="o">.</span><span class="n">GITLAB_PRIVATE_TOKEN</span>
-        <span class="p">}</span>
+        <span class="n">URL</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">urljoin</span><span class="p">(</span>
+                <span class="n">const</span><span class="o">.</span><span class="n">GITLAB_API_BASE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%2F</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;/merge_requests?&quot;</span>
+        <span class="p">)</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PRIVATE-TOKEN&quot;</span><span class="p">:</span> <span class="n">const</span><span class="o">.</span><span class="n">GITLAB_PRIVATE_TOKEN</span><span class="p">}</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">mr_title</span><span class="p">,</span>
             <span class="s2">&quot;source_branch&quot;</span><span class="p">:</span> <span class="n">source_branch</span><span class="p">,</span>
             <span class="s2">&quot;target_branch&quot;</span><span class="p">:</span> <span class="n">target_branch</span><span class="p">,</span>
-            <span class="s2">&quot;remove_source_branch&quot;</span><span class="p">:</span> <span class="kc">True</span>
+            <span class="s2">&quot;remove_source_branch&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;URL: </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">]:</span>
             <span class="n">web_url</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;web_url&quot;</span><span class="p">]</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created MR successfully!&quot;</span><span class="p">)</span>
@@ -292,6 +300,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Failed to create MR&quot;</span><span class="p">)</span></div>
+
 
 <span class="n">create_mr_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
     <span class="n">create_mr</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>

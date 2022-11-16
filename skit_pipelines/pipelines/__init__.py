@@ -25,3 +25,6 @@ from skit_pipelines.pipelines.train_voicebot_intent_model_xlmr import (
     train_voicebot_intent_model_xlmr,
 )
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline
+from skit_pipelines.pipelines.fetch_tagged_data_from_labelstore import (
+    fetch_tagged_data_from_labelstore,
+)

@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.fetch_n_tag_calls package" href="skit_pipelines.pipelines.fetch_n_tag_calls.html" /><link rel="prev" title="skit-pipelines" href="index.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.pipelines.fetch_calls_pipeline package - skit-pipelines 0.2.43 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
+        <title>skit_pipelines.pipelines.fetch_calls_pipeline package - skit-pipelines 0.2.49 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.49 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.49 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
@@ -203,6 +204,7 @@
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
@@ -236,7 +238,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -256,7 +259,7 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.fetch_calls_pipeline" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_calls_pipeline.fetch_calls_pipeline">
-<span class="sig-name descname"><span class="pre">fetch_calls_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_callers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asr_provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'INBOUND'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_calls_pipeline.html#fetch_calls_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_calls_pipeline.fetch_calls_pipeline" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_calls_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_callers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asr_provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_calls_pipeline.html#fetch_calls_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_calls_pipeline.fetch_calls_pipeline" title="Permalink to this definition">#</a></dt>
 <dd><p>A pipeline to randomly sample calls for a given voice-bot project.</p>
 <p id="p-fetch-calls-pipeline">Example payload to invoke this pipeline via slack integrations:</p>
 <blockquote>
@@ -287,7 +290,7 @@
 <li><p><strong>asr_provider</strong> (<em>str</em><em>, </em><em>optional</em>) – The ASR vendor (google/VASR), defaults to “”</p></li>
 <li><p><strong>states</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter calls in a comma separated list of states, defaults to “”</p></li>
 <li><p><strong>call_quantity</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of calls to sample, defaults to 200</p></li>
-<li><p><strong>call_type</strong> (<em>str</em><em>, </em><em>optional</em>) – inbound, outbound vs subtesting call filters. We can currently choose only one of these, defaults to “INBOUND”</p></li>
+<li><p><strong>call_type</strong> (<em>str</em><em>, </em><em>optional</em>) – inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to “INBOUND” and “OUTBOUND” both</p></li>
 <li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – A comma separated list of slack ids: “&#64;apples, &#64;orange.fruit” etc, defaults to “”</p></li>
 <li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
 <li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
@@ -311,10 +314,10 @@
                 </div>
                 <div class="title">skit_pipelines.pipelines.fetch_n_tag_calls package</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="index.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -350,7 +353,7 @@
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">

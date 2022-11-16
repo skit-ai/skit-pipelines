@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.43 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
+        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.49 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.49 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.49 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -178,6 +178,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
@@ -202,6 +203,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
@@ -280,13 +282,13 @@
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">import</span> <span class="nn">subprocess</span>
     <span class="kn">import</span> <span class="nn">tempfile</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
     <span class="kn">import</span> <span class="nn">git</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="kn">import</span> <span class="nn">yaml</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components.preprocess.create_true_intent_column.utils</span> <span class="kn">import</span> <span class="p">(</span>
@@ -396,7 +398,7 @@
 
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
         <span class="n">new_branch</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="c1">#checkout to new branch</span>
+        <span class="c1"># checkout to new branch</span>
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
 
         <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;pip install poetry -U&quot;</span><span class="p">)</span>
@@ -415,12 +417,12 @@
             <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;slu setup-dirs&quot;</span><span class="p">)</span>
-            
+
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Discrepancy between setting </span><span class="si">{</span><span class="n">initial_training</span><span class="si">=}</span><span class="s2"> and repo containing data.dvc&quot;</span>
             <span class="p">)</span>
-        
+
         <span class="n">old_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
             <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
         <span class="p">)</span>
@@ -428,8 +430,12 @@
             <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
         <span class="p">)</span>
 
-        <span class="n">new_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span><span class="p">)</span>
-        <span class="n">new_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span><span class="p">)</span>
+        <span class="n">new_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
+        <span class="p">)</span>
+        <span class="n">new_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
+        <span class="p">)</span>
 
         <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;ls data&quot;</span><span class="p">)</span>
 
@@ -472,12 +478,15 @@
 
         <span class="c1"># training begins</span>
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu train --epochs </span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">old_test_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">):</span>
             <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">&quot;raw.intent&quot;</span> <span class="ow">in</span> <span class="n">test_df</span> <span class="ow">and</span> <span class="s2">&quot;intent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>
-                <span class="n">test_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw.intent&quot;</span><span class="p">:</span> <span class="s2">&quot;intent&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-                    <span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-                <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;intent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span> <span class="c1">#TODO: remove on phase 2 cicd release</span>
+                <span class="k">if</span> <span class="s2">&quot;raw.intent&quot;</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>
+                    <span class="n">test_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw.intent&quot;</span><span class="p">:</span> <span class="s2">&quot;intent&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                        <span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu test&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">classification_report_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
@@ -497,6 +506,9 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">):</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -Rf </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc add data&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc push data&quot;</span><span class="p">)</span>
+        
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
@@ -507,11 +519,12 @@
             <span class="n">committer</span><span class="o">=</span><span class="n">committer</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
-        
+
     <span class="k">except</span> <span class="n">git</span><span class="o">.</span><span class="n">GitCommandError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: Given </span><span class="si">{</span><span class="n">branch</span><span class="si">=}</span><span class="s2"> doesn&#39;t exist in the repo&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_branch</span></div>
+
 
 <span class="n">retrain_slu_from_repo_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
     <span class="n">retrain_slu_from_repo</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>

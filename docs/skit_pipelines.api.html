@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.api.models package" href="skit_pipelines.api.models.html" /><link rel="prev" title="skit_pipelines package" href="skit_pipelines.html" />
 
-    <meta name="generator" content="sphinx-4.4.0, furo 2022.06.21"/>
-        <title>skit_pipelines.api package - skit-pipelines 0.2.43 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
+        <title>skit_pipelines.api package - skit-pipelines 0.2.49 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.43 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.49 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.43 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.49 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
@@ -203,6 +204,7 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
@@ -236,7 +238,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -276,7 +279,7 @@
 <span id="skit-pipelines-api-auth-module"></span><h2>skit_pipelines.api.auth module<a class="headerlink" href="#module-skit_pipelines.api.auth" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.auth.authenticate_user">
-<span class="sig-name descname"><span class="pre">authenticate_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'tog-service&#64;skit.ai':</span> <span class="pre">{'hashed_password':</span> <span class="pre">'$2b$12$7m7f.mME/zBX19vLSVqRh.vv3jnB/Sw5r25kPpqA4iCLnl6/AUs9a',</span> <span class="pre">'username':</span> <span class="pre">'tog-service&#64;skit.ai'}}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#authenticate_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.authenticate_user" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">authenticate_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'tog-service&#64;skit.ai':</span> <span class="pre">{'hashed_password':</span> <span class="pre">'$2b$12$W5h18brn/1rxzja42ksgguq66xQyflqA68rsKgzB4G6LEF8hII9nG',</span> <span class="pre">'username':</span> <span class="pre">'tog-service&#64;skit.ai'}}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#authenticate_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.authenticate_user" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -567,10 +570,10 @@ users may send.</p>
                 </div>
                 <div class="title">skit_pipelines.api.models package</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="skit_pipelines.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -606,7 +609,7 @@ users may send.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">

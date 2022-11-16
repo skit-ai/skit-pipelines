@@ -52,3 +52,7 @@ from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
+from skit_pipelines.components.fetch_tagged_data_label_store import (
+    fetch_tagged_data_label_store,
+    fetch_tagged_data_label_store_op,
+)
