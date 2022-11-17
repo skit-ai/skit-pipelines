@@ -1,7 +1,9 @@
 # Changelog
 
+
 ## 0.2.51
-- [x] update: db_host const 
+- [x] update: db_host const
+- [x] add: timezone based on cluster region
 
 ## 0.2.50
 - [x] add: fetch_tagged_data_from_labelstore pipeline (#79)
