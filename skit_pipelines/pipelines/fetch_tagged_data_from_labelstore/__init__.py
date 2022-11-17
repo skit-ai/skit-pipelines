@@ -16,7 +16,7 @@ def fetch_tagged_data_from_labelstore(
     flow_id: str,
     start_date: str = "",
     end_date: str = "",
-    limit: int = 200,
+    limit: int = 2000,
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -48,7 +48,7 @@ def fetch_tagged_data_from_labelstore(
     :param end_date: The end date range (YYYY-MM-DD) to filter tagged data, defaults to today
     :type end_date: str, optional
 
-    :param limit: Number of annotations to fetch, defaults to 200
+    :param limit: Number of annotations to fetch, defaults to 2000
     :type limit: int, optional
 
     :param notify: Whether to send a slack notification, defaults to ""

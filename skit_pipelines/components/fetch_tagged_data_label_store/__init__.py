@@ -143,6 +143,11 @@ def fetch_tagged_data_label_store(
         df = df.apply(process_call_context, axis=1)
         return df
 
+    def serialize(value):
+        if isinstance(value, (dict, list)):
+            value = json.dumps(value, ensure_ascii=False)
+        return value
+
     def get_engine(
         host: Optional[str] = os.environ[const.DB_HOST],
         port: Optional[str] = os.environ[const.DB_PORT],
@@ -159,11 +164,13 @@ def fetch_tagged_data_label_store(
         with get_engine(db_name=db_name).connect().execution_options(
             stream_results=True
         ) as conn:
+            conn.execute(f"SELECT setseed({pipeline_constants.SQL_RANDOM_SEED});")
             for chunk in pd.read_sql_query(
                 get_query(query_file_name), conn, params=params, chunksize=1000
             ):
                 if processing_fn:
                     chunk = processing_fn(chunk)
+                chunk = chunk.applymap(serialize)
                 chunk.to_csv(output_file_name, header=header, index=False, mode="a")
                 header = False
 
