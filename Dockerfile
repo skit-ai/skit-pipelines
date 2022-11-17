@@ -30,18 +30,14 @@ RUN apt-get -y update\
 
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
-RUN pip install poetry==1.1.14 regex==2022.7.25 pygit2==1.10.0
+RUN pip install -U pip setuptools && pip install poetry==1.2.2 numpy==1.22.0 regex==2022.7.25 pygit2==1.10.0
 RUN poetry config virtualenvs.create false
 
 RUN conda install scipy
 
-COPY pyproject.toml .
-
-RUN poetry install --no-dev
-
 COPY . .
 
-RUN pip install -U setuptools poetry && poetry install --no-dev
+RUN poetry install --only main && poetry install --only main
 
 # install johnny.
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
