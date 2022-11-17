@@ -17,6 +17,7 @@ def fetch_calls(
     end_time_offset: int = 0,
     call_quantity: int = 200,
     call_type: Optional[str] = None,
+    timezone: Optional[str] = None,
     ignore_callers: Optional[str] = None,
     reported: bool = False,
     use_case: Optional[str] = None,
@@ -53,6 +54,7 @@ def fetch_calls(
         end_date_offset=end_date_offset,
         start_time_offset=start_time_offset,
         end_time_offset=end_time_offset,
+        timezone=pipeline_constants.TIMEZONE,
     )
     validate_date_ranges(start_date, end_date)
 

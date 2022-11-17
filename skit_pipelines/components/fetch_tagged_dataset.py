@@ -11,7 +11,7 @@ def fetch_tagged_dataset(
     job_id: Optional[str] = None,
     project_id: Optional[str] = None,
     task_type: str = "conversation",
-    timezone: str = "Asia/Kolkata",
+    timezone: Optional[str] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
     start_date_offset: Optional[int] = None,
@@ -43,7 +43,7 @@ def fetch_tagged_dataset(
     user = pipeline_constants.DB_USER
 
     if not timezone:
-        timezone = pytz.UTC
+        timezone = pipeline_constants.TIMEZONE
 
     if not task_type:
         task_type = const.TASK_TYPE__CONVERSATION
