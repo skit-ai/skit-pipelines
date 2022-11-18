@@ -6,11 +6,7 @@ BASE_IMAGE = os.environ["BASE_IMAGE"]
 CUDA_IMAGE = os.environ["CUDA_IMAGE"]
 US_EAST_1 = "us-east-1"
 AP_SOUTH_1 = "ap-south-1"
-TIMEZONE = (
-    "Asia/Kolkata"
-    if REGION == AP_SOUTH_1
-    else "America/New_York"
-)
+TIMEZONE = "Asia/Kolkata" if REGION == AP_SOUTH_1 else "America/New_York"
 KALDI_REPOSITORY = "vernacular-voice-services/voice-services/kaldi-nvidia-lm-tuning"
 KALDI_IMAGE = f"{ECR_REGISTRY}/{KALDI_REPOSITORY}:latest"
 BUCKET = os.environ["BUCKET"]
@@ -258,3 +254,4 @@ GET_ANNOTATIONS_LABEL_STORE = "pipeline_secrets/get_annotations_label_store.sql"
 GET_CALL_CONTEXT_LABEL_STORE = "pipeline_secrets/get_call_context_label_store.sql"
 LABEL_STUDIO_DB_NAME = "label_studio"
 WAREHOUSE_DB_NAME = "warehouse"
+SQL_RANDOM_SEED = 0.5
