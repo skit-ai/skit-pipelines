@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.2.52
+- [x] update: label store data format and query changes (#80)
 
 ## 0.2.51
 - [x] update: db_host const
