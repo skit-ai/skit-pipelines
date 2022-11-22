@@ -12,6 +12,7 @@ def tag_calls(
     job_ids: str = "",
     project_id: Optional[str] = None,
     org_id: Optional[str] = None,
+    labelstudio_call_project_id : Optional[str] = None,
 ) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
@@ -62,6 +63,11 @@ def tag_calls(
 
     if project_id:
         error, df_size = upload2labelstudio(input_file, project_id)
+        errors.append(error)
+        df_sizes.append(df_size)
+
+    if labelstudio_call_project_id:
+        error, df_size = upload2labelstudio(input_file, labelstudio_call_project_id)
         errors.append(error)
         df_sizes.append(df_size)
 

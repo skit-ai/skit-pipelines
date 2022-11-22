@@ -56,3 +56,4 @@ from skit_pipelines.components.fetch_tagged_data_label_store import (
     fetch_tagged_data_label_store,
     fetch_tagged_data_label_store_op,
 )
+from skit_pipelines.components.upload_for_call_and_slot_tagging import fetch_calls_for_slots_op
