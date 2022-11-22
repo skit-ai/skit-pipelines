@@ -41,6 +41,7 @@ def retrain_slu(
     epochs: int = 10,
     train_split_percent: int = 85,
     stratify: bool = False,
+    target_mr_branch: str = "sandbox",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -98,7 +99,7 @@ def retrain_slu(
                 "repo_name": "slu_repo_name",
                 "repo_branch": "master",
                 "labelstudio_project_ids": "10,13",
-                "initial_training": true
+                "initial_training": True
             }
 
 
@@ -233,7 +234,7 @@ def retrain_slu(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
         project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
-        target_branch="staging",
+        target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
     )

@@ -130,7 +130,7 @@ def retrain_slu_from_repo(
         s3_df[pipeline_constants.TAG] = s3_df[pipeline_constants.TAG].apply(
             pick_1st_tag
         )
-        tagged_df = pd.concat([tagged_df, s3_df])
+        tagged_df = s3_df if no_annotated_job else pd.concat([tagged_df, s3_df])
     except pd.errors.EmptyDataError:
         logger.warning("No csv file from S3 found!")
         if no_annotated_job:
