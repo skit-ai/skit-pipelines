@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.53
+- [x] fix: retrain slu pipeline fails when only s3 uri provided
+
 ## 0.2.52
 - [x] update: label store data format and query changes (#80)
 
