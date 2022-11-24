@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.54
+- [x] add: new pipeline for pushing same data for intent, entities & slot/call tagging (#81)
+
 ## 0.2.53
 - [x] fix: retrain slu pipeline fails when only s3 uri provided
 
