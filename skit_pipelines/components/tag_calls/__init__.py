@@ -12,6 +12,7 @@ def tag_calls(
     job_ids: str = "",
     project_id: Optional[str] = None,
     org_id: Optional[str] = None,
+    call_project_id : Optional[str] = None,
 ) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
@@ -29,10 +30,10 @@ def tag_calls(
     org_id = int(org_id) if org_id else org_id
 
     job_ids = comma_sep_str(job_ids)
-    if not job_ids and not project_id:
-        raise ValueError("Either job_ids or project_id must be provided")
+    if not job_ids and not project_id and not call_project_id:
+        raise ValueError("At least one of job_ids, project_id, call_project_id must be provided")
 
-    if not project_id and org_id:
+    if (not project_id and org_id) and (not call_project_id):
         if org_id == 120:
             job_ids = None
             project_id = 105
@@ -57,11 +58,19 @@ def tag_calls(
         #     job_ids = None
         #     project_id = 111
 
+    print(f"{project_id=}")
+    print(f"{call_project_id=}")
+
     if job_ids:
         errors, df_sizes = upload2tog(input_file, token, job_ids)
 
     if project_id:
         error, df_size = upload2labelstudio(input_file, project_id)
+        errors.append(error)
+        df_sizes.append(df_size)
+
+    if call_project_id:
+        error, df_size = upload2labelstudio(input_file, call_project_id)
         errors.append(error)
         df_sizes.append(df_size)
 
