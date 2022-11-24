@@ -1,14 +1,10 @@
-from typing import Any, Dict
-
 import kfp
-from kfp.components import InputPath, OutputPath
 
 from skit_pipelines import constants as pipeline_constants
 
 
 def upload_for_tagging_calls_on_labelstudio(
     untagged_records_path: str,
-    output_path: OutputPath(str),
     org_id: str = "",
     language_code="",
     start_date="",
@@ -25,7 +21,7 @@ def upload_for_tagging_calls_on_labelstudio(
     df = df.drop_duplicates(subset=["call_uuid"])
 
     df["date"] = df["reftime"].apply(lambda x: parser.isoparse(x).strftime("%Y-%m-%d"))
-    df["call_links"] = df["call_uuid"].apply(lambda x: f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={x}")
+    df["call_link"] = df["call_uuid"].apply(lambda x: f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={x}")
     df["language"] = language_code
 
     df.drop(labels=["call_uuid", "reftime"], axis='columns', inplace=True)

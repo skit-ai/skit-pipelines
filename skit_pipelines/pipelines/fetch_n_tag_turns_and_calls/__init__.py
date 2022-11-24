@@ -41,7 +41,7 @@ def fetch_n_tag_turns_and_calls(
     on_prem: bool = False,
 ):
     """
-    A pipeline to randomly sample calls and upload for annotation.
+    A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
 
     .. _p_fetch_n_tag_turns_and_calls:
 
@@ -52,13 +52,13 @@ def fetch_n_tag_turns_and_calls(
         .. code-block:: python
 
             {
-                "client_id": 1,
-                "start_date": "2020-01-01",
+                "client_id": 41,
+                "org_id": 34,
                 "lang": "en",
-                "end_date": "2020-01-01",
-                "reported": false,
-                "job_ids": "4011,4012,4013",
-                "call_quantity": 200
+                "start_date": "2022-11-10",
+                "end_date": "2022-11-11",
+                "labelstudio_project_id": 195,
+                "labelstudio_call_project_id": 194
             }
 
     To use labelstudio:
@@ -74,9 +74,10 @@ def fetch_n_tag_turns_and_calls(
                 "end_date": "2022-09-19",
                 "lang": "en",
                 "reported": false,
-                "labelstudio_project_id": "135",
                 "call_quantity": 1000,
                 "flow_name" : "indigo_domain_tuning_english"
+                "labelstudio_project_id": "135",
+                "labelstudio_call_project_id": 194
             }
 
     :param client_id: The client id as per api-gateway.
@@ -88,8 +89,11 @@ def fetch_n_tag_turns_and_calls(
     :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
     :type job_ids: str
 
-    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
+    :param labelstudio_project_id: The labelstudio project id for turn level tagging (intent & entities) (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
+
+    :param labelstudio_call_project_id: The labelstudio project id for call level tagging (slots & call metrics) (this is a number) since this is optional, defaults to "".
+    :type labelstudio_call_project_id: str
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
@@ -217,7 +221,7 @@ def fetch_n_tag_turns_and_calls(
         errors = tag_turns_output.outputs["errors"]
 
         notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {job_ids=}."""
+        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {job_ids=} or {labelstudio_project_id=}."""
         notification_text += f"\nErrors: {errors}" if errors else ""
 
         task_no_cache = slack_notification_op(
@@ -231,7 +235,7 @@ def fetch_n_tag_turns_and_calls(
         errors2 = tag_calls_output.outputs["errors"]
 
         notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {labelstudio_call_project_id=}."""
+        Uploaded {getattr(fetch_slot_and_calls_output, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {labelstudio_call_project_id=}."""
         notification_text += f"\nErrors: {errors2}" if errors else ""
 
         task_no_cache2 = slack_notification_op(

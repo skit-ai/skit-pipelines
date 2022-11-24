@@ -30,10 +30,10 @@ def tag_calls(
     org_id = int(org_id) if org_id else org_id
 
     job_ids = comma_sep_str(job_ids)
-    if not job_ids and not project_id:
-        raise ValueError("Either job_ids or project_id must be provided")
+    if not job_ids and not project_id and not labelstudio_call_project_id:
+        raise ValueError("At least one of job_ids, project_id, labelstudio_call_project_id must be provided")
 
-    if not project_id and org_id:
+    if (not project_id and org_id) and (not labelstudio_call_project_id):
         if org_id == 120:
             job_ids = None
             project_id = 105
@@ -57,6 +57,9 @@ def tag_calls(
         # if org_id == 4:
         #     job_ids = None
         #     project_id = 111
+
+    print(f"{project_id=}")
+    print(f"{labelstudio_call_project_id=}")
 
     if job_ids:
         errors, df_sizes = upload2tog(input_file, token, job_ids)
