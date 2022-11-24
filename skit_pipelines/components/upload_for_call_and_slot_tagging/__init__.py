@@ -3,7 +3,7 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 
 
-def upload_for_tagging_calls_on_labelstudio(
+def fetch_calls_for_slots(
     untagged_records_path: str,
     org_id: str = "",
     language_code="",
@@ -39,14 +39,14 @@ def upload_for_tagging_calls_on_labelstudio(
 
 
 fetch_calls_for_slots_op = kfp.components.create_component_from_func(
-    upload_for_tagging_calls_on_labelstudio, base_image=pipeline_constants.BASE_IMAGE
+    fetch_calls_for_slots, base_image=pipeline_constants.BASE_IMAGE
 )
 
 
 
 if __name__ == "__main__":
 
-    upload_for_tagging_calls_on_labelstudio(
+    fetch_calls_for_slots(
         untagged_records_path="./indigo_untagged.csv",
         org_id="34",
         language_code="en"

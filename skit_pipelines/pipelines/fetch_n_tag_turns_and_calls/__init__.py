@@ -21,7 +21,7 @@ def fetch_n_tag_turns_and_calls(
     end_date: str = "",
     job_ids: str = "",
     labelstudio_project_id: str = "",
-    labelstudio_call_project_id: str = "",
+    call_project_id: str = "",
     ignore_callers: str = "",
     use_case: str = "",
     flow_name: str = "",
@@ -58,7 +58,7 @@ def fetch_n_tag_turns_and_calls(
                 "start_date": "2022-11-10",
                 "end_date": "2022-11-11",
                 "labelstudio_project_id": 195,
-                "labelstudio_call_project_id": 194
+                "call_project_id": 194
             }
 
     To use labelstudio:
@@ -77,7 +77,7 @@ def fetch_n_tag_turns_and_calls(
                 "call_quantity": 1000,
                 "flow_name" : "indigo_domain_tuning_english"
                 "labelstudio_project_id": "135",
-                "labelstudio_call_project_id": 194
+                "call_project_id": 194
             }
 
     :param client_id: The client id as per api-gateway.
@@ -92,8 +92,8 @@ def fetch_n_tag_turns_and_calls(
     :param labelstudio_project_id: The labelstudio project id for turn level tagging (intent & entities) (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
 
-    :param labelstudio_call_project_id: The labelstudio project id for call level tagging (slots & call metrics) (this is a number) since this is optional, defaults to "".
-    :type labelstudio_call_project_id: str
+    :param call_project_id: The labelstudio project id for call level tagging (slots & call metrics) (this is a number) since this is optional, defaults to "".
+    :type call_project_id: str
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
@@ -212,7 +212,7 @@ def fetch_n_tag_turns_and_calls(
         project_id="",
         token=auth_token.output,
         org_id=org_id,
-        labelstudio_call_project_id=labelstudio_call_project_id
+        call_project_id=call_project_id
     )
 
     
@@ -235,7 +235,7 @@ def fetch_n_tag_turns_and_calls(
         errors2 = tag_calls_output.outputs["errors"]
 
         notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(fetch_slot_and_calls_output, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {labelstudio_call_project_id=}."""
+        Uploaded {getattr(fetch_slot_and_calls_output, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {call_project_id=}."""
         notification_text += f"\nErrors: {errors2}" if errors else ""
 
         task_no_cache2 = slack_notification_op(
