@@ -1,11 +1,11 @@
 import kfp
 
 from skit_pipelines.components import (
+    fetch_calls_for_slots_op,
     fetch_calls_op,
     org_auth_token_op,
     slack_notification_op,
     tag_calls_op,
-    fetch_calls_for_slots_op
 )
 
 
@@ -194,16 +194,13 @@ def fetch_n_tag_turns_and_calls(
         org_id=org_id,
     )
 
-
-
     fetch_slot_and_calls_output = fetch_calls_for_slots_op(
         untagged_records_path=calls.output,
         org_id=org_id,
         language_code=lang,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
     )
-
 
     # uploads data for call & slot level tagging to labelstudio
     tag_calls_output = tag_calls_op(
@@ -212,10 +209,9 @@ def fetch_n_tag_turns_and_calls(
         project_id="",
         token=auth_token.output,
         org_id=org_id,
-        call_project_id=call_project_id
+        call_project_id=call_project_id,
     )
 
-    
     with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output) as check1:
         df_sizes = tag_turns_output.outputs["df_sizes"]
         errors = tag_turns_output.outputs["errors"]
@@ -244,5 +240,6 @@ def fetch_n_tag_turns_and_calls(
         task_no_cache2.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["fetch_n_tag_turns_and_calls"]

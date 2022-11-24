@@ -2,6 +2,7 @@ from typing import Optional, Tuple
 
 import kfp
 from kfp.components import OutputPath
+
 from skit_pipelines import constants as pipeline_constants
 
 
@@ -13,22 +14,24 @@ def fetch_tagged_data_label_store(
     limit: int = 200,
 ):
 
+    import json
     import os
     import tempfile
     import time
-    import json
-    import pytz
-    import numpy as np
-    import pandas as pd
-    from loguru import logger
     from datetime import date, datetime, timedelta
 
-    from sqlalchemy import create_engine
+    import numpy as np
+    import pandas as pd
+    import pytz
+    from loguru import logger
     from skit_calls import constants as const
     from skit_calls import utils
-    from skit_calls.data.model import get_call_url, get_url as get_audio_url
-    from skit_pipelines import constants as pipeline_constants
     from skit_calls.cli import to_datetime, validate_date_ranges
+    from skit_calls.data.model import get_call_url
+    from skit_calls.data.model import get_url as get_audio_url
+    from sqlalchemy import create_engine
+
+    from skit_pipelines import constants as pipeline_constants
 
     def get_query(query_file_name):
         with open(query_file_name) as handle:

@@ -3,8 +3,8 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_tagged_data_label_store_op,
-    upload2s3_op,
     slack_notification_op,
+    upload2s3_op,
 )
 
 

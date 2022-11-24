@@ -19,6 +19,10 @@ from skit_pipelines.components.extract_info_from_dataset import (
 )
 from skit_pipelines.components.extract_tgz import extract_tgz_op
 from skit_pipelines.components.fetch_calls import fetch_calls_op
+from skit_pipelines.components.fetch_tagged_data_label_store import (
+    fetch_tagged_data_label_store,
+    fetch_tagged_data_label_store_op,
+)
 from skit_pipelines.components.fetch_tagged_dataset import fetch_tagged_dataset_op
 from skit_pipelines.components.gen_asr_metrics import gen_asr_metrics_op
 from skit_pipelines.components.gen_confusion_matrix import gen_confusion_matrix_op
@@ -52,8 +56,6 @@ from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
-from skit_pipelines.components.fetch_tagged_data_label_store import (
-    fetch_tagged_data_label_store,
-    fetch_tagged_data_label_store_op,
+from skit_pipelines.components.upload_for_call_and_slot_tagging import (
+    fetch_calls_for_slots_op,
 )
-from skit_pipelines.components.upload_for_call_and_slot_tagging import fetch_calls_for_slots_op

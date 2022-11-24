@@ -22,6 +22,8 @@ skit-pipelines
    Annotated Dataset Entity Evaluation <./skit_pipelines.pipelines.eer_from_tog>
    Retrain SLU <./skit_pipelines.pipelines.retrain_slu>
    Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
+   Random sample and tag turns and calls <./skit_pipelines.pipelines.fetch_n_tag_turns_and_calls>
+
 
 .. toctree::
    :maxdepth: 1
@@ -89,6 +91,8 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 | 10| :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
 +--+----------------------------------------------------------------------------------+
 | 11| :ref:`Retrain SLU <p_retrain_slu>`                                              |
++--+----------------------------------------------------------------------------------+
+| 12| :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
 +--+----------------------------------------------------------------------------------+
 
 

@@ -12,7 +12,7 @@ def tag_calls(
     job_ids: str = "",
     project_id: Optional[str] = None,
     org_id: Optional[str] = None,
-    call_project_id : Optional[str] = None,
+    call_project_id: Optional[str] = None,
 ) -> TaggingResponseType:
     from loguru import logger
     from skit_labels import utils
@@ -31,7 +31,9 @@ def tag_calls(
 
     job_ids = comma_sep_str(job_ids)
     if not job_ids and not project_id and not call_project_id:
-        raise ValueError("At least one of job_ids, project_id, call_project_id must be provided")
+        raise ValueError(
+            "At least one of job_ids, project_id, call_project_id must be provided"
+        )
 
     if (not project_id and org_id) and (not call_project_id):
         if org_id == 120:

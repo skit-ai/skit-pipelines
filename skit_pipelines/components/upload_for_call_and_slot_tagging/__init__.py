@@ -8,7 +8,7 @@ def fetch_calls_for_slots(
     org_id: str = "",
     language_code="",
     start_date="",
-    end_date=""
+    end_date="",
 ) -> str:
 
     import pandas as pd
@@ -21,10 +21,12 @@ def fetch_calls_for_slots(
     df = df.drop_duplicates(subset=["call_uuid"])
 
     df["date"] = df["reftime"].apply(lambda x: parser.isoparse(x).strftime("%Y-%m-%d"))
-    df["call_link"] = df["call_uuid"].apply(lambda x: f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={x}")
+    df["call_link"] = df["call_uuid"].apply(
+        lambda x: f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={x}"
+    )
     df["language"] = language_code
 
-    df.drop(labels=["call_uuid", "reftime"], axis='columns', inplace=True)
+    df.drop(labels=["call_uuid", "reftime"], axis="columns", inplace=True)
     print(df.head())
     df.to_csv("op.csv", index=False)
 
@@ -43,11 +45,8 @@ fetch_calls_for_slots_op = kfp.components.create_component_from_func(
 )
 
 
-
 if __name__ == "__main__":
 
     fetch_calls_for_slots(
-        untagged_records_path="./indigo_untagged.csv",
-        org_id="34",
-        language_code="en"
+        untagged_records_path="./indigo_untagged.csv", org_id="34", language_code="en"
     )

@@ -58,7 +58,7 @@ def fetch_tagged_dataset(
         )
 
     if job_id or project_id:
-        job_ids = comma_sep_str(job_id or project_id) #tog or labelstudio
+        job_ids = comma_sep_str(job_id or project_id)  # tog or labelstudio
         for job_id in job_ids:
             df_path, _ = download_dataset_from_db(
                 job_id=int(job_id),
@@ -73,7 +73,7 @@ def fetch_tagged_dataset(
                 db=const.LABELSTUIO_DB if project_id else "tog",
             )
             df_paths.append(df_path)
-        
+
     else:
         if not empty_possible:
             raise ValueError("Either job_id or project_id must be provided")

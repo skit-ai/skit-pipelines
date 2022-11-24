@@ -12,6 +12,7 @@ Subpackages
    skit_pipelines.components.preprocess
    skit_pipelines.components.tag_calls
    skit_pipelines.components.upload2sheet
+   skit_pipelines.components.upload_for_call_and_slot_tagging
 
 Submodules
 ----------

@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.types package" href="skit_pipelines.types.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package" href="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package - skit-pipelines 0.2.54 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package - skit-pipelines 0.2.54 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -204,9 +204,9 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
@@ -255,22 +255,43 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-pipelines-fetch-tagged-data-from-labelstore-package">
-<h1>skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package<a class="headerlink" href="#skit-pipelines-pipelines-fetch-tagged-data-from-labelstore-package" title="Permalink to this headline">#</a></h1>
-<section id="module-skit_pipelines.pipelines.fetch_tagged_data_from_labelstore">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.fetch_tagged_data_from_labelstore" title="Permalink to this headline">#</a></h2>
+          <section id="skit-pipelines-pipelines-fetch-n-tag-turns-and-calls-package">
+<h1>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package<a class="headerlink" href="#skit-pipelines-pipelines-fetch-n-tag-turns-and-calls-package" title="Permalink to this headline">#</a></h1>
+<section id="module-skit_pipelines.pipelines.fetch_n_tag_turns_and_calls">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.fetch_n_tag_turns_and_calls" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.fetch_tagged_data_from_labelstore">
-<span class="sig-name descname"><span class="pre">fetch_tagged_data_from_labelstore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_tagged_data_from_labelstore.html#fetch_tagged_data_from_labelstore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.fetch_tagged_data_from_labelstore" title="Permalink to this definition">#</a></dt>
-<dd><p>A pipeline aimed at querying intent, entity, and transcriptions that happen across Skit</p>
-<p id="p-fetch-tagged-data-from-labelstore">Example payload to invoke via slack integrations:</p>
+<dt class="sig sig-object py" id="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.fetch_n_tag_turns_and_calls">
+<span class="sig-name descname"><span class="pre">fetch_n_tag_turns_and_calls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">org_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_project_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_callers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flow_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asr_provider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reported</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_prem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/fetch_n_tag_turns_and_calls.html#fetch_n_tag_turns_and_calls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.fetch_n_tag_turns_and_calls" title="Permalink to this definition">#</a></dt>
+<dd><p>A pipeline to randomly sample calls and upload for annotating turns for intents &amp; entities and annotating calls for slots &amp; call level metrics.</p>
+<p id="p-fetch-n-tag-turns-and-calls">Example payload to invoke via slack integrations:</p>
 <blockquote>
-<div><p>&#64;charon run fetch_tagged_data_from_labelstore</p>
+<div><p>&#64;charon run fetch_n_tag_turns_and_calls</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;flow_id&quot;</span><span class="p">:</span> <span class="s2">&quot;294&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
-    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-12&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-16&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;en&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-11-11&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_id&quot;</span><span class="p">:</span> <span class="mi">195</span><span class="p">,</span>
+    <span class="s2">&quot;call_project_id&quot;</span><span class="p">:</span> <span class="mi">194</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To use labelstudio:</p>
+<blockquote>
+<div><p>&#64;charon run fetch_n_tag_turns_and_calls</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;org_id&quot;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span>
+    <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-09-16&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-09-19&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lang&quot;</span><span class="p">:</span> <span class="s2">&quot;en&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reported&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;call_quantity&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="s2">&quot;flow_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;indigo_domain_tuning_english&quot;</span>
+    <span class="s2">&quot;labelstudio_project_id&quot;</span><span class="p">:</span> <span class="s2">&quot;135&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;call_project_id&quot;</span><span class="p">:</span> <span class="mi">194</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -278,13 +299,31 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>flow_id</strong> (<em>str</em>) – The id of the flow from which annotated data should be queried</p></li>
-<li><p><strong>start_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The start date range (YYYY-MM-DD) to filter tagged data. defaults to yesterday</p></li>
-<li><p><strong>end_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The end date range (YYYY-MM-DD) to filter tagged data, defaults to today</p></li>
-<li><p><strong>limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of annotations to fetch, defaults to 2000</p></li>
+<li><p><strong>client_id</strong> (<em>int</em>) – The client id as per api-gateway.</p></li>
+<li><p><strong>org_id</strong> (<em>str</em>) – The organization id as per api-gateway.</p></li>
+<li><p><strong>job_ids</strong> (<em>str</em>) – The job ids as per tog. Optional if labestudio project id is provided.</p></li>
+<li><p><strong>labelstudio_project_id</strong> (<em>str</em>) – The labelstudio project id for turn level tagging (intent &amp; entities) (this is a number) since this is optional, defaults to “”.</p></li>
+<li><p><strong>call_project_id</strong> (<em>str</em>) – The labelstudio project id for call level tagging (slots &amp; call metrics) (this is a number) since this is optional, defaults to “”.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em>) – The start date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>lang</strong> (<em>str</em>) – The language code of the calls to filter. eg: en, hi, ta, te, etc.</p></li>
+<li><p><strong>end_date</strong> (<em>str</em>) – The end date range to filter calls in YYYY-MM-DD format.</p></li>
+<li><p><strong>ignore_callers</strong> (<em>str</em><em>, </em><em>optional</em>) – Comma separated list of callers to ignore, defaults to “”</p></li>
+<li><p><strong>reported</strong> (<em>bool</em>) – Pick only reported calls, defaults to False</p></li>
+<li><p><strong>use_case</strong> (<em>str</em><em>, </em><em>optional</em>) – Voice bot project’s use-case, defaults to “”</p></li>
+<li><p><strong>flow_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Identifier for a whole/part of a voicebot conversation flow, defaults to “”</p></li>
+<li><p><strong>min_duration</strong> (<em>str</em><em>, </em><em>optional</em>) – Call duration filter, defaults to “”</p></li>
+<li><p><strong>asr_provider</strong> (<em>str</em><em>, </em><em>optional</em>) – The ASR vendor (google/VASR), defaults to “”</p></li>
+<li><p><strong>states</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter calls in a comma separated list of states, defaults to “”</p></li>
+<li><p><strong>start_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the start date by an integer value, defaults to 0</p></li>
+<li><p><strong>end_date_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the end date by an integer value, defaults to 0</p></li>
+<li><p><strong>start_time_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the start time by an integer value, defaults to 0</p></li>
+<li><p><strong>end_time_offset</strong> (<em>int</em><em>, </em><em>optional</em>) – Offset the end time by an integer value, defaults to 0</p></li>
+<li><p><strong>call_quantity</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of calls to sample, defaults to 200</p></li>
+<li><p><strong>call_type</strong> (<em>str</em><em>, </em><em>optional</em>) – inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to “INBOUND” and “OUTBOUND” both</p></li>
 <li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to send a slack notification, defaults to “”</p></li>
 <li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
 <li><p><strong>slack_thread</strong> (<em>float</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
+<li><p><strong>on_prem</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the pipeline is run on prem or not, defaults to False</p></li>
 </ul>
 </dd>
 </dl>
@@ -298,23 +337,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.types.html">
+          <a class="next-page" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.types package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</div>
                 
               </div>
             </a>
@@ -350,8 +389,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a><ul>
-<li><a class="reference internal" href="#module-skit_pipelines.pipelines.fetch_tagged_data_from_labelstore">Module contents</a></li>
+<li><a class="reference internal" href="#">skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package</a><ul>
+<li><a class="reference internal" href="#module-skit_pipelines.pipelines.fetch_n_tag_turns_and_calls">Module contents</a></li>
 </ul>
 </li>
 </ul>
