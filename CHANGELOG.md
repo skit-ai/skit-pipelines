@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.55
+- [x] upload2s3: correct bug in upload_as_directory that leads to flattening of path_on_disk contents in the target output_path (#82)
+- [x] change: changed the parser for Hindi from Unified Parser to Character split. This is a breaking change and support for ASR models hi-v4 and b
+elow is removed (#83)
+
 ## 0.2.54
 - [x] add: new pipeline for pushing same data for intent, entities & slot/call tagging (#81)
 
