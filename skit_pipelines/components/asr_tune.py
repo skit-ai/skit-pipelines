@@ -129,7 +129,7 @@ def asr_tune(
         exec_shell(f"mkdir -p {recipe_path}/data/local/lexicons")
         exec_shell(f"cd ~/g2p && pip3 install -r ~/kaldi/requirements.txt")
         exec_shell(
-            f"cd ~/g2p && poetry run python3 ~/kaldi/scripts/lexicon/words_to_lexicon.py {recipe_path}/data/local/{augment_wordlist} {recipe_path}/data/local/lexicons/ext.lexicon.csv --unified-parser {PHONEMIZERS[lang]}"
+            f"cd ~/g2p && poetry run python3 ~/kaldi/scripts/lexicon/words_to_lexicon.py {recipe_path}/data/local/{augment_wordlist} {recipe_path}/data/local/lexicons/ext.lexicon.csv -c"
         )
     else:
         raise UserWarning("language specified does not have phonemization configured")
