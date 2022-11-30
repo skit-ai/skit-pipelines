@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.57
+- [x] fix: skit-calls secrets query for language - version bump to 0.2.26
+
 ## 0.2.56
 - [x] update: skit-calls version bump to 0.2.25
 - [x] fix: upload2s3 folder upload bug
