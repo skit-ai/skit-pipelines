@@ -2389,7 +2389,7 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.24"
+version = "0.2.25"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
@@ -3351,7 +3351,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "1cd64ecc588ceb91ab1ca4585d8f3904d650f21fb65b28150833158feb732136"
+content-hash = "8d637370610e9f850f3aa04bcd340884476274082396110c14a21f024c87de36"
 
 [metadata.files]
 absl-py = [
@@ -5353,8 +5353,8 @@ skit-auth = [
     {file = "skit_auth-0.1.5-py3-none-any.whl", hash = "sha256:534bda8bac8b1b24eba3521fbaabf7e605b3eefe1cc5a9ea5d237a5504801791"},
 ]
 skit-calls = [
-    {file = "skit_calls-0.2.24-py3-none-any.whl", hash = "sha256:c082c2d0bbe535bd36bb926302abff53c93b4e58d346d470ea3bdf49222d380f"},
-    {file = "skit_calls-0.2.24.tar.gz", hash = "sha256:d67ba7db94ebf633a85493997173e58fd3ee45bcd6a7447349ce399534e467a2"},
+    {file = "skit_calls-0.2.25-py3-none-any.whl", hash = "sha256:511826a59fef0e30d9ee58da2a02da62feeabfb8a8b2f4823e6493e2e133071f"},
+    {file = "skit_calls-0.2.25.tar.gz", hash = "sha256:da7893f21283ada4fb8a9eaa14dd8c7ed333e4301523dd0e75bce73421d82084"},
 ]
 skit-labels = [
     {file = "skit_labels-0.3.30-py3-none-any.whl", hash = "sha256:d10cd85d87fb32da965005449f65010403a347b05574a375b945faa446e998b9"},

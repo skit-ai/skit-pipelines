@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.56
+- [x] update: skit-calls version bump to 0.2.25
+- [x] fix: upload2s3 folder upload bug
+
 ## 0.2.55
 - [x] upload2s3: correct bug in upload_as_directory that leads to flattening of path_on_disk contents in the target output_path (#82)
 - [x] change: changed the parser for Hindi from Unified Parser to Character split. This is a breaking change and support for ASR models hi-v4 and b
