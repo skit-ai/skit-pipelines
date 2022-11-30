@@ -31,9 +31,11 @@ def upload2s3(
         for root, dirs, files in os.walk(path_on_disk):
             for file in files:
                 middle_part = os.path.relpath(root,path_on_disk)
+                middle_part = "" if middle_part == "." else middle_part
                 s3_resource.upload_file(
                     os.path.join(root, file), bucket, os.path.join(upload_path, middle_part, file)
                 )
+                logger.debug(f"Uploaded ({os.path.join(root, file)}) to ({os.path.join(upload_path, middle_part, file)})")
 
     s3_resource = boto3.client("s3")
 
