@@ -12,6 +12,7 @@ def fetch_tagged_data_label_store(
     flow_id: str,
     end_date: Optional[str] = None,
     limit: int = 200,
+    data_labels: str = "",
 ):
 
     import json
@@ -32,6 +33,7 @@ def fetch_tagged_data_label_store(
     from sqlalchemy import create_engine
 
     from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.utils.normalize import comma_sep_str
 
     def get_query(query_file_name):
         with open(query_file_name) as handle:
@@ -74,22 +76,22 @@ def fetch_tagged_data_label_store(
             if item["from_name"] == "tag":
                 choices = item["value"]["choices"]
                 row["tag"] = choices[0]
-                row["intent_tag"] = choices
+                row["ls_intent"] = choices
             elif item["from_name"] == "ls_entities":
                 ls_entities.append(item["value"])
             elif item["from_name"] == "ls_transcription":
-                row["transcription_tag"] = item["value"]["text"][0]
+                row["ls_transcription"] = item["value"]["text"][0]
 
         if ls_entities:
-            row["entity_tag"] = ls_entities
+            row["ls_entities"] = ls_entities
 
         return row
 
     def unpack_annotation_result(df):
         df["tag"] = np.nan
-        df["intent_tag"] = np.nan
-        df["entity_tag"] = np.nan
-        df["transcription_tag"] = np.nan
+        df["ls_intent"] = np.nan
+        df["ls_entities"] = np.nan
+        df["ls_transcription"] = np.nan
         df = df.apply(extract_iet_annotations, axis=1)
         return df
 
@@ -188,11 +190,14 @@ def fetch_tagged_data_label_store(
     start_date = start_date.replace(tzinfo=pytz.UTC).isoformat(timespec="microseconds")
     end_date = end_date.replace(tzinfo=pytz.UTC).isoformat(timespec="microseconds")
 
+    data_labels = comma_sep_str(data_labels) if data_labels else data_labels
+    data_labels = tuple(set(data_labels or [None]))
     ann_params = {
         "flow_id": flow_id,
         "limit": limit,
         "start": start_date,
         "end": end_date,
+        "data_labels": data_labels,
     }
     _, annotations_file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     start = time.time()
@@ -205,6 +210,9 @@ def fetch_tagged_data_label_store(
     )
     logger.info(f"Finished fetching annotations in {time.time() - start:.2f} seconds")
     df_ann = pd.read_csv(annotations_file_path)
+
+    if df_ann.empty:
+        raise ValueError(f"No tagged data found for parameters: {ann_params}")
 
     conversation_uuids = tuple(df_ann["conversation_uuid"].tolist())
     call_uuids = tuple(df_ann["call_uuid"].tolist())
