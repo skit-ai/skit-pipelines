@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.58
+- [x] add: mandatory data_label field for tag_calls component
+- [x] add: optional data_labels field for fetch_tagged_data_from_labelstore component
+- [x] update: skit-labels version bump to 0.3.31
+
 ## 0.2.57
 - [x] fix: skit-calls secrets query for language - version bump to 0.2.26
 
