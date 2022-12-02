@@ -15,12 +15,12 @@ from skit_pipelines.components import (
 def tag_calls(
     org_id: str,
     s3_path: str,
+    data_label: str,
     job_ids: str = "",
     labelstudio_project_id: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    data_label: str = ""
 ):
     """
     A pipeline to upload a dataset for annotation.
@@ -67,7 +67,7 @@ def tag_calls(
     :type slack_thread: float, optional
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str, optional
+    :type data_label: str
     """
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
@@ -79,7 +79,7 @@ def tag_calls(
         project_id=labelstudio_project_id,
         token=auth_token.output,
         org_id=org_id,
-        data_label=data_label
+        data_label=data_label,
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:

@@ -21,6 +21,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     org_id: str,
     job_ids: str,
     lang: str,
+    data_label: str,
     start_date: str = "",
     end_date: str = "",
     ignore_callers: str = "",
@@ -41,7 +42,6 @@ def fetch_calls_n_upload_tog_and_sheet(
     channel: str = "",
     slack_thread: str = "",
     on_prem: bool = False,
-    data_label: str = ""
 ):
     """
     A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)
@@ -138,7 +138,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     :type on_prem: bool, optional
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str, optional
+    :type data_label: str
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -174,7 +174,7 @@ def fetch_calls_n_upload_tog_and_sheet(
         input_file=calls.output,
         job_ids=job_ids,
         token=auth_token.output,
-        data_label=data_label
+        data_label=data_label,
     )
 
     upload = upload2sheet_op(

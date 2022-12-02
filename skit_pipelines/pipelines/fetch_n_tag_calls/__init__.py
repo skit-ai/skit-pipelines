@@ -17,6 +17,7 @@ def fetch_n_tag_calls(
     client_id: int,
     org_id: str,
     lang: str,
+    data_label: str,
     start_date: str = "",
     end_date: str = "",
     job_ids: str = "",
@@ -38,7 +39,6 @@ def fetch_n_tag_calls(
     channel: str = "",
     slack_thread: str = "",
     on_prem: bool = False,
-    data_label: str = ""
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -152,7 +152,7 @@ def fetch_n_tag_calls(
     :type on_prem: bool, optional
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str, optional
+    :type data_label: str
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -190,7 +190,7 @@ def fetch_n_tag_calls(
         project_id=labelstudio_project_id,
         token=auth_token.output,
         org_id=org_id,
-        data_label=data_label
+        data_label=data_label,
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:
