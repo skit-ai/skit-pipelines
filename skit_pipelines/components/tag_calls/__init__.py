@@ -13,9 +13,13 @@ def tag_calls(
     project_id: Optional[str] = None,
     org_id: Optional[str] = None,
     call_project_id: Optional[str] = None,
+    data_label: Optional[str] = None,
 ) -> TaggingResponseType:
+    import argparse
     from loguru import logger
     from skit_labels import utils
+    from skit_labels.cli import is_valid_data_label
+    from skit_labels.constants import VALID_DATA_LABELS
 
     from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
     from skit_pipelines.components.tag_calls.tog import upload2tog
@@ -33,6 +37,13 @@ def tag_calls(
     if not job_ids and not project_id and not call_project_id:
         raise ValueError(
             "At least one of job_ids, project_id, call_project_id must be provided"
+        )
+
+    try:
+        is_valid_data_label(data_label)
+    except argparse.ArgumentTypeError as e:
+        raise ValueError(
+            f"Recieved an invalid data_label. Please pass one of [{', '.join(VALID_DATA_LABELS)}] as data_label"
         )
 
     if (not project_id and org_id) and (not call_project_id):
@@ -64,15 +75,15 @@ def tag_calls(
     print(f"{call_project_id=}")
 
     if job_ids:
-        errors, df_sizes = upload2tog(input_file, token, job_ids)
+        errors, df_sizes = upload2tog(input_file, token, job_ids, data_label)
 
     if project_id:
-        error, df_size = upload2labelstudio(input_file, project_id)
+        error, df_size = upload2labelstudio(input_file, project_id, data_label)
         errors.append(error)
         df_sizes.append(df_size)
 
     if call_project_id:
-        error, df_size = upload2labelstudio(input_file, call_project_id)
+        error, df_size = upload2labelstudio(input_file, call_project_id, data_label)
         errors.append(error)
         df_sizes.append(df_size)
 

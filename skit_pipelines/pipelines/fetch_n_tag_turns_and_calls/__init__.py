@@ -39,6 +39,7 @@ def fetch_n_tag_turns_and_calls(
     channel: str = "",
     slack_thread: str = "",
     on_prem: bool = False,
+    data_label: str = ""
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
@@ -154,6 +155,9 @@ def fetch_n_tag_turns_and_calls(
 
     :param on_prem: Whether the pipeline is run on prem or not, defaults to False
     :type on_prem: bool, optional
+
+    :param data_label: A label to identify the source of a datapoint
+    :type data_label: str, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -192,6 +196,7 @@ def fetch_n_tag_turns_and_calls(
         project_id=labelstudio_project_id,
         token=auth_token.output,
         org_id=org_id,
+        data_label=data_label
     )
 
     fetch_slot_and_calls_output = fetch_calls_for_slots_op(
@@ -210,6 +215,7 @@ def fetch_n_tag_turns_and_calls(
         token=auth_token.output,
         org_id=org_id,
         call_project_id=call_project_id,
+        data_label=data_label
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output) as check1:
