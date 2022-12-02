@@ -24,6 +24,7 @@ skit-pipelines
    Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
    Random sample and tag turns and calls <./skit_pipelines.pipelines.fetch_n_tag_turns_and_calls>
 
+
 .. toctree::
    :maxdepth: 1
    :hidden:
@@ -91,8 +92,9 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 +--+----------------------------------------------------------------------------------+
 | 11| :ref:`Retrain SLU <p_retrain_slu>`                                              |
 +--+----------------------------------------------------------------------------------+
-| 12| :ref:`Random sample and tag calls <p_fetch_n_tag_turns_and_calls>`              |
+| 12| :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
 +--+----------------------------------------------------------------------------------+
+
 
 Project strucuture
 ------------------

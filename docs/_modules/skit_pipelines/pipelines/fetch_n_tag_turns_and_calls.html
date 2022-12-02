@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls - skit-pipelines 0.2.54 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls - skit-pipelines 0.2.60 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.54 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.60 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.54 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.60 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -168,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -257,11 +258,11 @@
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">fetch_calls_for_slots_op</span><span class="p">,</span>
     <span class="n">fetch_calls_op</span><span class="p">,</span>
     <span class="n">org_auth_token_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">tag_calls_op</span><span class="p">,</span>
-    <span class="n">fetch_calls_for_slots_op</span>
 <span class="p">)</span>
 
 
@@ -273,6 +274,7 @@
     <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -351,6 +353,9 @@
 <span class="sd">    :param call_project_id: The labelstudio project id for call level tagging (slots &amp; call metrics) (this is a number) since this is optional, defaults to &quot;&quot;.</span>
 <span class="sd">    :type call_project_id: str</span>
 
+<span class="sd">    :param data_label: A label to identify the source of a datapoint</span>
+<span class="sd">    :type data_label: str</span>
+
 <span class="sd">    :param start_date: The start date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type start_date: str</span>
 
@@ -396,7 +401,7 @@
 <span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
 <span class="sd">    :type call_quantity: int, optional</span>
 
-<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to &quot;INBOUND&quot; and &quot;OUTBOUND&quot; both</span>
+<span class="sd">    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to &quot;INBOUND&quot; and &quot;OUTBOUND&quot; both</span>
 <span class="sd">    :type call_type: str, optional</span>
 
 <span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
@@ -448,18 +453,16 @@
         <span class="n">project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
+        <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
     <span class="p">)</span>
-
-
 
     <span class="n">fetch_slot_and_calls_output</span> <span class="o">=</span> <span class="n">fetch_calls_for_slots_op</span><span class="p">(</span>
         <span class="n">untagged_records_path</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
         <span class="n">language_code</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
         <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
-        <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span>
+        <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
     <span class="p">)</span>
-
 
     <span class="c1"># uploads data for call &amp; slot level tagging to labelstudio</span>
     <span class="n">tag_calls_output</span> <span class="o">=</span> <span class="n">tag_calls_op</span><span class="p">(</span>
@@ -468,10 +471,10 @@
         <span class="n">project_id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-        <span class="n">call_project_id</span><span class="o">=</span><span class="n">call_project_id</span>
+        <span class="n">call_project_id</span><span class="o">=</span><span class="n">call_project_id</span><span class="p">,</span>
+        <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
     <span class="p">)</span>
 
-    
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">tag_turns_output</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
         <span class="n">df_sizes</span> <span class="o">=</span> <span class="n">tag_turns_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df_sizes&quot;</span><span class="p">]</span>
         <span class="n">errors</span> <span class="o">=</span> <span class="n">tag_turns_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;errors&quot;</span><span class="p">]</span>
@@ -500,6 +503,7 @@
         <span class="n">task_no_cache2</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
         <span class="p">)</span></div>
+
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fetch_n_tag_turns_and_calls&quot;</span><span class="p">]</span>
 </pre></div>

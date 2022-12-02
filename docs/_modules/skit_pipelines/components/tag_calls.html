@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.tag_calls - skit-pipelines 0.2.54 documentation</title>
+        <title>skit_pipelines.components.tag_calls - skit-pipelines 0.2.60 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.54 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.60 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.54 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.60 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -168,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -268,10 +269,14 @@
     <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">org_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">call_project_id</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">call_project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">data_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaggingResponseType</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
     <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">utils</span>
+    <span class="kn">from</span> <span class="nn">skit_labels.cli</span> <span class="kn">import</span> <span class="n">is_valid_data_label</span>
+    <span class="kn">from</span> <span class="nn">skit_labels.constants</span> <span class="kn">import</span> <span class="n">VALID_DATA_LABELS</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines.components.tag_calls.labelstudio</span> <span class="kn">import</span> <span class="n">upload2labelstudio</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components.tag_calls.tog</span> <span class="kn">import</span> <span class="n">upload2tog</span>
@@ -287,7 +292,16 @@
 
     <span class="n">job_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">job_ids</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">job_ids</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">project_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">call_project_id</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one of job_ids, project_id, call_project_id must be provided&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;At least one of job_ids, project_id, call_project_id must be provided&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">is_valid_data_label</span><span class="p">(</span><span class="n">data_label</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentTypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Recieved an invalid data_label. Please pass one of [</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">VALID_DATA_LABELS</span><span class="p">)</span><span class="si">}</span><span class="s2">] as data_label&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">project_id</span> <span class="ow">and</span> <span class="n">org_id</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">call_project_id</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">org_id</span> <span class="o">==</span> <span class="mi">120</span><span class="p">:</span>
@@ -318,15 +332,15 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">call_project_id</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">job_ids</span><span class="p">:</span>
-        <span class="n">errors</span><span class="p">,</span> <span class="n">df_sizes</span> <span class="o">=</span> <span class="n">upload2tog</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">)</span>
+        <span class="n">errors</span><span class="p">,</span> <span class="n">df_sizes</span> <span class="o">=</span> <span class="n">upload2tog</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">,</span> <span class="n">data_label</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">project_id</span><span class="p">:</span>
-        <span class="n">error</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload2labelstudio</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">project_id</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload2labelstudio</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">data_label</span><span class="p">)</span>
         <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
         <span class="n">df_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_size</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">call_project_id</span><span class="p">:</span>
-        <span class="n">error</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload2labelstudio</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">call_project_id</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload2labelstudio</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">call_project_id</span><span class="p">,</span> <span class="n">data_label</span><span class="p">)</span>
         <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
         <span class="n">df_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_size</span><span class="p">)</span>
 

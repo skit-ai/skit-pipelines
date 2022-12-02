@@ -96,6 +96,9 @@ def fetch_n_tag_turns_and_calls(
     :param call_project_id: The labelstudio project id for call level tagging (slots & call metrics) (this is a number) since this is optional, defaults to "".
     :type call_project_id: str
 
+    :param data_label: A label to identify the source of a datapoint
+    :type data_label: str
+
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
 
@@ -141,7 +144,7 @@ def fetch_n_tag_turns_and_calls(
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
-    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
+    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
     :type call_type: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""
@@ -155,9 +158,6 @@ def fetch_n_tag_turns_and_calls(
 
     :param on_prem: Whether the pipeline is run on prem or not, defaults to False
     :type on_prem: bool, optional
-
-    :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
     """
     calls = fetch_calls_op(
         client_id=client_id,

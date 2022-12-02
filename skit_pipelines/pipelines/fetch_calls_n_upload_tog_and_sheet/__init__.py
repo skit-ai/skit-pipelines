@@ -74,6 +74,9 @@ def fetch_calls_n_upload_tog_and_sheet(
     :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
     :type job_ids: str
 
+    :param data_label: A label to identify the source of a datapoint
+    :type data_label: str
+
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
 
@@ -122,7 +125,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
-    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to "inbound and outbound" both
+    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
     :type call_type: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""
@@ -136,9 +139,6 @@ def fetch_calls_n_upload_tog_and_sheet(
 
     :param on_prem: Whether the pipeline is run on prem or not, defaults to False
     :type on_prem: bool, optional
-
-    :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
     """
     calls = fetch_calls_op(
         client_id=client_id,

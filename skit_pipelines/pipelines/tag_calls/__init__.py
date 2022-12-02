@@ -53,21 +53,27 @@ def tag_calls(
 
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
+
     :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
     :type job_ids: str
+
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
+
     :param s3_path: The s3 path to the dataset.
     :type s3_path: str
-    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
-    :type notify: str, optional
-    :param channel: The slack channel to send the notification, defaults to ""
-    :type channel: str, optional
-    :param slack_thread: The slack thread to send the notification, defaults to ""
-    :type slack_thread: float, optional
 
     :param data_label: A label to identify the source of a datapoint
     :type data_label: str
+
+    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
+    :type notify: str, optional
+
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
+
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: float, optional
     """
     auth_token = org_auth_token_op(org_id)
     auth_token.execution_options.caching_strategy.max_cache_staleness = (

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.60
+- [x] update: make docs
+
 ## 0.2.59
 - [x] update: remove default option for data_label in all tag_call component involving pipelines
 

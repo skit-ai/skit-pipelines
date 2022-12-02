@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet - skit-pipelines 0.2.49 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet - skit-pipelines 0.2.60 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.49 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.60 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.49 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.60 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -168,6 +168,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.eer_from_tog.html">Annotated Dataset Entity Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
@@ -191,6 +192,7 @@
 </li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.tag_calls.html">skit_pipelines.components.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload2sheet.html">skit_pipelines.components.upload2sheet package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.upload_for_call_and_slot_tagging.html">skit_pipelines.components.upload_for_call_and_slot_tagging package</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -202,6 +204,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet.html">skit_pipelines.pipelines.fetch_calls_n_upload_tog_and_sheet package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">skit_pipelines.pipelines.fetch_calls_pipeline package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">skit_pipelines.pipelines.fetch_n_tag_calls package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">skit_pipelines.pipelines.fetch_n_tag_turns_and_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">skit_pipelines.pipelines.fetch_tagged_calls_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
@@ -275,6 +278,7 @@
     <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">ignore_callers</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -327,6 +331,9 @@
 <span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
 <span class="sd">    :type job_ids: str</span>
 
+<span class="sd">    :param data_label: A label to identify the source of a datapoint</span>
+<span class="sd">    :type data_label: str</span>
+
 <span class="sd">    :param start_date: The start date range to filter calls in YYYY-MM-DD format.</span>
 <span class="sd">    :type start_date: str</span>
 
@@ -375,7 +382,7 @@
 <span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
 <span class="sd">    :type call_quantity: int, optional</span>
 
-<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to &quot;inbound and outbound&quot; both</span>
+<span class="sd">    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to &quot;INBOUND&quot; and &quot;OUTBOUND&quot; both</span>
 <span class="sd">    :type call_type: str, optional</span>
 
 <span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
@@ -424,6 +431,7 @@
         <span class="n">input_file</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">job_ids</span><span class="o">=</span><span class="n">job_ids</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
+        <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">upload</span> <span class="o">=</span> <span class="n">upload2sheet_op</span><span class="p">(</span>
