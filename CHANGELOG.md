@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.59
+- [x] update: remove default option for data_label in all tag_call component involving pipelines
+
 ## 0.2.58
 - [x] add: mandatory data_label field for tag_calls component
 - [x] add: optional data_labels field for fetch_tagged_data_from_labelstore component
