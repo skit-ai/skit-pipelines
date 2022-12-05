@@ -92,7 +92,7 @@ def fetch_calls(
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
 
-    def remove_empty_audios(df: pd.DataFrame, df_path: str):
+    def empty_audios_remover(df: pd.DataFrame, df_path: str):
         audios_dir_path = tempfile.mkdtemp()
         download_audio_wavs(
             audio_data_path=df_path,
@@ -118,7 +118,7 @@ def fetch_calls(
         ].drop("audio_filename", axis=1).to_csv(df_path, index=False)
 
     if remove_empty_audios:
-        remove_empty_audios(df=maybe_df, df_path=file_path)
+        empty_audios_remover(df=maybe_df, df_path=file_path)
 
     s3_path = upload2s3(
         file_path,
