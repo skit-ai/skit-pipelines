@@ -21,6 +21,7 @@ def fetch_calls_pipeline(
     states: str = "",
     call_quantity: int = 200,
     call_type: str = "",
+    remove_empty_audios: bool = True,
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",

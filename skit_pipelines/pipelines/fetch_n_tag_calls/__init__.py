@@ -35,6 +35,7 @@ def fetch_n_tag_calls(
     end_date_offset: int = 0,
     start_time_offset: int = 0,
     end_time_offset: int = 0,
+    remove_empty_audios: bool = True,
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -173,6 +174,7 @@ def fetch_n_tag_calls(
         asr_provider=asr_provider,
         states=states,
         on_prem=on_prem,
+        remove_empty_audios=remove_empty_audios,
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (
