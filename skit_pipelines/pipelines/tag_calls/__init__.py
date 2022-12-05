@@ -15,7 +15,7 @@ from skit_pipelines.components import (
 def tag_calls(
     org_id: str,
     s3_path: str,
-    data_label: str,
+    data_label: str = "",
     job_ids: str = "",
     labelstudio_project_id: str = "",
     notify: str = "",
@@ -48,7 +48,8 @@ def tag_calls(
             {
                 "org_id": 23,
                 "labelstudio_project_id": "41",
-                "s3_path": "s3://bucket/path/to/file.csv"
+                "s3_path": "s3://bucket/path/to/file.csv",
+                "data_label": "Client"
             }
 
     :param org_id: The organization id as per api-gateway.
@@ -64,7 +65,7 @@ def tag_calls(
     :type s3_path: str
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
+    :type data_label: str, optional. Defaults to "Live"
 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional

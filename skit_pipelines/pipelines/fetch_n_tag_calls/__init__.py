@@ -17,7 +17,7 @@ def fetch_n_tag_calls(
     client_id: int,
     org_id: str,
     lang: str,
-    data_label: str,
+    data_label: str = "",
     start_date: str = "",
     end_date: str = "",
     job_ids: str = "",
@@ -77,7 +77,8 @@ def fetch_n_tag_calls(
                 "reported": false,
                 "labelstudio_project_id": "135",
                 "call_quantity": 1000,
-                "flow_name" : "indigo_domain_tuning_english"
+                "flow_name" : "indigo_domain_tuning_english",
+                "data_label": "Client"
             }
 
     :param client_id: The client id as per api-gateway.
@@ -93,7 +94,7 @@ def fetch_n_tag_calls(
     :type labelstudio_project_id: str
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
+    :type data_label: str, optional. Defaults to "Live"
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str

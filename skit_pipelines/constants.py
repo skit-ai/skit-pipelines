@@ -255,3 +255,4 @@ GET_CALL_CONTEXT_LABEL_STORE = "pipeline_secrets/get_call_context_label_store.sq
 LABEL_STUDIO_DB_NAME = "label_studio"
 WAREHOUSE_DB_NAME = "warehouse"
 SQL_RANDOM_SEED = 0.5
+DATA_LABEL_DEFAULT = "Live"
