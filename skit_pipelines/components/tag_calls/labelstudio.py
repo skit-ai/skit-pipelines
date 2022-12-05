@@ -17,6 +17,6 @@ def upload2labelstudio(input_file: str, project_id: str, data_label: str):
         pipeline_constants.LABELSTUDIO_TOKEN,
         project_id,
         labels_constants.SOURCE__LABELSTUDIO,
-        data_label
+        data_label,
     )
     return str(error), df_size

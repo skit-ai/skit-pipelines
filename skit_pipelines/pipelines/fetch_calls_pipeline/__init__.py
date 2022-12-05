@@ -71,8 +71,10 @@ def fetch_calls_pipeline(
     :type states: str, optional
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
-    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
+    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to "INBOUND" and "OUTBOUND" both
     :type call_type: str, optional
+    :param remove_empty_audios: to remove calls with call audios being empty/broken, defaults to True
+    :type remove_empty_audios: bool
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
     :param channel: The slack channel to send the notification, defaults to ""
@@ -94,6 +96,7 @@ def fetch_calls_pipeline(
         min_duration=min_duration,
         asr_provider=asr_provider,
         states=states,
+        remove_empty_audios=remove_empty_audios,
     )
     calls.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

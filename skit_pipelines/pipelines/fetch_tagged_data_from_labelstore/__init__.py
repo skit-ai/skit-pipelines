@@ -20,7 +20,7 @@ def fetch_tagged_data_from_labelstore(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    data_labels: str = ""
+    data_labels: str = "",
 ):
     """
     A pipeline aimed at querying intent, entity, and transcriptions that happen across Skit
@@ -65,7 +65,11 @@ def fetch_tagged_data_from_labelstore(
     :type data_labels: str, optional
     """
     tagged_df = fetch_tagged_data_label_store_op(
-        flow_id=flow_id, start_date=start_date, end_date=end_date, limit=limit, data_labels=data_labels
+        flow_id=flow_id,
+        start_date=start_date,
+        end_date=end_date,
+        limit=limit,
+        data_labels=data_labels,
     )
 
     tagged_df.execution_options.caching_strategy.max_cache_staleness = (

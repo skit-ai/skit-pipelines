@@ -16,6 +16,7 @@ def tag_calls(
     data_label: Optional[str] = None,
 ) -> TaggingResponseType:
     import argparse
+
     from loguru import logger
     from skit_labels import utils
     from skit_labels.cli import is_valid_data_label

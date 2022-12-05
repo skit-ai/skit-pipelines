@@ -292,6 +292,7 @@
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">start_time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">end_time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -430,6 +431,7 @@
         <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span><span class="p">,</span>
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
         <span class="n">on_prem</span><span class="o">=</span><span class="n">on_prem</span><span class="p">,</span>
+        <span class="n">remove_empty_audios</span><span class="o">=</span><span class="n">remove_empty_audios</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">calls</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>

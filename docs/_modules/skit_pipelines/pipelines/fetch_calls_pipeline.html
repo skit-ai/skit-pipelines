@@ -278,6 +278,7 @@
     <span class="n">states</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">call_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
     <span class="n">call_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -327,8 +328,10 @@
 <span class="sd">    :type states: str, optional</span>
 <span class="sd">    :param call_quantity: Number of calls to sample, defaults to 200</span>
 <span class="sd">    :type call_quantity: int, optional</span>
-<span class="sd">    :param call_type: INBOUND, OUTBOUND, or CALL_TEST call filters. We can currently choose only one of these, or defaults to &quot;INBOUND&quot; and &quot;OUTBOUND&quot; both</span>
+<span class="sd">    :param call_type: inbound, outbound vs subtesting call filters. We can currently choose only one of these, or defaults to &quot;INBOUND&quot; and &quot;OUTBOUND&quot; both</span>
 <span class="sd">    :type call_type: str, optional</span>
+<span class="sd">    :param remove_empty_audios: to remove calls with call audios being empty/broken, defaults to True</span>
+<span class="sd">    :type remove_empty_audios: bool</span>
 <span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
 <span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
@@ -350,6 +353,7 @@
         <span class="n">min_duration</span><span class="o">=</span><span class="n">min_duration</span><span class="p">,</span>
         <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span><span class="p">,</span>
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
+        <span class="n">remove_empty_audios</span><span class="o">=</span><span class="n">remove_empty_audios</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">calls</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
