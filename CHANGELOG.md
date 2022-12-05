@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.61
+- [x] add: `remove_empty_audios` param controllable for fetch_calls_pipeline
+
 ## 0.2.60
 - [x] update: make docs
 
