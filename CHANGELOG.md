@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.63
+- [x] update: set default value of `data_label` as `Live`
+
 ## 0.2.62
 - [x] fix: `remove_empty_audios` not setting to false for fetch_calls
 
