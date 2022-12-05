@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.62
+- [x] fix: `remove_empty_audios` not setting to false for fetch_calls
+
 ## 0.2.61
 - [x] add: `remove_empty_audios` param controllable for fetch_calls_pipeline
 
