@@ -10,10 +10,10 @@ def tag_calls(
     input_file: str,
     token: str = "",
     job_ids: str = "",
+    data_label: str = "",
     project_id: Optional[str] = None,
     org_id: Optional[str] = None,
     call_project_id: Optional[str] = None,
-    data_label: Optional[str] = None,
 ) -> TaggingResponseType:
     import argparse
 
@@ -40,6 +40,7 @@ def tag_calls(
             "At least one of job_ids, project_id, call_project_id must be provided"
         )
 
+    data_label = data_label or pipeline_constants.DATA_LABEL_DEFAULT
     try:
         is_valid_data_label(data_label)
     except argparse.ArgumentTypeError as e:

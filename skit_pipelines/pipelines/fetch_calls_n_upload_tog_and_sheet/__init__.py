@@ -21,7 +21,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     org_id: str,
     job_ids: str,
     lang: str,
-    data_label: str,
+    data_label: str = "",
     start_date: str = "",
     end_date: str = "",
     ignore_callers: str = "",
@@ -63,6 +63,7 @@ def fetch_calls_n_upload_tog_and_sheet(
                 "job_ids": "4001,4002,4003",
                 "call_type": "INBOUND",
                 "sheet_id": "1juSkziNwbEZ6-ZfNGBoy32gp_PlG_fdsohgSje1e1dI",
+                "data_label": "Client"
             }
 
     :param client_id: The client id as per api-gateway.
@@ -75,7 +76,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     :type job_ids: str
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
+    :type data_label: str, optional. Defaults to "Live"
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str

@@ -38,6 +38,7 @@ def fetch_tagged_data_from_labelstore(
                 "limit": 20,
                 "start_date": "2022-11-12",
                 "end_date": "2022-11-16",
+                "data_labels": "Client, Live"
             }
 
     :param flow_id: The id of the flow from which annotated data should be queried

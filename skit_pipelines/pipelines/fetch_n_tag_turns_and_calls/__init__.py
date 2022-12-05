@@ -17,7 +17,7 @@ def fetch_n_tag_turns_and_calls(
     client_id: int,
     org_id: str,
     lang: str,
-    data_label: str,
+    data_label: str = "",
     start_date: str = "",
     end_date: str = "",
     job_ids: str = "",
@@ -59,7 +59,8 @@ def fetch_n_tag_turns_and_calls(
                 "start_date": "2022-11-10",
                 "end_date": "2022-11-11",
                 "labelstudio_project_id": 195,
-                "call_project_id": 194
+                "call_project_id": 194,
+                "data_label": "Client"
             }
 
     To use labelstudio:
@@ -97,7 +98,7 @@ def fetch_n_tag_turns_and_calls(
     :type call_project_id: str
 
     :param data_label: A label to identify the source of a datapoint
-    :type data_label: str
+    :type data_label: str, optional. Defaults to "Live"
 
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
