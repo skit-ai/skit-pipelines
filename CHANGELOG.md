@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.64
+- [x] fix: `data_label` bug
+
 ## 0.2.63
 - [x] update: set default value of `data_label` as `Live`
 
