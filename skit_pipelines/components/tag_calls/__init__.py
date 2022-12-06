@@ -21,6 +21,7 @@ def tag_calls(
     from skit_labels import utils
     from skit_labels.cli import is_valid_data_label
     from skit_labels.constants import VALID_DATA_LABELS
+    from skit_pipelines import constants as pipeline_constants
 
     from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
     from skit_pipelines.components.tag_calls.tog import upload2tog
