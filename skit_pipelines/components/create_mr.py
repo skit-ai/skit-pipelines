@@ -14,6 +14,7 @@ def create_mr(
     target_branch: str,
     source_branch: str,
     mr_title: str,
+    description: str = "",
 ) -> str:
     from urllib.parse import urljoin
 
@@ -34,6 +35,7 @@ def create_mr(
             "title": mr_title,
             "source_branch": source_branch,
             "target_branch": target_branch,
+            "description": description,
             "remove_source_branch": True,
         }
         logger.info(f"URL: {URL}")
