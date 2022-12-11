@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.65
+- [x] add: new component file_contents_to_markdown for better gitlab mr description with reports (#88)
+
 ## 0.2.64
 - [x] fix: `data_label` bug
 
