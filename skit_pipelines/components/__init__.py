@@ -24,6 +24,9 @@ from skit_pipelines.components.fetch_tagged_data_label_store import (
     fetch_tagged_data_label_store_op,
 )
 from skit_pipelines.components.fetch_tagged_dataset import fetch_tagged_dataset_op
+from skit_pipelines.components.file_contents_to_markdown import (
+    file_contents_to_markdown_op,
+)
 from skit_pipelines.components.gen_asr_metrics import gen_asr_metrics_op
 from skit_pipelines.components.gen_confusion_matrix import gen_confusion_matrix_op
 from skit_pipelines.components.gen_eer_metrics import gen_eer_metrics_op
@@ -59,4 +62,3 @@ from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
 from skit_pipelines.components.upload_for_call_and_slot_tagging import (
     fetch_calls_for_slots_op,
 )
-from skit_pipelines.components.file_contents_to_markdown import file_contents_to_markdown_op

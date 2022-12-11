@@ -7,10 +7,10 @@ from skit_pipelines.components import (
     download_repo_op,
     download_yaml_op,
     fetch_tagged_dataset_op,
+    file_contents_to_markdown_op,
     retrain_slu_from_repo_op,
     slack_notification_op,
     upload2s3_op,
-    file_contents_to_markdown_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -233,13 +233,13 @@ def retrain_slu(
 
     classification_report_markdown_op = file_contents_to_markdown_op(
         ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs['output_classification_report'],
+        path_on_disk=retrained_op.outputs["output_classification_report"],
         file_title="## Classification Report",
     )
-    
+
     confusion_matrix_markdown_op = file_contents_to_markdown_op(
         ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs['output_confusion_matrix'],
+        path_on_disk=retrained_op.outputs["output_confusion_matrix"],
         file_title="## Confusion Matrix",
     )
 
@@ -250,7 +250,7 @@ def retrain_slu(
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
-        description=f"{classification_report_markdown_op.output}{confusion_matrix_markdown_op.output}"
+        description=f"{classification_report_markdown_op.output}{confusion_matrix_markdown_op.output}",
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):

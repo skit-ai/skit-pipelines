@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_tagged_entity_dataset - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.components.file_contents_to_markdown - skit-pipelines 0.2.65 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -254,133 +254,38 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.pipelines.fetch_tagged_entity_dataset</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+          <h1>Source code for skit_pipelines.components.file_contents_to_markdown</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">kfp</span>
+<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-<span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">fetch_tagged_dataset_op</span><span class="p">,</span>
-    <span class="n">modify_entity_dataset_op</span><span class="p">,</span>
-    <span class="n">slack_notification_op</span><span class="p">,</span>
-    <span class="n">upload2s3_op</span><span class="p">,</span>
+
+
+<div class="viewcode-block" id="file_contents_to_markdown"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.file_contents_to_markdown.file_contents_to_markdown">[docs]</a><span class="k">def</span> <span class="nf">file_contents_to_markdown</span><span class="p">(</span>
+    <span class="n">ext</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">path_on_disk</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">file_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
+
+    <span class="n">final_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">:</span>
+        <span class="n">md_content</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_on_disk</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span>
+        <span class="n">final_content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">file_title</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">md_content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">final_content</span></div>
+
+
+<span class="n">file_contents_to_markdown_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">file_contents_to_markdown</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
 <span class="p">)</span>
-
-
-<div class="viewcode-block" id="fetch_tagged_entity_dataset"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html#skit_pipelines.pipelines.fetch_tagged_entity_dataset.fetch_tagged_entity_dataset">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fetch Tagged Entities Dataset Pipeline&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;fetches tagged entity dataset from tog &amp; does few modifications for eval&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">fetch_tagged_entity_dataset</span><span class="p">(</span>
-    <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">labelstudio_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">timezone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Asia/Kolkata&quot;</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;conversation&quot;</span><span class="p">,</span>
-    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A pipeline to fetch tagged entity dataset wiht modifications ready for eval.</span>
-
-<span class="sd">    .. _p_fetch_tagged_entity_dataset:</span>
-
-<span class="sd">    Example payload to invoke via slack integrations:</span>
-
-<span class="sd">        @charon run fetch_tagged_entity_dataset</span>
-
-<span class="sd">        .. code-block:: python</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 1,</span>
-<span class="sd">                &quot;job_id&quot;: &quot;4011&quot;,</span>
-<span class="sd">                &quot;start_date&quot;: &quot;2020-01-01&quot;,</span>
-<span class="sd">                &quot;end_date&quot;: &quot;2020-01-01&quot;</span>
-<span class="sd">            }</span>
-
-<span class="sd">    To use labelstudio:</span>
-
-<span class="sd">        @charon run fetch_tagged_entity_dataset</span>
-
-<span class="sd">        .. code-block:: python</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 1,</span>
-<span class="sd">                &quot;labelstudio_project_id&quot;: &quot;40&quot;,</span>
-<span class="sd">                &quot;start_date&quot;: &quot;2020-01-01&quot;,</span>
-<span class="sd">                &quot;end_date&quot;: &quot;2020-01-01&quot;</span>
-<span class="sd">            }</span>
-
-<span class="sd">    :param org_id: reference path to save the metrics.</span>
-<span class="sd">    :type org_id: str</span>
-<span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
-<span class="sd">    :type job_id: str</span>
-<span class="sd">    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
-<span class="sd">    :type labelstudio_project_id: str</span>
-<span class="sd">    :param start_date: The start date range (YYYY-MM-DD) to filter tagged data.</span>
-<span class="sd">    :type start_date: str</span>
-<span class="sd">    :param end_date: The end date range (YYYY-MM-DD) to filter tagged data</span>
-<span class="sd">    :type end_date: str</span>
-<span class="sd">    :param timezone: The timezone to apply for multi-region datasets, defaults to &quot;Asia/Kolkata&quot;</span>
-<span class="sd">    :type timezone: str, optional</span>
-<span class="sd">    :param task_type: https://github.com/skit-ai/skit-labels#task-types, defaults to &quot;conversation&quot;</span>
-<span class="sd">    :type task_type: str, optional</span>
-<span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
-<span class="sd">    :type notify: str, optional</span>
-<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
-<span class="sd">    :type channel: str, optional</span>
-<span class="sd">    :param slack_thread: The slack thread to send the notification, defaults to &quot;&quot;</span>
-<span class="sd">    :type slack_thread: str, optional</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">fetch_tagged_dataset_op</span><span class="p">(</span>
-        <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
-        <span class="n">project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
-        <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span><span class="p">,</span>
-        <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span><span class="p">,</span>
-        <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
-        <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">tagged_df</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-    <span class="p">)</span>
-
-    <span class="n">modified_df</span> <span class="o">=</span> <span class="n">modify_entity_dataset_op</span><span class="p">(</span>
-        <span class="n">tagged_df</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-        <span class="n">tog_job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
-        <span class="n">labelstudio_project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
-        <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">modified_df</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-    <span class="p">)</span>
-
-    <span class="n">s3_upload</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
-        <span class="n">path_on_disk</span><span class="o">=</span><span class="n">modified_df</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">org_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">file_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;tagged_entity&quot;</span><span class="p">,</span>
-        <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span><span class="p">,</span>
-        <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Here is your tagged entity data for </span><span class="si">{</span><span class="n">org_id</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="n">job_id</span><span class="si">=}</span><span class="s2">.&quot;</span>
-    <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">s3_upload</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2"> .&quot;</span>
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">s3_upload</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
-        <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
-            <span class="n">notification_text</span><span class="p">,</span>
-            <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
-            <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
-            <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-            <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-        <span class="p">)</span></div>
-
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fetch_tagged_entity_dataset&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>
