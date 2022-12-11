@@ -10,6 +10,7 @@ from skit_pipelines.components import (
     retrain_slu_from_repo_op,
     slack_notification_op,
     upload2s3_op,
+    file_contents_to_markdown_op,
 )
 
 UTTERANCES = pipeline_constants.UTTERANCES
@@ -216,7 +217,7 @@ def retrain_slu(
         reference=repo_name,
         file_type="test_classification_report",
         bucket=BUCKET,
-        ext=".csv",
+        ext=CSV_FILE,
     )
 
     upload_cm = upload2s3_op(
@@ -224,10 +225,22 @@ def retrain_slu(
         reference=repo_name,
         file_type="test_confusion_matrix",
         bucket=BUCKET,
-        ext=".csv",
+        ext=CSV_FILE,
     )
     upload_cm.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
+    )
+
+    classification_report_markdown_op = file_contents_to_markdown_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs['output_classification_report'],
+        file_title="## Classification Report",
+    )
+    
+    confusion_matrix_markdown_op = file_contents_to_markdown_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs['output_confusion_matrix'],
+        file_title="## Confusion Matrix",
     )
 
     mr_response_op = create_mr_op(
@@ -237,6 +250,7 @@ def retrain_slu(
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
+        description=f"{classification_report_markdown_op.output}{confusion_matrix_markdown_op.output}"
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
