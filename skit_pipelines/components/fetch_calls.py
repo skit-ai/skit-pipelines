@@ -98,7 +98,7 @@ def fetch_calls(
             audio_data_path=df_path,
             output_path=audios_dir_path,
             audio_sample_rate="8k",
-            audio_download_workers=30,
+            audio_download_workers=40,
         )
         if not df.size:
             raise ValueError("No calls found for the above parameters")

@@ -11,10 +11,10 @@ def upload2tog(input_file: str, token: str, job_ids: List[str], data_label: str)
     errors = []
     df_sizes = []
     for job_id in job_ids:
-        errors, df_size = upload_dataset(
+        error, df_size = upload_dataset(
             input_file, url, token, job_id, labels_constants.SOURCE__DB, data_label
         )
-        if errors:
-            errors.extend(errors)
+        if error:
+            errors.extend(error)
         df_sizes.append(df_size)
     return errors, df_sizes

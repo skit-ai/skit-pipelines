@@ -81,12 +81,16 @@ def tag_calls(
         errors, df_sizes = upload2tog(input_file, token, job_ids, data_label)
 
     if project_id:
-        error, df_size = upload2labelstudio(input_file, project_id, data_label)
+        project_ids = comma_sep_str(project_id)
+        logger.debug(f"{project_ids=}")
+        error, df_size = upload2labelstudio(input_file, project_ids, data_label)
         errors.append(error)
         df_sizes.append(df_size)
 
     if call_project_id:
-        error, df_size = upload2labelstudio(input_file, call_project_id, data_label)
+        call_project_ids = comma_sep_str(call_project_id)
+        logger.debug(f"{call_project_ids=}")
+        error, df_size = upload2labelstudio(input_file, call_project_ids, data_label)
         errors.append(error)
         df_sizes.append(df_size)
 
