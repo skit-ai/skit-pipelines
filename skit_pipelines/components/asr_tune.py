@@ -71,7 +71,11 @@ def asr_tune(
     exec_shell(f"cd {BASE_PATH}/kaldi && git pull")
     exec_shell(f"cd {BASE_PATH}/kaldi && pip install -r requirements.txt")
     # __clone_corprep
-    exec_shell(f"cd {BASE_PATH}/corprep && poetry install")
+    exec_shell('cd ~/corprep && git config --local user.email "someemail@provider.com"')
+    exec_shell('cd ~/corprep && git config --local user.name "Some Email"')
+    exec_shell(
+        f"cd {BASE_PATH}/corprep && rm poetry.lock && git stash && git pull && poetry install"
+    )
     exec_shell(f"cd {BASE_PATH}/corprep && poetry run pip3 install -U nltk")
 
     exec_shell(f"cd {BASE_PATH}/g2p && poetry install")
