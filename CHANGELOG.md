@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.67
+- [x] fix: Auto-MR creation breaks in SLU training pipeline when classification report / confusion matrix is long (#91)
+- [x] update: use poetry version only what mentioned in SLU repo in retrain_slu pipeline
+- [x] update: cache the poetry install step for faster docker builds and dev experience (#90)
+- [x] fix: asr tune pull request #89 from skit-ai/asr_tune_hi_fix
+
+
 ## 0.2.66
 - [x] update: upload same data to multiple labelstudio project ids
 
