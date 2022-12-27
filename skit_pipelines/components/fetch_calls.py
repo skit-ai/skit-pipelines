@@ -82,7 +82,7 @@ def fetch_calls(
         reported=reported or None,
         use_case=use_case or None,
         flow_name=flow_name or None,
-        min_duration=min_duration or None,
+        min_duration=float(min_duration) if min_duration else None,
         asr_provider=asr_provider or None,
         states=states or None,
         on_disk=False,

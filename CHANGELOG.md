@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.68
+- [x] update: skit-calls version bump to 0.2.27 for sampling call on min_duration
+
 ## 0.2.67
 - [x] fix: Auto-MR creation breaks in SLU training pipeline when classification report / confusion matrix is long (#91)
 - [x] update: use poetry version only what mentioned in SLU repo in retrain_slu pipeline
