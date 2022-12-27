@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.69
+- [x] revert: "cache the poetry install step for faster docker builds and dev experience (#90)" (#92)
+
 ## 0.2.68
 - [x] update: skit-calls version bump to 0.2.27 for sampling call on min_duration
 
