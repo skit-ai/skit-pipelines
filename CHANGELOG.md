@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.70
+- [x] skit-calls version bump for minute offset to def process_date_filters - in fetch_calls component
+
 ## 0.2.69
 - [x] revert: "cache the poetry install step for faster docker builds and dev experience (#90)" (#92)
 
