@@ -35,11 +35,9 @@ RUN poetry config virtualenvs.create false
 
 RUN conda install scipy
 
-COPY poetry.lock pyproject.toml .
+COPY . .
 
 RUN poetry install --only main && poetry install --only main
-
-COPY . .
 
 # install johnny.
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
