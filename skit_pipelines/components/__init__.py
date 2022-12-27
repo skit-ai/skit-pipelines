@@ -10,6 +10,7 @@ from skit_pipelines.components.download_from_s3 import (
     download_csv_from_s3_op,
     download_directory_from_s3_op,
     download_file_from_s3_op,
+    download_file_from_s3
 )
 from skit_pipelines.components.download_repo import download_repo_op
 from skit_pipelines.components.download_yaml import download_yaml_op
@@ -24,8 +25,8 @@ from skit_pipelines.components.fetch_tagged_data_label_store import (
     fetch_tagged_data_label_store_op,
 )
 from skit_pipelines.components.fetch_tagged_dataset import fetch_tagged_dataset_op
-from skit_pipelines.components.file_contents_to_markdown import (
-    file_contents_to_markdown_op,
+from skit_pipelines.components.file_contents_to_markdown_s3 import (
+    file_contents_to_markdown_s3_op,
 )
 from skit_pipelines.components.gen_asr_metrics import gen_asr_metrics_op
 from skit_pipelines.components.gen_confusion_matrix import gen_confusion_matrix_op

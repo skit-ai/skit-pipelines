@@ -42,7 +42,7 @@ def retrain_slu_from_repo(
     )
     from skit_pipelines.utils.normalize import comma_sep_str
 
-    execute_cli = lambda cmd: subprocess.run(cmd.split())
+    execute_cli = lambda cmd, split=True: subprocess.run(cmd.split() if split else cmd, shell=not split)
     create_dataset_path = lambda data_type, dataset_type: os.path.join(
         data_type,
         "classification/datasets",
@@ -146,8 +146,7 @@ def retrain_slu_from_repo(
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
-
-        execute_cli("pip install poetry -U")
+        execute_cli("pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')", split=False)
         execute_cli("make install")
 
         if not os.path.exists("data.dvc") and initial_training:
@@ -233,7 +232,7 @@ def retrain_slu_from_repo(
                     )
                 else:
                     test_df["intent"] = ""
-
+                    test_df.to_csv(new_test_path, index=False)
             execute_cli(f"slu test")
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
