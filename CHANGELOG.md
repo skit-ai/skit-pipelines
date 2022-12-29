@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.71
+- [x] fix: granular time filters not getting applied for ml fetch calls pipelines
+
 ## 0.2.70
 - [x] skit-calls version bump for minute offset to def process_date_filters - in fetch_calls component
 
