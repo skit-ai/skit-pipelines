@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.72
+- [x] fix: granular time filters not getting applied for ml fetch calls pipelines - date offset
+
+
 0.2.71
 - [x] fix: granular time filters not getting applied for ml fetch calls pipelines
 
