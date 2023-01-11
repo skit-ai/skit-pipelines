@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.73
+- [x] update: skit-calls version bump - calls-with-cors path removal for audio_url in fetched calls.
+
 0.2.72
 - [x] fix: granular time filters not getting applied for ml fetch calls pipelines - date offset
 
