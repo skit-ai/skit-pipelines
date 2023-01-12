@@ -1,13 +1,13 @@
 import json
+import os
+import tempfile
 from typing import Any, Dict, Iterable, List
 
 from kfp_server_api.models.api_run_detail import ApiRunDetail as kfp_ApiRunDetail
-from skit_pipelines.components.download_from_s3 import download_file_from_s3
-import tempfile
 from loguru import logger
-import os
 
 import skit_pipelines.constants as const
+from skit_pipelines.components.download_from_s3 import download_file_from_s3
 
 
 def filter_artifact_nodes(nodes: Dict[str, Any], **filter_map) -> List[Dict[str, Any]]:
@@ -69,15 +69,21 @@ class ParseRunResponse:
 
         if not self.success:
             self.failed_artifact_nodes = filter_artifact_nodes(
-                run_manifest["status"]["nodes"], type=const.NODE_TYPE_POD, phase='Failed'
+                run_manifest["status"]["nodes"],
+                type=const.NODE_TYPE_POD,
+                phase="Failed",
             )
             failed_logs_uri = [
-                uri for obj in map(artifact_node_to_uri, self.failed_artifact_nodes) for uri in obj
+                uri
+                for obj in map(artifact_node_to_uri, self.failed_artifact_nodes)
+                for uri in obj
             ]
             self.set_error_logs(failed_logs_uri)
             return
 
-        self.artifact_nodes = filter_artifact_nodes(run_manifest["status"]["nodes"], type=const.NODE_TYPE_POD)
+        self.artifact_nodes = filter_artifact_nodes(
+            run_manifest["status"]["nodes"], type=const.NODE_TYPE_POD
+        )
         return [
             uri for obj in map(artifact_node_to_uri, self.artifact_nodes) for uri in obj
         ]
@@ -86,8 +92,8 @@ class ParseRunResponse:
         for log_uri in uris:
             _, file_path = tempfile.mkstemp(suffix=".txt")
         download_file_from_s3(storage_path=log_uri, output_path=file_path)
-        with open(file_path, 'r') as log_file:
+        with open(file_path, "r") as log_file:
             log_text = log_file.read()
             logger.error(log_text)
             self.error_logs += log_text
-        os.remove(file_path) # delete temp log file
+        os.remove(file_path)  # delete temp log file

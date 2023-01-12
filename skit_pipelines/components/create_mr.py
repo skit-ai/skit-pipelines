@@ -15,8 +15,8 @@ def create_mr(
     mr_title: str,
     s3_description_paths: str,
 ) -> str:
-    from urllib.parse import urljoin
     import tempfile
+    from urllib.parse import urljoin
 
     import requests
     from loguru import logger
@@ -24,9 +24,9 @@ def create_mr(
     from skit_pipelines import constants as const
     from skit_pipelines.components.download_from_s3 import download_file_from_s3
     from skit_pipelines.utils.normalize import comma_sep_str
-    
+
     def get_description(s3_description_paths: str) -> str:
-        description = ''
+        description = ""
         s3_paths = comma_sep_str(s3_description_paths)
         for s3_path in s3_paths:
             _, save_path = tempfile.mkstemp(suffix=".md")

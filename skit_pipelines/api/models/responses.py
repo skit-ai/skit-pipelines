@@ -59,6 +59,6 @@ def successfulCreationResponse(run_id: str, name: str, namespace: str):
             "name": name,
             "run_id": run_id,
             "run_url": const.GET_RUN_URL(namespace, run_id),
-            "error_logs": ""
+            "error_logs": "",
         }
     )
