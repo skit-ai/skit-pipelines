@@ -28,6 +28,15 @@ ENV DISPLAY=:99
 RUN apt-get -y update\
     && apt-get -y install libblas-dev liblapack-dev gfortran ffmpeg cmake
 
+# install johnny.
+RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
+    | grep "\"browser_download_url.*linux-amd64.tar.gz\"" \
+    | cut -d : -f 2,3 | tr -d \" \
+    | wget -qi - -O johnny.tar.gz \
+    && tar -xvzf johnny.tar.gz \
+    && pwd \
+    && ls -lat .
+
 RUN conda install git pip
 RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
 RUN pip install -U pip setuptools && pip install poetry==1.2.2 numpy==1.22.0 regex==2022.7.25 pygit2==1.10.0
@@ -39,14 +48,6 @@ COPY . .
 
 RUN poetry install --only main && poetry install --only main
 
-# install johnny.
-RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
-    | grep "\"browser_download_url.*linux-amd64.tar.gz\"" \
-    | cut -d : -f 2,3 | tr -d \" \
-    | wget -qi - -O johnny.tar.gz \
-    && tar -xvzf johnny.tar.gz \
-    && pwd \
-    && ls -lat .
 
 ARG BASE_IMAGE
 ARG CUDA_IMAGE

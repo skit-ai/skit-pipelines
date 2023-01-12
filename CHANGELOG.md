@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.74
+- [x] add: get pipeline run error logs as slackbot message (#93)
+
 0.2.73
 - [x] update: skit-calls version bump - calls-with-cors path removal for audio_url in fetched calls.
 
