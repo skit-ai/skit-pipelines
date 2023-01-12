@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.create_mr - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.components.create_mr - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -264,21 +264,33 @@
 
 
 <div class="viewcode-block" id="create_mr"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.create_mr.create_mr">[docs]</a><span class="k">def</span> <span class="nf">create_mr</span><span class="p">(</span>
-    <span class="o">*</span><span class="p">,</span>
     <span class="n">git_host_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">target_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">source_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">mr_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">s3_description_paths</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">tempfile</span>
     <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 
     <span class="kn">import</span> <span class="nn">requests</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_from_s3</span> <span class="kn">import</span> <span class="n">download_file_from_s3</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
+
+    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="n">s3_description_paths</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">s3_paths</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">s3_description_paths</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s3_path</span> <span class="ow">in</span> <span class="n">s3_paths</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">save_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span>
+            <span class="n">download_file_from_s3</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">+=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">description</span>
 
     <span class="k">if</span> <span class="n">git_host_name</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">:</span>
         <span class="n">URL</span> <span class="o">=</span> <span class="p">(</span>
@@ -292,7 +304,7 @@
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">mr_title</span><span class="p">,</span>
             <span class="s2">&quot;source_branch&quot;</span><span class="p">:</span> <span class="n">source_branch</span><span class="p">,</span>
             <span class="s2">&quot;target_branch&quot;</span><span class="p">:</span> <span class="n">target_branch</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">get_description</span><span class="p">(</span><span class="n">s3_description_paths</span><span class="p">),</span>
             <span class="s2">&quot;remove_source_branch&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;URL: </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

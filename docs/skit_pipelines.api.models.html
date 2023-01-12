@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components package" href="skit_pipelines.components.html" /><link rel="prev" title="skit_pipelines.api package" href="skit_pipelines.api.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.api.models package - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.api.models package - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -331,6 +331,11 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.ParseRunResponse.set_error_logs">
+<span class="sig-name descname"><span class="pre">set_error_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uris</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#ParseRunResponse.set_error_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.ParseRunResponse.set_error_logs" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.ParseRunResponse.set_state">
 <span class="sig-name descname"><span class="pre">set_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#ParseRunResponse.set_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.ParseRunResponse.set_state" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
@@ -354,7 +359,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.custom_models.filter_artifact_nodes">
-<span class="sig-name descname"><span class="pre">filter_artifact_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#filter_artifact_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.filter_artifact_nodes" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">filter_artifact_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">filter_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/custom_models.html#filter_artifact_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.custom_models.filter_artifact_nodes" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</p>
@@ -442,6 +447,11 @@
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StatusResponseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/models/responses.html#StatusResponseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.error_logs">
+<span class="sig-name descname"><span class="pre">error_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.error_logs" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="skit_pipelines.api.models.responses.StatusResponseModel.message">
 <span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#skit_pipelines.api.models.responses.StatusResponseModel.message" title="Permalink to this definition">#</a></dt>

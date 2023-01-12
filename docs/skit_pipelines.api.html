@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.api.models package" href="skit_pipelines.api.models.html" /><link rel="prev" title="skit_pipelines package" href="skit_pipelines.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.api package - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.api package - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -125,7 +125,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -282,7 +282,7 @@
 <span id="skit-pipelines-api-auth-module"></span><h2>skit_pipelines.api.auth module<a class="headerlink" href="#module-skit_pipelines.api.auth" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="skit_pipelines.api.auth.authenticate_user">
-<span class="sig-name descname"><span class="pre">authenticate_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'tog-service&#64;skit.ai':</span> <span class="pre">{'hashed_password':</span> <span class="pre">'$2b$12$UCL4U5wjvEe0gn.Gs6FdCe5jOgMSSRy08ZPJJGuPLllnYh1QhwtUu',</span> <span class="pre">'username':</span> <span class="pre">'tog-service&#64;skit.ai'}}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#authenticate_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.authenticate_user" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">authenticate_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'tog-service&#64;skit.ai':</span> <span class="pre">{'hashed_password':</span> <span class="pre">'$2b$12$NNc7ZHZpfjANFPkK2zrIEORwG/G6lBY2Gtv66p3i2km9RNgSSXJ4q',</span> <span class="pre">'username':</span> <span class="pre">'tog-service&#64;skit.ai'}}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/api/auth.html#authenticate_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.api.auth.authenticate_user" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -480,20 +480,20 @@ For [2] we require users to pass indented, neat, dictionaries. The serialization
 <p>Removing attributes other than <code class="code docutils literal notranslate"><span class="pre">event</span></code> for brevity, even within
 <code class="code docutils literal notranslate"><span class="pre">event.blocks</span></code> is redacted. It is helpful for markdown content that
 users may send.</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;client_msg_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;UUID&gt;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;message&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;help&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;ts&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1654862590.595759&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;team&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;blocks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{}],</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;channel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;event_ts&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1654862590.595759&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nt">&quot;channel_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;im&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;client_msg_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;UUID&gt;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;message&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;help&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;ts&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1654862590.595759&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;team&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;blocks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{}],</span>
+<span class="w">        </span><span class="nt">&quot;channel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[A-Z0-9]+&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;event_ts&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1654862590.595759&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;channel_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;im&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

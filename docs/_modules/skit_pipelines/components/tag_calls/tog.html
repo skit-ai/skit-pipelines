@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.tag_calls.tog - skit-pipelines 0.2.60 documentation</title>
+        <title>skit_pipelines.components.tag_calls.tog - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.60 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.60 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -268,11 +268,11 @@
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">df_sizes</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">:</span>
-        <span class="n">errors</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload_dataset</span><span class="p">(</span>
+        <span class="n">error</span><span class="p">,</span> <span class="n">df_size</span> <span class="o">=</span> <span class="n">upload_dataset</span><span class="p">(</span>
             <span class="n">input_file</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">labels_constants</span><span class="o">.</span><span class="n">SOURCE__DB</span><span class="p">,</span> <span class="n">data_label</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
         <span class="n">df_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">errors</span><span class="p">,</span> <span class="n">df_sizes</span></div>
 </pre></div>

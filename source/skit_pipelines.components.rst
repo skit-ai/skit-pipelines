@@ -121,10 +121,10 @@ skit\_pipelines.components.fetch\_tagged\_dataset module
    :undoc-members:
    :show-inheritance:
 
-skit\_pipelines.components.file\_contents\_to\_markdown module
---------------------------------------------------------------
+skit\_pipelines.components.file\_contents\_to\_markdown\_s3 module
+------------------------------------------------------------------
 
-.. automodule:: skit_pipelines.components.file_contents_to_markdown
+.. automodule:: skit_pipelines.components.file_contents_to_markdown_s3
    :members:
    :undoc-members:
    :show-inheritance:

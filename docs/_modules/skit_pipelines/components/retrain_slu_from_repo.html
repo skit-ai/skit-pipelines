@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -299,7 +299,9 @@
     <span class="p">)</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
-    <span class="n">execute_cli</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">execute_cli</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">split</span> <span class="k">else</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="ow">not</span> <span class="n">split</span>
+    <span class="p">)</span>
     <span class="n">create_dataset_path</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">dataset_type</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">data_type</span><span class="p">,</span>
         <span class="s2">&quot;classification/datasets&quot;</span><span class="p">,</span>
@@ -403,8 +405,10 @@
         <span class="n">new_branch</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="c1"># checkout to new branch</span>
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
-
-        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;pip install poetry -U&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="s2">&quot;pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= &#39;{print $2}&#39;)&quot;</span><span class="p">,</span>
+            <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;make install&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
@@ -445,7 +449,7 @@
         <span class="k">if</span> <span class="n">train_split_percent</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
             <span class="c1"># split into train and test</span>
             <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;slu split-data --train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span> <span class="k">if</span> <span class="n">stratify</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;slu split-data --train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
                 <span class="c1"># combine with older train set</span>
@@ -490,7 +494,7 @@
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
+                    <span class="n">test_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu test&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">classification_report_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
                 <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CLASSIFICATION_REPORT</span>

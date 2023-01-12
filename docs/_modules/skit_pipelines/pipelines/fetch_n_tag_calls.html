@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -298,7 +298,7 @@
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">on_prem</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to randomly sample calls and upload for annotation.</span>
 
 <span class="sd">    .. _p_fetch_n_tag_calls:</span>
@@ -458,7 +458,7 @@
         <span class="n">errors</span> <span class="o">=</span> <span class="n">tag_calls_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;errors&quot;</span><span class="p">]</span>
 
         <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Finished a request for </span><span class="si">{</span><span class="n">call_quantity</span><span class="si">}</span><span class="s2"> calls. Fetched from </span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">client_id</span><span class="si">=}</span><span class="s2">.</span>
-<span class="s2">        Uploaded </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">calls</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">df_sizes</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">org_id</span><span class="si">=}</span><span class="s2">) for tagging to </span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">.&quot;&quot;&quot;</span>
+<span class="s2">        Uploaded </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">calls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;output&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">df_sizes</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">org_id</span><span class="si">=}</span><span class="s2">) for tagging to </span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">.&quot;&quot;&quot;</span>
         <span class="n">notification_text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Errors: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">errors</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
 
         <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>

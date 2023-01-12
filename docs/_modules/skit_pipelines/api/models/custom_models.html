@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.api.models.custom_models - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.api.models.custom_models - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -256,17 +256,27 @@
         <article role="main">
           <h1>Source code for skit_pipelines.api.models.custom_models</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">from</span> <span class="nn">kfp_server_api.models.api_run_detail</span> <span class="kn">import</span> <span class="n">ApiRunDetail</span> <span class="k">as</span> <span class="n">kfp_ApiRunDetail</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
 
 <span class="kn">import</span> <span class="nn">skit_pipelines.constants</span> <span class="k">as</span> <span class="nn">const</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.components.download_from_s3</span> <span class="kn">import</span> <span class="n">download_file_from_s3</span>
 
 
-<div class="viewcode-block" id="filter_artifact_nodes"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.filter_artifact_nodes">[docs]</a><span class="k">def</span> <span class="nf">filter_artifact_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-    <span class="k">return</span> <span class="p">[</span>
-        <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="n">const</span><span class="o">.</span><span class="n">NODE_TYPE</span><span class="p">]</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">NODE_TYPE_POD</span>
-    <span class="p">]</span></div>
+<div class="viewcode-block" id="filter_artifact_nodes"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.filter_artifact_nodes">[docs]</a><span class="k">def</span> <span class="nf">filter_artifact_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">filter_map</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="n">req_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">filter_key</span><span class="p">,</span> <span class="n">filter_value</span> <span class="ow">in</span> <span class="n">filter_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="n">filter_key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">filter_value</span><span class="p">:</span>
+                <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
+            <span class="n">req_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">req_nodes</span></div>
 
 
 <div class="viewcode-block" id="get_kf_object_uri"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.get_kf_object_uri">[docs]</a><span class="k">def</span> <span class="nf">get_kf_object_uri</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">store</span><span class="o">=</span><span class="s2">&quot;s3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -287,7 +297,7 @@
 
 
 <div class="viewcode-block" id="ParseRunResponse"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.ParseRunResponse">[docs]</a><span class="k">class</span> <span class="nc">ParseRunResponse</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run Response parser</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -298,6 +308,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">artifact_nodes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pending</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_logs</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">uris</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_response</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ParseRunResponse.set_state"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.ParseRunResponse.set_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_status</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -314,12 +325,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">current_status</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">failed_artifact_nodes</span> <span class="o">=</span> <span class="n">filter_artifact_nodes</span><span class="p">(</span>
+                <span class="n">run_manifest</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">],</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">NODE_TYPE_POD</span><span class="p">,</span>
+                <span class="n">phase</span><span class="o">=</span><span class="s2">&quot;Failed&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">failed_logs_uri</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">uri</span>
+                <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">artifact_node_to_uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">failed_artifact_nodes</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">obj</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_error_logs</span><span class="p">(</span><span class="n">failed_logs_uri</span><span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">artifact_nodes</span> <span class="o">=</span> <span class="n">filter_artifact_nodes</span><span class="p">(</span><span class="n">run_manifest</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artifact_nodes</span> <span class="o">=</span> <span class="n">filter_artifact_nodes</span><span class="p">(</span>
+            <span class="n">run_manifest</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">NODE_TYPE_POD</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">uri</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">artifact_node_to_uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artifact_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">obj</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="ParseRunResponse.set_error_logs"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.ParseRunResponse.set_error_logs">[docs]</a>    <span class="k">def</span> <span class="nf">set_error_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uris</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">log_uri</span> <span class="ow">in</span> <span class="n">uris</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+        <span class="n">download_file_from_s3</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">log_uri</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log_file</span><span class="p">:</span>
+            <span class="n">log_text</span> <span class="o">=</span> <span class="n">log_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">log_text</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error_logs</span> <span class="o">+=</span> <span class="n">log_text</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>  <span class="c1"># delete temp log file</span></div></div>
 </pre></div>
         </article>
       </div>

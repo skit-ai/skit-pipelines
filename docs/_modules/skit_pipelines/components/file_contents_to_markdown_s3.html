@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.fetch_tagged_dataset - skit-pipelines 0.2.74 documentation</title>
+        <title>skit_pipelines.components.file_contents_to_markdown_s3 - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -254,97 +254,53 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.components.fetch_tagged_dataset</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+          <h1>Source code for skit_pipelines.components.file_contents_to_markdown_s3</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">kfp</span>
-<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">OutputPath</span>
+<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">InputPath</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
-<div class="viewcode-block" id="fetch_tagged_dataset"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.fetch_tagged_dataset.fetch_tagged_dataset">[docs]</a><span class="k">def</span> <span class="nf">fetch_tagged_dataset</span><span class="p">(</span>
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">job_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">project_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;conversation&quot;</span><span class="p">,</span>
-    <span class="n">timezone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">start_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">start_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">end_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">empty_possible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">asyncio</span>
-    <span class="kn">import</span> <span class="nn">time</span>
+<div class="viewcode-block" id="file_contents_to_markdown_s3"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.file_contents_to_markdown_s3.file_contents_to_markdown_s3">[docs]</a><span class="k">def</span> <span class="nf">file_contents_to_markdown_s3</span><span class="p">(</span>
+    <span class="n">ext</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">path_on_disk</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">file_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="kn">import</span> <span class="nn">tempfile</span>
 
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="kn">import</span> <span class="nn">pytz</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-    <span class="kn">from</span> <span class="nn">skit_calls.cli</span> <span class="kn">import</span> <span class="n">process_date_filters</span>
-    <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
-    <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">utils</span>
-    <span class="kn">from</span> <span class="nn">skit_labels.commands</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">download_dataset_from_db</span><span class="p">,</span>
-        <span class="n">download_dataset_from_labelstudio</span><span class="p">,</span>
-    <span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-    <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="n">upload2s3</span>
 
-    <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">final_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">host</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_HOST</span>
-    <span class="n">port</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PORT</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PASSWORD</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_USER</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;file type is csv&quot;</span><span class="p">)</span>
+        <span class="n">md_content</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_on_disk</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span>
+        <span class="n">final_content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">file_title</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">md_content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">timezone</span><span class="p">:</span>
-        <span class="n">timezone</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TIMEZONE</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.md&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">final_content</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">task_type</span><span class="p">:</span>
-        <span class="n">task_type</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">TASK_TYPE__CONVERSATION</span>
-
-    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">df_paths</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">if</span> <span class="n">start_date_offset</span> <span class="ow">or</span> <span class="n">end_date_offset</span><span class="p">:</span>
-        <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">process_date_filters</span><span class="p">(</span>
-            <span class="n">start_date_offset</span><span class="o">=</span><span class="n">start_date_offset</span><span class="p">,</span>
-            <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
+        <span class="n">s3_path</span> <span class="o">=</span> <span class="n">upload2s3</span><span class="p">(</span>
+            <span class="n">file_path</span><span class="p">,</span>
+            <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">file_title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">file_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;MR-Description&quot;</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">BUCKET</span><span class="p">,</span>
+            <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.md&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">job_id</span> <span class="ow">or</span> <span class="n">project_id</span><span class="p">:</span>
-        <span class="n">job_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">job_id</span> <span class="ow">or</span> <span class="n">project_id</span><span class="p">)</span>  <span class="c1"># tog or labelstudio</span>
-        <span class="k">for</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="n">job_ids</span><span class="p">:</span>
-            <span class="n">df_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">download_dataset_from_db</span><span class="p">(</span>
-                <span class="n">job_id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">job_id</span><span class="p">),</span>
-                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">timezone</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span> <span class="k">if</span> <span class="n">timezone</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
-                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
-                <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-                <span class="n">db</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">LABELSTUIO_DB</span> <span class="k">if</span> <span class="n">project_id</span> <span class="k">else</span> <span class="s2">&quot;tog&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">df_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">empty_possible</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either job_id or project_id must be provided&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">return</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">df_path</span> <span class="ow">in</span> <span class="n">df_paths</span><span class="p">])</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">s3_path</span></div>
 
 
-<span class="n">fetch_tagged_dataset_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
-    <span class="n">fetch_tagged_dataset</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
+<span class="n">file_contents_to_markdown_s3_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">file_contents_to_markdown_s3</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
 <span class="p">)</span>
 </pre></div>
         </article>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.retrain_slu - skit-pipelines 0.2.65 documentation</title>
+        <title>skit_pipelines.pipelines.retrain_slu - skit-pipelines 0.2.74 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.65 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.65 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -264,7 +264,7 @@
     <span class="n">download_repo_op</span><span class="p">,</span>
     <span class="n">download_yaml_op</span><span class="p">,</span>
     <span class="n">fetch_tagged_dataset_op</span><span class="p">,</span>
-    <span class="n">file_contents_to_markdown_op</span><span class="p">,</span>
+    <span class="n">file_contents_to_markdown_s3_op</span><span class="p">,</span>
     <span class="n">retrain_slu_from_repo_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">upload2s3_op</span><span class="p">,</span>
@@ -305,7 +305,7 @@
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to retrain an existing SLU model.</span>
 
 <span class="sd">    .. _p_retrain_slu:</span>
@@ -488,13 +488,13 @@
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="n">classification_report_markdown_op</span> <span class="o">=</span> <span class="n">file_contents_to_markdown_op</span><span class="p">(</span>
+    <span class="n">classification_report_markdown_file_op</span> <span class="o">=</span> <span class="n">file_contents_to_markdown_s3_op</span><span class="p">(</span>
         <span class="n">ext</span><span class="o">=</span><span class="n">CSV_FILE</span><span class="p">,</span>
         <span class="n">path_on_disk</span><span class="o">=</span><span class="n">retrained_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_classification_report&quot;</span><span class="p">],</span>
         <span class="n">file_title</span><span class="o">=</span><span class="s2">&quot;## Classification Report&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">confusion_matrix_markdown_op</span> <span class="o">=</span> <span class="n">file_contents_to_markdown_op</span><span class="p">(</span>
+    <span class="n">confusion_matrix_markdown_file_op</span> <span class="o">=</span> <span class="n">file_contents_to_markdown_s3_op</span><span class="p">(</span>
         <span class="n">ext</span><span class="o">=</span><span class="n">CSV_FILE</span><span class="p">,</span>
         <span class="n">path_on_disk</span><span class="o">=</span><span class="n">retrained_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output_confusion_matrix&quot;</span><span class="p">],</span>
         <span class="n">file_title</span><span class="o">=</span><span class="s2">&quot;## Confusion Matrix&quot;</span><span class="p">,</span>
@@ -507,7 +507,7 @@
         <span class="n">target_branch</span><span class="o">=</span><span class="n">target_mr_branch</span><span class="p">,</span>
         <span class="n">source_branch</span><span class="o">=</span><span class="n">retrained_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">mr_title</span><span class="o">=</span><span class="s2">&quot;Auto retrained changes&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">classification_report_markdown_op</span><span class="o">.</span><span class="n">output</span><span class="si">}{</span><span class="n">confusion_matrix_markdown_op</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">s3_description_paths</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">classification_report_markdown_file_op</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">confusion_matrix_markdown_file_op</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">retrained_op</span><span class="p">,</span> <span class="n">mr_response_op</span><span class="p">):</span>
