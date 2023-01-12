@@ -90,6 +90,7 @@ NODE_OUTPUT = "outputs"
 NODE_ARTIFACTS = "artifacts"
 ARTIFACT_URI_KEY = "key"
 OBJECT_BUCKET = "bucket"
+NODE_PHASE = "phase"
 
 NAME = "name"
 VALUE = "value"

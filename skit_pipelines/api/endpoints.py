@@ -99,8 +99,11 @@ async def schedule_run_completion(
         res = json.loads(msg.body.decode("utf8"))
         message = res.get("response", {}).get("message")
         url = res.get("response", {}).get("run_url")
+        error_logs = res.get("response", {}).get("error_logs")
         message = f"<{url}|{message}>"
         slack_notification(message, channel=slack_channel, thread_id=slack_thread)
+        if error_logs:
+            slack_notification(message="Check error logs for more info :point_down:", channel=slack_channel, thread_id=slack_thread, file_title="Error Logs", file_content=error_logs)
 
 
 @app.get("/")
