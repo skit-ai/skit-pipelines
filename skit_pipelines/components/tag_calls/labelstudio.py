@@ -1,8 +1,8 @@
 import tempfile
 
+from loguru import logger
 from skit_labels import constants as labels_constants
 from skit_labels.cli import upload_dataset
-from loguru import logger
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components.download_from_s3 import download_csv_from_s3

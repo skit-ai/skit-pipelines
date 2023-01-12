@@ -11,6 +11,7 @@ class StatusResponseModel(BaseModel):
     message: str
     run_id: str
     run_url: str
+    error_logs: str = ""
     uris: Union[List[str], None] = None
     webhook: bool = False
 
@@ -42,6 +43,7 @@ def statusWiseResponse(run_response: ParseRunResponse, webhook=False):
         status = "pending"
     else:
         _message.message = "Run failed."
+        _message.error_logs = run_response.error_logs
         status = "error"
         status_code = 500
 
@@ -57,5 +59,6 @@ def successfulCreationResponse(run_id: str, name: str, namespace: str):
             "name": name,
             "run_id": run_id,
             "run_url": const.GET_RUN_URL(namespace, run_id),
+            "error_logs": "",
         }
     )

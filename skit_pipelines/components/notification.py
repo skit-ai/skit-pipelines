@@ -9,6 +9,8 @@ def slack_notification(
     channel: str = "",
     cc: str = "",
     thread_id: str = "",
+    file_title: str = "",
+    file_content: str = "",
 ) -> None:
     """
     Send a message on any channel.
@@ -36,13 +38,23 @@ def slack_notification(
 
     try:
         client = WebClient(token=pipeline_constants.SLACK_TOKEN)
-        client.chat_postMessage(
-            channel=channel,
-            **slack_message_blocks,
-            link_names=1,
-            thread_ts=thread_id or None,
-            parse="full",
-        )
+        if file_content:
+            client.files_upload(
+                initial_comment=message,
+                content=file_content,
+                title=file_title,
+                channels=channel,
+                filetype="auto",
+                thread_ts=thread_id or None,
+            )
+        else:
+            client.chat_postMessage(
+                channel=channel,
+                **slack_message_blocks,
+                link_names=1,
+                thread_ts=thread_id or None,
+                parse="full",
+            )
     except SlackApiError as error:
         logger.error(error)
         logger.error(traceback.format_exc())
