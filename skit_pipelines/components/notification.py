@@ -42,6 +42,7 @@ def slack_notification(
             client.files_upload(
                 initial_comment=message,
                 content=file_content,
+                title=file_title,
                 channels=channel,
                 filetype="auto",
                 thread_ts=thread_id or None,
