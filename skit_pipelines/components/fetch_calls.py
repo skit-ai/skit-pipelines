@@ -89,6 +89,8 @@ def fetch_calls(
         on_prem=on_prem,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
+    if not maybe_df.size:
+        raise ValueError("No calls found for the above parameters")
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
 
@@ -117,8 +119,8 @@ def fetch_calls(
             )
         ].drop("audio_filename", axis=1).to_csv(df_path, index=False)
 
-    if remove_empty_audios:
-        empty_audios_remover(df=maybe_df, df_path=file_path)
+    # if remove_empty_audios:
+    #     empty_audios_remover(df=maybe_df, df_path=file_path)
 
     s3_path = upload2s3(
         file_path,
