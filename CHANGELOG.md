@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.75
+- [x] update: removed audio validation from fetch_calls component as min_duration is present now.
+
 0.2.74
 - [x] add: get pipeline run error logs as slackbot message (#93)
 
