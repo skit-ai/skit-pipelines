@@ -22,7 +22,7 @@ def fetch_calls_for_slots(
 
     df["date"] = df["reftime"].apply(lambda x: parser.isoparse(x).strftime("%Y-%m-%d"))
     df["call_link"] = df["call_uuid"].apply(
-        lambda x: f"https://console.vernacular.ai/{org_id}/call-report/#/call?uuid={x}"
+        lambda x: f"{pipeline_constants.CONSOLE_URL}/{org_id}/call-report/#/call?uuid={x}"
     )
     df["language"] = language_code
 
