@@ -18,6 +18,14 @@ CONSOLE_API_URL = os.environ["SKIT_API_GATEWAY_URL"]
 CONSOLE_IAM_EMAIL = os.environ["SKIT_API_GATEWAY_EMAIL"]
 CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
+# console base URL, for call report purposes
+CONSOLE_URL = (
+    "https://console.skit.ai"
+    if REGION == AP_SOUTH_1
+    else "https://console.us.skit.ai"
+)
+
+
 AUDIO_URL_DOMAIN = os.environ["AUDIO_URL_DOMAIN"]
 
 # for fsm-db
