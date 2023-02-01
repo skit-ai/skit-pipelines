@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.76
+- [x] fix: made console URL region specific to fix call & slot tagging job uploads (esp in US)
+
 0.2.75
 - [x] update: removed audio validation from fetch_calls component as min_duration is present now.
 
