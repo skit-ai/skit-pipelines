@@ -35,6 +35,9 @@ compile_pipes:
 dev:
 	@source secrets/env.sh && ./docker_build_dev_image $(tag)
 
+us_dev:
+	@source secrets/us_env.sh && ./us_docker_build_dev_image $(tag)
+
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
