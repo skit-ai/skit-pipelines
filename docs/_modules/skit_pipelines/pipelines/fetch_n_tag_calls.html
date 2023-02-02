@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.74 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.76 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.76 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.76 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -257,6 +257,7 @@
           <h1>Source code for skit_pipelines.pipelines.fetch_n_tag_calls</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">fetch_calls_op</span><span class="p">,</span>
     <span class="n">org_auth_token_op</span><span class="p">,</span>
@@ -264,6 +265,8 @@
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">tag_calls_op</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">USE_FSM_URL</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">USE_FSM_URL</span>
 
 
 <div class="viewcode-block" id="fetch_n_tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html#skit_pipelines.pipelines.fetch_n_tag_calls.fetch_n_tag_calls">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
@@ -296,7 +299,7 @@
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">on_prem</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_fsm_url</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to randomly sample calls and upload for annotation.</span>
@@ -410,8 +413,8 @@
 <span class="sd">    :param slack_thread: The slack thread to send the notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type slack_thread: float, optional</span>
 
-<span class="sd">    :param on_prem: Whether the pipeline is run on prem or not, defaults to False</span>
-<span class="sd">    :type on_prem: bool, optional</span>
+<span class="sd">    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False</span>
+<span class="sd">    :type use_fsm_url: bool, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
         <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
@@ -431,7 +434,7 @@
         <span class="n">min_duration</span><span class="o">=</span><span class="n">min_duration</span><span class="p">,</span>
         <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span><span class="p">,</span>
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
-        <span class="n">on_prem</span><span class="o">=</span><span class="n">on_prem</span><span class="p">,</span>
+        <span class="n">use_fsm_url</span><span class="o">=</span><span class="n">USE_FSM_URL</span> <span class="ow">or</span> <span class="n">use_fsm_url</span><span class="p">,</span>
         <span class="n">remove_empty_audios</span><span class="o">=</span><span class="n">remove_empty_audios</span><span class="p">,</span>
     <span class="p">)</span>
 
