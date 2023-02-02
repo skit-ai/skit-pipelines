@@ -2,6 +2,7 @@ from typing import Optional
 
 import kfp
 
+from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_calls_op,
     org_auth_token_op,
@@ -11,6 +12,7 @@ from skit_pipelines.components import (
     upload2sheet_op,
 )
 
+USE_FSM_URL = pipeline_constants.USE_FSM_URL
 
 @kfp.dsl.pipeline(
     name="Fetch calls and push to tog and sheet",
@@ -41,7 +43,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    on_prem: bool = False,
+    use_fsm_url: bool = False,
 ):
     """
     A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)
@@ -138,8 +140,8 @@ def fetch_calls_n_upload_tog_and_sheet(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: float, optional
 
-    :param on_prem: Whether the pipeline is run on prem or not, defaults to False
-    :type on_prem: bool, optional
+    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
+    :type use_fsm_url: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -159,7 +161,7 @@ def fetch_calls_n_upload_tog_and_sheet(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
-        on_prem=on_prem,
+        use_fsm_url=USE_FSM_URL or use_fsm_url
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

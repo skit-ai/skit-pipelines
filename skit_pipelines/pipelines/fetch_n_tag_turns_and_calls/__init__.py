@@ -1,5 +1,6 @@
 import kfp
 
+from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_calls_for_slots_op,
     fetch_calls_op,
@@ -8,6 +9,7 @@ from skit_pipelines.components import (
     tag_calls_op,
 )
 
+USE_FSM_URL = pipeline_constants.USE_FSM_URL
 
 @kfp.dsl.pipeline(
     name="Fetch and push for tagging turns & calls pipeline",
@@ -39,7 +41,7 @@ def fetch_n_tag_turns_and_calls(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    on_prem: bool = False,
+    use_fsm_url: bool = False,
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
@@ -157,8 +159,8 @@ def fetch_n_tag_turns_and_calls(
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: float, optional
 
-    :param on_prem: Whether the pipeline is run on prem or not, defaults to False
-    :type on_prem: bool, optional
+    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
+    :type use_fsm_url: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -178,7 +180,7 @@ def fetch_n_tag_turns_and_calls(
         min_duration=min_duration,
         asr_provider=asr_provider,
         states=states,
-        on_prem=on_prem,
+        use_fsm_url=USE_FSM_URL or use_fsm_url,
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

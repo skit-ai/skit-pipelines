@@ -25,7 +25,7 @@ def fetch_calls(
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
     states: Optional[str] = None,
-    on_prem: bool = False,
+    use_fsm_url: bool = False,
     remove_empty_audios: bool = True,
 ) -> str:
     import os
@@ -86,7 +86,7 @@ def fetch_calls(
         asr_provider=asr_provider or None,
         states=states or None,
         on_disk=False,
-        on_prem=on_prem,
+        use_fsm_url=use_fsm_url,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     if not maybe_df.size:

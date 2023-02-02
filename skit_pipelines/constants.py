@@ -25,6 +25,8 @@ CONSOLE_URL = (
     else "https://console.us.skit.ai"
 )
 
+# logic for getting the correct URL for the audio files based on region
+USE_FSM_URL = False if REGION == AP_SOUTH_1 else True
 
 AUDIO_URL_DOMAIN = os.environ["AUDIO_URL_DOMAIN"]
 

@@ -1,5 +1,6 @@
 import kfp
 
+from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_calls_op,
     read_json_key_op,
@@ -7,6 +8,7 @@ from skit_pipelines.components import (
     upload2sheet_op,
 )
 
+USE_FSM_URL = pipeline_constants.USE_FSM_URL
 
 @kfp.dsl.pipeline(
     name="Fetch and push for calls to gogole sheets pipeline",
@@ -34,7 +36,7 @@ def fetch_calls_n_push_to_sheets(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    on_prem: bool = False,
+    use_fsm_url: bool = False,
 ):
     untagged_records_s3_path = fetch_calls_op(
         client_id=client_id,
@@ -53,7 +55,7 @@ def fetch_calls_n_push_to_sheets(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
-        on_prem=on_prem,
+        use_fsm_url=USE_FSM_URL or use_fsm_url,
     )
 
     untagged_records_s3_path.execution_options.caching_strategy.max_cache_staleness = (
