@@ -1,5 +1,10 @@
 # Changelog
 
+0.2.77
+- [x] update: use_fsm_url flag based on region for deciding turn audio uri paths should be from fsm or s3 bucket directly
+- [x] update: skit-calls version bump for use-fsm-url flag
+- [x] update: org_auth_token component's output is optional since tog deprecated
+
 0.2.76
 - [x] fix: made console URL region specific to fix call & slot tagging job uploads (esp in US)
 
