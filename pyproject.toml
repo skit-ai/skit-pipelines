@@ -32,7 +32,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.5"
 GitPython = "^3.1.27"
 google-auth-oauthlib = "0.4.6"
-skit-calls = "0.2.32"
+skit-calls = "0.2.33"
 SQLAlchemy = "1.4.42"
 
 [tool.poetry.dev-dependencies]
