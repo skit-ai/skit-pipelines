@@ -76,7 +76,7 @@ def fetch_calls(
         end_date,
         lang,
         domain_url=pipeline_constants.AUDIO_URL_DOMAIN,
-        call_quantity=call_quantity,
+        call_quantity=call_quantity + const.DEFAULT_CALL_QUANTITY,
         call_type=call_type or None,
         ignore_callers=ignore_callers,
         reported=reported or None,
