@@ -234,7 +234,7 @@ DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
 # K8s
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
-CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.xlarge"
+CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.2xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
 
 # Bots

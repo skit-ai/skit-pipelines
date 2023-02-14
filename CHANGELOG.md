@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.78
+- [x] update: buffer for call_quantity for fetch_calls component
+
 0.2.77
 - [x] update: use_fsm_url flag based on region for deciding turn audio uri paths should be from fsm or s3 bucket directly
 - [x] update: skit-calls version bump for use-fsm-url flag
