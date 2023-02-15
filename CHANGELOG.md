@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.79
+- [x] add: skit-calls version bump which includes new columns for fetch_calls component returned csv - call_type, disposition, call_end_status, flow_name
+
 0.2.78
 - [x] update: buffer for call_quantity for fetch_calls component
 
