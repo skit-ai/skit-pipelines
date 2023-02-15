@@ -17,7 +17,7 @@ def fetch_calls_for_slots(
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components import upload2s3
 
-    df = pd.read_csv(untagged_records_path, usecols=["call_uuid", "reftime"])
+    df = pd.read_csv(untagged_records_path, usecols=["call_uuid", "reftime", "call_type", "language", "call_end_status", "disposition", "flow_id", "flow_version", "flow_name", "call_duration"])
     df = df.drop_duplicates(subset=["call_uuid"])
 
     df["date"] = df["reftime"].apply(lambda x: parser.isoparse(x).strftime("%Y-%m-%d"))
@@ -25,10 +25,10 @@ def fetch_calls_for_slots(
         lambda x: f"{pipeline_constants.CONSOLE_URL}/{org_id}/call-report/#/call?uuid={x}"
     )
     df["language"] = language_code
-
-    df.drop(labels=["call_uuid", "reftime"], axis="columns", inplace=True)
     print(df.head())
     df.to_csv("op.csv", index=False)
+
+    print(df.columns)
 
     s3_path = upload2s3(
         "op.csv",
@@ -48,5 +48,5 @@ fetch_calls_for_slots_op = kfp.components.create_component_from_func(
 if __name__ == "__main__":
 
     fetch_calls_for_slots(
-        untagged_records_path="./indigo_untagged.csv", org_id="34", language_code="en"
+        untagged_records_path="./vi_ta.csv", org_id="65", language_code="ta"
     )
