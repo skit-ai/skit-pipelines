@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.80
+- [x] [PL-997] adding more call metadata from upstream for CRR tagging
+
 0.2.79
 - [x] add: skit-calls version bump which includes new columns for fetch_calls component returned csv - call_type, disposition, call_end_status, flow_name
 

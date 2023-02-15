@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.upload_for_call_and_slot_tagging - skit-pipelines 0.2.76 documentation</title>
+        <title>skit_pipelines.components.upload_for_call_and_slot_tagging - skit-pipelines 0.2.80 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.76 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.80 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.76 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.80 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -274,7 +274,7 @@
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="n">upload2s3</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">untagged_records_path</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;call_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;reftime&quot;</span><span class="p">])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">untagged_records_path</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;call_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;reftime&quot;</span><span class="p">,</span> <span class="s2">&quot;call_type&quot;</span><span class="p">,</span> <span class="s2">&quot;language&quot;</span><span class="p">,</span> <span class="s2">&quot;call_end_status&quot;</span><span class="p">,</span> <span class="s2">&quot;disposition&quot;</span><span class="p">,</span> <span class="s2">&quot;flow_id&quot;</span><span class="p">,</span> <span class="s2">&quot;flow_version&quot;</span><span class="p">,</span> <span class="s2">&quot;flow_name&quot;</span><span class="p">,</span> <span class="s2">&quot;call_duration&quot;</span><span class="p">])</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;call_uuid&quot;</span><span class="p">])</span>
 
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;reftime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">parser</span><span class="o">.</span><span class="n">isoparse</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">))</span>
@@ -282,10 +282,10 @@
         <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CONSOLE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">org_id</span><span class="si">}</span><span class="s2">/call-report/#/call?uuid=</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language_code</span>
-
-    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;call_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;reftime&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
     <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;op.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
     <span class="n">s3_path</span> <span class="o">=</span> <span class="n">upload2s3</span><span class="p">(</span>
         <span class="s2">&quot;op.csv&quot;</span><span class="p">,</span>
@@ -305,7 +305,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="n">fetch_calls_for_slots</span><span class="p">(</span>
-        <span class="n">untagged_records_path</span><span class="o">=</span><span class="s2">&quot;./indigo_untagged.csv&quot;</span><span class="p">,</span> <span class="n">org_id</span><span class="o">=</span><span class="s2">&quot;34&quot;</span><span class="p">,</span> <span class="n">language_code</span><span class="o">=</span><span class="s2">&quot;en&quot;</span>
+        <span class="n">untagged_records_path</span><span class="o">=</span><span class="s2">&quot;./vi_ta.csv&quot;</span><span class="p">,</span> <span class="n">org_id</span><span class="o">=</span><span class="s2">&quot;65&quot;</span><span class="p">,</span> <span class="n">language_code</span><span class="o">=</span><span class="s2">&quot;ta&quot;</span>
     <span class="p">)</span>
 </pre></div>
         </article>
