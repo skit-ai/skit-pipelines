@@ -194,8 +194,8 @@ def modify_truth(df: pd.DataFrame, ds_source: str, timezone: str = "Asia/Kolkata
         language = df.iloc[0]["raw.language"]
         df["extracted_tagged_entities"] = df["tag"].apply(extract_truth_in_tog)
     elif ds_source == "labelstudio":
-        language = df.iloc[0]["language"]
-        df["extracted_tagged_entities"] = df["ls_entities"].apply(
+        language = df.iloc[0]["raw.language"]
+        df["extracted_tagged_entities"] = df["raw.entities"].apply(
             extract_truth_in_labelstudio
         )
 
