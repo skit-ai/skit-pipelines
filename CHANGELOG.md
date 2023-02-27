@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.81
+- [x] fix: upstream column names for entity tagged dataset
+- [x] update: version bump for skit-calls which helps to sample turns in a call based on comma separated list of intents
+
 0.2.80
 - [x] [PL-997] adding more call metadata from upstream for CRR tagging
 
