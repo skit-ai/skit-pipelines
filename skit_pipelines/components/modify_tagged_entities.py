@@ -46,9 +46,11 @@ modify_entity_dataset_op = kfp.components.create_component_from_func(
 )
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-# modify_entity_dataset("4284.csv", "duck_4284.csv", tog_job_id=4284)
-# modify_entity_dataset("l2.csv", "duck_l2.csv", labelstudio_project_id=85)
+    # modify_entity_dataset("4284.csv", "duck_4284.csv", tog_job_id=4284)
+    # modify_entity_dataset("l2.csv", "duck_l2.csv", labelstudio_project_id=85)
 
-# modify_entity_dataset("lu2.csv", "duck_lu2.csv", labelstudio_project_id=85, timezone="America/New_York")
+    # modify_entity_dataset("lu2.csv", "duck_lu2.csv", labelstudio_project_id=85, timezone="America/New_York")
+
+    modify_entity_dataset("amey_65.csv", "amey_65_duck.csv", labelstudio_project_id=65)
