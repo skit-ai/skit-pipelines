@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.76 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.81 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.76 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.81 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.76 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.81 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -287,6 +287,7 @@
     <span class="n">flow_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">min_duration</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">asr_provider</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">intents</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">states</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">reported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">call_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
@@ -385,6 +386,9 @@
 
 <span class="sd">    :param states: Filter calls in a comma separated list of states, defaults to &quot;&quot;</span>
 <span class="sd">    :type states: str, optional</span>
+<span class="sd">    </span>
+<span class="sd">    :param intents: Filter turns in sampled calls from a comma separated list of intents, defaults to &quot;&quot;</span>
+<span class="sd">    :type intents: str, optional</span>
 
 <span class="sd">    :param start_date_offset: Offset the start date by an integer value, defaults to 0</span>
 <span class="sd">    :type start_date_offset: int, optional</span>
@@ -433,6 +437,7 @@
         <span class="n">flow_name</span><span class="o">=</span><span class="n">flow_name</span><span class="p">,</span>
         <span class="n">min_duration</span><span class="o">=</span><span class="n">min_duration</span><span class="p">,</span>
         <span class="n">asr_provider</span><span class="o">=</span><span class="n">asr_provider</span><span class="p">,</span>
+        <span class="n">intents</span><span class="o">=</span><span class="n">intents</span><span class="p">,</span>
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
         <span class="n">use_fsm_url</span><span class="o">=</span><span class="n">USE_FSM_URL</span> <span class="ow">or</span> <span class="n">use_fsm_url</span><span class="p">,</span>
         <span class="n">remove_empty_audios</span><span class="o">=</span><span class="n">remove_empty_audios</span><span class="p">,</span>
