@@ -24,6 +24,7 @@ def fetch_calls(
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
     asr_provider: Optional[str] = None,
+    intents: Optional[str] = None,
     states: Optional[str] = None,
     use_fsm_url: bool = False,
     remove_empty_audios: bool = True,
@@ -69,6 +70,7 @@ def fetch_calls(
 
     start = time.time()
     states = comma_sep_str(states) if states else states
+    intents = comma_sep_str(intents) if intents else intents
 
     maybe_df = calls.sample(
         client_id,
@@ -84,6 +86,7 @@ def fetch_calls(
         flow_name=flow_name or None,
         min_duration=float(min_duration) if min_duration else None,
         asr_provider=asr_provider or None,
+        intents=intents or None,
         states=states or None,
         on_disk=False,
         use_fsm_url=use_fsm_url,

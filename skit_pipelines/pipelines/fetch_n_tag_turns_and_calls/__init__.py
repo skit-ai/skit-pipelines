@@ -31,6 +31,7 @@ def fetch_n_tag_turns_and_calls(
     min_duration: str = "",
     asr_provider: str = "",
     states: str = "",
+    intents: str = "",
     reported: bool = False,
     call_quantity: int = 200,
     call_type: str = "",
@@ -131,6 +132,9 @@ def fetch_n_tag_turns_and_calls(
 
     :param states: Filter calls in a comma separated list of states, defaults to ""
     :type states: str, optional
+    
+    :param intents: Filter turns in sampled calls from a comma separated list of intents, defaults to ""
+    :type intents: str, optional
 
     :param start_date_offset: Offset the start date by an integer value, defaults to 0
     :type start_date_offset: int, optional
@@ -179,6 +183,7 @@ def fetch_n_tag_turns_and_calls(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
+        intents=intents,
         states=states,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
     )
