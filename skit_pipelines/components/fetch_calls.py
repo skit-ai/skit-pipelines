@@ -7,10 +7,10 @@ from skit_pipelines import constants as pipeline_constants
 
 def fetch_calls(
     *,
-    client_id: int,
     lang: str,
     start_date: str,
     end_date: Optional[str] = None,
+    client_id: Optional[str] = None,
     start_date_offset: int = 0,
     end_date_offset: int = 0,
     start_time_offset: int = 0,
@@ -20,6 +20,7 @@ def fetch_calls(
     timezone: Optional[str] = None,
     ignore_callers: Optional[str] = None,
     reported: bool = False,
+    template_id: Optional[str] = None,
     use_case: Optional[str] = None,
     flow_name: Optional[str] = None,
     min_duration: Optional[str] = None,
@@ -71,17 +72,19 @@ def fetch_calls(
     start = time.time()
     states = comma_sep_str(states) if states else states
     intents = comma_sep_str(intents) if intents else intents
-
+    client_id = comma_sep_str(client_id) if client_id else client_id
+    print("client_ids", client_id)
     maybe_df = calls.sample(
-        client_id,
         start_date,
         end_date,
         lang,
         domain_url=pipeline_constants.AUDIO_URL_DOMAIN,
+        org_ids=client_id,
         call_quantity=call_quantity + const.DEFAULT_CALL_QUANTITY,
         call_type=call_type or None,
         ignore_callers=ignore_callers,
         reported=reported or None,
+        template_id=template_id or None,
         use_case=use_case or None,
         flow_name=flow_name or None,
         min_duration=float(min_duration) if min_duration else None,
@@ -124,10 +127,10 @@ def fetch_calls(
 
     # if remove_empty_audios:
     #     empty_audios_remover(df=maybe_df, df_path=file_path)
-
+    client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
     s3_path = upload2s3(
         file_path,
-        reference=f"{client_id}-{start_date}-{end_date}",
+        reference=f"{client_id_string}-{start_date}-{end_date}",
         file_type=f"{lang}-untagged",
         bucket=pipeline_constants.BUCKET,
         ext=".csv",

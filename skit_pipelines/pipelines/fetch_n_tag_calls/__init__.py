@@ -17,15 +17,16 @@ USE_FSM_URL = pipeline_constants.USE_FSM_URL
     description="fetches calls from production db with respective arguments and uploads calls to database for tagging",
 )
 def fetch_n_tag_calls(
-    client_id: int,
     org_id: str,
     lang: str,
+    client_id: str = "",
     data_label: str = "",
     start_date: str = "",
     end_date: str = "",
     job_ids: str = "",
     labelstudio_project_id: str = "",
     ignore_callers: str = "",
+    template_id: str = "",
     use_case: str = "",
     flow_name: str = "",
     min_duration: str = "",
@@ -85,8 +86,8 @@ def fetch_n_tag_calls(
                 "data_label": "Client"
             }
 
-    :param client_id: The client id as per api-gateway.
-    :type client_id: int
+    :param client_id: The comma separated client ids as per fsm db.
+    :type client_id: str, optional
 
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
@@ -114,6 +115,9 @@ def fetch_n_tag_calls(
 
     :param reported: Pick only reported calls, defaults to False
     :type reported: bool
+    
+    :param template_id: The flow template id to filter calls, defaults to ""
+    :type template_id: str, optional
 
     :param use_case: Voice bot project's use-case, defaults to ""
     :type use_case: str, optional
@@ -176,6 +180,7 @@ def fetch_n_tag_calls(
         end_time_offset=end_time_offset,
         ignore_callers=ignore_callers,
         reported=reported,
+        template_id=template_id,
         use_case=use_case,
         flow_name=flow_name,
         min_duration=min_duration,

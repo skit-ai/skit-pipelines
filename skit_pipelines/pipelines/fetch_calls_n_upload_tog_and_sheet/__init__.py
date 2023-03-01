@@ -19,14 +19,15 @@ USE_FSM_URL = pipeline_constants.USE_FSM_URL
     description="fetches calls from production db with respective arguments and uploads the same set of calls to both tog (for intent, region, and transcription tagging) and a google sheet (for Call tagging and SCR analysis)",
 )
 def fetch_calls_n_upload_tog_and_sheet(
-    client_id: int,
     org_id: str,
     job_ids: str,
     lang: str,
+    client_id: Optional[str] = None,
     data_label: str = "",
     start_date: str = "",
     end_date: str = "",
     ignore_callers: str = "",
+    template_id: str = "",
     use_case: str = "",
     flow_name: str = "",
     min_duration: str = "",
@@ -97,6 +98,9 @@ def fetch_calls_n_upload_tog_and_sheet(
 
     :param reported: Pick only reported calls, defaults to False
     :type reported: bool
+    
+    :param template_id: The flow template id to filter calls, defaults to ""
+    :type template_id: str, optional
 
     :param use_case: Voice bot project's use-case, defaults to ""
     :type use_case: str, optional
@@ -156,6 +160,7 @@ def fetch_calls_n_upload_tog_and_sheet(
         call_type=call_type,
         ignore_callers=ignore_callers,
         reported=reported,
+        template_id=template_id,
         states=states,
         use_case=use_case,
         flow_name=flow_name,

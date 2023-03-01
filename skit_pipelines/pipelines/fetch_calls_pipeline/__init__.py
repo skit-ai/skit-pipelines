@@ -8,12 +8,13 @@ from skit_pipelines.components import fetch_calls_op, slack_notification_op
     description="fetches calls from production db with respective arguments",
 )
 def fetch_calls_pipeline(
-    client_id: int,
     lang: str,
     start_date: str = "",
     end_date: str = "",
+    client_id: str = "",
     ignore_callers: str = "",
     reported: bool = False,
+    template_id: str = "",
     use_case: str = "",
     flow_name: str = "",
     min_duration: str = "",
@@ -48,8 +49,8 @@ def fetch_calls_pipeline(
                 "call_quantity": 200
             }
 
-    :param client_id: The client id as per fsm db.
-    :type client_id: int
+    :param client_id: The comma separated client ids as per fsm db.
+    :type client_id: str, optional
     :param start_date: The start date range to filter calls in YYYY-MM-DD format.
     :type start_date: str
     :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.
@@ -60,6 +61,8 @@ def fetch_calls_pipeline(
     :type ignore_callers: str, optional
     :param reported: Pick only reported calls, defaults to False
     :type reported: bool
+    :param template_id: The flow template id to filter calls, defaults to ""
+    :type template_id: str, optional
     :param use_case: Voice bot project's use-case, defaults to ""
     :type use_case: str, optional
     :param flow_name: Identifier for a whole/part of a voicebot conversation flow, defaults to ""
@@ -94,6 +97,7 @@ def fetch_calls_pipeline(
         call_type=call_type,
         ignore_callers=ignore_callers,
         reported=reported,
+        template_id=template_id,
         use_case=use_case,
         flow_name=flow_name,
         min_duration=min_duration,

@@ -15,9 +15,9 @@ USE_FSM_URL = pipeline_constants.USE_FSM_URL
     description="fetches calls from production db with respective arguments and uploads calls to google sheets for Call tagging",
 )
 def fetch_calls_n_push_to_sheets(
-    client_id: int,
     org_id: str,
     lang: str,
+    client_id: str = "",
     start_date: str = "",
     end_date: str = "",
     ignore_callers: str = "",
