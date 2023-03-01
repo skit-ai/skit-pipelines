@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.82
+- [x] add: comma separated list of client_id is supported, template_id to filter calls is supported. Both in fetch_calls component + also modified downstream pipelines using it
+
 0.2.81
 - [x] fix: upstream column names for entity tagged dataset
 - [x] update: version bump for skit-calls which helps to sample turns in a call based on comma separated list of intents
