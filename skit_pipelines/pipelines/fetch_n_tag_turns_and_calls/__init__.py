@@ -8,6 +8,7 @@ from skit_pipelines.components import (
     slack_notification_op,
     tag_calls_op,
 )
+from skit_pipelines.components.fetch_gpt_intent_prediction import fetch_gpt_intent_prediction_op
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
 REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
@@ -46,6 +47,7 @@ def fetch_n_tag_turns_and_calls(
     slack_thread: str = "",
     use_fsm_url: bool = False,
     remove_empty_audios: bool = REMOVE_EMPTY_AUDIOS,
+    use_assisted_annotation: bool = False,
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
@@ -171,6 +173,9 @@ def fetch_n_tag_turns_and_calls(
 
     :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
     :type use_fsm_url: bool, optional
+
+    :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
+    :type use_assisted_annotation: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -204,6 +209,13 @@ def fetch_n_tag_turns_and_calls(
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+    # Filter data for upload to GPT
+    if use_assisted_annotation:
+        gpt_response_path = fetch_gpt_intent_prediction_op(
+            calls.output
+        )
+        print(gpt_response_path)
 
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
