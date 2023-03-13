@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.83
+- [x] update: skit-calls version bump and use_fsm_url as param for all fetch_calls related pipelines
+
 0.2.82
 - [x] add: comma separated list of client_id is supported, template_id to filter calls is supported. Both in fetch_calls component + also modified downstream pipelines using it
 
