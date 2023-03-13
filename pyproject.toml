@@ -32,7 +32,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.5"
 GitPython = "^3.1.27"
 google-auth-oauthlib = "0.4.6"
-skit-calls = "0.2.36"
+skit-calls = "0.2.37"
 SQLAlchemy = "1.4.42"
 
 [tool.poetry.dev-dependencies]
@@ -61,3 +61,4 @@ filterwarnings = [
 [tool.taskipy.tasks]
 serve = "uvicorn skit_pipelines.api.endpoints:app --proxy-headers --host 0.0.0.0 --port 9991 --workers 1 --reload"
 run_pipeline = "source secrets/env.sh && python run_pipeline.py"
+run_pipeline_us = "source pipeline_secrets/us_env.sh && python run_pipeline.py"

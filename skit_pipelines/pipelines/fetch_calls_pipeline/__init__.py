@@ -1,7 +1,9 @@
 import kfp
 
 from skit_pipelines.components import fetch_calls_op, slack_notification_op
+from skit_pipelines import constants as pipeline_constants
 
+USE_FSM_URL = pipeline_constants.USE_FSM_URL
 
 @kfp.dsl.pipeline(
     name="Fetch Calls Pipeline",
@@ -27,6 +29,7 @@ def fetch_calls_pipeline(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
+    use_fsm_url: bool = False,
 ):
     """
     A pipeline to randomly sample calls for a given voice-bot project.
@@ -87,6 +90,8 @@ def fetch_calls_pipeline(
     :type channel: str, optional
     :param slack_thread: The slack thread to send the notification, defaults to ""
     :type slack_thread: str, optional
+    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
+    :type use_fsm_url: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -105,6 +110,7 @@ def fetch_calls_pipeline(
         intents=intents,
         states=states,
         remove_empty_audios=remove_empty_audios,
+        use_fsm_url=USE_FSM_URL or use_fsm_url,
     )
     calls.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching

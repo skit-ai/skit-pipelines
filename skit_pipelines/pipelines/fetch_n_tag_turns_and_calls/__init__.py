@@ -44,6 +44,7 @@ def fetch_n_tag_turns_and_calls(
     channel: str = "",
     slack_thread: str = "",
     use_fsm_url: bool = False,
+    remove_empty_audios: bool = True,
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
@@ -191,6 +192,7 @@ def fetch_n_tag_turns_and_calls(
         intents=intents,
         states=states,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
+        remove_empty_audios=remove_empty_audios
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (
