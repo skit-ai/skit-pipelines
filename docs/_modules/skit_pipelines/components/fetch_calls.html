@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.2.81 documentation</title>
+        <title>skit_pipelines.components.fetch_calls - skit-pipelines 0.2.84 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.81 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.84 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.81 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.84 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -264,10 +264,10 @@
 
 <div class="viewcode-block" id="fetch_calls"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.fetch_calls.fetch_calls">[docs]</a><span class="k">def</span> <span class="nf">fetch_calls</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">client_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">start_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">start_time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -277,6 +277,7 @@
     <span class="n">timezone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ignore_callers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">reported</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">template_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">use_case</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">flow_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">min_duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -312,7 +313,7 @@
         <span class="n">end_date_offset</span><span class="o">=</span><span class="n">end_date_offset</span><span class="p">,</span>
         <span class="n">start_time_offset</span><span class="o">=</span><span class="n">start_time_offset</span><span class="p">,</span>
         <span class="n">end_time_offset</span><span class="o">=</span><span class="n">end_time_offset</span><span class="p">,</span>
-        <span class="n">timezone</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TIMEZONE</span><span class="p">,</span>
+        <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span> <span class="ow">or</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TIMEZONE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">validate_date_ranges</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
 
@@ -328,17 +329,19 @@
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">states</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">states</span><span class="p">)</span> <span class="k">if</span> <span class="n">states</span> <span class="k">else</span> <span class="n">states</span>
     <span class="n">intents</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">intents</span><span class="p">)</span> <span class="k">if</span> <span class="n">intents</span> <span class="k">else</span> <span class="n">intents</span>
-
+    <span class="n">client_id</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">client_id</span> <span class="k">else</span> <span class="n">client_id</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;client_ids&quot;</span><span class="p">,</span> <span class="n">client_id</span><span class="p">)</span>
     <span class="n">maybe_df</span> <span class="o">=</span> <span class="n">calls</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
-        <span class="n">client_id</span><span class="p">,</span>
         <span class="n">start_date</span><span class="p">,</span>
         <span class="n">end_date</span><span class="p">,</span>
         <span class="n">lang</span><span class="p">,</span>
         <span class="n">domain_url</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">AUDIO_URL_DOMAIN</span><span class="p">,</span>
+        <span class="n">org_ids</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
         <span class="n">call_quantity</span><span class="o">=</span><span class="n">call_quantity</span> <span class="o">+</span> <span class="n">const</span><span class="o">.</span><span class="n">DEFAULT_CALL_QUANTITY</span><span class="p">,</span>
         <span class="n">call_type</span><span class="o">=</span><span class="n">call_type</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">ignore_callers</span><span class="o">=</span><span class="n">ignore_callers</span><span class="p">,</span>
         <span class="n">reported</span><span class="o">=</span><span class="n">reported</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">template_id</span><span class="o">=</span><span class="n">template_id</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">use_case</span><span class="o">=</span><span class="n">use_case</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">flow_name</span><span class="o">=</span><span class="n">flow_name</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">min_duration</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">min_duration</span><span class="p">)</span> <span class="k">if</span> <span class="n">min_duration</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
@@ -347,6 +350,7 @@
         <span class="n">states</span><span class="o">=</span><span class="n">states</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">on_disk</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">use_fsm_url</span><span class="o">=</span><span class="n">use_fsm_url</span><span class="p">,</span>
+        <span class="n">timezone</span><span class="o">=</span><span class="n">timezone</span> <span class="ow">or</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TIMEZONE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">maybe_df</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
@@ -381,10 +385,10 @@
 
     <span class="c1"># if remove_empty_audios:</span>
     <span class="c1">#     empty_audios_remover(df=maybe_df, df_path=file_path)</span>
-
+    <span class="n">client_id_string</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">client_id</span>
     <span class="n">s3_path</span> <span class="o">=</span> <span class="n">upload2s3</span><span class="p">(</span>
         <span class="n">file_path</span><span class="p">,</span>
-        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">client_id_string</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">file_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2">-untagged&quot;</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span><span class="p">,</span>
         <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>

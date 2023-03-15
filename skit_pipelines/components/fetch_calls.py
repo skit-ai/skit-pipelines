@@ -56,7 +56,7 @@ def fetch_calls(
         end_date_offset=end_date_offset,
         start_time_offset=start_time_offset,
         end_time_offset=end_time_offset,
-        timezone=pipeline_constants.TIMEZONE,
+        timezone=timezone or pipeline_constants.TIMEZONE,
     )
     validate_date_ranges(start_date, end_date)
 
@@ -93,6 +93,7 @@ def fetch_calls(
         states=states or None,
         on_disk=False,
         use_fsm_url=use_fsm_url,
+        timezone=timezone or pipeline_constants.TIMEZONE,
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     if not maybe_df.size:
