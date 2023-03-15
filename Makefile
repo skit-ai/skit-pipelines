@@ -5,6 +5,10 @@ BASE := skit_pipelines/pipelines
 BLANK := 
 SOURCE_FILES := $(shell find ${BASE} -name "__init__.py" ! -wholename "${BASE}/__init__.py")
 
+CURRENT_TAG=$(shell git describe --tags --abbrev=0)
+CHANGELOG=$(shell git log $(CURRENT_TAG)..HEAD --oneline --pretty=format:%s | sed -e 's/^/- [x] /' | sed -e '1s/^/\n$(CURRENT_TAG)\n/' | awk -v ORS='\\n' '1')
+NEW_TAG=$(shell echo $(CURRENT_TAG) | awk -F. '{$$NF=$$NF+1;} 1' | sed 's/ /./g')
+
 lint:
 	@echo -e "Running linter"
 	@isort skit_pipelines
@@ -45,6 +49,20 @@ docs:
 
 start_server:
 	@source secrets/env.sh && task serve
+
+commit:
+	@git add .
+	@git commit -m "$(msg)"
+
+changelog:
+	@sed -i -e "2s/^/$(CHANGELOG)/" CHANGELOG.md; rm CHANGELOG.md-e
+	@sed -e "1s/^version.*/$(NEW_TAG)/;t" -e "1,/^version.*/s//version = \"$(NEW_TAG)\"/" pyproject.toml >> temp.toml; mv temp.toml pyproject.toml
+
+release:
+	@make changelog; echo "Changelog updated.."
+	@make commit msg="update: $(NEW_TAG)"
+	@git tag $(NEW_TAG); echo "Tagged $(NEW_TAG)"
+	@git push origin main $(NEW_TAG); echo "Pushed $(NEW_TAG), please check - https://github.com/skit-ai/skit-pipelines"
 
 pipes: secrets compile_pipes
 all: lint pipes docs
