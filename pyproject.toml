@@ -34,6 +34,7 @@ GitPython = "^3.1.27"
 google-auth-oauthlib = "0.4.6"
 skit-calls = "0.2.39"
 SQLAlchemy = "1.4.42"
+openai = "^0.27.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"

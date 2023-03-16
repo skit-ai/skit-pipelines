@@ -174,6 +174,9 @@ def fetch_n_tag_turns_and_calls(
     :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
     :type use_fsm_url: bool, optional
 
+    :param remove_empty_audios: Whether to turns of empty audio., defaults to False
+    :type remove_empty_audios: bool, optional
+
     :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
     :type use_assisted_annotation: bool, optional
     """
@@ -210,16 +213,19 @@ def fetch_n_tag_turns_and_calls(
         "P0D"  # disables caching
     )
 
+    intent_tagging_filename: str = calls.output
+
     # Filter data for upload to GPT
     if use_assisted_annotation:
         gpt_response_path = fetch_gpt_intent_prediction_op(
-            calls.output
+            intent_tagging_filename
         )
         print(gpt_response_path)
+        intent_tagging_filename = gpt_response_path
 
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
-        input_file=calls.output,
+        input_file=intent_tagging_filename,
         job_ids=job_ids,
         project_id=labelstudio_project_id,
         token=auth_token.output,

@@ -2667,6 +2667,29 @@ signals = ["blinker (>=1.4.0)"]
 signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
+name = "openai"
+version = "0.27.2"
+description = "Python client library for the OpenAI API"
+category = "main"
+optional = false
+python-versions = ">=3.7.1"
+files = [
+    {file = "openai-0.27.2-py3-none-any.whl", hash = "sha256:6df674cf257e9e0504f1fd191c333d3f6a2442b13218d0eccf06230eb24d320e"},
+    {file = "openai-0.27.2.tar.gz", hash = "sha256:5869fdfa34b0ec66c39afa22f4a0fb83a135dff81f6505f52834c6ab3113f762"},
+]
+
+[package.dependencies]
+aiohttp = "*"
+requests = ">=2.20"
+tqdm = "*"
+
+[package.extras]
+datalib = ["numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)"]
+dev = ["black (>=21.6b0,<22.0)", "pytest (>=6.0.0,<7.0.0)", "pytest-asyncio", "pytest-mock"]
+embeddings = ["matplotlib", "numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)", "plotly", "scikit-learn (>=1.0.2)", "scipy", "tenacity (>=8.0.1)"]
+wandb = ["numpy", "openpyxl (>=3.0.7)", "pandas (>=1.2.3)", "pandas-stubs (>=1.1.0.11)", "wandb"]
+
+[[package]]
 name = "outcome"
 version = "1.2.0"
 description = "Capture the outcome of Python function calls."
@@ -6105,4 +6128,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "a178ad66bde5b1ae6fe085ffccbe16001ce487c8f170daec7e0a1abe67374fb5"
+content-hash = "a3e67362971b508aa8fe4d2c5e2a8a44082e5c2dfc04392960952db965f0e6f2"

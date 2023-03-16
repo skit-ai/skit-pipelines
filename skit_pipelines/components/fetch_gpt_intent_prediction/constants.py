@@ -1,4 +1,7 @@
-In the below conversation turn between a debt collection bot and a user:
+INTENT_MODEL: str = "text-davinci-003"
+ALLOWED_INTENTS = ['_confirm_', '_cancel_']
+
+PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
 
 STATE: {{state}}
 {{conversation_context}}
@@ -14,4 +17,4 @@ If the user appears to be providing a 4 digit number when the bot asks for their
 If the user appears to be providing a date when the bot asks for their date of birth , answer 'inform_dob'
 If the user is saying anything else or you are unsure of what they are saying, answer ‘Other’
 
-Answer:
+Answer:"""
