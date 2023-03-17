@@ -40,7 +40,7 @@ dev:
 	@source secrets/env.sh && ./docker_build_dev_image $(tag)
 
 us_dev:
-	@source secrets/us_env.sh && ./us_docker_build_dev_image $(tag)
+	@source pipeline_secrets/us_env.sh && ./us_docker_build_dev_image $(tag)
 
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
