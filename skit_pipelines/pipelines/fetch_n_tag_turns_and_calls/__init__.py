@@ -215,13 +215,14 @@ def fetch_n_tag_turns_and_calls(
 
     intent_tagging_filename: str = calls.output
 
+    # TODO: Check if this actually works
     # Filter data for upload to GPT
     if use_assisted_annotation:
         gpt_response_path = fetch_gpt_intent_prediction_op(
             intent_tagging_filename
         )
-        print(gpt_response_path)
-        intent_tagging_filename = gpt_response_path
+        print(gpt_response_path.output)
+        intent_tagging_filename = gpt_response_path.output
 
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
