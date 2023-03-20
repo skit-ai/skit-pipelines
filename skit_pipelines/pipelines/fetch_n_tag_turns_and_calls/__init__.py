@@ -213,20 +213,15 @@ def fetch_n_tag_turns_and_calls(
         "P0D"  # disables caching
     )
 
-    intent_tagging_filename: str = calls.output
-
-    # TODO: Check if this actually works
-    # Filter data for upload to GPT
-    if use_assisted_annotation:
-        gpt_response_path = fetch_gpt_intent_prediction_op(
-            intent_tagging_filename
-        )
-        print(gpt_response_path.output)
-        intent_tagging_filename = gpt_response_path.output
+    # Get intent response from GPT for qualifying turns
+    gpt_response_path = fetch_gpt_intent_prediction_op(
+        calls.output, use_assisted_annotation
+    )
+    print(gpt_response_path.output)
 
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
-        input_file=intent_tagging_filename,
+        input_file=gpt_response_path.output,
         job_ids=job_ids,
         project_id=labelstudio_project_id,
         token=auth_token.output,

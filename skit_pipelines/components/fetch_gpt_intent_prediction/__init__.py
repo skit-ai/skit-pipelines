@@ -5,6 +5,7 @@ from skit_pipelines import constants as pipeline_constants
 
 def fetch_gpt_intent_prediction(
         s3_file_path: str,
+        use_assisted_annotation: bool,
 ) -> str:
     import json
     import math
@@ -18,6 +19,15 @@ def fetch_gpt_intent_prediction(
     from skit_pipelines.components.download_from_s3 import download_csv_from_s3
     from skit_pipelines import constants as pipeline_constants
     # from skit_pipelines.components.fetch_gpt_intent_prediction import constants as gpt_constants
+
+    def gpt_accuracy(df_row):
+        if df_row['intent'] == df_row['gpt_intent']:
+            return 1
+        return 0
+
+    if not use_assisted_annotation:
+        print('Skipping intent predictions by GPT')
+        return s3_file_path
 
     INTENT_MODEL: str = "text-davinci-003"
     ALLOWED_INTENTS = ['_confirm_', '_cancel_', '_identity_', 'inform_dob']
@@ -41,11 +51,10 @@ def fetch_gpt_intent_prediction(
     Answer:"""
 
     # TODO: Move this to secrets file
-    openai.api_key = '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'
-    prompt_text = PROMPT_TEXT
+    openai.api_key = 'sk-masked'
 
+    print('Executing intent prediction by GPT3-davinci')
     fd_download, downloaded_file_path = tempfile.mkstemp(suffix=".csv")
-    print(s3_file_path)
     download_csv_from_s3(storage_path=s3_file_path, output_path=downloaded_file_path)
     f = pd.read_csv(downloaded_file_path)
 
@@ -64,7 +73,7 @@ def fetch_gpt_intent_prediction(
     for i, row in df.iterrows():
         utterance = row["utterances"]
         conversation_context = json.loads(utterance)[0][0]["transcript"]
-        input_text = prompt_text
+        input_text = PROMPT_TEXT
         input_text = input_text.replace('{{conversation_context}}', conversation_context)
         input_text = input_text.replace('{{state}}', row["state"])
         response = openai.Completion.create(engine=INTENT_MODEL, prompt=input_text, max_tokens=1024,
@@ -74,6 +83,7 @@ def fetch_gpt_intent_prediction(
         f['gpt_intent'][i] = response["choices"][0]["text"]
         f['gpt_prob'][i] = math.exp(sum(response["choices"][0]["logprobs"]["token_logprobs"][:-3]))
 
+    f['use_gpt_intent'] = f.apply(lambda f_row: gpt_accuracy(f_row), axis=1)
     fd_upload, upload_file_path = tempfile.mkstemp(suffix=".csv")
     f.to_csv(upload_file_path, index=False)
     s3_path = upload2s3(
