@@ -189,6 +189,27 @@ def retrain_slu(
         yaml_path=alias_yaml_path,
     )
 
+    validate_training_setup_op = retrain_slu_from_repo_op(
+        tagged_s3_data_op.outputs["output"],
+        tagged_job_data_op.outputs["output"],
+        downloaded_repo_op.outputs["repo"],
+        downloaded_alias_yaml_op.outputs["output"],
+        bucket=BUCKET,
+        repo_name=repo_name,
+        branch=repo_branch,
+        remove_intents=remove_intents,
+        use_previous_dataset=use_previous_dataset,
+        train_split_percent=train_split_percent,
+        stratify=stratify,
+        epochs=epochs,
+        initial_training=initial_training,
+        job_ids=job_ids,
+        labelstudio_project_ids=labelstudio_project_ids,
+        s3_paths=dataset_path,
+        validate_setup=True,
+    )
+    validate_training_setup_op.display_name = "Validate Training Setup"
+
     retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
@@ -206,7 +227,7 @@ def retrain_slu(
         job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
-    )
+    ).after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
     )

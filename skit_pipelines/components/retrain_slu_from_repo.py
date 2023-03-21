@@ -22,6 +22,7 @@ def retrain_slu_from_repo(
     job_ids: str = "",
     labelstudio_project_ids: str = "",
     s3_paths: str = "",
+    validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
 ) -> str:
@@ -152,7 +153,7 @@ def retrain_slu_from_repo(
             "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
             split=False,
         )
-        execute_cli("make install")
+        execute_cli("make install").check_returncode()
 
         if not os.path.exists("data.dvc") and initial_training:
             execute_cli("slu setup-dirs")
@@ -226,8 +227,14 @@ def retrain_slu_from_repo(
         filter_dataset(new_test_path, remove_intents)
         alias_dataset(new_test_path, intent_alias_path)
 
+        if validate_setup:
+            _, validate_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
+            execute_cli(f"cp {validate_path} {output_classification_report_path}")
+            execute_cli(f"cp {validate_path} {output_confusion_matrix_path}")
+            return ""
+
         # training begins
-        execute_cli(f"slu train --epochs {epochs}")
+        execute_cli(f"slu train --epochs {epochs}").check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
             if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
@@ -238,7 +245,7 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"slu test")
+            execute_cli(f"slu test").check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):
