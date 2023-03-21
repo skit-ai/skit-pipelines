@@ -6,8 +6,8 @@ BLANK :=
 SOURCE_FILES := $(shell find ${BASE} -name "__init__.py" ! -wholename "${BASE}/__init__.py")
 
 CURRENT_TAG=$(shell git describe --tags --abbrev=0)
-CHANGELOG=$(shell git log $(CURRENT_TAG)..HEAD --oneline --pretty=format:%s | sed -e 's/^/- [x] /' | sed -e '1s/^/\n$(CURRENT_TAG)\n/' | awk -v ORS='\\n' '1')
 NEW_TAG=$(shell echo $(CURRENT_TAG) | awk -F. '{$$NF=$$NF+1;} 1' | sed 's/ /./g')
+CHANGELOG=$(shell git log $(CURRENT_TAG)..HEAD --oneline --pretty=format:%s | sed -e 's/^/- [x] /' | sed -e '1s/^/\n$(NEW_TAG)\n/' | awk -v ORS='\\n' '1')
 
 lint:
 	@echo -e "Running linter"
@@ -55,7 +55,7 @@ commit:
 	@git commit -m "$(msg)"
 
 changelog:
-	@sed -i -e "2s/^/$(CHANGELOG)/" CHANGELOG.md; rm CHANGELOG.md-e
+	@sed -i -e "2s/^/$(CHANGELOG)/" CHANGELOG.md; if [ -f "CHANGELOG.md-e" ]; then rm CHANGELOG.md-e; fi
 	@sed -e "1s/^version.*/$(NEW_TAG)/;t" -e "1,/^version.*/s//version = \"$(NEW_TAG)\"/" pyproject.toml >> temp.toml; mv temp.toml pyproject.toml
 
 release:
