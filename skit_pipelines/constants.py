@@ -270,6 +270,8 @@ SQL_RANDOM_SEED = 0.5
 DATA_LABEL_DEFAULT = "Live"
 
 # GPT related constants - Will be moved to a dedicated file soon
+GPT_API_KEY = 'sk-masked'
+# GPT_API_KEY = os.environ["GPT_API_KEY"]
 INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ['_confirm_', '_cancel_']
 

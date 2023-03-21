@@ -22,36 +22,14 @@ def fetch_gpt_intent_prediction(
 
     def gpt_accuracy(df_row):
         if df_row['intent'] == df_row['gpt_intent']:
-            return 1
-        return 0
+            return "yes"
+        return "no"
 
     if not use_assisted_annotation:
         print('Skipping intent predictions by GPT')
         return s3_file_path
 
-    INTENT_MODEL: str = "text-davinci-003"
-    ALLOWED_INTENTS = ['_confirm_', '_cancel_', '_identity_', 'inform_dob']
-
-    PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
-
-    STATE: {{state}}
-    {{conversation_context}}
-
-    If the user is answering the bot with an affirmative or confirming what the bot says (consider yep, yeah, or the like as "yes"), answer ‘_confirm_’
-    If the user is denying what the bot says, answer ‘_cancel_’
-    If the user is unsure, answer '_maybe_'
-    If the user asks who the bot is, where the bot is calling from, or why the bot is calling, answer ‘_identity_’
-    If the user requests that the bot repeat something, answer ‘_repeat_’
-    If the user doesn't wish to speak to machines and robots or wants to speak to a human agent / operator / customer service / person, answer 'ask_for_agent'
-    If the user is greeting the bot or saying hello, answer ‘_greeting_’
-    If the user appears to be providing a 4 digit number when the bot asks for their social security number, answer 'inform_ssn_number'
-    If the user appears to be providing a date when the bot asks for their date of birth , answer 'inform_dob'
-    If the user is saying anything else or you are unsure of what they are saying, answer ‘Other’
-
-    Answer:"""
-
-    # TODO: Move this to secrets file
-    openai.api_key = 'sk-masked'
+    openai.api_key = pipeline_constants.GPT_API_KEY
 
     print('Executing intent prediction by GPT3-davinci')
     fd_download, downloaded_file_path = tempfile.mkstemp(suffix=".csv")
@@ -60,7 +38,7 @@ def fetch_gpt_intent_prediction(
 
     df = f[["call_id", "call_uuid", "state", "prediction", "intent", "utterances", "context"]]
     df = df[df[['utterances']].notnull().all(1)]
-    df = df.loc[df['intent'].isin(ALLOWED_INTENTS)]
+    df = df.loc[df['intent'].isin(pipeline_constants.ALLOWED_INTENTS)]
 
     # TODO: Remove this condition once an official openai key is available
     df = df.head()
@@ -73,16 +51,18 @@ def fetch_gpt_intent_prediction(
     for i, row in df.iterrows():
         utterance = row["utterances"]
         conversation_context = json.loads(utterance)[0][0]["transcript"]
-        input_text = PROMPT_TEXT
+        input_text = pipeline_constants.PROMPT_TEXT
         input_text = input_text.replace('{{conversation_context}}', conversation_context)
         input_text = input_text.replace('{{state}}', row["state"])
-        response = openai.Completion.create(engine=INTENT_MODEL, prompt=input_text, max_tokens=1024,
+        response = openai.Completion.create(engine=pipeline_constants.INTENT_MODEL, prompt=input_text, max_tokens=1024,
                                             temperature=0, n=1,
                                             logprobs=1)
 
-        f['gpt_intent'][i] = response["choices"][0]["text"]
-        f['gpt_prob'][i] = math.exp(sum(response["choices"][0]["logprobs"]["token_logprobs"][:-3]))
+        f.at[i, "gpt_intent"] = response["choices"][0]["text"]
+        f.at[i, "gpt_prob"] = math.exp(sum(response["choices"][0]["logprobs"]["token_logprobs"][:-3]))
 
+    f['gpt_intent'] = f['gpt_intent'].str.strip()
+    f['gpt_intent'] = f['gpt_intent'].replace({"confirm": "_confirm_", "cancel": "_cancel_"})
     f['use_gpt_intent'] = f.apply(lambda f_row: gpt_accuracy(f_row), axis=1)
     fd_upload, upload_file_path = tempfile.mkstemp(suffix=".csv")
     f.to_csv(upload_file_path, index=False)
