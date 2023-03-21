@@ -59,7 +59,7 @@ changelog:
 	@sed -e "1s/^version.*/$(NEW_TAG)/;t" -e "1,/^version.*/s//version = \"$(NEW_TAG)\"/" pyproject.toml >> temp.toml; mv temp.toml pyproject.toml
 
 release:
-	@make changelog; echo "Changelog updated.."
+	# @make changelog; echo "Changelog updated.."
 	@make commit msg="update: $(NEW_TAG)"
 	@git tag $(NEW_TAG); echo "Tagged $(NEW_TAG)"
 	@git push origin main $(NEW_TAG); echo "Pushed $(NEW_TAG), please check - https://github.com/skit-ai/skit-pipelines"

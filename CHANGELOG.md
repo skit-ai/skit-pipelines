@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.86
+- [x] update: skit-calls and skit-labels version update
+- [x] fix: alternatives column postprocessing after downloading from labelstudio, client_id not being truly optional for fetch_calls component  
+
 0.2.84
 - [x] update: skit-calls version bump for reftime with timezone
 
