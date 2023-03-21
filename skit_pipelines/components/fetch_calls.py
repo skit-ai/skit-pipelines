@@ -126,8 +126,8 @@ def fetch_calls(
             )
         ].drop("audio_filename", axis=1).to_csv(df_path, index=False)
 
-    # if remove_empty_audios:
-    #     empty_audios_remover(df=maybe_df, df_path=file_path)
+    if remove_empty_audios:
+        empty_audios_remover(df=maybe_df, df_path=file_path)
     client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
     s3_path = upload2s3(
         file_path,

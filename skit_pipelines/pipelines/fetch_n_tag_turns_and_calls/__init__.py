@@ -10,6 +10,7 @@ from skit_pipelines.components import (
 )
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
+REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
 
 @kfp.dsl.pipeline(
     name="Fetch and push for tagging turns & calls pipeline",
@@ -44,7 +45,7 @@ def fetch_n_tag_turns_and_calls(
     channel: str = "",
     slack_thread: str = "",
     use_fsm_url: bool = False,
-    remove_empty_audios: bool = True,
+    remove_empty_audios: bool = REMOVE_EMPTY_AUDIOS,
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.

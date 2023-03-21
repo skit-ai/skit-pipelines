@@ -13,6 +13,8 @@ from skit_pipelines.components import (
 )
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
+REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
+
 
 @kfp.dsl.pipeline(
     name="Fetch calls and push to tog and sheet",
@@ -45,6 +47,7 @@ def fetch_calls_n_upload_tog_and_sheet(
     channel: str = "",
     slack_thread: str = "",
     use_fsm_url: bool = False,
+    remove_empty_audios: bool = REMOVE_EMPTY_AUDIOS,
 ):
     """
     A pipeline to sample random calls and upload for tagging. Uploads the data to TOG (Intent/Entity/Transcription tagging)

@@ -10,6 +10,7 @@ from skit_pipelines.components import (
 )
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
+REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
 
 
 @kfp.dsl.pipeline(
@@ -40,7 +41,7 @@ def fetch_n_tag_calls(
     end_date_offset: int = 0,
     start_time_offset: int = 0,
     end_time_offset: int = 0,
-    remove_empty_audios: bool = True,
+    remove_empty_audios: bool = REMOVE_EMPTY_AUDIOS,
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
