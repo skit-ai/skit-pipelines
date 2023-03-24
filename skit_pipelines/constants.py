@@ -231,8 +231,6 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
-OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
-
 # K8s
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
 CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.2xlarge"
@@ -270,8 +268,7 @@ SQL_RANDOM_SEED = 0.5
 DATA_LABEL_DEFAULT = "Live"
 
 # GPT related constants - Will be moved to a dedicated file soon
-GPT_API_KEY = 'sk-masked'
-# GPT_API_KEY = os.environ["GPT_API_KEY"]
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ['_confirm_', '_cancel_']
 

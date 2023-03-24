@@ -29,7 +29,7 @@ def fetch_gpt_intent_prediction(
         print('Skipping intent predictions by GPT')
         return s3_file_path
 
-    openai.api_key = pipeline_constants.GPT_API_KEY
+    openai.api_key = pipeline_constants.OPENAI_API_KEY
 
     print('Executing intent prediction by GPT3-davinci')
     fd_download, downloaded_file_path = tempfile.mkstemp(suffix=".csv")
