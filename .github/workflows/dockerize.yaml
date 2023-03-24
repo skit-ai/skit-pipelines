@@ -67,6 +67,7 @@ jobs:
           --build-arg ML_METRICS_DB_PASSWORD=${{ secrets.ML_METRICS_DB_PASSWORD }} 
           --build-arg PERSONAL_ACCESS_TOKEN_GITHUB=${{secrets.PERSONAL_ACCESS_TOKEN_GITHUB }}
           --build-arg PERSONAL_ACCESS_TOKEN_GITLAB=${{secrets.PERSONAL_ACCESS_TOKEN_GITLAB }}
+          --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           --build-arg DUCKLING_HOST="${{ secrets.DUCKLING_HOST }}" -t $ECR_REPOSITORY . 
           
       - name: Tag and push images
@@ -142,6 +143,7 @@ jobs:
           --build-arg ML_METRICS_DB_PASSWORD="${{ secrets.US_ML_METRICS_DB_PASSWORD }}"
           --build-arg PERSONAL_ACCESS_TOKEN_GITHUB=${{secrets.PERSONAL_ACCESS_TOKEN_GITHUB }}
           --build-arg PERSONAL_ACCESS_TOKEN_GITLAB=${{secrets.PERSONAL_ACCESS_TOKEN_GITLAB }}
+          --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           --build-arg DUCKLING_HOST="${{ secrets.DUCKLING_HOST }}" -t $US_ECR_REPOSITORY .
  
       - name: Tag and push images

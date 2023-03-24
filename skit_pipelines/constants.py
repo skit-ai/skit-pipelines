@@ -231,6 +231,7 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 
 # K8s
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
