@@ -63,3 +63,4 @@ from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
 from skit_pipelines.components.upload_for_call_and_slot_tagging import (
     fetch_calls_for_slots_op,
 )
+from skit_pipelines.components.fetch_gpt_intent_prediction import fetch_gpt_intent_prediction_op

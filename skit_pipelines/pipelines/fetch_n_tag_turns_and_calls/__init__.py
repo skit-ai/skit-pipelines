@@ -7,8 +7,8 @@ from skit_pipelines.components import (
     org_auth_token_op,
     slack_notification_op,
     tag_calls_op,
+    fetch_gpt_intent_prediction_op
 )
-from skit_pipelines.components.fetch_gpt_intent_prediction import fetch_gpt_intent_prediction_op
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
 REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
@@ -215,9 +215,9 @@ def fetch_n_tag_turns_and_calls(
 
     # Get intent response from GPT for qualifying turns
     gpt_response_path = fetch_gpt_intent_prediction_op(
-        calls.output, use_assisted_annotation
+        s3_file_path=calls.output,
+        use_assisted_annotation=use_assisted_annotation
     )
-    print(gpt_response_path.output)
 
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
