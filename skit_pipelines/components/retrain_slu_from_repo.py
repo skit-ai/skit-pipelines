@@ -119,7 +119,7 @@ def retrain_slu_from_repo(
             )
             execute_cli("poetry install").check_returncode()
             execute_cli("cd custom_slu && task serve &")
-            execute_clu(
+            execute_cli(
                 "conda deactivate"
             )
 
