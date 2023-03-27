@@ -46,6 +46,8 @@ def retrain_slu(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
+    customization_repo_name: str = "slu-customization",
+    customization_repo_branch: str = "master"
 ):
 
     """
@@ -180,7 +182,18 @@ def retrain_slu(
         repo_name=repo_name,
         project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
     )
+
     downloaded_repo_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    downloaded_customization_repo_op = download_repo_op(
+        git_host_name=pipeline_constants.GITLAB,
+        repo_name=customization_repo_name,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+    )
+
+    downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
 
@@ -207,6 +220,8 @@ def retrain_slu(
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
         validate_setup=True,
+        customization_repo_path=downloaded_customization_repo_op.outputs["repo"],
+        customization_repo_branch=customization_repo_branch,
     )
     validate_training_setup_op.display_name = "Validate Training Setup"
 
@@ -227,6 +242,8 @@ def retrain_slu(
         job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
+        customization_repo_path=downloaded_customization_repo_op.outputs["repo"],
+        customization_repo_branch=customization_repo_branch,
     ).after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL

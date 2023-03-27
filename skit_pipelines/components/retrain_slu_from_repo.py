@@ -25,6 +25,8 @@ def retrain_slu_from_repo(
     validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
+    customization_repo_path: str = "",
+    customization_repo_branch: str = "",
 ) -> str:
     import os
     import subprocess
@@ -92,6 +94,39 @@ def retrain_slu_from_repo(
         dataset.replace({intent_col: reverse_alias_config}).to_csv(
             dataset_path, index=False
         )
+
+    def setup_customization_repo(repo_path, repo_branch):
+        os.chdir(repo_path)
+        repo = git.Repo(".")
+        repo.config_writer().set_value(
+            "user", "name", pipeline_constants.GITLAB_USER
+        ).release()
+        repo.config_writer().set_value(
+            "user", "email", pipeline_constants.GITLAB_USER_EMAIL
+        ).release()
+
+        try:
+            repo.git.checkout(repo_branch)
+            execute_cli(
+                """conda create -n "customization" -m python=3.8 -y""",
+            )
+            execute_cli(
+                "conda activate customization"
+            )
+            execute_cli(
+                "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                split=False,
+            )
+            execute_cli("poetry install").check_returncode()
+            execute_cli("cd custom_slu && task serve &")
+            execute_cli(
+                "conda deactivate"
+            )
+
+        except Exception as exc:
+            raise exc
+
+    setup_customization_repo(customization_repo_path, customization_repo_branch)
 
     data_info = (
         f"{job_ids=}"
