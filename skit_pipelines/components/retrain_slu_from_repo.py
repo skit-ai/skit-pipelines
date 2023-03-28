@@ -25,7 +25,7 @@ def retrain_slu_from_repo(
     validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
-    customization_repo_path: str = "",
+    customization_repo_name: str = "",
     customization_repo_branch: str = "",
 ) -> str:
     import os
@@ -38,7 +38,9 @@ def retrain_slu_from_repo(
     import pandas as pd
     import yaml
     from loguru import logger
-
+    
+    
+    from skit_pipelines.components.download_repo import download_repo
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
         pick_1st_tag,
@@ -95,8 +97,15 @@ def retrain_slu_from_repo(
             dataset_path, index=False
         )
 
-    def setup_customization_repo(repo_path, repo_branch):
-        os.chdir(repo_path)
+    def setup_customization_repo(repo_name, repo_branch):
+        customization_repo_path = tempfile.mkdtemp()
+        download_repo(
+            git_host_name=pipeline_constants.GITLAB,
+            repo_name=customization_repo_name,
+            project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+            repo_path=customization_repo_path
+        )
+        os.chdir(customization_repo_path)
         repo = git.Repo(".")
         repo.config_writer().set_value(
             "user", "name", pipeline_constants.GITLAB_USER
@@ -110,6 +119,7 @@ def retrain_slu_from_repo(
             execute_cli(
                 """conda create -n "customization" -m python=3.8 -y""",
             )
+            execute_cli("conda init bash")
             execute_cli(
                 "conda activate customization"
             )
@@ -118,7 +128,9 @@ def retrain_slu_from_repo(
                 split=False,
             )
             execute_cli("poetry install").check_returncode()
-            execute_cli("cd custom_slu && task serve &")
+            os.listdir("custom_slu")
+            os.chdir(path="custom_slu")
+            execute_cli("task serve &").check_returncode()
             execute_cli(
                 "conda deactivate"
             )
@@ -126,7 +138,7 @@ def retrain_slu_from_repo(
         except Exception as exc:
             raise exc
 
-    setup_customization_repo(customization_repo_path, customization_repo_branch)
+    setup_customization_repo(customization_repo_name, customization_repo_branch)
 
     data_info = (
         f"{job_ids=}"

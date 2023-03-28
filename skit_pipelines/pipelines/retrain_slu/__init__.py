@@ -187,15 +187,15 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
-    downloaded_customization_repo_op = download_repo_op(
-        git_host_name=pipeline_constants.GITLAB,
-        repo_name=customization_repo_name,
-        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
-    )
-
-    downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
+    # downloaded_customization_repo_op = download_repo_op(
+    #     repo_name=customization_repo_name,
+    # )
+    # downloaded_customization_repo_op.display_name = "Download SLU customization repo"
+    
+    
+    # downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (
+    #     "P0D"  # disables caching
+    # )
 
     downloaded_alias_yaml_op = download_yaml_op(
         git_host_name=pipeline_constants.GITHUB,
@@ -220,7 +220,7 @@ def retrain_slu(
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
         validate_setup=True,
-        customization_repo_path=downloaded_customization_repo_op.outputs["repo"],
+        customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
     )
     validate_training_setup_op.display_name = "Validate Training Setup"
