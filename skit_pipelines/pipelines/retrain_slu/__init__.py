@@ -242,7 +242,7 @@ def retrain_slu(
         job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
-        customization_repo_path=downloaded_customization_repo_op.outputs["repo"],
+        customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
     ).after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(

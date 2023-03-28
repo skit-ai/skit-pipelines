@@ -117,23 +117,17 @@ def retrain_slu_from_repo(
         try:
             repo.git.checkout(repo_branch)
             execute_cli(
-                """conda create -n "customization" -m python=3.8 -y""",
+                "conda create -n customization -m python=3.8 -y",
             )
-            execute_cli("conda init bash")
+            os.system(". /conda/etc/profile.d/conda.sh")
             execute_cli(
-                "conda activate customization"
-            )
-            execute_cli(
-                "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                "conda run -n customization pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
                 split=False,
             )
-            execute_cli("poetry install").check_returncode()
-            os.listdir("custom_slu")
-            os.chdir(path="custom_slu")
-            execute_cli("task serve &").check_returncode()
-            execute_cli(
-                "conda deactivate"
-            )
+            execute_cli("conda run -n customization poetry install").check_returncode()
+            os.chdir("custom_slu")
+            os.system("conda run -n customization task serve &")
+            execute_cli("ps aux | grep task", split=False)
 
         except Exception as exc:
             raise exc
