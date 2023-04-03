@@ -194,6 +194,10 @@ def retrain_slu_from_repo(
             "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
             split=False,
         )
+        execute_cli(
+            "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
+            split=False,
+        )
         execute_cli("make install").check_returncode()
 
         if not os.path.exists("data.dvc") and initial_training:

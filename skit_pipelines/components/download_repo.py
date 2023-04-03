@@ -21,7 +21,6 @@ def download_repo(
             user=pipeline_constants.GITLAB_USER,
             token=pipeline_constants.GITLAB_PRIVATE_TOKEN,
         )
-        print("Repo url:", repo_url)
         repo = git.Repo.clone_from(url=repo_url, to_path=repo_path)
 
         print(repo_path, os.listdir(repo_path))
