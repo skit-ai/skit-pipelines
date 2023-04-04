@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.89
+- [x] add: Slu customization integration with retrain_slu pipeline (#102)
+- [x] add: support for call level tagging jobs for tag_calls pipeline, alongwith turn level tagging
+
 0.2.88
 - [x] add: Merge pull request #99 from skit-ai/gpt_intents
 

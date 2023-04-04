@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.84 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_calls - skit-pipelines 0.2.89 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.84 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.89 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.84 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.89 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -267,6 +268,7 @@
 <span class="p">)</span>
 
 <span class="n">USE_FSM_URL</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">USE_FSM_URL</span>
+<span class="n">REMOVE_EMPTY_AUDIOS</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">USE_FSM_URL</span> <span class="k">else</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="fetch_n_tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html#skit_pipelines.pipelines.fetch_n_tag_calls.fetch_n_tag_calls">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
@@ -297,7 +299,7 @@
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">start_time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">end_time_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">REMOVE_EMPTY_AUDIOS</span><span class="p">,</span>
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>

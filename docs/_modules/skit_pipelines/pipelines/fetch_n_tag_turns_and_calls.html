@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls - skit-pipelines 0.2.84 documentation</title>
+        <title>skit_pipelines.pipelines.fetch_n_tag_turns_and_calls - skit-pipelines 0.2.89 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.84 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.89 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.84 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.89 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -264,9 +265,11 @@
     <span class="n">org_auth_token_op</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">tag_calls_op</span><span class="p">,</span>
+    <span class="n">fetch_gpt_intent_prediction_op</span>
 <span class="p">)</span>
 
 <span class="n">USE_FSM_URL</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">USE_FSM_URL</span>
+<span class="n">REMOVE_EMPTY_AUDIOS</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">USE_FSM_URL</span> <span class="k">else</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="fetch_n_tag_turns_and_calls"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html#skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.fetch_n_tag_turns_and_calls">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Fetch and push for tagging turns &amp; calls pipeline&quot;</span><span class="p">,</span>
@@ -301,7 +304,8 @@
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">use_fsm_url</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">remove_empty_audios</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">REMOVE_EMPTY_AUDIOS</span><span class="p">,</span>
+    <span class="n">use_assisted_annotation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to randomly sample calls and upload for annotating turns for intents &amp; entities and annotating calls for slots &amp; call level metrics.</span>
@@ -427,6 +431,12 @@
 
 <span class="sd">    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False</span>
 <span class="sd">    :type use_fsm_url: bool, optional</span>
+
+<span class="sd">    :param remove_empty_audios: Whether to turns of empty audio., defaults to False</span>
+<span class="sd">    :type remove_empty_audios: bool, optional</span>
+
+<span class="sd">    :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False</span>
+<span class="sd">    :type use_assisted_annotation: bool, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
         <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
@@ -461,9 +471,15 @@
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
+    <span class="c1"># Get intent response from GPT for qualifying turns</span>
+    <span class="n">gpt_response_path</span> <span class="o">=</span> <span class="n">fetch_gpt_intent_prediction_op</span><span class="p">(</span>
+        <span class="n">s3_file_path</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
+        <span class="n">use_assisted_annotation</span><span class="o">=</span><span class="n">use_assisted_annotation</span>
+    <span class="p">)</span>
+
     <span class="c1"># uploads data for turn level intent, entity &amp; transcription tagging</span>
     <span class="n">tag_turns_output</span> <span class="o">=</span> <span class="n">tag_calls_op</span><span class="p">(</span>
-        <span class="n">input_file</span><span class="o">=</span><span class="n">calls</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
+        <span class="n">input_file</span><span class="o">=</span><span class="n">gpt_response_path</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
         <span class="n">job_ids</span><span class="o">=</span><span class="n">job_ids</span><span class="p">,</span>
         <span class="n">project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>

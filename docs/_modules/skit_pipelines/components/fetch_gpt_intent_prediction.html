@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.tag_calls - skit-pipelines 0.2.89 documentation</title>
+        <title>skit_pipelines.components.fetch_gpt_intent_prediction - skit-pipelines 0.2.89 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -255,145 +255,93 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.pipelines.tag_calls</h1><div class="highlight"><pre>
+          <h1>Source code for skit_pipelines.components.fetch_gpt_intent_prediction</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 
-<span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">org_auth_token_op</span><span class="p">,</span>
-    <span class="n">read_json_key_op</span><span class="p">,</span>
-    <span class="n">slack_notification_op</span><span class="p">,</span>
-    <span class="n">tag_calls_op</span><span class="p">,</span>
-    <span class="n">fetch_calls_for_slots_op</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
 
 
-<div class="viewcode-block" id="tag_calls"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.tag_calls.html#skit_pipelines.pipelines.tag_calls.tag_calls">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Tag Calls Pipeline&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Uploads calls to database for tagging&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">tag_calls</span><span class="p">(</span>
-    <span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">labelstudio_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">call_project_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A pipeline to upload a dataset for annotation.</span>
+<div class="viewcode-block" id="fetch_gpt_intent_prediction"><a class="viewcode-back" href="../../../skit_pipelines.components.fetch_gpt_intent_prediction.html#skit_pipelines.components.fetch_gpt_intent_prediction.fetch_gpt_intent_prediction">[docs]</a><span class="k">def</span> <span class="nf">fetch_gpt_intent_prediction</span><span class="p">(</span>
+        <span class="n">s3_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">use_assisted_annotation</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="kn">import</span> <span class="nn">tempfile</span>
+    <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="sd">    .. _p_tag_calls:</span>
+    <span class="kn">import</span> <span class="nn">openai</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="sd">    Example payload to invoke via slack integrations:</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="n">upload2s3</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_from_s3</span> <span class="kn">import</span> <span class="n">download_csv_from_s3</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+    <span class="c1"># from skit_pipelines.components.fetch_gpt_intent_prediction import constants as gpt_constants</span>
 
-<span class="sd">        @charon run tag_calls</span>
+    <span class="k">def</span> <span class="nf">gpt_accuracy</span><span class="p">(</span><span class="n">df_row</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">df_row</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df_row</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s2">&quot;yes&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;no&quot;</span>
 
-<span class="sd">        .. code-block:: python</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_assisted_annotation</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Skipping intent predictions by GPT&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s3_file_path</span>
 
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 23,</span>
-<span class="sd">                &quot;job_ids&quot;: &quot;1,2,3&quot;,</span>
-<span class="sd">                &quot;s3_path&quot;: &quot;s3://bucket/path/to/file.csv&quot;</span>
-<span class="sd">            }</span>
+    <span class="n">openai</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OPENAI_API_KEY</span>
 
-<span class="sd">    To use labelstudio:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Executing intent prediction by GPT3-davinci&#39;</span><span class="p">)</span>
+    <span class="n">fd_download</span><span class="p">,</span> <span class="n">downloaded_file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
+    <span class="n">download_csv_from_s3</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">s3_file_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">downloaded_file_path</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">downloaded_file_path</span><span class="p">)</span>
 
-<span class="sd">        @charon run tag_calls</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">f</span><span class="p">[[</span><span class="s2">&quot;call_id&quot;</span><span class="p">,</span> <span class="s2">&quot;call_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="s2">&quot;prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;intent&quot;</span><span class="p">,</span> <span class="s2">&quot;utterances&quot;</span><span class="p">,</span> <span class="s2">&quot;context&quot;</span><span class="p">]]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;utterances&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ALLOWED_INTENTS</span><span class="p">)]</span>
 
-<span class="sd">        .. code-block:: python</span>
+    <span class="c1"># TODO: Remove this condition once an official openai key is available</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 
-<span class="sd">            {</span>
-<span class="sd">                &quot;org_id&quot;: 23,</span>
-<span class="sd">                &quot;labelstudio_project_id&quot;: &quot;41&quot;,</span>
-<span class="sd">                &quot;call_project_id&quot;: &quot;100&quot;,</span>
-<span class="sd">                &quot;s3_path&quot;: &quot;s3://bucket/path/to/file.csv&quot;,</span>
-<span class="sd">                &quot;data_label&quot;: &quot;Client&quot;</span>
-<span class="sd">            }</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N/A&quot;</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_prob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="sd">    :param org_id: The organization id as per api-gateway.</span>
-<span class="sd">    :type org_id: str</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Not using df.apply() as rate limiter in GPT will become an issue there.</span>
+<span class="sd">        For loops allows for easier control over the api calls &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">utterance</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;utterances&quot;</span><span class="p">]</span>
+        <span class="n">conversation_context</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">utterance</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;transcript&quot;</span><span class="p">]</span>
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">PROMPT_TEXT</span>
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">input_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{{conversation_context}}&#39;</span><span class="p">,</span> <span class="n">conversation_context</span><span class="p">)</span>
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">input_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{{state}}&#39;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">])</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">Completion</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">INTENT_MODEL</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">input_text</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+                                            <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                            <span class="n">logprobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="sd">    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.</span>
-<span class="sd">    :type job_ids: str</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;gpt_intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;gpt_prob&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;logprobs&quot;</span><span class="p">][</span><span class="s2">&quot;token_logprobs&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">3</span><span class="p">]))</span>
 
-<span class="sd">    :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
-<span class="sd">    :type labelstudio_project_id: str</span>
-<span class="sd">    </span>
-<span class="sd">    :param call_project_id: The call project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
-<span class="sd">    :type call_project_id: str</span>
-<span class="sd">    </span>
-<span class="sd">    :param lang: The language of the calls, defaults to &quot;&quot;</span>
-<span class="sd">    :type lang: str, optional</span>
-
-<span class="sd">    :param s3_path: The s3 path to the dataset.</span>
-<span class="sd">    :type s3_path: str</span>
-
-<span class="sd">    :param data_label: A label to identify the source of a datapoint</span>
-<span class="sd">    :type data_label: str, optional. Defaults to &quot;Live&quot;</span>
-
-<span class="sd">    :param notify: A comma separated list of slack ids: &quot;@apples, @orange.fruit&quot; etc, defaults to &quot;&quot;</span>
-<span class="sd">    :type notify: str, optional</span>
-
-<span class="sd">    :param channel: The slack channel to send the notification, defaults to &quot;&quot;</span>
-<span class="sd">    :type channel: str, optional</span>
-
-<span class="sd">    :param slack_thread: The slack thread to send the notification, defaults to &quot;&quot;</span>
-<span class="sd">    :type slack_thread: float, optional</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">auth_token</span> <span class="o">=</span> <span class="n">org_auth_token_op</span><span class="p">(</span><span class="n">org_id</span><span class="p">)</span>
-    <span class="n">auth_token</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;gpt_intent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;confirm&quot;</span><span class="p">:</span> <span class="s2">&quot;_confirm_&quot;</span><span class="p">,</span> <span class="s2">&quot;cancel&quot;</span><span class="p">:</span> <span class="s2">&quot;_cancel_&quot;</span><span class="p">})</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;use_gpt_intent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f_row</span><span class="p">:</span> <span class="n">gpt_accuracy</span><span class="p">(</span><span class="n">f_row</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fd_upload</span><span class="p">,</span> <span class="n">upload_file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">upload_file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">s3_path</span> <span class="o">=</span> <span class="n">upload2s3</span><span class="p">(</span>
+        <span class="n">upload_file_path</span><span class="p">,</span>
+        <span class="n">file_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Gpt_intent_predictions&quot;</span><span class="p">,</span>
+        <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span><span class="p">,</span>
+        <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">tag_turns_output</span> <span class="o">=</span> <span class="n">tag_calls_op</span><span class="p">(</span>
-        <span class="n">input_file</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span>
-        <span class="n">job_ids</span><span class="o">=</span><span class="n">job_ids</span><span class="p">,</span>
-        <span class="n">project_id</span><span class="o">=</span><span class="n">labelstudio_project_id</span><span class="p">,</span>
-        <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
-        <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-        <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
-    <span class="p">)</span>
-    
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">call_project_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;call-tagging&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">auth_token</span><span class="p">)</span> <span class="k">as</span> <span class="n">check1</span><span class="p">:</span>
-        <span class="n">calls_s3_path</span> <span class="o">=</span> <span class="n">fetch_calls_for_slots_op</span><span class="p">(</span>
-            <span class="n">untagged_records_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span>
-            <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-            <span class="n">language_code</span><span class="o">=</span><span class="n">lang</span><span class="p">,</span>
-            <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">tag_calls_output</span> <span class="o">=</span> <span class="n">tag_calls_op</span><span class="p">(</span>
-            <span class="n">input_file</span><span class="o">=</span><span class="n">calls_s3_path</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
-            <span class="n">job_ids</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">project_id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="n">token</span><span class="o">=</span><span class="n">auth_token</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
-            <span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">,</span>
-            <span class="n">call_project_id</span><span class="o">=</span><span class="n">call_project_id</span><span class="p">,</span>
-            <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
-        <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="n">notify</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;notify&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">tag_turns_output</span><span class="p">)</span> <span class="k">as</span> <span class="n">check2</span><span class="p">:</span>
-        <span class="n">df_sizes</span> <span class="o">=</span> <span class="n">tag_turns_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df_sizes&quot;</span><span class="p">]</span>
-        <span class="n">errors</span> <span class="o">=</span> <span class="n">tag_turns_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;errors&quot;</span><span class="p">]</span>
-        <span class="n">notification_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Uploaded </span><span class="si">{</span><span class="n">s3_path</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">df_sizes</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">org_id</span><span class="si">=}</span><span class="s2">) for tagging to </span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Errors: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">code_block</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;aws s3 cp </span><span class="si">{</span><span class="n">s3_path</span><span class="si">}</span><span class="s2"> .&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd_download</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">downloaded_file_path</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd_upload</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">upload_file_path</span><span class="p">)</span>
 
-        <span class="n">task_no_cache</span> <span class="o">=</span> <span class="n">slack_notification_op</span><span class="p">(</span>
-            <span class="n">notification_text</span><span class="p">,</span>
-            <span class="n">cc</span><span class="o">=</span><span class="n">notify</span><span class="p">,</span>
-            <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-            <span class="n">code_block</span><span class="o">=</span><span class="n">code_block</span><span class="p">,</span>
-            <span class="n">thread_id</span><span class="o">=</span><span class="n">slack_thread</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">task_no_cache</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
-        <span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">s3_path</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tag_calls&quot;</span><span class="p">]</span>
+<span class="n">fetch_gpt_intent_prediction_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">fetch_gpt_intent_prediction</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
+<span class="p">)</span>
 </pre></div>
         </article>
       </div>

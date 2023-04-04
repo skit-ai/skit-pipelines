@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.74 documentation</title>
+        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.89 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.74 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.89 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.74 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.89 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -179,6 +179,7 @@
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -279,8 +280,11 @@
     <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">labelstudio_project_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">s3_paths</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">validate_setup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">output_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
     <span class="n">output_confusion_matrix_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="n">customization_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">customization_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">os</span>
     <span class="kn">import</span> <span class="nn">subprocess</span>
@@ -292,7 +296,9 @@
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
     <span class="kn">import</span> <span class="nn">yaml</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-
+    
+    
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_repo</span> <span class="kn">import</span> <span class="n">download_repo</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components.preprocess.create_true_intent_column.utils</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">pick_1st_tag</span><span class="p">,</span>
@@ -348,6 +354,43 @@
         <span class="n">dataset</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="n">intent_col</span><span class="p">:</span> <span class="n">reverse_alias_config</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
             <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup_customization_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">repo_branch</span><span class="p">):</span>
+        <span class="n">customization_repo_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+        <span class="n">download_repo</span><span class="p">(</span>
+            <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
+            <span class="n">repo_name</span><span class="o">=</span><span class="n">customization_repo_name</span><span class="p">,</span>
+            <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
+            <span class="n">repo_path</span><span class="o">=</span><span class="n">customization_repo_path</span>
+        <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">customization_repo_path</span><span class="p">)</span>
+        <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
+            <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
+            <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">repo_branch</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="s2">&quot;conda create -n customization -m python=3.8 -y&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;. /conda/etc/profile.d/conda.sh&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="s2">&quot;conda run -n customization pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= &#39;{print $2}&#39;)&quot;</span><span class="p">,</span>
+                <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;conda run -n customization poetry install&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;custom_slu&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;conda run -n customization task serve &amp;&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;ps aux | grep task&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+    <span class="n">setup_customization_repo</span><span class="p">(</span><span class="n">customization_repo_name</span><span class="p">,</span> <span class="n">customization_repo_branch</span><span class="p">)</span>
 
     <span class="n">data_info</span> <span class="o">=</span> <span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
@@ -409,7 +452,11 @@
             <span class="s2">&quot;pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= &#39;{print $2}&#39;)&quot;</span><span class="p">,</span>
             <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;make install&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="s2">&quot;pip install torch==$(grep torch pyproject.toml | awk -F&#39;=|</span><span class="se">\&quot;</span><span class="s2">&#39; &#39;{print $3}&#39;)&quot;</span><span class="p">,</span>
+            <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;make install&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;slu setup-dirs&quot;</span><span class="p">)</span>
@@ -483,8 +530,14 @@
         <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
         <span class="n">alias_dataset</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">validate_setup</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">validate_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
         <span class="c1"># training begins</span>
-        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu train --epochs </span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu train --epochs </span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">):</span>
             <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;intent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>  <span class="c1"># TODO: remove on phase 2 cicd release</span>
@@ -495,7 +548,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="n">test_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu test&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;slu test&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">classification_report_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
                 <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CLASSIFICATION_REPORT</span>
             <span class="p">):</span>

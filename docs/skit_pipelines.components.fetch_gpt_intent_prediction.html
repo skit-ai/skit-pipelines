@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.preprocess.create_true_transcript_column package" href="skit_pipelines.components.preprocess.create_true_transcript_column.html" /><link rel="prev" title="skit_pipelines.components.preprocess.create_features package" href="skit_pipelines.components.preprocess.create_features.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.fetch_tagged_data_label_store package" href="skit_pipelines.components.fetch_tagged_data_label_store.html" /><link rel="prev" title="skit_pipelines.components package" href="skit_pipelines.components.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.preprocess.create_true_intent_column package - skit-pipelines 0.2.89 documentation</title>
+        <title>skit_pipelines.components.fetch_gpt_intent_prediction package - skit-pipelines 0.2.89 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -180,12 +180,12 @@
 </ul>
 </li>
 <li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
-<li class="toctree-l4 current has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
-<li class="toctree-l5 current current-page"><a class="current reference internal" href="#">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt.html">skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt package</a></li>
@@ -257,30 +257,30 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-components-preprocess-create-true-intent-column-package">
-<h1>skit_pipelines.components.preprocess.create_true_intent_column package<a class="headerlink" href="#skit-pipelines-components-preprocess-create-true-intent-column-package" title="Permalink to this headline">#</a></h1>
+          <section id="skit-pipelines-components-fetch-gpt-intent-prediction-package">
+<h1>skit_pipelines.components.fetch_gpt_intent_prediction package<a class="headerlink" href="#skit-pipelines-components-fetch-gpt-intent-prediction-package" title="Permalink to this headline">#</a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="module-skit_pipelines.components.preprocess.create_true_intent_column.utils">
-<span id="skit-pipelines-components-preprocess-create-true-intent-column-utils-module"></span><h2>skit_pipelines.components.preprocess.create_true_intent_column.utils module<a class="headerlink" href="#module-skit_pipelines.components.preprocess.create_true_intent_column.utils" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_intent_column.utils.pick_1st_tag">
-<span class="sig-name descname"><span class="pre">pick_1st_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/preprocess/create_true_intent_column/utils.html#pick_1st_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_intent_column.utils.pick_1st_tag" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
+<section id="module-skit_pipelines.components.fetch_gpt_intent_prediction.constants">
+<span id="skit-pipelines-components-fetch-gpt-intent-prediction-constants-module"></span><h2>skit_pipelines.components.fetch_gpt_intent_prediction.constants module<a class="headerlink" href="#module-skit_pipelines.components.fetch_gpt_intent_prediction.constants" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="module-skit_pipelines.components.preprocess.create_true_intent_column">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.preprocess.create_true_intent_column" title="Permalink to this headline">#</a></h2>
+<section id="module-skit_pipelines.components.fetch_gpt_intent_prediction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.fetch_gpt_intent_prediction" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_intent_column.create_intent_labels">
-<span class="sig-name descname"><span class="pre">create_intent_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/preprocess/create_true_intent_column.html#create_intent_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_intent_column.create_intent_labels" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="skit_pipelines.components.fetch_gpt_intent_prediction.fetch_gpt_intent_prediction">
+<span class="sig-name descname"><span class="pre">fetch_gpt_intent_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_assisted_annotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/fetch_gpt_intent_prediction.html#fetch_gpt_intent_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.fetch_gpt_intent_prediction.fetch_gpt_intent_prediction" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_intent_column.create_true_intent_labels_op">
-<span class="sig-name descname"><span class="pre">create_true_intent_labels_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_intent_column.create_true_intent_labels_op" title="Permalink to this definition">#</a></dt>
-<dd><p>Create intent labels</p>
+<dt class="sig sig-object py" id="skit_pipelines.components.fetch_gpt_intent_prediction.fetch_gpt_intent_prediction_op">
+<span class="sig-name descname"><span class="pre">fetch_gpt_intent_prediction_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_assisted_annotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.fetch_gpt_intent_prediction.fetch_gpt_intent_prediction_op" title="Permalink to this definition">#</a></dt>
+<dd><p>Fetch gpt intent prediction</p>
 </dd></dl>
 
 </section>
@@ -291,23 +291,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">
+          <a class="next-page" href="skit_pipelines.components.fetch_tagged_data_label_store.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.components.preprocess.create_true_transcript_column package</div>
+                <div class="title">skit_pipelines.components.fetch_tagged_data_label_store package</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.components.preprocess.create_features.html">
+          <a class="prev-page" href="skit_pipelines.components.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.components.preprocess.create_features package</div>
+                <div class="title">skit_pipelines.components package</div>
                 
               </div>
             </a>
@@ -343,10 +343,10 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.components.preprocess.create_true_intent_column package</a><ul>
+<li><a class="reference internal" href="#">skit_pipelines.components.fetch_gpt_intent_prediction package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.preprocess.create_true_intent_column.utils">skit_pipelines.components.preprocess.create_true_intent_column.utils module</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.preprocess.create_true_intent_column">Module contents</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.components.fetch_gpt_intent_prediction.constants">skit_pipelines.components.fetch_gpt_intent_prediction.constants module</a></li>
+<li><a class="reference internal" href="#module-skit_pipelines.components.fetch_gpt_intent_prediction">Module contents</a></li>
 </ul>
 </li>
 </ul>
