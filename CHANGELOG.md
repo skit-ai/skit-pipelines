@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.88
+- [x] add: Merge pull request #99 from skit-ai/gpt_intents
+
 0.2.87
 - [x] add: validate setup component for retrain_slu pipeline, tests slu setup builds in cpu node
 
