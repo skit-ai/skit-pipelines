@@ -25,6 +25,8 @@ def retrain_slu_from_repo(
     validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
+    customization_repo_name: str = "",
+    customization_repo_branch: str = "",
 ) -> str:
     import os
     import subprocess
@@ -36,7 +38,9 @@ def retrain_slu_from_repo(
     import pandas as pd
     import yaml
     from loguru import logger
-
+    
+    
+    from skit_pipelines.components.download_repo import download_repo
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
         pick_1st_tag,
@@ -92,6 +96,43 @@ def retrain_slu_from_repo(
         dataset.replace({intent_col: reverse_alias_config}).to_csv(
             dataset_path, index=False
         )
+
+    def setup_customization_repo(repo_name, repo_branch):
+        customization_repo_path = tempfile.mkdtemp()
+        download_repo(
+            git_host_name=pipeline_constants.GITLAB,
+            repo_name=customization_repo_name,
+            project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+            repo_path=customization_repo_path
+        )
+        os.chdir(customization_repo_path)
+        repo = git.Repo(".")
+        repo.config_writer().set_value(
+            "user", "name", pipeline_constants.GITLAB_USER
+        ).release()
+        repo.config_writer().set_value(
+            "user", "email", pipeline_constants.GITLAB_USER_EMAIL
+        ).release()
+
+        try:
+            repo.git.checkout(repo_branch)
+            execute_cli(
+                "conda create -n customization -m python=3.8 -y",
+            )
+            os.system(". /conda/etc/profile.d/conda.sh")
+            execute_cli(
+                "conda run -n customization pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                split=False,
+            )
+            execute_cli("conda run -n customization poetry install").check_returncode()
+            os.chdir("custom_slu")
+            os.system("conda run -n customization task serve &")
+            execute_cli("ps aux | grep task", split=False)
+
+        except Exception as exc:
+            raise exc
+
+    setup_customization_repo(customization_repo_name, customization_repo_branch)
 
     data_info = (
         f"{job_ids=}"
@@ -151,6 +192,10 @@ def retrain_slu_from_repo(
         repo.git.checkout("-b", new_branch)
         execute_cli(
             "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+            split=False,
+        )
+        execute_cli(
+            "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
             split=False,
         )
         execute_cli("make install").check_returncode()

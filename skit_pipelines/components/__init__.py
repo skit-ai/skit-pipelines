@@ -12,7 +12,7 @@ from skit_pipelines.components.download_from_s3 import (
     download_file_from_s3,
     download_file_from_s3_op,
 )
-from skit_pipelines.components.download_repo import download_repo_op
+from skit_pipelines.components.download_repo import download_repo_op, download_repo
 from skit_pipelines.components.download_yaml import download_yaml_op
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
 from skit_pipelines.components.extract_info_from_dataset import (

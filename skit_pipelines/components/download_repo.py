@@ -23,7 +23,7 @@ def download_repo(
         )
         repo = git.Repo.clone_from(url=repo_url, to_path=repo_path)
 
-        print(repo, os.listdir(repo_path))
+        print(repo_path, os.listdir(repo_path))
         logger.info("cloned successfully!")
 
 
