@@ -5,6 +5,7 @@ from skit_pipelines.components import (
     read_json_key_op,
     slack_notification_op,
     tag_calls_op,
+    fetch_calls_for_slots_op,
 )
 
 
@@ -18,6 +19,8 @@ def tag_calls(
     data_label: str = "",
     job_ids: str = "",
     labelstudio_project_id: str = "",
+    call_project_id: str = "",
+    lang: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -48,6 +51,7 @@ def tag_calls(
             {
                 "org_id": 23,
                 "labelstudio_project_id": "41",
+                "call_project_id": "100",
                 "s3_path": "s3://bucket/path/to/file.csv",
                 "data_label": "Client"
             }
@@ -60,6 +64,12 @@ def tag_calls(
 
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
+    
+    :param call_project_id: The call project id (this is a number) since this is optional, defaults to "".
+    :type call_project_id: str
+    
+    :param lang: The language of the calls, defaults to ""
+    :type lang: str, optional
 
     :param s3_path: The s3 path to the dataset.
     :type s3_path: str
@@ -80,7 +90,7 @@ def tag_calls(
     auth_token.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
-    tag_calls_output = tag_calls_op(
+    tag_turns_output = tag_calls_op(
         input_file=s3_path,
         job_ids=job_ids,
         project_id=labelstudio_project_id,
@@ -88,10 +98,28 @@ def tag_calls(
         org_id=org_id,
         data_label=data_label,
     )
+    
+    with kfp.dsl.Condition(call_project_id != "", "call-tagging").after(auth_token) as check1:
+        calls_s3_path = fetch_calls_for_slots_op(
+            untagged_records_path=s3_path,
+            org_id=org_id,
+            language_code=lang,
+            start_date="",
+            end_date="",
+        )
+        tag_calls_output = tag_calls_op(
+            input_file=calls_s3_path.output,
+            job_ids="",
+            project_id="",
+            token=auth_token.output,
+            org_id=org_id,
+            call_project_id=call_project_id,
+            data_label=data_label,
+        )
 
-    with kfp.dsl.Condition(notify != "", "notify").after(tag_calls_output) as check1:
-        df_sizes = tag_calls_output.outputs["df_sizes"]
-        errors = tag_calls_output.outputs["errors"]
+    with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output) as check2:
+        df_sizes = tag_turns_output.outputs["df_sizes"]
+        errors = tag_turns_output.outputs["errors"]
         notification_text = f"Uploaded {s3_path} ({df_sizes}, {org_id=}) for tagging to {job_ids=}.\nErrors: {errors}"
         code_block = f"aws s3 cp {s3_path} ."
 

@@ -49,31 +49,6 @@ def tag_calls(
             f"Recieved an invalid data_label. Please pass one of [{', '.join(VALID_DATA_LABELS)}] as data_label"
         )
 
-    if (not project_id and org_id) and (not call_project_id):
-        if org_id == 120:
-            job_ids = None
-            project_id = 105
-
-        if org_id == 146:
-            job_ids = None
-            project_id = 99
-
-        if org_id == 147:
-            job_ids = None
-            project_id = 99
-
-        if org_id == 34:
-            job_ids = None
-            project_id = 109
-
-        # LabelStudio is not prepared for these
-        # if org_id == 2:
-        #     job_ids = None
-        #     project_id = 110
-        # if org_id == 4:
-        #     job_ids = None
-        #     project_id = 111
-
     print(f"{project_id=}")
     print(f"{call_project_id=}")
 
