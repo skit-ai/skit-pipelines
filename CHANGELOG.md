@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.90
+- [x] update: Secrets for assisted annotation pipeline
+
 0.2.89
 - [x] add: Slu customization integration with retrain_slu pipeline (#102)
 - [x] add: support for call level tagging jobs for tag_calls pipeline, alongwith turn level tagging
