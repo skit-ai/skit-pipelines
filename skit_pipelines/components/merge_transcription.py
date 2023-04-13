@@ -20,6 +20,8 @@ def overlay_transcription_csv(
         fn = audiourl.rsplit("/", 1)[-1]
         if fn.endswith(".flac"):
             return fn[:-5] + ".wav"
+        if fn.endswith(".mp3"):
+            return fn[:-4] + ".wav"
         return fn
 
     cnx = sqlite3.connect(f"{sqlite_path}")
