@@ -38,31 +38,38 @@ def fetch_gpt_intent_prediction(
 
     df = f[["call_id", "call_uuid", "state", "prediction", "intent", "utterances", "context"]]
     df = df[df[['utterances']].notnull().all(1)]
-    df = df.loc[df['intent'].isin(pipeline_constants.ALLOWED_INTENTS)]
+    df = df[df[['context']].notna().all(1)]
 
-    # TODO: Remove this condition once an official openai key is available
-    df = df.head()
+    # TODO: Uncomment this condition once validation phrase is done
+    # df = df.loc[df['intent'].isin(pipeline_constants.ALLOWED_INTENTS)]
 
     f['gpt_intent'] = "N/A"
     f['gpt_prob'] = 0
+    f['gpt3-tokens-consumed'] = 0
 
     ''' Not using df.apply() as rate limiter in GPT will become an issue there.
         For loops allows for easier control over the api calls '''
     for i, row in df.iterrows():
-        utterance = row["utterances"]
-        conversation_context = json.loads(utterance)[0][0]["transcript"]
-        input_text = pipeline_constants.PROMPT_TEXT
-        input_text = input_text.replace('{{conversation_context}}', conversation_context)
-        input_text = input_text.replace('{{state}}', row["state"])
-        response = openai.Completion.create(engine=pipeline_constants.INTENT_MODEL, prompt=input_text, max_tokens=1024,
-                                            temperature=0, n=1,
-                                            logprobs=1)
+        try:
+            user_utterance = json.loads(row["utterances"])[0][0]["transcript"]
+            bot_response = json.loads(row["context"])["bot_response"]
+            conversation_context = "[Bot]: " + bot_response + "  \n " + "[User]: " + user_utterance
 
-        f.at[i, "gpt_intent"] = response["choices"][0]["text"]
-        f.at[i, "gpt_prob"] = math.exp(sum(response["choices"][0]["logprobs"]["token_logprobs"][:-3]))
+            input_text = pipeline_constants.PROMPT_TEXT
+            input_text = input_text.replace('{{conversation_context}}', conversation_context)
+            input_text = input_text.replace('{{state}}', row["state"])
+            response = openai.Completion.create(engine=pipeline_constants.INTENT_MODEL, prompt=input_text, max_tokens=1024,
+                                                temperature=0, n=1,
+                                                logprobs=1)
+
+            f.at[i, "gpt_intent"] = response["choices"][0]["text"]
+            f.at[i, "gpt_prob"] = math.exp(sum(response["choices"][0]["logprobs"]["token_logprobs"][:-3]))
+            f.at[i, "gpt3-tokens-consumed"] = response['usage']['total_tokens']
+        except Exception as e:
+            print("Couldn't get Gpt response because: " + str(e))
 
     f['gpt_intent'] = f['gpt_intent'].str.strip()
-    f['gpt_intent'] = f['gpt_intent'].replace({"confirm": "_confirm_", "cancel": "_cancel_"})
+    # f['gpt_intent'] = f['gpt_intent'].replace({"confirm": "_confirm_", "cancel": "_cancel_"})
     f['use_gpt_intent'] = f.apply(lambda f_row: gpt_accuracy(f_row), axis=1)
     fd_upload, upload_file_path = tempfile.mkstemp(suffix=".csv")
     f.to_csv(upload_file_path, index=False)

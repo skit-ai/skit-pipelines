@@ -7,6 +7,7 @@ from skit_pipelines.components import (
     read_json_key_op,
     slack_notification_op,
     tag_calls_op,
+    fetch_gpt_intent_prediction_op
 )
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
@@ -46,6 +47,7 @@ def fetch_n_tag_calls(
     channel: str = "",
     slack_thread: str = "",
     use_fsm_url: bool = False,
+    use_assisted_annotation: bool = False,
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -167,6 +169,9 @@ def fetch_n_tag_calls(
 
     :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
     :type use_fsm_url: bool, optional
+
+    :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
+    :type use_assisted_annotation: bool, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -201,8 +206,14 @@ def fetch_n_tag_calls(
         "P0D"  # disables caching
     )
 
+    # Get intent response from GPT for qualifying turns
+    gpt_response_path = fetch_gpt_intent_prediction_op(
+        s3_file_path=calls.output,
+        use_assisted_annotation=use_assisted_annotation
+    )
+
     tag_calls_output = tag_calls_op(
-        input_file=calls.output,
+        input_file=gpt_response_path.output,
         job_ids=job_ids,
         project_id=labelstudio_project_id,
         token=auth_token.output,
