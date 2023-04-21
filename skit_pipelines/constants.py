@@ -285,7 +285,7 @@ Answer: _confirm_
 
 In the below conversation turn between a debt collection bot and a user:
 
-{{state}}
+STATE: {{state}}
 {{conversation_context}}
 
 Answer "_confirm_" if the user is giving the bot a positive response or confirming what the bot says (yep, yeah, or similar expressions are taken to mean "yes");
