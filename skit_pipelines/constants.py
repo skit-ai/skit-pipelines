@@ -25,6 +25,14 @@ CONSOLE_URL = (
     else "https://console.us.skit.ai"
 )
 
+# studio base url, for call report purposes
+STUDIO_URL = (
+    "https://studio.skit.ai"
+    if REGION == AP_SOUTH_1
+    else "https://studio.us.skit.ai"
+)
+
+
 # logic for getting the correct URL for the audio files based on region
 USE_FSM_URL = False if REGION == AP_SOUTH_1 else True
 
