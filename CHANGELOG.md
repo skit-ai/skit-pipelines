@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.91
+- [x] Extend GPT support for fetch_n_tag_calls and update prompts (#104)
+- [x] transcription pipeline: add support for mp3 file format while overlaying transcriptions (#103) 
+
 0.2.90
 - [x] update: Secrets for assisted annotation pipeline
 
