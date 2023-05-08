@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.92
+- [x] fix: template_id not working properly, changed skit-calls query secrets
+- [x] PL-1300: new data format support & extra meta-annotation-columns (#21)
+
 0.2.91
 - [x] Extend GPT support for fetch_n_tag_calls and update prompts (#104)
 - [x] transcription pipeline: add support for mp3 file format while overlaying transcriptions (#103) 

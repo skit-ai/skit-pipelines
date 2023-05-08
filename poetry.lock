@@ -3524,14 +3524,14 @@ tqdm = "4.62.1"
 
 [[package]]
 name = "skit-labels"
-version = "0.3.32"
+version = "0.3.33"
 description = "Command line tool for interacting with labelled datasets at skit.ai."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_labels-0.3.32-py3-none-any.whl", hash = "sha256:9118426ce63e2d3a73181b1c566d5c97d34d55fc7a42c760d01129ae111c5e58"},
-    {file = "skit_labels-0.3.32.tar.gz", hash = "sha256:4eab9b7726fff74e21aaded97abcfb56d99ca2c5282c454586288d34c4347002"},
+    {file = "skit_labels-0.3.33-py3-none-any.whl", hash = "sha256:29a54924e8fa2b03a74c034ab8b40dc2ba2b7a15f35deac2ec18c351dbde06d4"},
+    {file = "skit_labels-0.3.33.tar.gz", hash = "sha256:26dac14aa529ba78e212cfee6d7d62eda2890c781b6cc02fba16a4332594fd5f"},
 ]
 
 [package.dependencies]
@@ -4647,4 +4647,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "cc9337e0f3107c890211b06533f4760b7d0792893401b8ebf98cd169bcc6c73f"
+content-hash = "ab5e07c9a1e6a7b7402fc3f499eed1d37f7ca72e10b102325ee82e7c487e0e0d"
