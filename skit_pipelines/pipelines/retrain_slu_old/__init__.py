@@ -8,7 +8,7 @@ from skit_pipelines.components import (
     download_yaml_op,
     fetch_tagged_dataset_op,
     file_contents_to_markdown_s3_op,
-    retrain_slu_from_repo_op,
+    retrain_slu_from_repo_op_old,
     slack_notification_op,
     upload2s3_op,
 )
@@ -46,9 +46,7 @@ def retrain_slu(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    core_slu_repo_name: str = "core-slu-service",
-    core_slu_repo_branch: str = "master",
-    customization_repo_name: str = "customization",
+    customization_repo_name: str = "slu-customization",
     customization_repo_branch: str = "master",
 ):
     """
@@ -181,12 +179,21 @@ def retrain_slu(
     downloaded_repo_op = download_repo_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
-        project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
     )
 
     downloaded_repo_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+    # downloaded_customization_repo_op = download_repo_op(
+    #     repo_name=customization_repo_name,
+    # )
+    # downloaded_customization_repo_op.display_name = "Download SLU customization repo"
+
+    # downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (
+    #     "P0D"  # disables caching
+    # )
 
     downloaded_alias_yaml_op = download_yaml_op(
         git_host_name=pipeline_constants.GITHUB,
@@ -213,8 +220,6 @@ def retrain_slu(
         validate_setup=True,
         customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
-        core_slu_repo_name=core_slu_repo_name,
-        core_slu_repo_branch=core_slu_repo_branch,
     )
     validate_training_setup_op.display_name = "Validate Training Setup"
 
@@ -237,8 +242,6 @@ def retrain_slu(
         s3_paths=dataset_path,
         customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
-        core_slu_repo_name=core_slu_repo_name,
-        core_slu_repo_branch=core_slu_repo_branch,
     ).after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL

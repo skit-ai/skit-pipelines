@@ -27,8 +27,6 @@ def retrain_slu_from_repo(
     output_confusion_matrix_path: OutputPath(str),
     customization_repo_name: str = "",
     customization_repo_branch: str = "",
-    core_slu_repo_name: str = "",
-    core_slu_repo_branch: str = "",
 ) -> str:
     import os
     import subprocess
@@ -98,15 +96,15 @@ def retrain_slu_from_repo(
             dataset_path, index=False
         )
 
-    def setup_utility_repo(repo_name, repo_branch, run_dir=None, run_cmd=None):
-        repo_local_path = tempfile.mkdtemp()
+    def setup_customization_repo(repo_name, repo_branch):
+        customization_repo_path = tempfile.mkdtemp()
         download_repo(
             git_host_name=pipeline_constants.GITLAB,
-            repo_name=repo_name,
+            repo_name=customization_repo_name,
             project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
-            repo_path=repo_local_path,
+            repo_path=customization_repo_path,
         )
-        os.chdir(repo_local_path)
+        os.chdir(customization_repo_path)
         repo = git.Repo(".")
         repo.config_writer().set_value(
             "user", "name", pipeline_constants.GITLAB_USER
@@ -118,35 +116,22 @@ def retrain_slu_from_repo(
         try:
             repo.git.checkout(repo_branch)
             execute_cli(
-                f"conda create -n {repo_name} -m python=3.8 -y",
+                "conda create -n customization -m python=3.8 -y",
             )
             os.system(". /conda/etc/profile.d/conda.sh")
             execute_cli(
-                f"conda run -n {repo_name} "
-                + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                "conda run -n customization pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
                 split=False,
             )
-            execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
-            if run_dir:
-                os.chdir(run_dir)
-            if run_cmd:
-                os.system(f"conda run -n {repo_name} {run_cmd} &")
+            execute_cli("conda run -n customization poetry install").check_returncode()
+            os.chdir("custom_slu")
+            os.system("conda run -n customization task serve &")
             execute_cli("ps aux | grep task", split=False)
-
-            return repo_local_path
 
         except Exception as exc:
             raise exc
 
-    customization_repo_local_path = setup_utility_repo(
-        customization_repo_name,
-        customization_repo_branch,
-        run_dir="custom_slu",
-        run_cmd="task serve",
-    )
-    core_slu_repo_local_path = setup_utility_repo(
-        core_slu_repo_name, core_slu_repo_branch
-    )
+    setup_customization_repo(customization_repo_name, customization_repo_branch)
 
     data_info = (
         f"{job_ids=}"
@@ -205,25 +190,17 @@ def retrain_slu_from_repo(
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
         execute_cli(
-            f"conda activate {core_slu_repo_name}",
+            "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+            split=False,
         )
         execute_cli(
-            f"export PROJECT_DATA_PATH={os.path.join(slu_path, '..')}",
+            "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
+            split=False,
         )
-        # execute_cli(
-        #     "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
-        #     split=False,
-        # )
-        # execute_cli(
-        #     "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
-        #     split=False,
-        # )
-        # execute_cli("make install").check_returncode()
+        execute_cli("make install").check_returncode()
 
         if not os.path.exists("data.dvc") and initial_training:
-            # TODO: fix this
-            execute_cli(f"slu setup-dirs --project_root_path {slu_path}")
-
+            execute_cli("slu setup-dirs")
             execute_cli("dvc init")
             execute_cli(f"dvc add {pipeline_constants.DATA}")
             execute_cli(
@@ -234,8 +211,7 @@ def retrain_slu_from_repo(
         elif not initial_training and os.path.exists("data.dvc"):
             execute_cli("dvc pull data.dvc")
             execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
-            # TODO: fix this
-            execute_cli(f"slu setup-dirs --project_root_path {slu_path}")
+            execute_cli("slu setup-dirs")
 
         else:
             raise ValueError(
@@ -302,9 +278,7 @@ def retrain_slu_from_repo(
             return ""
 
         # training begins
-        execute_cli(
-            f"slu train --epochs {epochs} --project_name {repo_name}"
-        ).check_returncode()
+        execute_cli(f"slu train --epochs {epochs}").check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
             if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
@@ -315,7 +289,7 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"slu test --project_name {repo_name}").check_returncode()
+            execute_cli(f"slu test").check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):
@@ -353,6 +327,6 @@ def retrain_slu_from_repo(
     return new_branch
 
 
-retrain_slu_from_repo_op = kfp.components.create_component_from_func(
+retrain_slu_from_repo_op_old = kfp.components.create_component_from_func(
     retrain_slu_from_repo, base_image=pipeline_constants.BASE_IMAGE
 )
