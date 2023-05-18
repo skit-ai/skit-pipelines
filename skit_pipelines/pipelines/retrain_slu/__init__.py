@@ -182,6 +182,7 @@ def retrain_slu(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
         project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
+        output_path=f"/tmp/outputs/repo/{repo_name}"
     )
 
     downloaded_repo_op.execution_options.caching_strategy.max_cache_staleness = (
@@ -193,11 +194,37 @@ def retrain_slu(
         yaml_path=alias_yaml_path,
     )
 
-    validate_training_setup_op = retrain_slu_from_repo_op(
+    # validate_training_setup_op = retrain_slu_from_repo_op(
+    #     tagged_s3_data_op.outputs["output"],
+    #     tagged_job_data_op.outputs["output"],
+    #     downloaded_alias_yaml_op.outputs["output"],
+    #     slu_path=downloaded_repo_op.output,
+    #     # downloaded_repo_op.outputs["output"],
+    #     bucket=BUCKET,
+    #     repo_name=repo_name,
+    #     branch=repo_branch,
+    #     remove_intents=remove_intents,
+    #     use_previous_dataset=use_previous_dataset,
+    #     train_split_percent=train_split_percent,
+    #     stratify=stratify,
+    #     epochs=epochs,
+    #     initial_training=initial_training,
+    #     job_ids=job_ids,
+    #     labelstudio_project_ids=labelstudio_project_ids,
+    #     s3_paths=dataset_path,
+    #     validate_setup=True,
+    #     customization_repo_name=customization_repo_name,
+    #     customization_repo_branch=customization_repo_branch,
+    #     core_slu_repo_name=core_slu_repo_name,
+    #     core_slu_repo_branch=core_slu_repo_branch,
+    # )
+    # validate_training_setup_op.display_name = "Validate Training Setup"
+
+    retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
-        downloaded_repo_op.outputs["repo"],
         downloaded_alias_yaml_op.outputs["output"],
+        slu_path=downloaded_repo_op.output,
         bucket=BUCKET,
         repo_name=repo_name,
         branch=repo_branch,
@@ -210,36 +237,12 @@ def retrain_slu(
         job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
-        validate_setup=True,
         customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
         core_slu_repo_name=core_slu_repo_name,
         core_slu_repo_branch=core_slu_repo_branch,
     )
-    validate_training_setup_op.display_name = "Validate Training Setup"
-
-    retrained_op = retrain_slu_from_repo_op(
-        tagged_s3_data_op.outputs["output"],
-        tagged_job_data_op.outputs["output"],
-        downloaded_repo_op.outputs["repo"],
-        downloaded_alias_yaml_op.outputs["output"],
-        bucket=BUCKET,
-        repo_name=repo_name,
-        branch=repo_branch,
-        remove_intents=remove_intents,
-        use_previous_dataset=use_previous_dataset,
-        train_split_percent=train_split_percent,
-        stratify=stratify,
-        epochs=epochs,
-        initial_training=initial_training,
-        job_ids=job_ids,
-        labelstudio_project_ids=labelstudio_project_ids,
-        s3_paths=dataset_path,
-        customization_repo_name=customization_repo_name,
-        customization_repo_branch=customization_repo_branch,
-        core_slu_repo_name=core_slu_repo_name,
-        core_slu_repo_branch=core_slu_repo_branch,
-    ).after(validate_training_setup_op)
+    # .after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
     )

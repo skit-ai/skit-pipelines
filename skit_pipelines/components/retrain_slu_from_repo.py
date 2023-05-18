@@ -8,8 +8,8 @@ def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
-    slu_path: InputPath(str),
     intent_alias_path: InputPath(str),
+    slu_path: str,
     bucket: str,
     repo_name: str,
     branch: str,
@@ -56,6 +56,8 @@ def retrain_slu_from_repo(
         "classification/datasets",
         dataset_type + pipeline_constants.CSV_FILE,
     )
+
+    execute_cli(f"ls {os.listdir(slu_path)}")
 
     def get_metrics_path(metric_type: str, data_type: str = pipeline_constants.DATA):
         metrics_dir = os.path.join(data_type, "classification/metrics")
@@ -148,6 +150,8 @@ def retrain_slu_from_repo(
         core_slu_repo_name, core_slu_repo_branch
     )
 
+    execute_cli("echo core slu repo setup successfully")
+
     data_info = (
         f"{job_ids=}"
         if job_ids
@@ -185,6 +189,7 @@ def retrain_slu_from_repo(
         no_annotated_job = True
     try:
         s3_df = pd.read_csv(s3_data_path)
+        s3_df = s3_df.sample(200)
         s3_df[pipeline_constants.TAG] = s3_df[pipeline_constants.TAG].apply(
             pick_1st_tag
         )
@@ -204,25 +209,13 @@ def retrain_slu_from_repo(
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
-        execute_cli(
-            f"conda activate {core_slu_repo_name}",
-        )
-        execute_cli(
-            f"export PROJECT_DATA_PATH={os.path.join(slu_path, '..')}",
-        )
         # execute_cli(
-        #     "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
-        #     split=False,
+        #     f"export PROJECT_DATA_PATH={os.path.join(slu_path, '..')}",
         # )
-        # execute_cli(
-        #     "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
-        #     split=False,
-        # )
-        # execute_cli("make install").check_returncode()
 
         if not os.path.exists("data.dvc") and initial_training:
             # TODO: fix this
-            execute_cli(f"slu setup-dirs --project_root_path {slu_path}")
+            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {slu_path}")
 
             execute_cli("dvc init")
             execute_cli(f"dvc add {pipeline_constants.DATA}")
@@ -235,7 +228,7 @@ def retrain_slu_from_repo(
             execute_cli("dvc pull data.dvc")
             execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
             # TODO: fix this
-            execute_cli(f"slu setup-dirs --project_root_path {slu_path}")
+            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {slu_path}")
 
         else:
             raise ValueError(
@@ -256,22 +249,28 @@ def retrain_slu_from_repo(
             pipeline_constants.DATA, pipeline_constants.TEST
         )
 
-        execute_cli("ls data")
-
+        execute_cli("ls")
+        execute_cli("ls ../")
         if train_split_percent < 100:
             # split into train and test
+            execute_cli("pwd")
+            logger.info(f"conda run -n {core_slu_repo_name} slu split-data "
+                        f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                        f" --file {tagged_data_path} --project_config_path {slu_path} --project {repo_name}")
             execute_cli(
-                f"slu split-data --train-size {train_split_percent/100}{' --stratify' if stratify else ''} --file {tagged_data_path}"
+                f"conda run -n {core_slu_repo_name} slu split-data "
+                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                f" --file {tagged_data_path} --project_config_path {slu_path} --project {repo_name}"
             )
             if use_previous_dataset:
                 # combine with older train set
                 execute_cli(
-                    f"slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
+                    f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
                 )
                 if os.path.exists(old_test_path):
                     # combine with older test set
                     execute_cli(
-                        f"slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
+                        f"conda run -n {core_slu_repo_name} slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
                     )
 
         else:
@@ -279,7 +278,7 @@ def retrain_slu_from_repo(
             if use_previous_dataset:
                 # combine with older train dataset
                 execute_cli(
-                    f"slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
+                    f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
                 )
             else:
                 # copy new dataset to new path
@@ -303,7 +302,7 @@ def retrain_slu_from_repo(
 
         # training begins
         execute_cli(
-            f"slu train --epochs {epochs} --project_name {repo_name}"
+            f"conda run -n {core_slu_repo_name} slu train --project {repo_name} --project_config_path {slu_path}"
         ).check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
@@ -315,7 +314,7 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"slu test --project_name {repo_name}").check_returncode()
+            execute_cli(f"conda run -n {core_slu_repo_name} slu test --project {repo_name} --project_config_path {slu_path}").check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):
