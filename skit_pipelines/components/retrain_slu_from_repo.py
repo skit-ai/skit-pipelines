@@ -8,8 +8,8 @@ def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
+    # slu_path: InputPath(str),
     intent_alias_path: InputPath(str),
-    slu_path: str,
     bucket: str,
     repo_name: str,
     branch: str,
@@ -57,8 +57,6 @@ def retrain_slu_from_repo(
         dataset_type + pipeline_constants.CSV_FILE,
     )
 
-    execute_cli(f"ls {os.listdir(slu_path)}")
-
     def get_metrics_path(metric_type: str, data_type: str = pipeline_constants.DATA):
         metrics_dir = os.path.join(data_type, "classification/metrics")
         metrics_dir_walk = os.walk(metrics_dir)
@@ -100,7 +98,7 @@ def retrain_slu_from_repo(
             dataset_path, index=False
         )
 
-    def setup_utility_repo(repo_name, repo_branch, run_dir=None, run_cmd=None):
+    def setup_utility_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None):
         repo_local_path = tempfile.mkdtemp()
         download_repo(
             git_host_name=pipeline_constants.GITLAB,
@@ -132,7 +130,9 @@ def retrain_slu_from_repo(
             if run_dir:
                 os.chdir(run_dir)
             if run_cmd:
-                os.system(f"conda run -n {repo_name} {run_cmd} &")
+                command = f"{runtime_env_var if runtime_env_var else ''} conda run -n {repo_name} {run_cmd} &"
+                logger.info(f"running command {command}")
+                os.system(command)
             execute_cli("ps aux | grep task", split=False)
 
             return repo_local_path
@@ -140,11 +140,22 @@ def retrain_slu_from_repo(
         except Exception as exc:
             raise exc
 
+    # Setup project config repo
+    project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
+    download_repo(
+        git_host_name=pipeline_constants.GITLAB,
+        repo_name=repo_name,
+        project_path="skit-ai/slu/project-configs",
+        repo_path=project_config_local_path,
+    )
+    logger.info(f"Cloned repo contents {project_config_local_path} - {os.listdir(project_config_local_path)}")
+
     customization_repo_local_path = setup_utility_repo(
         customization_repo_name,
         customization_repo_branch,
         run_dir="custom_slu",
         run_cmd="task serve",
+        runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}"
     )
     core_slu_repo_local_path = setup_utility_repo(
         core_slu_repo_name, core_slu_repo_branch
@@ -162,7 +173,7 @@ def retrain_slu_from_repo(
         else ""
     )
 
-    os.chdir(slu_path)
+    os.chdir(project_config_local_path)
     repo = git.Repo(".")
     author = git.Actor(
         pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL
@@ -214,8 +225,7 @@ def retrain_slu_from_repo(
         # )
 
         if not os.path.exists("data.dvc") and initial_training:
-            # TODO: fix this
-            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {slu_path}")
+            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {project_config_local_path}")
 
             execute_cli("dvc init")
             execute_cli(f"dvc add {pipeline_constants.DATA}")
@@ -228,7 +238,7 @@ def retrain_slu_from_repo(
             execute_cli("dvc pull data.dvc")
             execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
             # TODO: fix this
-            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {slu_path}")
+            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {project_config_local_path}")
 
         else:
             raise ValueError(
@@ -256,11 +266,11 @@ def retrain_slu_from_repo(
             execute_cli("pwd")
             logger.info(f"conda run -n {core_slu_repo_name} slu split-data "
                         f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                        f" --file {tagged_data_path} --project_config_path {slu_path} --project {repo_name}")
+                        f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}")
             execute_cli(
                 f"conda run -n {core_slu_repo_name} slu split-data "
                 f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                f" --file {tagged_data_path} --project_config_path {slu_path} --project {repo_name}"
+                f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
             )
             if use_previous_dataset:
                 # combine with older train set
@@ -302,7 +312,7 @@ def retrain_slu_from_repo(
 
         # training begins
         execute_cli(
-            f"conda run -n {core_slu_repo_name} slu train --project {repo_name} --project_config_path {slu_path}"
+            f"conda run -n {core_slu_repo_name} slu train --project {repo_name} --project_config_path {project_config_local_path}"
         ).check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
@@ -314,7 +324,7 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"conda run -n {core_slu_repo_name} slu test --project {repo_name} --project_config_path {slu_path}").check_returncode()
+            execute_cli(f"conda run -n {core_slu_repo_name} slu test --project {repo_name} --project_config_path {project_config_local_path}").check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):
