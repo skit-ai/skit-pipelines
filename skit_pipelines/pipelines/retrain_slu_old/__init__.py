@@ -26,7 +26,7 @@ NODESELECTOR_LABEL = pipeline_constants.POD_NODE_SELECTOR_LABEL
     name="SLU retraining Pipeline",
     description="Retrains an existing SLU model.",
 )
-def retrain_slu(
+def retrain_slu_old(
     *,
     repo_name: str,
     repo_branch: str = "master",
@@ -200,7 +200,7 @@ def retrain_slu(
         yaml_path=alias_yaml_path,
     )
 
-    validate_training_setup_op = retrain_slu_from_repo_op(
+    validate_training_setup_op = retrain_slu_from_repo_op_old(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_repo_op.outputs["repo"],
@@ -223,7 +223,7 @@ def retrain_slu(
     )
     validate_training_setup_op.display_name = "Validate Training Setup"
 
-    retrained_op = retrain_slu_from_repo_op(
+    retrained_op = retrain_slu_from_repo_op_old(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_repo_op.outputs["repo"],
@@ -331,4 +331,4 @@ def retrain_slu(
         )
 
 
-__all__ = ["retrain_slu"]
+__all__ = ["retrain_slu_old"]

@@ -204,7 +204,7 @@ def retrain_slu(
         customization_repo_branch=customization_repo_branch,
         core_slu_repo_name=core_slu_repo_name,
         core_slu_repo_branch=core_slu_repo_branch,
-    )
+    ).set_ephemeral_storage_limit("20G")
     validate_training_setup_op.display_name = "Validate Training Setup"
 
     retrained_op = retrain_slu_from_repo_op(
