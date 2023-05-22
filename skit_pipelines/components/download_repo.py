@@ -13,7 +13,6 @@ def download_repo(
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
-    logger.info(f"repo_path {repo_path}")
     if git_host_name == pipeline_constants.GITLAB:
         repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
             repo_name=repo_name,
@@ -21,13 +20,10 @@ def download_repo(
             user=pipeline_constants.GITLAB_USER,
             token=pipeline_constants.GITLAB_PRIVATE_TOKEN,
         )
-        repo_path = os.path.join(repo_path, repo_name)
         repo = git.Repo.clone_from(url=repo_url, to_path=repo_path)
 
         logger.info(f"{repo_path}, {os.listdir(repo_path)}")
         logger.info("cloned successfully!")
-
-        # return output_path
 
 
 download_repo_op = kfp.components.create_component_from_func(

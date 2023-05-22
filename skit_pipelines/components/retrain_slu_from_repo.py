@@ -202,7 +202,6 @@ def retrain_slu_from_repo(
         no_annotated_job = True
     try:
         s3_df = pd.read_csv(s3_data_path)
-        s3_df = s3_df.sample(200)
         s3_df[pipeline_constants.TAG] = s3_df[pipeline_constants.TAG].apply(
             pick_1st_tag
         )
@@ -225,9 +224,6 @@ def retrain_slu_from_repo(
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
-        # execute_cli(
-        #     f"export PROJECT_DATA_PATH={os.path.join(slu_path, '..')}",
-        # )
 
         if not os.path.exists("data.dvc") and initial_training:
             execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {project_config_local_path}")
@@ -264,11 +260,8 @@ def retrain_slu_from_repo(
             pipeline_constants.DATA, pipeline_constants.TEST
         )
 
-        execute_cli("ls")
-        execute_cli("ls ../")
         if train_split_percent < 100:
             # split into train and test
-            execute_cli("pwd")
             logger.info(f"conda run -n {core_slu_repo_name} slu split-data "
                         f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
                         f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}")
