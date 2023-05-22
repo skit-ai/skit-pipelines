@@ -252,6 +252,7 @@ GITLAB = "gitlab.com"
 GITLAB_API_BASE = f"https://{GITLAB}/api/v4/projects/"
 GITLAB_SLU_PROJECT_PATH = "skit-ai/slu"
 GITLAB_SLU_PROJECT_CONFIG_PATH = "skit-ai/slu/project-configs"
+GITLAB_ALIAS_PROJECT_ID = "42034581"
 GITLAB_USER = "automation"
 GITLAB_USER_EMAIL = "automation@skit.ai"
 GITLAB_PRIVATE_TOKEN = os.environ["PERSONAL_ACCESS_TOKEN_GITLAB"]

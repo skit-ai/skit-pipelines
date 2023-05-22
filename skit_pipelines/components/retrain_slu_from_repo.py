@@ -310,6 +310,8 @@ def retrain_slu_from_repo(
         alias_dataset(new_test_path, intent_alias_path)
 
         if validate_setup:
+            if os.path.exists(pipeline_constants.OLD_DATA):
+                execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
             _, validate_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
             execute_cli(f"cp {validate_path} {output_classification_report_path}")
             execute_cli(f"cp {validate_path} {output_confusion_matrix_path}")

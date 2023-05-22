@@ -21,16 +21,15 @@ def download_yaml(git_host_name: str, yaml_path: str, output_path: OutputPath(st
             yaml.safe_dump({}, yaml_file)
         return
 
-    if git_host_name == pipeline_constants.GITHUB:
+    if git_host_name == pipeline_constants.GITLAB:
         try:
-            yaml_url = urljoin(
-                pipeline_constants.EEVEE_RAW_FILE_GITHUB_REPO_URL, yaml_path
-            )
+            yaml_url = (
+                    urljoin(
+                        f"{pipeline_constants.GITLAB_API_BASE}/{pipeline_constants.GITLAB_ALIAS_PROJECT_ID}/repository/files/", yaml_path.replace("/", "%2F")
+                    ) + "/raw?ref=main"
+                )
             logger.debug(f"{yaml_url=}")
-            headers = requests.structures.CaseInsensitiveDict()
-            headers[
-                "Authorization"
-            ] = f"token {pipeline_constants.PERSONAL_ACCESS_TOKEN_GITHUB}"
+            headers = {"PRIVATE-TOKEN": pipeline_constants.GITLAB_PRIVATE_TOKEN}
 
             response = requests.get(yaml_url, headers=headers)
             logger.info(response.status_code)

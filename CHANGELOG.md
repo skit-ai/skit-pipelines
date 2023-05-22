@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.94
+- [x] download_yaml: chnages in alias file download from gitlab repo. (#106), storage_full_fix: Removig old_data while velidating pipelines.
+
 0.2.92
 - [x] fix: template_id not working properly, changed skit-calls query secrets
 - [x] PL-1300: new data format support & extra meta-annotation-columns (#21)

@@ -179,7 +179,7 @@ def retrain_slu(
     )
 
     downloaded_alias_yaml_op = download_yaml_op(
-        git_host_name=pipeline_constants.GITHUB,
+        git_host_name=pipeline_constants.GITLAB,
         yaml_path=alias_yaml_path,
     )
 
