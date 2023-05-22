@@ -8,7 +8,6 @@ def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
-    # slu_path: InputPath(str),
     intent_alias_path: InputPath(str),
     bucket: str,
     repo_name: str,
@@ -132,7 +131,7 @@ def retrain_slu_from_repo(
             if run_cmd:
                 command = f"{runtime_env_var if runtime_env_var else ''} conda run -n {repo_name} {run_cmd} &"
                 logger.info(f"running command {command}")
-                os.system(command)
+                execute_cli(command, split=False)
             execute_cli("ps aux | grep task", split=False)
 
             return repo_local_path
@@ -150,29 +149,6 @@ def retrain_slu_from_repo(
     )
     logger.info(f"Cloned repo contents {project_config_local_path} - {os.listdir(project_config_local_path)}")
 
-    customization_repo_local_path = setup_utility_repo(
-        customization_repo_name,
-        customization_repo_branch,
-        run_dir="custom_slu",
-        run_cmd="task serve",
-        runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}"
-    )
-    core_slu_repo_local_path = setup_utility_repo(
-        core_slu_repo_name, core_slu_repo_branch
-    )
-
-    execute_cli("echo core slu repo setup successfully")
-
-    data_info = (
-        f"{job_ids=}"
-        if job_ids
-        else "" + f" {labelstudio_project_ids=}"
-        if labelstudio_project_ids
-        else "" + f" {s3_paths=}"
-        if s3_paths
-        else ""
-    )
-
     os.chdir(project_config_local_path)
     repo = git.Repo(".")
     author = git.Actor(
@@ -187,6 +163,32 @@ def retrain_slu_from_repo(
     repo.config_writer().set_value(
         "user", "email", pipeline_constants.GITLAB_USER_EMAIL
     ).release()
+
+    repo.git.checkout(branch)
+
+    # Setup utility services
+    customization_repo_local_path = setup_utility_repo(
+        customization_repo_name,
+        customization_repo_branch,
+        run_dir="custom_slu",
+        run_cmd="task serve",
+        runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}"
+    )
+    logger.info("customization repo setup successfully")
+    core_slu_repo_local_path = setup_utility_repo(
+        core_slu_repo_name, core_slu_repo_branch
+    )
+    logger.info("core slu repo setup successfully")
+
+    data_info = (
+        f"{job_ids=}"
+        if job_ids
+        else "" + f" {labelstudio_project_ids=}"
+        if labelstudio_project_ids
+        else "" + f" {s3_paths=}"
+        if s3_paths
+        else ""
+    )
 
     try:
         tagged_df = pd.read_csv(annotated_job_data_path)
@@ -211,6 +213,9 @@ def retrain_slu_from_repo(
             raise ValueError(
                 "Either data from job_ids or s3_path has to be available for retraining to continue."
             )
+
+    # Change directory just to make sure
+    os.chdir(project_config_local_path)
 
     try:
         _, tagged_data_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
@@ -312,8 +317,8 @@ def retrain_slu_from_repo(
 
         # training begins
         execute_cli(
-            f"conda run -n {core_slu_repo_name} slu train --project {repo_name} --project_config_path {project_config_local_path}"
-        ).check_returncode()
+            f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} conda "
+            f"run -n {core_slu_repo_name} slu train --project {repo_name}", split=False).check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
             if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
@@ -324,7 +329,9 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"conda run -n {core_slu_repo_name} slu test --project {repo_name} --project_config_path {project_config_local_path}").check_returncode()
+            execute_cli(f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
+                        f"conda run -n {core_slu_repo_name} "
+                        f"slu test --project {repo_name} ", split=False).check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):

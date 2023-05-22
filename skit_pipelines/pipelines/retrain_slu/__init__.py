@@ -178,16 +178,6 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
-    # downloaded_repo_op = download_repo_op(
-    #     git_host_name=pipeline_constants.GITLAB,
-    #     repo_name=repo_name,
-    #     project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
-    # )
-    #
-    # downloaded_repo_op.execution_options.caching_strategy.max_cache_staleness = (
-    #     "P0D"  # disables caching
-    # )
-
     downloaded_alias_yaml_op = download_yaml_op(
         git_host_name=pipeline_constants.GITHUB,
         yaml_path=alias_yaml_path,
@@ -197,8 +187,6 @@ def retrain_slu(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_alias_yaml_op.outputs["output"],
-        # slu_path=downloaded_repo_op.output,
-        # downloaded_repo_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
         branch=repo_branch,
@@ -222,7 +210,6 @@ def retrain_slu(
     retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
-        # downloaded_repo_op.outputs["repo"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
@@ -280,7 +267,7 @@ def retrain_slu(
     mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
-        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
