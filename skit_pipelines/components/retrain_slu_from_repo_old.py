@@ -8,6 +8,7 @@ def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
+    slu_path: InputPath(str),
     intent_alias_path: InputPath(str),
     bucket: str,
     repo_name: str,
@@ -26,8 +27,6 @@ def retrain_slu_from_repo(
     output_confusion_matrix_path: OutputPath(str),
     customization_repo_name: str = "",
     customization_repo_branch: str = "",
-    core_slu_repo_name: str = "",
-    core_slu_repo_branch: str = "",
 ) -> str:
     import os
     import subprocess
@@ -97,15 +96,15 @@ def retrain_slu_from_repo(
             dataset_path, index=False
         )
 
-    def setup_utility_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None):
-        repo_local_path = tempfile.mkdtemp()
+    def setup_customization_repo(repo_name, repo_branch):
+        customization_repo_path = tempfile.mkdtemp()
         download_repo(
             git_host_name=pipeline_constants.GITLAB,
-            repo_name=repo_name,
+            repo_name=customization_repo_name,
             project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
-            repo_path=repo_local_path,
+            repo_path=customization_repo_path,
         )
-        os.chdir(repo_local_path)
+        os.chdir(customization_repo_path)
         repo = git.Repo(".")
         repo.config_writer().set_value(
             "user", "name", pipeline_constants.GITLAB_USER
@@ -117,39 +116,34 @@ def retrain_slu_from_repo(
         try:
             repo.git.checkout(repo_branch)
             execute_cli(
-                f"conda create -n {repo_name} -m python=3.8 -y",
+                "conda create -n customization -m python=3.8 -y",
             )
             os.system(". /conda/etc/profile.d/conda.sh")
             execute_cli(
-                f"conda run -n {repo_name} "
-                + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                "conda run -n customization pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
                 split=False,
             )
-            execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
-            if run_dir:
-                os.chdir(run_dir)
-            if run_cmd:
-                command = f"{runtime_env_var if runtime_env_var else ''} conda run -n {repo_name} {run_cmd} &"
-                logger.info(f"running command {command}")
-                execute_cli(command, split=False)
+            execute_cli("conda run -n customization poetry install").check_returncode()
+            os.chdir("custom_slu")
+            os.system("conda run -n customization task serve &")
             execute_cli("ps aux | grep task", split=False)
-
-            return repo_local_path
 
         except Exception as exc:
             raise exc
 
-    # Setup project config repo
-    project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
-    download_repo(
-        git_host_name=pipeline_constants.GITLAB,
-        repo_name=repo_name,
-        project_path="skit-ai/slu/project-configs",
-        repo_path=project_config_local_path,
-    )
-    logger.info(f"Cloned repo contents {project_config_local_path} - {os.listdir(project_config_local_path)}")
+    setup_customization_repo(customization_repo_name, customization_repo_branch)
 
-    os.chdir(project_config_local_path)
+    data_info = (
+        f"{job_ids=}"
+        if job_ids
+        else "" + f" {labelstudio_project_ids=}"
+        if labelstudio_project_ids
+        else "" + f" {s3_paths=}"
+        if s3_paths
+        else ""
+    )
+
+    os.chdir(slu_path)
     repo = git.Repo(".")
     author = git.Actor(
         pipeline_constants.GITLAB_USER, pipeline_constants.GITLAB_USER_EMAIL
@@ -163,32 +157,6 @@ def retrain_slu_from_repo(
     repo.config_writer().set_value(
         "user", "email", pipeline_constants.GITLAB_USER_EMAIL
     ).release()
-
-    repo.git.checkout(branch)
-
-    # Setup utility services
-    customization_repo_local_path = setup_utility_repo(
-        customization_repo_name,
-        customization_repo_branch,
-        run_dir="custom_slu",
-        run_cmd="task serve",
-        runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}"
-    )
-    logger.info("customization repo setup successfully")
-    core_slu_repo_local_path = setup_utility_repo(
-        core_slu_repo_name, core_slu_repo_branch
-    )
-    logger.info("core slu repo setup successfully")
-
-    data_info = (
-        f"{job_ids=}"
-        if job_ids
-        else "" + f" {labelstudio_project_ids=}"
-        if labelstudio_project_ids
-        else "" + f" {s3_paths=}"
-        if s3_paths
-        else ""
-    )
 
     try:
         tagged_df = pd.read_csv(annotated_job_data_path)
@@ -213,9 +181,6 @@ def retrain_slu_from_repo(
                 "Either data from job_ids or s3_path has to be available for retraining to continue."
             )
 
-    # Change directory just to make sure
-    os.chdir(project_config_local_path)
-
     try:
         _, tagged_data_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
         tagged_df.to_csv(tagged_data_path, index=False)
@@ -224,10 +189,18 @@ def retrain_slu_from_repo(
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
+        execute_cli(
+            "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+            split=False,
+        )
+        execute_cli(
+            "pip install torch==$(grep torch pyproject.toml | awk -F'=|\"' '{print $3}')",
+            split=False,
+        )
+        execute_cli("make install").check_returncode()
 
         if not os.path.exists("data.dvc") and initial_training:
-            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {project_config_local_path}")
-
+            execute_cli("slu setup-dirs")
             execute_cli("dvc init")
             execute_cli(f"dvc add {pipeline_constants.DATA}")
             execute_cli(
@@ -238,8 +211,7 @@ def retrain_slu_from_repo(
         elif not initial_training and os.path.exists("data.dvc"):
             execute_cli("dvc pull data.dvc")
             execute_cli(f"mv {pipeline_constants.DATA} {pipeline_constants.OLD_DATA}")
-            # TODO: fix this
-            execute_cli(f"conda run -n {core_slu_repo_name} slu setup-dirs --project_config_path {project_config_local_path}")
+            execute_cli("slu setup-dirs")
 
         else:
             raise ValueError(
@@ -260,25 +232,22 @@ def retrain_slu_from_repo(
             pipeline_constants.DATA, pipeline_constants.TEST
         )
 
+        execute_cli("ls data")
+
         if train_split_percent < 100:
             # split into train and test
-            logger.info(f"conda run -n {core_slu_repo_name} slu split-data "
-                        f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                        f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}")
             execute_cli(
-                f"conda run -n {core_slu_repo_name} slu split-data "
-                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
+                f"slu split-data --train-size {train_split_percent/100}{' --stratify' if stratify else ''} --file {tagged_data_path}"
             )
             if use_previous_dataset:
                 # combine with older train set
                 execute_cli(
-                    f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
+                    f"slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
                 )
                 if os.path.exists(old_test_path):
                     # combine with older test set
                     execute_cli(
-                        f"conda run -n {core_slu_repo_name} slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
+                        f"slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
                     )
 
         else:
@@ -286,7 +255,7 @@ def retrain_slu_from_repo(
             if use_previous_dataset:
                 # combine with older train dataset
                 execute_cli(
-                    f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
+                    f"slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
                 )
             else:
                 # copy new dataset to new path
@@ -311,9 +280,7 @@ def retrain_slu_from_repo(
             return ""
 
         # training begins
-        execute_cli(
-            f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} conda "
-            f"run -n {core_slu_repo_name} slu train --project {repo_name}", split=False).check_returncode()
+        execute_cli(f"slu train --epochs {epochs}").check_returncode()
         if os.path.exists(new_test_path):
             test_df = pd.read_csv(new_test_path)
             if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
@@ -324,9 +291,7 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
-                        f"conda run -n {core_slu_repo_name} "
-                        f"slu test --project {repo_name} ", split=False).check_returncode()
+            execute_cli(f"slu test").check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):
@@ -364,6 +329,6 @@ def retrain_slu_from_repo(
     return new_branch
 
 
-retrain_slu_from_repo_op = kfp.components.create_component_from_func(
+retrain_slu_from_repo_op_old = kfp.components.create_component_from_func(
     retrain_slu_from_repo, base_image=pipeline_constants.BASE_IMAGE
 )

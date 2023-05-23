@@ -8,7 +8,7 @@ from skit_pipelines.components import (
     download_yaml_op,
     fetch_tagged_dataset_op,
     file_contents_to_markdown_s3_op,
-    retrain_slu_from_repo_op,
+    retrain_slu_from_repo_op_old,
     slack_notification_op,
     upload2s3_op,
 )
@@ -26,7 +26,7 @@ NODESELECTOR_LABEL = pipeline_constants.POD_NODE_SELECTOR_LABEL
     name="SLU retraining Pipeline",
     description="Retrains an existing SLU model.",
 )
-def retrain_slu(
+def retrain_slu_old(
     *,
     repo_name: str,
     repo_branch: str = "master",
@@ -46,9 +46,7 @@ def retrain_slu(
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
-    core_slu_repo_name: str = "core-slu-service",
-    core_slu_repo_branch: str = "master",
-    customization_repo_name: str = "customization",
+    customization_repo_name: str = "slu-customization",
     customization_repo_branch: str = "master",
 ):
     """
@@ -122,6 +120,9 @@ def retrain_slu(
     :param labelstudio_project_ids: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_ids: str
 
+    :param epochs: Number of epchs to train the model, defaults to 10
+    :type epochs: int, optional
+
     :param job_start_date: The start date range (YYYY-MM-DD) to filter tagged data.
     :type job_start_date: str, optional
 
@@ -145,21 +146,6 @@ def retrain_slu(
 
     :param stratify: For stratified splitting of dataset into train and test set, defaults to False.
     :type stratify: bool, optional
-
-    :param core_slu_repo_name: Name of repository for core slu service. Defaults to core-slu-service
-    :type core_slu_repo_name: str, optional
-
-    :param core_slu_repo_branch: Branch to check out for core slu repository. Defaults to master
-    :type core_slu_repo_branch: str, optional
-
-    :param customization_repo_name: Name of repository for customization service. Defaults to customization
-    :type customization_repo_name: str, optional
-
-    :param customization_repo_branch: Branch to check out for customization service repository. Defaults to master
-    :type customization_repo_branch: str, optional
-
-    :param target_mr_branch: Target branch against which the MR will be created. Defaults to sandbox
-    :type target_mr_branch: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""
     :type notify: str, optional
@@ -190,14 +176,34 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
-    downloaded_alias_yaml_op = download_yaml_op(
+    downloaded_repo_op = download_repo_op(
         git_host_name=pipeline_constants.GITLAB,
+        repo_name=repo_name,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+    )
+
+    downloaded_repo_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    # downloaded_customization_repo_op = download_repo_op(
+    #     repo_name=customization_repo_name,
+    # )
+    # downloaded_customization_repo_op.display_name = "Download SLU customization repo"
+
+    # downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (
+    #     "P0D"  # disables caching
+    # )
+
+    downloaded_alias_yaml_op = download_yaml_op(
+        git_host_name=pipeline_constants.GITHUB,
         yaml_path=alias_yaml_path,
     )
 
-    validate_training_setup_op = retrain_slu_from_repo_op(
+    validate_training_setup_op = retrain_slu_from_repo_op_old(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
+        downloaded_repo_op.outputs["repo"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
@@ -214,14 +220,13 @@ def retrain_slu(
         validate_setup=True,
         customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
-        core_slu_repo_name=core_slu_repo_name,
-        core_slu_repo_branch=core_slu_repo_branch,
-    ).set_ephemeral_storage_limit("20G")
+    )
     validate_training_setup_op.display_name = "Validate Training Setup"
 
-    retrained_op = retrain_slu_from_repo_op(
+    retrained_op = retrain_slu_from_repo_op_old(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
+        downloaded_repo_op.outputs["repo"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
@@ -237,8 +242,6 @@ def retrain_slu(
         s3_paths=dataset_path,
         customization_repo_name=customization_repo_name,
         customization_repo_branch=customization_repo_branch,
-        core_slu_repo_name=core_slu_repo_name,
-        core_slu_repo_branch=core_slu_repo_branch,
     ).after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
@@ -279,7 +282,7 @@ def retrain_slu(
     mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
-        project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
@@ -328,4 +331,4 @@ def retrain_slu(
         )
 
 
-__all__ = ["retrain_slu"]
+__all__ = ["retrain_slu_old"]

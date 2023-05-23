@@ -56,6 +56,7 @@ from skit_pipelines.components.push_eer_to_postgres import push_eer_to_postgres_
 from skit_pipelines.components.push_irr_to_postgres import push_irr_to_postgres_op
 from skit_pipelines.components.read_json_key import read_json_key_op
 from skit_pipelines.components.retrain_slu_from_repo import retrain_slu_from_repo_op
+from skit_pipelines.components.retrain_slu_from_repo_old import retrain_slu_from_repo_op_old
 from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
