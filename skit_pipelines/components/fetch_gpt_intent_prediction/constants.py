@@ -1,5 +1,5 @@
 INTENT_MODEL: str = "text-davinci-003"
-ALLOWED_INTENTS = ['_confirm_', '_cancel_']
+ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
 PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
 

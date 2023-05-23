@@ -6,8 +6,9 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def org_auth_token(org_id: str, url: Optional[str] = None) -> str:
-    from skit_auth import auth, utils
     from loguru import logger
+    from skit_auth import auth, utils
+
     from skit_pipelines import constants as const
 
     utils.configure_logger(7)

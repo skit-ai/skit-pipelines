@@ -21,6 +21,7 @@ Subpackages
    skit_pipelines.pipelines.fetch_tagged_entity_dataset
    skit_pipelines.pipelines.irr_from_tog
    skit_pipelines.pipelines.retrain_slu
+   skit_pipelines.pipelines.retrain_slu_old
    skit_pipelines.pipelines.tag_calls
    skit_pipelines.pipelines.train_voicebot_intent_model_xlmr
    skit_pipelines.pipelines.transcription_pipeline

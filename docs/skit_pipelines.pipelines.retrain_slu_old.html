@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.components.preprocess.create_utterance_column package" href="skit_pipelines.components.preprocess.create_utterance_column.html" /><link rel="prev" title="skit_pipelines.components.preprocess.create_true_intent_column package" href="skit_pipelines.components.preprocess.create_true_intent_column.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="skit_pipelines.types package" href="skit_pipelines.types.html" /><link rel="prev" title="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.preprocess.create_true_transcript_column package - skit-pipelines 0.2.94 documentation</title>
+        <title>skit_pipelines.pipelines.retrain_slu_old package - skit-pipelines 0.2.94 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -179,14 +179,14 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.api.models.html">skit_pipelines.api.models package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
-<li class="toctree-l4 current has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4 has-children"><a class="reference internal" href="skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_intent_column.html">skit_pipelines.components.preprocess.create_true_intent_column package</a></li>
-<li class="toctree-l5 current current-page"><a class="current reference internal" href="#">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_true_transcript_column.html">skit_pipelines.components.preprocess.create_true_transcript_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.create_utterance_column.html">skit_pipelines.components.preprocess.create_utterance_column package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt.html">skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt package</a></li>
 <li class="toctree-l5"><a class="reference internal" href="skit_pipelines.components.preprocess.process_true_transcript_column.html">skit_pipelines.components.preprocess.process_true_transcript_column package</a></li>
@@ -197,7 +197,7 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.components.upload_for_call_and_slot_tagging.html">skit_pipelines.components.upload_for_call_and_slot_tagging package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="skit_pipelines.pipelines.html">skit_pipelines.pipelines package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.asr_tune.html">skit_pipelines.pipelines.asr_tune package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eer_from_tog.html">skit_pipelines.pipelines.eer_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.eval_asr_pipeline.html">skit_pipelines.pipelines.eval_asr_pipeline package</a></li>
@@ -212,7 +212,7 @@
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu_old.html">skit_pipelines.pipelines.retrain_slu_old package</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">skit_pipelines.pipelines.retrain_slu_old package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
@@ -258,30 +258,82 @@
           </label>
         </div>
         <article role="main">
-          <section id="skit-pipelines-components-preprocess-create-true-transcript-column-package">
-<h1>skit_pipelines.components.preprocess.create_true_transcript_column package<a class="headerlink" href="#skit-pipelines-components-preprocess-create-true-transcript-column-package" title="Permalink to this headline">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">#</a></h2>
-</section>
-<section id="module-skit_pipelines.components.preprocess.create_true_transcript_column.utils">
-<span id="skit-pipelines-components-preprocess-create-true-transcript-column-utils-module"></span><h2>skit_pipelines.components.preprocess.create_true_transcript_column.utils module<a class="headerlink" href="#module-skit_pipelines.components.preprocess.create_true_transcript_column.utils" title="Permalink to this headline">#</a></h2>
+          <section id="skit-pipelines-pipelines-retrain-slu-old-package">
+<h1>skit_pipelines.pipelines.retrain_slu_old package<a class="headerlink" href="#skit-pipelines-pipelines-retrain-slu-old-package" title="Permalink to this headline">#</a></h1>
+<section id="module-skit_pipelines.pipelines.retrain_slu_old">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.pipelines.retrain_slu_old" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_transcript_column.utils.pick_text_from_tag">
-<span class="sig-name descname"><span class="pre">pick_text_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/preprocess/create_true_transcript_column/utils.html#pick_text_from_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_transcript_column.utils.pick_text_from_tag" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-skit_pipelines.components.preprocess.create_true_transcript_column">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.preprocess.create_true_transcript_column" title="Permalink to this headline">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_transcript_column.create_true_transcript_labels">
-<span class="sig-name descname"><span class="pre">create_true_transcript_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/components/preprocess/create_true_transcript_column.html#create_true_transcript_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_transcript_column.create_true_transcript_labels" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="skit_pipelines.components.preprocess.create_true_transcript_column.create_true_transcript_labels_op">
-<span class="sig-name descname"><span class="pre">create_true_transcript_labels_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_label_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.preprocess.create_true_transcript_column.create_true_transcript_labels_op" title="Permalink to this definition">#</a></dt>
-<dd><p>Create true transcript labels</p>
+<dt class="sig sig-object py" id="skit_pipelines.pipelines.retrain_slu_old.retrain_slu_old">
+<span class="sig-name descname"><span class="pre">retrain_slu_old</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'master'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_start_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_end_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_intents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_yaml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_previous_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_split_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_mr_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sandbox'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'slu-customization'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'master'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skit_pipelines/pipelines/retrain_slu_old.html#retrain_slu_old"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.pipelines.retrain_slu_old.retrain_slu_old" title="Permalink to this definition">#</a></dt>
+<dd><p>A pipeline to retrain an existing SLU model.</p>
+<p id="p-retrain-slu">Example payload to invoke via slack integrations:</p>
+<p>A minimal example:</p>
+<blockquote>
+<div><p>&#64;charon run retrain_slu</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;repo_name&quot;</span><span class="p">:</span> <span class="s2">&quot;slu_repo_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;10,13&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>A full available parameters example:</p>
+<blockquote>
+<div><p>&#64;charon run retrain_slu</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;repo_name&quot;</span><span class="p">:</span> <span class="s2">&quot;slu_repo_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;repo_branch&quot;</span><span class="p">:</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dataset_path&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://bucket-name/path1/to1/data1.csv,s3://bucket-name/path2/to2/data2.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;job_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;4011,4012&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;10,13&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;job_start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-08-01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;job_end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2022-09-19&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;remove_intents&quot;</span><span class="p">:</span> <span class="s2">&quot;_confirm_,_oos_,audio_speech_unclear,ood&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;alias_yaml_path&quot;</span><span class="p">:</span> <span class="s2">&quot;intents/oppo/alias.yaml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;use_previous_dataset&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;train_split_percent&quot;</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span>
+    <span class="s2">&quot;stratify&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;epochs&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Training an SLU for first time example:</p>
+<blockquote>
+<div><p>&#64;charon run retrain_slu</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;repo_name&quot;</span><span class="p">:</span> <span class="s2">&quot;slu_repo_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;repo_branch&quot;</span><span class="p">:</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;labelstudio_project_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;10,13&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;initial_training&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_name</strong> (<em>str</em><em>, </em><em>optional</em>) – SLU repository name under /vernacularai/ai/clients org in gitlab.</p></li>
+<li><p><strong>repo_branch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The branch name in the SLU repository one wants to use, defaults to master.</p></li>
+<li><p><strong>dataset_path</strong> (<em>str</em><em>, </em><em>optional</em>) – The S3 URI or the S3 key for the tagged dataset (can be multiple - comma separated).</p></li>
+<li><p><strong>job_ids</strong> (<em>str</em>) – The job ids as per tog. Optional if labestudio_project_ids is provided.</p></li>
+<li><p><strong>labelstudio_project_ids</strong> (<em>str</em>) – The labelstudio project id (this is a number) since this is optional, defaults to “”.</p></li>
+<li><p><strong>epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of epchs to train the model, defaults to 10</p></li>
+<li><p><strong>job_start_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The start date range (YYYY-MM-DD) to filter tagged data.</p></li>
+<li><p><strong>job_end_date</strong> (<em>str</em><em>, </em><em>optional</em>) – The end date range (YYYY-MM-DD) to filter tagged data</p></li>
+<li><p><strong>remove_intents</strong> (<em>str</em><em>, </em><em>optional</em>) – Comma separated list of intents to remove from dataset while training.</p></li>
+<li><p><strong>alias_yaml_path</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>eevee’s intent_report alias.yaml, refer docs <a class="reference external" href="https://skit-ai.github.io/eevee/metrics/intents.html#aliasing">here</a> . Upload your yaml to eevee-yamls repository <a class="reference external" href="https://github.com/skit-ai/eevee-yamls">here</a> &amp; pass the relative path of the yaml from base of the repository.</p>
+</p></li>
+<li><p><strong>initial_training</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to true only if you’re training a model for the first time, defaults to False.</p></li>
+<li><p><strong>use_previous_dataset</strong> (<em>bool</em><em>, </em><em>optional</em>) – Before retraining combines new dataset with last dataset the model was trained on, defaults to True.</p></li>
+<li><p><strong>train_split_percent</strong> (<em>int</em><em>, </em><em>optional</em>) – Percentage of new data one should train the model on, defaults to 85.</p></li>
+<li><p><strong>stratify</strong> (<em>bool</em><em>, </em><em>optional</em>) – For stratified splitting of dataset into train and test set, defaults to False.</p></li>
+<li><p><strong>notify</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to send a slack notification, defaults to “”</p></li>
+<li><p><strong>channel</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack channel to send the notification, defaults to “”</p></li>
+<li><p><strong>slack_thread</strong> (<em>str</em><em>, </em><em>optional</em>) – The slack thread to send the notification, defaults to “”</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -292,23 +344,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="skit_pipelines.components.preprocess.create_utterance_column.html">
+          <a class="next-page" href="skit_pipelines.types.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">skit_pipelines.components.preprocess.create_utterance_column package</div>
+                <div class="title">skit_pipelines.types package</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="skit_pipelines.components.preprocess.create_true_intent_column.html">
+          <a class="prev-page" href="skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">skit_pipelines.components.preprocess.create_true_intent_column package</div>
+                <div class="title">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</div>
                 
               </div>
             </a>
@@ -344,10 +396,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">skit_pipelines.components.preprocess.create_true_transcript_column package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.preprocess.create_true_transcript_column.utils">skit_pipelines.components.preprocess.create_true_transcript_column.utils module</a></li>
-<li><a class="reference internal" href="#module-skit_pipelines.components.preprocess.create_true_transcript_column">Module contents</a></li>
+<li><a class="reference internal" href="#">skit_pipelines.pipelines.retrain_slu_old package</a><ul>
+<li><a class="reference internal" href="#module-skit_pipelines.pipelines.retrain_slu_old">Module contents</a></li>
 </ul>
 </li>
 </ul>

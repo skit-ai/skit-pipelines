@@ -1,10 +1,11 @@
 import kfp
 
-from skit_pipelines.components import fetch_calls_op, slack_notification_op
 from skit_pipelines import constants as pipeline_constants
+from skit_pipelines.components import fetch_calls_op, slack_notification_op
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
 REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
+
 
 @kfp.dsl.pipeline(
     name="Fetch Calls Pipeline",

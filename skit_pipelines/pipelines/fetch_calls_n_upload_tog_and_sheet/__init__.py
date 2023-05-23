@@ -101,7 +101,7 @@ def fetch_calls_n_upload_tog_and_sheet(
 
     :param reported: Pick only reported calls, defaults to False
     :type reported: bool
-    
+
     :param template_id: The flow template id to filter calls, defaults to ""
     :type template_id: str, optional
 
@@ -169,7 +169,7 @@ def fetch_calls_n_upload_tog_and_sheet(
         flow_name=flow_name,
         min_duration=min_duration,
         asr_provider=asr_provider,
-        use_fsm_url=USE_FSM_URL or use_fsm_url
+        use_fsm_url=USE_FSM_URL or use_fsm_url,
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

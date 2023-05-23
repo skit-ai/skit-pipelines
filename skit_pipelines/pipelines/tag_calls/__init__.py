@@ -1,11 +1,11 @@
 import kfp
 
 from skit_pipelines.components import (
+    fetch_calls_for_slots_op,
     org_auth_token_op,
     read_json_key_op,
     slack_notification_op,
     tag_calls_op,
-    fetch_calls_for_slots_op,
 )
 
 
@@ -64,10 +64,10 @@ def tag_calls(
 
     :param labelstudio_project_id: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
-    
+
     :param call_project_id: The call project id (this is a number) since this is optional, defaults to "".
     :type call_project_id: str
-    
+
     :param lang: The language of the calls, defaults to ""
     :type lang: str, optional
 
@@ -98,8 +98,10 @@ def tag_calls(
         org_id=org_id,
         data_label=data_label,
     )
-    
-    with kfp.dsl.Condition(call_project_id != "", "call-tagging").after(auth_token) as check1:
+
+    with kfp.dsl.Condition(call_project_id != "", "call-tagging").after(
+        auth_token
+    ) as check1:
         calls_s3_path = fetch_calls_for_slots_op(
             untagged_records_path=s3_path,
             org_id=org_id,

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.pipelines.retrain_slu - skit-pipelines 0.2.94 documentation</title>
+        <title>skit_pipelines.pipelines.retrain_slu_old - skit-pipelines 0.2.94 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -256,7 +256,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for skit_pipelines.pipelines.retrain_slu</h1><div class="highlight"><pre>
+          <h1>Source code for skit_pipelines.pipelines.retrain_slu_old</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">kfp</span>
 
 <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
@@ -267,7 +267,7 @@
     <span class="n">download_yaml_op</span><span class="p">,</span>
     <span class="n">fetch_tagged_dataset_op</span><span class="p">,</span>
     <span class="n">file_contents_to_markdown_s3_op</span><span class="p">,</span>
-    <span class="n">retrain_slu_from_repo_op</span><span class="p">,</span>
+    <span class="n">retrain_slu_from_repo_op_old</span><span class="p">,</span>
     <span class="n">slack_notification_op</span><span class="p">,</span>
     <span class="n">upload2s3_op</span><span class="p">,</span>
 <span class="p">)</span>
@@ -281,11 +281,11 @@
 <span class="n">NODESELECTOR_LABEL</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">POD_NODE_SELECTOR_LABEL</span>
 
 
-<div class="viewcode-block" id="retrain_slu"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.retrain_slu.html#skit_pipelines.pipelines.retrain_slu.retrain_slu">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
+<div class="viewcode-block" id="retrain_slu_old"><a class="viewcode-back" href="../../../skit_pipelines.pipelines.retrain_slu_old.html#skit_pipelines.pipelines.retrain_slu_old.retrain_slu_old">[docs]</a><span class="nd">@kfp</span><span class="o">.</span><span class="n">dsl</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SLU retraining Pipeline&quot;</span><span class="p">,</span>
     <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Retrains an existing SLU model.&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">retrain_slu</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">retrain_slu_old</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
@@ -305,9 +305,7 @@
     <span class="n">notify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">core_slu_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;core-slu-service&quot;</span><span class="p">,</span>
-    <span class="n">core_slu_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
-    <span class="n">customization_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;customization&quot;</span><span class="p">,</span>
+    <span class="n">customization_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;slu-customization&quot;</span><span class="p">,</span>
     <span class="n">customization_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -381,6 +379,9 @@
 <span class="sd">    :param labelstudio_project_ids: The labelstudio project id (this is a number) since this is optional, defaults to &quot;&quot;.</span>
 <span class="sd">    :type labelstudio_project_ids: str</span>
 
+<span class="sd">    :param epochs: Number of epchs to train the model, defaults to 10</span>
+<span class="sd">    :type epochs: int, optional</span>
+
 <span class="sd">    :param job_start_date: The start date range (YYYY-MM-DD) to filter tagged data.</span>
 <span class="sd">    :type job_start_date: str, optional</span>
 
@@ -404,21 +405,6 @@
 
 <span class="sd">    :param stratify: For stratified splitting of dataset into train and test set, defaults to False.</span>
 <span class="sd">    :type stratify: bool, optional</span>
-
-<span class="sd">    :param core_slu_repo_name: Name of repository for core slu service. Defaults to core-slu-service</span>
-<span class="sd">    :type core_slu_repo_name: str, optional</span>
-
-<span class="sd">    :param core_slu_repo_branch: Branch to check out for core slu repository. Defaults to master</span>
-<span class="sd">    :type core_slu_repo_branch: str, optional</span>
-
-<span class="sd">    :param customization_repo_name: Name of repository for customization service. Defaults to customization</span>
-<span class="sd">    :type customization_repo_name: str, optional</span>
-
-<span class="sd">    :param customization_repo_branch: Branch to check out for customization service repository. Defaults to master</span>
-<span class="sd">    :type customization_repo_branch: str, optional</span>
-
-<span class="sd">    :param target_mr_branch: Target branch against which the MR will be created. Defaults to sandbox</span>
-<span class="sd">    :type target_mr_branch: str, optional</span>
 
 <span class="sd">    :param notify: Whether to send a slack notification, defaults to &quot;&quot;</span>
 <span class="sd">    :type notify: str, optional</span>
@@ -449,14 +435,34 @@
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
     <span class="p">)</span>
 
-    <span class="n">downloaded_alias_yaml_op</span> <span class="o">=</span> <span class="n">download_yaml_op</span><span class="p">(</span>
+    <span class="n">downloaded_repo_op</span> <span class="o">=</span> <span class="n">download_repo_op</span><span class="p">(</span>
         <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">downloaded_repo_op</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
+    <span class="p">)</span>
+
+    <span class="c1"># downloaded_customization_repo_op = download_repo_op(</span>
+    <span class="c1">#     repo_name=customization_repo_name,</span>
+    <span class="c1"># )</span>
+    <span class="c1"># downloaded_customization_repo_op.display_name = &quot;Download SLU customization repo&quot;</span>
+
+    <span class="c1"># downloaded_customization_repo_op.execution_options.caching_strategy.max_cache_staleness = (</span>
+    <span class="c1">#     &quot;P0D&quot;  # disables caching</span>
+    <span class="c1"># )</span>
+
+    <span class="n">downloaded_alias_yaml_op</span> <span class="o">=</span> <span class="n">download_yaml_op</span><span class="p">(</span>
+        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITHUB</span><span class="p">,</span>
         <span class="n">yaml_path</span><span class="o">=</span><span class="n">alias_yaml_path</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">validate_training_setup_op</span> <span class="o">=</span> <span class="n">retrain_slu_from_repo_op</span><span class="p">(</span>
+    <span class="n">validate_training_setup_op</span> <span class="o">=</span> <span class="n">retrain_slu_from_repo_op_old</span><span class="p">(</span>
         <span class="n">tagged_s3_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">tagged_job_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">downloaded_repo_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">],</span>
         <span class="n">downloaded_alias_yaml_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
         <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
@@ -473,14 +479,13 @@
         <span class="n">validate_setup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">customization_repo_name</span><span class="o">=</span><span class="n">customization_repo_name</span><span class="p">,</span>
         <span class="n">customization_repo_branch</span><span class="o">=</span><span class="n">customization_repo_branch</span><span class="p">,</span>
-        <span class="n">core_slu_repo_name</span><span class="o">=</span><span class="n">core_slu_repo_name</span><span class="p">,</span>
-        <span class="n">core_slu_repo_branch</span><span class="o">=</span><span class="n">core_slu_repo_branch</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">set_ephemeral_storage_limit</span><span class="p">(</span><span class="s2">&quot;20G&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">validate_training_setup_op</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;Validate Training Setup&quot;</span>
 
-    <span class="n">retrained_op</span> <span class="o">=</span> <span class="n">retrain_slu_from_repo_op</span><span class="p">(</span>
+    <span class="n">retrained_op</span> <span class="o">=</span> <span class="n">retrain_slu_from_repo_op_old</span><span class="p">(</span>
         <span class="n">tagged_s3_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">tagged_job_data_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+        <span class="n">downloaded_repo_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;repo&quot;</span><span class="p">],</span>
         <span class="n">downloaded_alias_yaml_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
         <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
@@ -496,8 +501,6 @@
         <span class="n">s3_paths</span><span class="o">=</span><span class="n">dataset_path</span><span class="p">,</span>
         <span class="n">customization_repo_name</span><span class="o">=</span><span class="n">customization_repo_name</span><span class="p">,</span>
         <span class="n">customization_repo_branch</span><span class="o">=</span><span class="n">customization_repo_branch</span><span class="p">,</span>
-        <span class="n">core_slu_repo_name</span><span class="o">=</span><span class="n">core_slu_repo_name</span><span class="p">,</span>
-        <span class="n">core_slu_repo_branch</span><span class="o">=</span><span class="n">core_slu_repo_branch</span><span class="p">,</span>
     <span class="p">)</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="n">validate_training_setup_op</span><span class="p">)</span>
     <span class="n">retrained_op</span><span class="o">.</span><span class="n">set_gpu_limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">add_node_selector_constraint</span><span class="p">(</span>
         <span class="n">label_name</span><span class="o">=</span><span class="n">NODESELECTOR_LABEL</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">GPU_NODE_LABEL</span>
@@ -538,7 +541,7 @@
     <span class="n">mr_response_op</span> <span class="o">=</span> <span class="n">create_mr_op</span><span class="p">(</span>
         <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
         <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
-        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
         <span class="n">target_branch</span><span class="o">=</span><span class="n">target_mr_branch</span><span class="p">,</span>
         <span class="n">source_branch</span><span class="o">=</span><span class="n">retrained_op</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
         <span class="n">mr_title</span><span class="o">=</span><span class="s2">&quot;Auto retrained changes&quot;</span><span class="p">,</span>
@@ -587,7 +590,7 @@
         <span class="p">)</span></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;retrain_slu&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;retrain_slu_old&quot;</span><span class="p">]</span>
 </pre></div>
         </article>
       </div>

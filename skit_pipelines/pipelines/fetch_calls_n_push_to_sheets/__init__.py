@@ -10,6 +10,7 @@ from skit_pipelines.components import (
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
 
+
 @kfp.dsl.pipeline(
     name="Fetch and push for calls to gogole sheets pipeline",
     description="fetches calls from production db with respective arguments and uploads calls to google sheets for Call tagging",

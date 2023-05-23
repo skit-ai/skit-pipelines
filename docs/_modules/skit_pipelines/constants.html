@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.constants - skit-pipelines 0.2.89 documentation</title>
+        <title>skit_pipelines.constants - skit-pipelines 0.2.94 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.89 documentation</div></a>
+      <a href="../../index.html"><div class="brand">skit-pipelines 0.2.94 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.89 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.94 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -211,6 +211,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.retrain_slu_old.html">skit_pipelines.pipelines.retrain_slu_old package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.train_voicebot_intent_model_xlmr.html">skit_pipelines.pipelines.train_voicebot_intent_model_xlmr package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../skit_pipelines.pipelines.transcription_pipeline.html">skit_pipelines.pipelines.transcription_pipeline package</a></li>
@@ -282,6 +283,14 @@
     <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span>
     <span class="k">else</span> <span class="s2">&quot;https://console.us.skit.ai&quot;</span>
 <span class="p">)</span>
+
+<span class="c1"># studio base url, for call report purposes</span>
+<span class="n">STUDIO_URL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://studio.skit.ai&quot;</span>
+    <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span>
+    <span class="k">else</span> <span class="s2">&quot;https://studio.us.skit.ai&quot;</span>
+<span class="p">)</span>
+
 
 <span class="c1"># logic for getting the correct URL for the audio files based on region</span>
 <span class="n">USE_FSM_URL</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="kc">True</span>
@@ -501,6 +510,8 @@
 <span class="n">GITLAB</span> <span class="o">=</span> <span class="s2">&quot;gitlab.com&quot;</span>
 <span class="n">GITLAB_API_BASE</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">GITLAB</span><span class="si">}</span><span class="s2">/api/v4/projects/&quot;</span>
 <span class="n">GITLAB_SLU_PROJECT_PATH</span> <span class="o">=</span> <span class="s2">&quot;skit-ai/slu&quot;</span>
+<span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span> <span class="o">=</span> <span class="s2">&quot;skit-ai/slu/project-configs&quot;</span>
+<span class="n">GITLAB_ALIAS_PROJECT_ID</span> <span class="o">=</span> <span class="s2">&quot;42034581&quot;</span>
 <span class="n">GITLAB_USER</span> <span class="o">=</span> <span class="s2">&quot;automation&quot;</span>
 <span class="n">GITLAB_USER_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;automation@skit.ai&quot;</span>
 <span class="n">GITLAB_PRIVATE_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PERSONAL_ACCESS_TOKEN_GITLAB&quot;</span><span class="p">]</span>
@@ -532,19 +543,42 @@
 
 <span class="n">PROMPT_TEXT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;In the below conversation turn between a debt collection bot and a user:</span>
 
+<span class="s2">STATE: COF</span>
+<span class="s2">[Bot]: &lt;speak&gt;&lt;prosody rate=&quot;102%&quot;&gt;Hello. Am I speaking with stephanie brown-stewart?&lt;/prosody&gt;&lt;/speak&gt; </span><span class="se">\n</span><span class="s2"> [User]: yes</span>
+
+<span class="s2">Answer &quot;_confirm_&quot; if the user is confirming;</span>
+<span class="s2">Answer &quot;_cancel_&quot; if the user is denying;</span>
+<span class="s2">Answer &quot;Other&quot; if the user says anything else.</span>
+
+<span class="s2">Answer: _confirm_</span>
+
+<span class="s2">In the below conversation turn between a debt collection bot and a user:</span>
+
 <span class="s2">STATE: {{state}}</span>
 <span class="s2">{{conversation_context}}</span>
 
-<span class="s2">If the user is answering the bot with an affirmative or confirming what the bot says (consider yep, yeah, or the like as &quot;yes&quot;), answer ‘_confirm_’</span>
-<span class="s2">If the user is denying what the bot says, answer ‘_cancel_’</span>
-<span class="s2">If the user is unsure, answer &#39;_maybe_&#39;</span>
-<span class="s2">If the user asks who the bot is, where the bot is calling from, or why the bot is calling, answer ‘_identity_’</span>
-<span class="s2">If the user requests that the bot repeat something, answer ‘_repeat_’</span>
-<span class="s2">If the user doesn&#39;t wish to speak to machines and robots or wants to speak to a human agent / operator / customer service / person, answer &#39;ask_for_agent&#39;</span>
-<span class="s2">If the user is greeting the bot or saying hello, answer ‘_greeting_’</span>
-<span class="s2">If the user appears to be providing a 4 digit number when the bot asks for their social security number, answer &#39;inform_ssn_number&#39;</span>
-<span class="s2">If the user appears to be providing a date when the bot asks for their date of birth , answer &#39;inform_dob&#39;</span>
-<span class="s2">If the user is saying anything else or you are unsure of what they are saying, answer ‘Other’</span>
+<span class="s2">Answer &quot;_confirm_&quot; if the user is giving the bot a positive response or confirming what the bot says (yep, yeah, or similar expressions are taken to mean &quot;yes&quot;);</span>
+<span class="s2">Answer &quot;_cancel_&quot; if the user is refuting what the bot says;</span>
+<span class="s2">Answer &quot;_maybe_&quot; if the user is undecided or provides an ambiguous response, such as possibly;</span>
+<span class="s2">Answer &quot;_identity_&quot; if the user asks who the bot is, where it is calling from, or why it is calling;</span>
+<span class="s2">Answer &quot;other_language&quot; if the user appears to not speak English, does not feel at ease speaking English, or requests that we speak to them in an other language, such as Spanish;</span>
+<span class="s2">Answer &quot;_greeting_&quot; if the user is greeting the bot or saying hello;</span>
+<span class="s2">Answer &quot;ask_for_agent&quot; if the user prefers to communicate with a human agent or operator rather than a machine or robot;</span>
+<span class="s2">Answer &quot;wrong_number&quot; if the user says that the bot called the wrong number or the wrong person;</span>
+<span class="s2">Answer &quot;_repeat_&quot; if the user asks the bot to repeat something;</span>
+<span class="s2">Answer &quot;_what_&quot; if the user looks to be having problems understanding the bot or if they are asking a question;</span>
+<span class="s2">Answer &quot;dispute_debt&quot; if it appears that the user is disputing the debt or insisting they owe nothing;</span>
+<span class="s2">Answer &quot;cease_desit&quot; if the user requests that we stop calling them, remove them from our call list, stop bothering them, or threatens to sue us;</span>
+<span class="s2">Answer &#39;put_on_hold&#39; if it looks that the user is asking the bot to wait or hold for a moment;</span>
+<span class="s2">Answer &quot;inform_phone_number&quot; if the user appears to be providing a number when the bot asks for their mobile number;</span>
+<span class="s2">Answer &#39;wont_pay&#39; if the user refuses to pay or if they are unwilling to make a payment;</span>
+<span class="s2">Answer &quot;inform_fund_shortage&quot; if it appears that the user is attempting to indicate that they are currently short on funds or have recently made a significant expenditure;</span>
+<span class="s2">Answer &quot;ask_for_installment&quot; if the user mentions a figure that is less than the amount owed or indicates they would like to pay in smaller amounts;</span>
+<span class="s2">Answer &quot;_callback_&quot; if the user later requests a callback from the bot;</span>
+<span class="s2">Answer &quot;inform_pay_later&quot; if it appears that the user intends to pay later;</span>
+<span class="s2">Answer &quot;date_entity_only&quot; if it appears that the user is providing a date;</span>
+<span class="s2">Answer &quot;inform already paid&quot; if the user appears to have already made a payment;</span>
+<span class="s2">Answer &quot;Other&quot; if the user says anything else or if you are unsure of what they are saying.</span>
 
 <span class="s2">Answer:&quot;&quot;&quot;</span>
 </pre></div>

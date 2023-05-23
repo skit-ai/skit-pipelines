@@ -20,16 +20,12 @@ CONSOLE_IAM_PASSWORD = os.environ["SKIT_API_GATEWAY_PASSWORD"]
 
 # console base URL, for call report purposes
 CONSOLE_URL = (
-    "https://console.skit.ai"
-    if REGION == AP_SOUTH_1
-    else "https://console.us.skit.ai"
+    "https://console.skit.ai" if REGION == AP_SOUTH_1 else "https://console.us.skit.ai"
 )
 
 # studio base url, for call report purposes
 STUDIO_URL = (
-    "https://studio.skit.ai"
-    if REGION == AP_SOUTH_1
-    else "https://studio.us.skit.ai"
+    "https://studio.skit.ai" if REGION == AP_SOUTH_1 else "https://studio.us.skit.ai"
 )
 
 
@@ -280,7 +276,7 @@ DATA_LABEL_DEFAULT = "Live"
 # GPT related constants - Will be moved to a dedicated file soon
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 INTENT_MODEL: str = "text-davinci-003"
-ALLOWED_INTENTS = ['_confirm_', '_cancel_']
+ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
 PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
 

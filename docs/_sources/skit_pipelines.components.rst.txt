@@ -226,6 +226,14 @@ skit\_pipelines.components.retrain\_slu\_from\_repo module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.retrain\_slu\_from\_repo\_old module
+---------------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.retrain_slu_from_repo_old
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.train\_voicebot\_xlmr module
 -------------------------------------------------------
 

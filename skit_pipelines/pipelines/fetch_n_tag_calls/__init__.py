@@ -3,11 +3,11 @@ import kfp
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     fetch_calls_op,
+    fetch_gpt_intent_prediction_op,
     org_auth_token_op,
     read_json_key_op,
     slack_notification_op,
     tag_calls_op,
-    fetch_gpt_intent_prediction_op
 )
 
 USE_FSM_URL = pipeline_constants.USE_FSM_URL
@@ -118,7 +118,7 @@ def fetch_n_tag_calls(
 
     :param reported: Pick only reported calls, defaults to False
     :type reported: bool
-    
+
     :param template_id: The flow template id to filter calls, defaults to ""
     :type template_id: str, optional
 
@@ -136,7 +136,7 @@ def fetch_n_tag_calls(
 
     :param states: Filter calls in a comma separated list of states, defaults to ""
     :type states: str, optional
-    
+
     :param intents: Filter turns in sampled calls from a comma separated list of intents, defaults to ""
     :type intents: str, optional
 
@@ -208,8 +208,7 @@ def fetch_n_tag_calls(
 
     # Get intent response from GPT for qualifying turns
     gpt_response_path = fetch_gpt_intent_prediction_op(
-        s3_file_path=calls.output,
-        use_assisted_annotation=use_assisted_annotation
+        s3_file_path=calls.output, use_assisted_annotation=use_assisted_annotation
     )
 
     tag_calls_output = tag_calls_op(

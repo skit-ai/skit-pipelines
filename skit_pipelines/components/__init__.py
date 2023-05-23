@@ -12,7 +12,7 @@ from skit_pipelines.components.download_from_s3 import (
     download_file_from_s3,
     download_file_from_s3_op,
 )
-from skit_pipelines.components.download_repo import download_repo_op, download_repo
+from skit_pipelines.components.download_repo import download_repo, download_repo_op
 from skit_pipelines.components.download_yaml import download_yaml_op
 from skit_pipelines.components.eevee_irr_with_yamls import eevee_irr_with_yamls_op
 from skit_pipelines.components.extract_info_from_dataset import (
@@ -20,6 +20,9 @@ from skit_pipelines.components.extract_info_from_dataset import (
 )
 from skit_pipelines.components.extract_tgz import extract_tgz_op
 from skit_pipelines.components.fetch_calls import fetch_calls_op
+from skit_pipelines.components.fetch_gpt_intent_prediction import (
+    fetch_gpt_intent_prediction_op,
+)
 from skit_pipelines.components.fetch_tagged_data_label_store import (
     fetch_tagged_data_label_store,
     fetch_tagged_data_label_store_op,
@@ -56,7 +59,9 @@ from skit_pipelines.components.push_eer_to_postgres import push_eer_to_postgres_
 from skit_pipelines.components.push_irr_to_postgres import push_irr_to_postgres_op
 from skit_pipelines.components.read_json_key import read_json_key_op
 from skit_pipelines.components.retrain_slu_from_repo import retrain_slu_from_repo_op
-from skit_pipelines.components.retrain_slu_from_repo_old import retrain_slu_from_repo_op_old
+from skit_pipelines.components.retrain_slu_from_repo_old import (
+    retrain_slu_from_repo_op_old,
+)
 from skit_pipelines.components.tag_calls import tag_calls_op
 from skit_pipelines.components.train_voicebot_xlmr import train_voicebot_xlmr_op
 from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
@@ -64,4 +69,3 @@ from skit_pipelines.components.upload2sheet import upload2sheet, upload2sheet_op
 from skit_pipelines.components.upload_for_call_and_slot_tagging import (
     fetch_calls_for_slots_op,
 )
-from skit_pipelines.components.fetch_gpt_intent_prediction import fetch_gpt_intent_prediction_op

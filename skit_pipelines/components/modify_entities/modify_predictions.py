@@ -29,7 +29,6 @@ def adjust_interval_values(interval_value: Dict):
 
 def modify_predictions(df: pd.DataFrame, ds_source: str):
 
-
     entity_column = "raw.entities"
 
     for idx, predicted_entities in tqdm(
