@@ -122,9 +122,6 @@ def retrain_slu(
     :param labelstudio_project_ids: The labelstudio project id (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_ids: str
 
-    :param epochs: Number of epchs to train the model, defaults to 10
-    :type epochs: int, optional
-
     :param job_start_date: The start date range (YYYY-MM-DD) to filter tagged data.
     :type job_start_date: str, optional
 
@@ -148,6 +145,21 @@ def retrain_slu(
 
     :param stratify: For stratified splitting of dataset into train and test set, defaults to False.
     :type stratify: bool, optional
+
+    :param core_slu_repo_name: Name of repository for core slu service. Defaults to core-slu-service
+    :type core_slu_repo_name: str, optional
+
+    :param core_slu_repo_branch: Branch to check out for core slu repository. Defaults to master
+    :type core_slu_repo_branch: str, optional
+
+    :param customization_repo_name: Name of repository for customization service. Defaults to customization
+    :type customization_repo_name: str, optional
+
+    :param customization_repo_branch: Branch to check out for customization service repository. Defaults to master
+    :type customization_repo_branch: str, optional
+
+    :param target_mr_branch: Target branch against which the MR will be created. Defaults to sandbox
+    :type target_mr_branch: str, optional
 
     :param notify: Whether to send a slack notification, defaults to ""
     :type notify: str, optional
