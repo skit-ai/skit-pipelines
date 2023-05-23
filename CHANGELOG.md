@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.95
+- [x] Refactor retraining pipelines for new SLU architecture (#107)
+
 0.2.94
 - [x] download_yaml: chnages in alias file download from gitlab repo. (#106), storage_full_fix: Removig old_data while velidating pipelines.
 
