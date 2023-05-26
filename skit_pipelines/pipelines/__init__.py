@@ -25,6 +25,9 @@ from skit_pipelines.pipelines.fetch_tagged_entity_dataset import (
     fetch_tagged_entity_dataset,
 )
 from skit_pipelines.pipelines.irr_from_tog import irr_from_tog
+from skit_pipelines.pipelines.publish_compliance_breaches import (
+    publish_compliance_breaches,
+)
 from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.retrain_slu_old import retrain_slu_old
 from skit_pipelines.pipelines.tag_calls import tag_calls
