@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.96
+- [x] add: skit-calls version bump for presigned-url logic for turn audio url in US cluster
+
 0.2.95
 - [x] Refactor retraining pipelines for new SLU architecture (#107)
 

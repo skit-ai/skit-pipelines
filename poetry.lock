@@ -3498,20 +3498,21 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.40"
+version = "0.2.42"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_calls-0.2.40-py3-none-any.whl", hash = "sha256:bd3e6ca437c4f30ad03245fa46d875338e83b1c3d5a5eb6af0511176405814d7"},
-    {file = "skit_calls-0.2.40.tar.gz", hash = "sha256:c078f52943ce24b014ccd473a58a38a31890117f1c7445c258784f0d49397452"},
+    {file = "skit_calls-0.2.42-py3-none-any.whl", hash = "sha256:da091a65b6181fd8b1aacb94fa1a779ebcc0f4c0a41a7dafb1b3731e74df16df"},
+    {file = "skit_calls-0.2.42.tar.gz", hash = "sha256:9e000f70fe17a1eaf935ca3658c9de1744b10199db5fc8e4a1d4411dbf39fd8a"},
 ]
 
 [package.dependencies]
 aiofiles = "0.8.0"
 aiohttp = "3.8.1"
 attrs = "20.3.0"
+boto3 = "1.20.24"
 dvc = {version = "2.9.5", extras = ["s3"]}
 loguru = "0.5.3"
 numpy = "1.22.0"
@@ -4647,4 +4648,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "ab5e07c9a1e6a7b7402fc3f499eed1d37f7ca72e10b102325ee82e7c487e0e0d"
+content-hash = "df908ed3e86ed2fabbf4d2796b93cf189ba39c5c3256616a46cdab66f0fc4961"
