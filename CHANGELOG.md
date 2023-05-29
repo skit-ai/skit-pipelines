@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.97
+- [x] fix: logs streaming during train and test (#108)
+
 0.2.96
 - [x] add: skit-calls version bump for presigned-url logic for turn audio url in US cluster
 
