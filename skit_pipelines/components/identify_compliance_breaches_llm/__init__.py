@@ -7,13 +7,13 @@ def identify_compliance_breaches_llm(
     s3_file_path: str,
 ) -> str:
     """
-        Groups turns into calls and pushes them to an LLM (uses openai chatComplete functionality) to identify
-        compliance breaches. The result value for each call is written in an output csv file
+    Groups turns into calls and pushes them to an LLM (uses openai chatComplete functionality) to identify
+    compliance breaches. The result value for each call is written in an output csv file
 
-        param s3_file_path: Csv file containing turns for calls obtained from fsm Db
-        type s3_file_path: str
+    param s3_file_path: Csv file containing turns for calls obtained from fsm Db
+    type s3_file_path: str
 
-        output: path of csv file containing complaince breach results for each call in the input
+    output: path of csv file containing complaince breach results for each call in the input
     """
 
     import os
@@ -22,14 +22,23 @@ def identify_compliance_breaches_llm(
     import openai
     import polars as pl
 
-    from skit_pipelines.components.identify_compliance_breaches_llm.utils import format_call, get_prompt_text, parse_calls, slice_json
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components import upload2s3
     from skit_pipelines.components.download_from_s3 import download_csv_from_s3
+    from skit_pipelines.components.identify_compliance_breaches_llm.utils import (
+        format_call,
+        get_prompt_text,
+        parse_calls,
+        slice_json,
+    )
+
+    if pipeline_constants.OPENAI_COMPLIANCE_BREACHES_KEY == "KEY_NOT_SET":
+        print("Skipping complaince report generation as the key is not set")
+        return "key_not_set"
 
     fd_download, downloaded_file_path = tempfile.mkstemp(suffix=".csv")
     download_csv_from_s3(storage_path=s3_file_path, output_path=downloaded_file_path)
-    openai.api_key = "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"
+    openai.api_key = pipeline_constants.OPENAI_COMPLIANCE_BREACHES_KEY
 
     df = pl.read_csv(downloaded_file_path)
     calls = parse_calls(df)

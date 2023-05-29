@@ -26,7 +26,10 @@ def fetch_gpt_intent_prediction(
             return "yes"
         return "no"
 
-    if not use_assisted_annotation:
+    if (
+        not use_assisted_annotation
+        or pipeline_constants.OPENAI_API_KEY == "KEY_NOT_SET"
+    ):
         print("Skipping intent predictions by GPT")
         return s3_file_path
 

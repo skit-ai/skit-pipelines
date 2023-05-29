@@ -39,7 +39,6 @@ from skit_pipelines.components.get_preds_voicebot_xlmr import get_preds_voicebot
 from skit_pipelines.components.identify_compliance_breaches_llm import (
     identify_compliance_breaches_llm_op,
 )
-from skit_pipelines.components.push_compliance_report_to_postgres import push_compliance_report_to_postgres_op
 from skit_pipelines.components.merge_transcription import overlay_transcription_csv_op
 from skit_pipelines.components.modify_tagged_entities import modify_entity_dataset_op
 from skit_pipelines.components.notification import slack_notification_op
@@ -58,6 +57,9 @@ from skit_pipelines.components.preprocess.extract_true_transcript_labels_to_txt 
 )
 from skit_pipelines.components.preprocess.process_true_transcript_column import (
     process_true_transcript_labels_op,
+)
+from skit_pipelines.components.push_compliance_report_to_postgres import (
+    push_compliance_report_to_postgres_op,
 )
 from skit_pipelines.components.push_eer_to_postgres import push_eer_to_postgres_op
 from skit_pipelines.components.push_irr_to_postgres import push_irr_to_postgres_op

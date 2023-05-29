@@ -6,7 +6,7 @@ from skit_pipelines.components import (
     fetch_calls_op,
     identify_compliance_breaches_llm_op,
     push_compliance_report_to_postgres_op,
-    slack_notification_op
+    slack_notification_op,
 )
 
 
@@ -29,49 +29,49 @@ def publish_compliance_breaches(
     slack_thread: str = "",
 ):
     """
-        A pipeline to sample calls in a given time range and check if there are any compliance breaches. A LLM model is
-        used to identify these breaches by sending entire conversations. The results are persisted in the 'ML_metrics'
-        database from where they can be queried whenever required.
+    A pipeline to sample calls in a given time range and check if there are any compliance breaches. A LLM model is
+    used to identify these breaches by sending entire conversations. The results are persisted in the 'ML_metrics'
+    database from where they can be queried whenever required.
 
-        .. _publish_compliance_breaches:
+    .. _publish_compliance_breaches:
 
-        Example payload to invoke via slack integrations:
+    Example payload to invoke via slack integrations:
 
-        @charon run publish_compliance_breaches
+    @charon run publish_compliance_breaches
 
-        .. code-block:: python
+    .. code-block:: python
 
-            {
-                "lang": "en",
-                "template_id": 100,
-                "start_date": "2022-11-10",
-                "end_date": "2022-11-11",
-                "reported": false,
-                "call_quantity": 500
-            }
+        {
+            "lang": "en",
+            "template_id": 100,
+            "start_date": "2022-11-10",
+            "end_date": "2022-11-11",
+            "reported": false,
+            "call_quantity": 500
+        }
 
-        :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.
-        :type lang: str
-        :param template_id: The flow template id to filter calls, defaults to ""
-        :type template_id: str, optional
-        :param start_date: The start date range to filter calls in YYYY-MM-DD format.
-        :type start_date: str
-        :param end_date: The end date range to filter calls in YYYY-MM-DD format.
-        :type end_date: str
-        :param start_date_offset: Number of days from current date to start querying calls
-        :type start_date_offset: int, optional
-        :param end_date_offset: Number of days from current date to stop querying calls
-        :type end_date_offset: int, optional
-        :param reported: Pick only reported calls, defaults to False
-        :type reported: bool
-        :param call_quantity: Number of calls to sample, defaults to 1000
-        :type call_quantity: int, optional
-        :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
-        :type notify: str, optional
-        :param channel: The slack channel to send the notification, defaults to ""
-        :type channel: str, optional
-        :param slack_thread: The slack thread to send the notification, defaults to ""
-        :type slack_thread: str, optional
+    :param lang: The language code of the calls to filter. eg: en, hi, ta, te, etc.
+    :type lang: str
+    :param template_id: The flow template id to filter calls, defaults to ""
+    :type template_id: str, optional
+    :param start_date: The start date range to filter calls in YYYY-MM-DD format.
+    :type start_date: str
+    :param end_date: The end date range to filter calls in YYYY-MM-DD format.
+    :type end_date: str
+    :param start_date_offset: Number of days from current date to start querying calls
+    :type start_date_offset: int, optional
+    :param end_date_offset: Number of days from current date to stop querying calls
+    :type end_date_offset: int, optional
+    :param reported: Pick only reported calls, defaults to False
+    :type reported: bool
+    :param call_quantity: Number of calls to sample, defaults to 1000
+    :type call_quantity: int, optional
+    :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
+    :type notify: str, optional
+    :param channel: The slack channel to send the notification, defaults to ""
+    :type channel: str, optional
+    :param slack_thread: The slack thread to send the notification, defaults to ""
+    :type slack_thread: str, optional
 
     """
 

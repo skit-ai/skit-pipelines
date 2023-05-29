@@ -4,12 +4,12 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def push_compliance_report_to_postgres(
-        s3_file_path: str,
+    s3_file_path: str,
 ) -> int:
-    import psycopg2
     import tempfile
 
     import pandas as pd
+    import psycopg2
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.download_from_s3 import download_csv_from_s3
@@ -80,9 +80,7 @@ def push_compliance_report_to_postgres(
                 "tokens_consumed": row["tokens_consumed"]
             }
 
-            cur.execute(
-                INSERT_COMPLIANCE_RESULT_QUERY, query_parameters
-            )
+            cur.execute(INSERT_COMPLIANCE_RESULT_QUERY, query_parameters)
 
             if row["is_breach"]:
                 breach_counter += 1

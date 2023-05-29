@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List
-
 import json
 import re
+from dataclasses import dataclass
+from typing import List
 
 import polars as pl
 
@@ -31,7 +30,7 @@ class Call:
 
 def parse_calls(input_df) -> list[Call]:
     """
-        Convert the turn-level dataframe obtained from fetch_calls into a list of calls
+    Convert the turn-level dataframe obtained from fetch_calls into a list of calls
     """
 
     parsed_calls = []
@@ -76,8 +75,8 @@ def parse_calls(input_df) -> list[Call]:
 
 def format_call(input_call: Call) -> str:
     """
-        Convert the turns of a call representing the entire conversation into a single string that would be used as
-        input to the LLM model
+    Convert the turns of a call representing the entire conversation into a single string that would be used as
+    input to the LLM model
     """
 
     transcripts = []
@@ -103,7 +102,7 @@ def _parse_text(text: str) -> str:
 
 def slice_json(text: str) -> dict:
     """
-        Slice the JSON part from given text and return a parsed dictionary or list.
+    Slice the JSON part from given text and return a parsed dictionary or list.
     """
 
     start = re.search(r"{", text)
@@ -118,7 +117,7 @@ def slice_json(text: str) -> dict:
 
     end = end.span()[0]
 
-    return json.loads(text[start: len(text) - end])
+    return json.loads(text[start : len(text) - end])
 
 
 def get_prompt_text():

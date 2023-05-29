@@ -278,6 +278,8 @@ OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
+OPENAI_COMPLIANCE_BREACHES_KEY = os.environ["OPENAI_COMPLIANCE_BREACHES_KEY"]
+
 PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
 
 STATE: COF
