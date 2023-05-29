@@ -323,7 +323,7 @@ def retrain_slu_from_repo(
         # training begins
         execute_cli(
             f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} conda "
-            f"run -n {core_slu_repo_name} slu train --project {repo_name}",
+            f"run --no-capture-output -n {core_slu_repo_name} slu train --project {repo_name}",
             split=False,
         ).check_returncode()
         if os.path.exists(new_test_path):
@@ -338,7 +338,7 @@ def retrain_slu_from_repo(
                     test_df.to_csv(new_test_path, index=False)
             execute_cli(
                 f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
-                f"conda run -n {core_slu_repo_name} "
+                f"conda run --no-capture-output -n {core_slu_repo_name} "
                 f"slu test --project {repo_name} ",
                 split=False,
             ).check_returncode()
