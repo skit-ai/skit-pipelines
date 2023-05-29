@@ -1,5 +1,5 @@
 # Changelog
-0.2.92
+0.2.96
 - [x] Add new pipeline to identify and persist ML compliance breaches in calls
 
 0.2.97
