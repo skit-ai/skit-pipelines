@@ -18,6 +18,7 @@ def identify_compliance_breaches_llm(
 
     import os
     import tempfile
+    import time
 
     import openai
     import polars as pl
@@ -43,20 +44,22 @@ def identify_compliance_breaches_llm(
     df = pl.read_csv(downloaded_file_path)
     calls = parse_calls(df)
     prompt_text = get_prompt_text()
-    calls = calls[0:5]
+    calls = calls[0:100]
     outputs = []
 
+    start_time = time.time()
     for call in calls:
         try:
+            call_as_string = format_call(call)
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": prompt_text},
-                    {"role": "user", "content": format_call(call)},
+                    {"role": "user", "content": call_as_string},
                 ],
                 temperature=0,
             )
-            print(format_call(call))
+            print(call_as_string)
             output = response["choices"][0]["message"]["content"]
             breach_status = slice_json(output)["breach"]
             outputs.append(
@@ -70,11 +73,16 @@ def identify_compliance_breaches_llm(
                     breach_status,
                     output,
                     response["usage"]["total_tokens"],
+                    call_as_string,
                 ]
             )
         except Exception as e:
             print("Couldn't get Gpt response because: " + str(e))
 
+    end_time = time.time()
+    total_time = str(end_time - start_time)
+    print("Time required to obtain compliance breaches from openai for " +
+          str(len(calls)) + " calls was " + total_time + " seconds")
     columns = [
         "call_id",
         "call_uuid",
@@ -85,6 +93,7 @@ def identify_compliance_breaches_llm(
         "is_breach",
         "compliance_output",
         "tokens_consumed",
+        "Call information"
     ]
     df_output = pl.DataFrame(outputs, schema=columns)
     fd_upload, upload_file_path = tempfile.mkstemp(suffix=".csv")
