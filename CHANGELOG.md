@@ -1,4 +1,6 @@
 # Changelog
+0.2.98
+- [x] Add new pipeline to identify and persist ML compliance breaches in calls
 
 0.2.97
 - [x] fix: logs streaming during train and test (#108)
