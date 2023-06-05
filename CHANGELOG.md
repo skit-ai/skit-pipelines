@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.101
+- [x] add: s3 client aws access id and keys secrets
+
 0.2.99
 - [x] alias_bug_fix: fixes issue in dowloading yaml file. (#112)
 - [x] Update key related dependencies and add time logger (#110)
