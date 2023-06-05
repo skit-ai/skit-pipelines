@@ -9,6 +9,7 @@ Subpackages
 
    skit_pipelines.components.fetch_gpt_intent_prediction
    skit_pipelines.components.fetch_tagged_data_label_store
+   skit_pipelines.components.identify_compliance_breaches_llm
    skit_pipelines.components.modify_entities
    skit_pipelines.components.preprocess
    skit_pipelines.components.tag_calls
@@ -190,6 +191,14 @@ skit\_pipelines.components.notification module
 ----------------------------------------------
 
 .. automodule:: skit_pipelines.components.notification
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.push\_compliance\_report\_to\_postgres module
+------------------------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.push_compliance_report_to_postgres
    :members:
    :undoc-members:
    :show-inheritance:

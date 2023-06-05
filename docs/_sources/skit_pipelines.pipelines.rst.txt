@@ -20,6 +20,7 @@ Subpackages
    skit_pipelines.pipelines.fetch_tagged_data_from_labelstore
    skit_pipelines.pipelines.fetch_tagged_entity_dataset
    skit_pipelines.pipelines.irr_from_tog
+   skit_pipelines.pipelines.publish_compliance_breaches
    skit_pipelines.pipelines.retrain_slu
    skit_pipelines.pipelines.retrain_slu_old
    skit_pipelines.pipelines.tag_calls

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.09.29"/>
-        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.94 documentation</title>
+        <title>skit_pipelines.components.retrain_slu_from_repo - skit-pipelines 0.2.99 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.94 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">skit-pipelines 0.2.99 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">skit-pipelines 0.2.94 documentation</span>
+  <span class="sidebar-brand-text">skit-pipelines 0.2.99 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -181,6 +181,7 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../skit_pipelines.components.html">skit_pipelines.components package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.fetch_tagged_data_label_store.html">skit_pipelines.components.fetch_tagged_data_label_store package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.identify_compliance_breaches_llm.html">skit_pipelines.components.identify_compliance_breaches_llm package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.components.modify_entities.html">skit_pipelines.components.modify_entities package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.html">skit_pipelines.components.preprocess package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../../skit_pipelines.components.preprocess.create_features.html">skit_pipelines.components.preprocess.create_features package</a></li>
@@ -210,6 +211,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_data_from_labelstore.html">skit_pipelines.pipelines.fetch_tagged_data_from_labelstore package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">skit_pipelines.pipelines.fetch_tagged_entity_dataset package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.irr_from_tog.html">skit_pipelines.pipelines.irr_from_tog package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">skit_pipelines.pipelines.publish_compliance_breaches package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">skit_pipelines.pipelines.retrain_slu package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu_old.html">skit_pipelines.pipelines.retrain_slu_old package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">skit_pipelines.pipelines.tag_calls package</a></li>
@@ -356,7 +358,9 @@
             <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">setup_utility_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">repo_branch</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">runtime_env_var</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setup_utility_repo</span><span class="p">(</span>
+        <span class="n">repo_name</span><span class="p">,</span> <span class="n">repo_branch</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">runtime_env_var</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="n">repo_local_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
         <span class="n">download_repo</span><span class="p">(</span>
             <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
@@ -406,7 +410,9 @@
         <span class="n">project_path</span><span class="o">=</span><span class="s2">&quot;skit-ai/slu/project-configs&quot;</span><span class="p">,</span>
         <span class="n">repo_path</span><span class="o">=</span><span class="n">project_config_local_path</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cloned repo contents </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Cloned repo contents </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -431,7 +437,7 @@
         <span class="n">customization_repo_branch</span><span class="p">,</span>
         <span class="n">run_dir</span><span class="o">=</span><span class="s2">&quot;custom_slu&quot;</span><span class="p">,</span>
         <span class="n">run_cmd</span><span class="o">=</span><span class="s2">&quot;task serve&quot;</span><span class="p">,</span>
-        <span class="n">runtime_env_var</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">runtime_env_var</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;customization repo setup successfully&quot;</span><span class="p">)</span>
     <span class="n">core_slu_repo_local_path</span> <span class="o">=</span> <span class="n">setup_utility_repo</span><span class="p">(</span>
@@ -485,7 +491,9 @@
         <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
             <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc init&quot;</span><span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dvc add </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -498,7 +506,9 @@
             <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># TODO: fix this</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -521,9 +531,11 @@
 
         <span class="k">if</span> <span class="n">train_split_percent</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
             <span class="c1"># split into train and test</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
             <span class="n">execute_cli</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -572,7 +584,9 @@
         <span class="c1"># training begins</span>
         <span class="n">execute_cli</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> conda &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu train --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
+            <span class="sa">f</span><span class="s2">&quot;run --no-capture-output -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu train --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">):</span>
             <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;intent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>  <span class="c1"># TODO: remove on phase 2 cicd release</span>
@@ -583,9 +597,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="n">test_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;slu test --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run --no-capture-output -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;slu test --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">,</span>
+                <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">classification_report_path</span> <span class="o">:=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
                 <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CLASSIFICATION_REPORT</span>
             <span class="p">):</span>
