@@ -18,36 +18,42 @@ def push_compliance_report_to_postgres(
     (
         id SERIAL PRIMARY KEY, 
         call_uuid CHAR(255) NOT NULL, 
-        audio_url CHAR(511), 
+        audio_url CHAR(511),
+        call_url CHAR(511), 
         flow_uuid CHAR(255),
         client_uuid CHAR(255),
         reftime TIMESTAMP,
         is_breach BOOLEAN NOT NULL,
         compliance_output CHAR(5000) NOT NULL,
-        tokens_consumed INT NOT NULL
+        tokens_consumed INT NOT NULL,
+        call_information CHAR(10000)
     );"""
 
     INSERT_COMPLIANCE_RESULT_QUERY = """INSERT INTO compliance_breaches 
     (
         call_uuid,
         audio_url,
+        call_url,
         flow_uuid,
         client_uuid,
         reftime,
         is_breach,
         compliance_output,
-        tokens_consumed
+        tokens_consumed,
+        call_information
     )
     VALUES
     (
         %(call_uuid)s,
         %(audio_url)s,
+        %(call_url)s,
         %(flow_uuid)s,
         %(client_uuid)s,
         %(reftime)s,
         %(is_breach)s,
         %(compliance_output)s,
-        %(tokens_consumed)s
+        %(tokens_consumed)s,
+        %(call_information)s
     )
     """
 
@@ -72,12 +78,14 @@ def push_compliance_report_to_postgres(
             query_parameters = {
                 "call_uuid": row["call_uuid"],
                 "audio_url": row["audio_url"],
+                "call_url": row["call_url"],
                 "flow_uuid": row["flow_uuid"],
                 "client_uuid": row["client_uuid"],
                 "reftime": row["reftime"],
                 "is_breach": row["is_breach"],
                 "compliance_output": row["compliance_output"],
-                "tokens_consumed": row["tokens_consumed"]
+                "tokens_consumed": row["tokens_consumed"],
+                "call_information": row["call_information"]
             }
 
             cur.execute(INSERT_COMPLIANCE_RESULT_QUERY, query_parameters)
