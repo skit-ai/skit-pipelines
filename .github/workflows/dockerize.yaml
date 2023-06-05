@@ -69,6 +69,8 @@ jobs:
           --build-arg PERSONAL_ACCESS_TOKEN_GITLAB=${{secrets.PERSONAL_ACCESS_TOKEN_GITLAB }}
           --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           --build-arg OPENAI_COMPLIANCE_BREACHES_KEY=${{ secrets.OPENAI_COMPLIANCE_BREACHES_KEY }}
+          --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           --build-arg DUCKLING_HOST="${{ secrets.DUCKLING_HOST }}" -t $ECR_REPOSITORY . 
           
       - name: Tag and push images
@@ -146,6 +148,8 @@ jobs:
           --build-arg PERSONAL_ACCESS_TOKEN_GITLAB=${{secrets.PERSONAL_ACCESS_TOKEN_GITLAB }}
           --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           --build-arg OPENAI_COMPLIANCE_BREACHES_KEY=${{ secrets.OPENAI_COMPLIANCE_BREACHES_KEY }}
+          --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
           --build-arg DUCKLING_HOST="${{ secrets.DUCKLING_HOST }}" -t $US_ECR_REPOSITORY .
  
       - name: Tag and push images
