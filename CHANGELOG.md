@@ -1,4 +1,9 @@
 # Changelog
+
+0.2.99
+- [x] alias_bug_fix: fixes issue in dowloading yaml file. (#112)
+- [x] Update key related dependencies and add time logger (#110)
+
 0.2.98
 - [x] Add new pipeline to identify and persist ML compliance breaches in calls
 
