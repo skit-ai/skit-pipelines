@@ -22,6 +22,7 @@ class Call:
     id: int
     uuid: str
     audio_url: str
+    call_url: str
     flow_uuid: str
     client_uuid: str
     reftime: str
@@ -63,6 +64,7 @@ def parse_calls(input_df) -> list[Call]:
                 id=record["call_id"],
                 uuid=record["call_uuid"][0],
                 audio_url=record["audio_url"][0],
+                call_url=record["call_url"][0],
                 flow_uuid=record["flow_uuid"][0],
                 client_uuid=record["client_uuid"][0],
                 reftime=record["reftime"][0],
