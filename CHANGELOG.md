@@ -1,5 +1,9 @@
 # Changelog
 
+0.2.102
+- [x] Redact user info using presidio (#113)
+- [x] updated aws creds
+
 0.2.101
 - [x] add: s3 client aws access id and keys secrets
 
