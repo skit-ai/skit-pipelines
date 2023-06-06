@@ -73,7 +73,6 @@ def identify_compliance_breaches_llm(
     df = pl.read_csv(downloaded_file_path)
     calls = parse_calls(df)
     prompt_text = get_prompt_text()
-    calls = calls[0:5]
     outputs = []
 
     start_time = time.time()
