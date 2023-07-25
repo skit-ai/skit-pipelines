@@ -4,7 +4,7 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def identify_compliance_breaches_llm(
-        s3_file_path: str,
+    s3_file_path: str,
 ) -> str:
     """
     Groups turns into calls and pushes them to an LLM (uses openai chatComplete functionality) to identify
@@ -23,7 +23,7 @@ def identify_compliance_breaches_llm(
     import openai
     import polars as pl
     import spacy
-    from presidio_analyzer import AnalyzerEngine, PatternRecognizer, Pattern
+    from presidio_analyzer import AnalyzerEngine, Pattern, PatternRecognizer
     from presidio_anonymizer import AnonymizerEngine
     from presidio_anonymizer.entities import OperatorConfig
 
@@ -45,21 +45,25 @@ def identify_compliance_breaches_llm(
     anonymizer = AnonymizerEngine()
 
     credit_number_pattern = Pattern(name="numbers_pattern", regex="\d{4}", score=0.5)
-    number_recognizer = PatternRecognizer(supported_entity="NUMBER", patterns=[credit_number_pattern])
+    number_recognizer = PatternRecognizer(
+        supported_entity="NUMBER", patterns=[credit_number_pattern]
+    )
     analyzer.registry.add_recognizer(number_recognizer)
 
     def anonymize_text(text):
-        results = analyzer.analyze(text=text,
-                                   entities=["PHONE_NUMBER", "NUMBER", "PERSON"],
-                                   language='en')
+        results = analyzer.analyze(
+            text=text, entities=["PHONE_NUMBER", "NUMBER", "PERSON"], language="en"
+        )
 
-        anonymized_text = anonymizer.anonymize(text=text, analyzer_results=results,
-                                               operators={
-                                                   "PERSON": OperatorConfig("replace", {"new_value": "Lorem Ipsum"}),
-                                                   "PHONE_NUMBER": OperatorConfig("replace",
-                                                                                  {"new_value": "5555555555"}),
-                                                   "NUMBER": OperatorConfig("replace", {"new_value": "1111"})
-                                               })
+        anonymized_text = anonymizer.anonymize(
+            text=text,
+            analyzer_results=results,
+            operators={
+                "PERSON": OperatorConfig("replace", {"new_value": "Lorem Ipsum"}),
+                "PHONE_NUMBER": OperatorConfig("replace", {"new_value": "5555555555"}),
+                "NUMBER": OperatorConfig("replace", {"new_value": "1111"}),
+            },
+        )
         return anonymized_text.text
 
     if pipeline_constants.OPENAI_COMPLIANCE_BREACHES_KEY == "KEY_NOT_SET":
@@ -110,8 +114,13 @@ def identify_compliance_breaches_llm(
 
     end_time = time.time()
     total_time = str(end_time - start_time)
-    print("Time required to obtain compliance breaches from openai for " +
-          str(len(calls)) + " calls was " + total_time + " seconds")
+    print(
+        "Time required to obtain compliance breaches from openai for "
+        + str(len(calls))
+        + " calls was "
+        + total_time
+        + " seconds"
+    )
     columns = [
         "call_id",
         "call_uuid",
@@ -123,7 +132,7 @@ def identify_compliance_breaches_llm(
         "is_breach",
         "compliance_output",
         "tokens_consumed",
-        "call_information"
+        "call_information",
     ]
     df_output = pl.DataFrame(outputs, schema=columns)
     fd_upload, upload_file_path = tempfile.mkstemp(suffix=".csv")

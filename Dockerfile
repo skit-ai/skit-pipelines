@@ -46,6 +46,7 @@ RUN conda install scipy
 
 COPY . .
 
+RUN pip3 install --default-timeout=1000 future
 RUN poetry install --only main && poetry install --only main
 
 

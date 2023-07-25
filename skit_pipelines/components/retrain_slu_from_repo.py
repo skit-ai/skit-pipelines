@@ -8,6 +8,7 @@ def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
+    custom_s3_data_path: InputPath(str),
     intent_alias_path: InputPath(str),
     bucket: str,
     repo_name: str,
@@ -199,6 +200,8 @@ def retrain_slu_from_repo(
         tagged_df[pipeline_constants.TAG] = tagged_df[pipeline_constants.TAG].apply(
             pick_1st_tag
         )
+        custom_tagged_df = pd.DataFrame()
+        custom_tagged_df = tagged_df.copy()
     except pd.errors.EmptyDataError:
         logger.warning(
             "No data found in given annotated jobs, check if data is tagged or job_ids are missing!"
@@ -216,6 +219,20 @@ def retrain_slu_from_repo(
             raise ValueError(
                 "Either data from job_ids or s3_path has to be available for retraining to continue."
             )
+    custom = True
+    try:
+        custom_s3_df = pd.read_csv(custom_s3_data_path)
+        custom_s3_df[pipeline_constants.TAG] = custom_s3_df[pipeline_constants.TAG].apply(
+            pick_1st_tag
+        )
+        custom_tagged_df = custom_s3_df if no_annotated_job else pd.concat([custom_tagged_df, custom_s3_df])
+    except pd.errors.EmptyDataError:
+        logger.warning("No csv file from custom_s3 found!")
+        if no_annotated_job:
+            raise ValueError(
+                "Either data from job_ids or custom_s3_path has to be available for retraining to continue."
+            )   
+        custom = False
 
     # Change directory just to make sure
     os.chdir(project_config_local_path)
@@ -223,6 +240,10 @@ def retrain_slu_from_repo(
     try:
         _, tagged_data_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
         tagged_df.to_csv(tagged_data_path, index=False)
+
+        if custom:
+            _, custom_s3_local_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
+            custom_tagged_df.to_csv(custom_s3_local_path, index=False)
 
         repo.git.checkout(branch)
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
@@ -268,30 +289,7 @@ def retrain_slu_from_repo(
             pipeline_constants.DATA, pipeline_constants.TEST
         )
 
-        if train_split_percent < 100:
-            # split into train and test
-            logger.info(
-                f"conda run -n {core_slu_repo_name} slu split-data "
-                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
-            )
-            execute_cli(
-                f"conda run -n {core_slu_repo_name} slu split-data "
-                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
-                f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
-            )
-            if use_previous_dataset:
-                # combine with older train set
-                execute_cli(
-                    f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
-                )
-                if os.path.exists(old_test_path):
-                    # combine with older test set
-                    execute_cli(
-                        f"conda run -n {core_slu_repo_name} slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
-                    )
-
-        else:
+        if custom:
             # don't split dataset - use all as train set
             if use_previous_dataset:
                 # combine with older train dataset
@@ -301,8 +299,45 @@ def retrain_slu_from_repo(
             else:
                 # copy new dataset to new path
                 execute_cli(f"cp {tagged_data_path} {new_train_path}")
-            # copy old test dataset to new path
+                # copy old test dataset to new path
             execute_cli(f"cp {old_test_path} {new_test_path}")
+
+        else:
+            if train_split_percent < 100:
+                # split into train and test
+                logger.info(
+                    f"conda run -n {core_slu_repo_name} slu split-data "
+                    f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                    f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
+                )
+                execute_cli(
+                    f"conda run -n {core_slu_repo_name} slu split-data "
+                    f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                    f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
+                )
+                if use_previous_dataset:
+                    # combine with older train set
+                    execute_cli(
+                        f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {new_train_path}"
+                    )
+                    if os.path.exists(old_test_path):
+                        # combine with older test set
+                        execute_cli(
+                            f"conda run -n {core_slu_repo_name} slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
+                        )
+
+            else:
+                # don't split dataset - use all as train set
+                if use_previous_dataset:
+                    # combine with older train dataset
+                    execute_cli(
+                        f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
+                    )
+                else:
+                    # copy new dataset to new path
+                    execute_cli(f"cp {tagged_data_path} {new_train_path}")
+                # copy old test dataset to new path
+                execute_cli(f"cp {old_test_path} {new_test_path}")
 
         # alias and filter on new train set
         alias_dataset(new_train_path, intent_alias_path)
@@ -336,12 +371,20 @@ def retrain_slu_from_repo(
                 else:
                     test_df["intent"] = ""
                     test_df.to_csv(new_test_path, index=False)
-            execute_cli(
-                f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
-                f"conda run --no-capture-output -n {core_slu_repo_name} "
-                f"slu test --project {repo_name} ",
-                split=False,
-            ).check_returncode()
+            if custom:
+                execute_cli(
+                    f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
+                    f"conda run --no-capture-output -n {core_slu_repo_name} "
+                    f"slu test --project {repo_name} --file {custom_s3_local_path}",
+                    split=False,
+                ).check_returncode()
+            else:
+                execute_cli(
+                    f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
+                    f"conda run --no-capture-output -n {core_slu_repo_name} "
+                    f"slu test --project {repo_name}",
+                    split=False,
+                ).check_returncode()
             if classification_report_path := get_metrics_path(
                 pipeline_constants.CLASSIFICATION_REPORT
             ):

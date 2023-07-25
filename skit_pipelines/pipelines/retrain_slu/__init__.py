@@ -32,6 +32,7 @@ def retrain_slu(
     repo_branch: str = "master",
     job_ids: str = "",
     dataset_path: str = "",
+    custom_dataset_path: str = "",
     labelstudio_project_ids: str = "",
     job_start_date: str = "",
     job_end_date: str = "",
@@ -177,6 +178,31 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
+    custom_tagged_s3_data_op = download_csv_from_s3_op(storage_path=custom_dataset_path)
+    custom_tagged_s3_data_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+    '''
+    try:
+        custom_tagged_s3_data_op = download_csv_from_s3_op(storage_path=custom_dataset_path)
+        custom_tagged_s3_data_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    
+    except: custom_tagged_s3_data_op = fetch_tagged_dataset_op(
+        job_id=job_ids,
+        project_id=labelstudio_project_ids,
+        task_type="conversation",
+        timezone="Asia/Kolkata",
+        start_date=job_start_date,
+        end_date=job_end_date,
+        empty_possible=True,
+    )
+
+    expect: print("Custom Data Path not found")
+
+    )
+    '''
+
     tagged_job_data_op = fetch_tagged_dataset_op(
         job_id=job_ids,
         project_id=labelstudio_project_ids,
@@ -194,10 +220,11 @@ def retrain_slu(
         git_host_name=pipeline_constants.GITLAB,
         yaml_path=alias_yaml_path,
     )
-
+    '''
     validate_training_setup_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
+        #custom_tagged_s3_data_op.outputs["output"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
@@ -218,10 +245,12 @@ def retrain_slu(
         core_slu_repo_branch=core_slu_repo_branch,
     ).set_ephemeral_storage_limit("20G")
     validate_training_setup_op.display_name = "Validate Training Setup"
+    '''
 
     retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
+        custom_tagged_s3_data_op.outputs["output"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
@@ -239,7 +268,7 @@ def retrain_slu(
         customization_repo_branch=customization_repo_branch,
         core_slu_repo_name=core_slu_repo_name,
         core_slu_repo_branch=core_slu_repo_branch,
-    ).after(validate_training_setup_op)
+    )#.after(validate_training_setup_op)
     retrained_op.set_gpu_limit(1).add_node_selector_constraint(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
     )
@@ -276,7 +305,7 @@ def retrain_slu(
         file_title="## Confusion Matrix",
     )
 
-    mr_response_op = create_mr_op(
+    '''mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
         project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
@@ -325,7 +354,7 @@ def retrain_slu(
         )
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
-        )
+        )'''
 
 
 __all__ = ["retrain_slu"]

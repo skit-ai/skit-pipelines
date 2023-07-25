@@ -85,7 +85,7 @@ def push_compliance_report_to_postgres(
                 "is_breach": row["is_breach"],
                 "compliance_output": row["compliance_output"],
                 "tokens_consumed": row["tokens_consumed"],
-                "call_information": row["call_information"]
+                "call_information": row["call_information"],
             }
 
             cur.execute(INSERT_COMPLIANCE_RESULT_QUERY, query_parameters)
@@ -93,8 +93,12 @@ def push_compliance_report_to_postgres(
             if row["is_breach"]:
                 breach_counter += 1
         except Exception as e:
-            print("Couldn't write compliance response report for call uuid " + row["call_uuid"] +
-                  " because: " + str(e))
+            print(
+                "Couldn't write compliance response report for call uuid "
+                + row["call_uuid"]
+                + " because: "
+                + str(e)
+            )
 
     conn.commit()
     cur.close()
