@@ -25,6 +25,8 @@ def retrain_slu_from_repo(
     validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
+    master_output_classification_report_path: OutputPath(str),
+    master_output_confusion_matrix_path: OutputPath(str),
     customization_repo_name: str = "",
     customization_repo_branch: str = "",
     core_slu_repo_name: str = "",
@@ -116,7 +118,7 @@ def retrain_slu_from_repo(
         repo.config_writer().set_value(
             "user", "email", pipeline_constants.GITLAB_USER_EMAIL
         ).release()
-
+        print("------------------------------121-----------------------------------")
         try:
             repo.git.checkout(repo_branch)
             execute_cli(
@@ -129,6 +131,7 @@ def retrain_slu_from_repo(
                 split=False,
             )
             execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
+            #execute_cli(f"conda run -n {repo_name} pip install dvc").check_returncode()
             if run_dir:
                 os.chdir(run_dir)
             if run_cmd:
@@ -141,7 +144,7 @@ def retrain_slu_from_repo(
 
         except Exception as exc:
             raise exc
-
+    print("---------------------------147-------------------------------------")
     # Setup project config repo
     project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
     download_repo(
@@ -354,7 +357,9 @@ def retrain_slu_from_repo(
             execute_cli(f"cp {validate_path} {output_classification_report_path}")
             execute_cli(f"cp {validate_path} {output_confusion_matrix_path}")
             return ""
-
+        print("------------------------------360----------------------------------")
+        execute_cli("ls")
+        '''
         # training begins
         execute_cli(
             f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} conda "
@@ -398,7 +403,7 @@ def retrain_slu_from_repo(
                 execute_cli(
                     f"cp {confusion_matrix_path} {output_confusion_matrix_path}"
                 )
-
+        '''
         if os.path.exists(pipeline_constants.OLD_DATA):
             execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
 
@@ -408,6 +413,54 @@ def retrain_slu_from_repo(
         execute_cli(f"git status")
         repo.git.add(all=True)
         execute_cli(f"git status")
+        print("---------------------------After git status-----------------------")
+        if os.path.exists(pipeline_constants.DATA):
+            execute_cli(f"rm -Rf {pipeline_constants.DATA}")
+        print("---------------------------After delete-----------------------")
+        branch_name = "stable"
+        folder_path = "vernacularai/ai/clients/ashley"
+        output_folder = "data"
+        pathSpecified = os.getcwd()
+        print(pathSpecified)
+        # Using listdir() function  
+        listOfFileNames = os.listdir(pathSpecified)  
+        # Print the name of all files in the current working directory  
+        print("Following is the list of names of all the files present in the current working directory: ")  
+        print(listOfFileNames)
+        #execute_cli("dvc get --rev " + branch_name + "https://" + pipeline_constants.GITLAB_USER + ":" + pipeline_constants.GITLAB_PRIVATE_TOKEN + ":@gitlab.com/" + folder_path)
+        execute_cli(f"dvc get --rev {branch_name} https://{pipeline_constants.GITLAB_USER}:{pipeline_constants.GITLAB_PRIVATE_TOKEN}:@gitlab.com/{folder_path} {output_folder}")
+        pathSpecified = os.getcwd()
+        print(pathSpecified)
+        # Using listdir() function  
+        listOfFileNames = os.listdir(pathSpecified)  
+        # Print the name of all files in the current working directory  
+        print("Following is the list of names of all the files present in the current working directory: ")  
+        print(listOfFileNames)  
+        print("---------------------------After dvc get-----------------------")
+        for root, dirs, files in os.walk(".", topdown=False):
+            print("---------------------------os-----------------------")
+            for name in files:
+                print(os.path.join(root, name))
+            for name in dirs:
+                print(os.path.join(root, name))
+        print("---------------------------After os-----------------------")
+        execute_cli(
+            f"slu test --project {repo_name}",
+            split=False,
+        ).check_returncode()
+        if classification_report_path := get_metrics_path(
+                pipeline_constants.CLASSIFICATION_REPORT
+        ):
+            execute_cli(
+                f"cp {classification_report_path} {master_output_classification_report_path}"
+            )
+
+        if confusion_matrix_path := get_metrics_path(
+            pipeline_constants.FULL_CONFUSION_MATRIX
+        ):
+            execute_cli(
+                f"cp {confusion_matrix_path} {master_output_confusion_matrix_path}"
+            )
 
         repo.index.commit(
             f"Trained XLMR model using {data_info}",

@@ -187,10 +187,10 @@ def retrain_slu(
         custom_tagged_s3_data_op = download_csv_from_s3_op(storage_path=custom_dataset_path)
         custom_tagged_s3_data_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
-    
+        
     except: custom_tagged_s3_data_op = fetch_tagged_dataset_op(
         job_id=job_ids,
-        project_id=labelstudio_project_ids,
+        project_id=custom_dataset_ls_project_id,
         task_type="conversation",
         timezone="Asia/Kolkata",
         start_date=job_start_date,
@@ -293,6 +293,38 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
+     # upload test set metrics.
+    master_upload_cf = upload2s3_op(
+        path_on_disk=retrained_op.outputs["master_output_classification_report"],
+        reference=repo_name,
+        file_type="test_classification_report",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+
+    upload_cm = upload2s3_op(
+        path_on_disk=retrained_op.outputs["master_output_confusion_matrix"],
+        reference=repo_name,
+        file_type="test_confusion_matrix",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    classification_report_markdown_file_op = file_contents_to_markdown_s3_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs["master_output_classification_report"],
+        file_title="## Master Classification Report",
+    )
+
+    confusion_matrix_markdown_file_op = file_contents_to_markdown_s3_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs["master_output_confusion_matrix"],
+        file_title="## Master Confusion Matrix",
+    )
+    
     classification_report_markdown_file_op = file_contents_to_markdown_s3_op(
         ext=CSV_FILE,
         path_on_disk=retrained_op.outputs["output_classification_report"],
