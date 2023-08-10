@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.103
+- [x] Add retry for LS uploads in skit-labels (#22)
+
 0.2.102
 - [x] Redact user info using presidio (#113)
 - [x] updated aws creds

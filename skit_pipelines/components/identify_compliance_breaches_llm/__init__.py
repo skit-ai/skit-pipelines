@@ -50,12 +50,11 @@ def identify_compliance_breaches_llm(
 
     def anonymize_text(text):
         results = analyzer.analyze(text=text,
-                                   entities=["PHONE_NUMBER", "NUMBER", "PERSON"],
+                                   entities=["PHONE_NUMBER", "NUMBER"],
                                    language='en')
 
         anonymized_text = anonymizer.anonymize(text=text, analyzer_results=results,
                                                operators={
-                                                   "PERSON": OperatorConfig("replace", {"new_value": "Lorem Ipsum"}),
                                                    "PHONE_NUMBER": OperatorConfig("replace",
                                                                                   {"new_value": "5555555555"}),
                                                    "NUMBER": OperatorConfig("replace", {"new_value": "1111"})
@@ -87,7 +86,6 @@ def identify_compliance_breaches_llm(
                 ],
                 temperature=0,
             )
-            print(call_as_string)
             output = response["choices"][0]["message"]["content"]
             breach_status = slice_json(output)["breach"]
             outputs.append(
