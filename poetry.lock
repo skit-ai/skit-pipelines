@@ -3988,14 +3988,14 @@ tqdm = "4.62.1"
 
 [[package]]
 name = "skit-labels"
-version = "0.3.33"
+version = "0.3.34"
 description = "Command line tool for interacting with labelled datasets at skit.ai."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_labels-0.3.33-py3-none-any.whl", hash = "sha256:29a54924e8fa2b03a74c034ab8b40dc2ba2b7a15f35deac2ec18c351dbde06d4"},
-    {file = "skit_labels-0.3.33.tar.gz", hash = "sha256:26dac14aa529ba78e212cfee6d7d62eda2890c781b6cc02fba16a4332594fd5f"},
+    {file = "skit_labels-0.3.34-py3-none-any.whl", hash = "sha256:e3506b25188305fd15391d8fc82e0a79b1caaf9b8968038c7585a324b982be49"},
+    {file = "skit_labels-0.3.34.tar.gz", hash = "sha256:608590b9756aee398a57d10be3fe267384d8c348ff706a19d45d05ae555b72cc"},
 ]
 
 [package.dependencies]
@@ -4013,6 +4013,7 @@ psycopg2-binary = "2.9.3"
 pydash = ">=5.1.0,<6.0.0"
 python-dateutil = ">=2.8.2,<3.0.0"
 pytz = "2021.1"
+tenacity = ">=8.2.2,<9.0.0"
 toml = "0.10.2"
 tqdm = "4.62.1"
 
@@ -4613,6 +4614,21 @@ colorama = ">=0.4.4,<0.5.0"
 mslex = {version = ">=0.3.0,<0.4.0", markers = "sys_platform == \"win32\""}
 psutil = ">=5.7.2,<6.0.0"
 tomli = {version = ">=2.0.1,<3.0.0", markers = "python_version >= \"3.7\" and python_version < \"4.0\""}
+
+[[package]]
+name = "tenacity"
+version = "8.2.2"
+description = "Retry code until it succeeds"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "tenacity-8.2.2-py3-none-any.whl", hash = "sha256:2f277afb21b851637e8f52e6a613ff08734c347dc19ade928e519d7d2d8569b0"},
+    {file = "tenacity-8.2.2.tar.gz", hash = "sha256:43af037822bd0029025877f3b2d97cc4d7bb0c2991000a3d59d71517c5c969e0"},
+]
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
 name = "termcolor"
@@ -5394,4 +5410,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "0a0c57a7282e59ee6358815c6140c73e2407c1bdaf69c16f3b264f65d7141f7b"
+content-hash = "302e0f80db5f3be635971e9dbdfce140ba6f0382d2137a5c3e62c0ba55f4df88"
