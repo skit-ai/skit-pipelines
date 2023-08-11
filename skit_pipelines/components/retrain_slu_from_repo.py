@@ -7,6 +7,7 @@ from skit_pipelines import constants as pipeline_constants
 def retrain_slu_from_repo(
     *,
     s3_data_path: InputPath(str),
+    custom_test_s3_data_path: InputPath(str),
     annotated_job_data_path: InputPath(str),
     intent_alias_path: InputPath(str),
     bucket: str,
@@ -23,7 +24,9 @@ def retrain_slu_from_repo(
     s3_paths: str = "",
     validate_setup: bool = False,
     output_classification_report_path: OutputPath(str),
+    production_classification_report_path: OutputPath(str),
     output_confusion_matrix_path: OutputPath(str),
+    production_confusion_matrix_path: OutputPath(str),
     customization_repo_name: str = "",
     customization_repo_branch: str = "",
     core_slu_repo_name: str = "",
@@ -68,6 +71,7 @@ def retrain_slu_from_repo(
 
     remove_intents = comma_sep_str(remove_intents)
     no_annotated_job = False
+    custom_test_dataset_present = True
 
     def filter_dataset(
         dataset_path: str,
@@ -141,12 +145,55 @@ def retrain_slu_from_repo(
         except Exception as exc:
             raise exc
 
+    def preprocess_test_dataset(test_df, test_dataset_path):
+        if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
+            if "raw.intent" in test_df:
+                test_df.rename(columns={"raw.intent": "intent"}).to_csv(
+                    test_dataset_path, index=False
+                )
+            else:
+                test_df["intent"] = ""
+                test_df.to_csv(test_dataset_path, index=False)
+
+    def evaluate(
+        test_dataset_path,
+        kfp_volume_classification_report_path=output_classification_report_path,
+        kfp_volumne_confusion_matrix_path=output_confusion_matrix_path,
+    ):
+        """To evaluate a model on a test set."""
+        test_df = pd.read_csv(test_dataset_path)
+        preprocess_test_dataset(test_df, test_dataset_path)
+        execute_cli(
+            f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
+            f"conda run --no-capture-output -n {core_slu_repo_name} "
+            f"slu test --project {repo_name} --file {test_dataset_path}",  # when custom_test_s3_data_path is passed, --file option would be redundant
+            split=False,
+        ).check_returncode()
+
+        classification_report_path = get_metrics_path(
+            pipeline_constants.CLASSIFICATION_REPORT
+        )
+        execute_cli(
+            f"cp {classification_report_path} {kfp_volume_classification_report_path}"
+        )
+
+        confusion_matrix_path = get_metrics_path(
+            pipeline_constants.FULL_CONFUSION_MATRIX
+        )
+        execute_cli(f"cp {confusion_matrix_path} {kfp_volumne_confusion_matrix_path}")
+
+        # recreate metrics directory for next pass
+        execute_cli("rm -rf data/classification/metrics/")
+        execute_cli("mkdir data/classification/metrics/")
+
+        return classification_report_path, confusion_matrix_path
+
     # Setup project config repo
     project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
     download_repo(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
-        project_path="skit-ai/slu/project-configs",
+        project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
         repo_path=project_config_local_path,
     )
     logger.info(
@@ -216,6 +263,17 @@ def retrain_slu_from_repo(
             raise ValueError(
                 "Either data from job_ids or s3_path has to be available for retraining to continue."
             )
+    try:
+        custom_test_s3_df = pd.read_csv(custom_test_s3_data_path)
+        custom_test_s3_df[pipeline_constants.TAG] = custom_test_s3_df[
+            pipeline_constants.TAG
+        ].apply(pick_1st_tag)
+    except pd.errors.EmptyDataError:
+        logger.warning(
+            "No custom test dataset from S3 found! While it is allowed to not pass a custom test dataset (holdout dataset),"
+            "passing it is hihgly recommended"
+        )
+        custom_test_dataset_present = False
 
     # Change directory just to make sure
     os.chdir(project_config_local_path)
@@ -224,6 +282,12 @@ def retrain_slu_from_repo(
         _, tagged_data_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
         tagged_df.to_csv(tagged_data_path, index=False)
 
+        if custom_test_dataset_present:
+            _, custom_test_tagged_data_path = tempfile.mkstemp(
+                suffix=pipeline_constants.CSV_FILE
+            )
+            custom_test_s3_df.to_csv(custom_test_tagged_data_path, index=False)
+            logger.info(f"saved custom dataset to {custom_test_tagged_data_path}")
         repo.git.checkout(branch)
         new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
@@ -268,6 +332,11 @@ def retrain_slu_from_repo(
             pipeline_constants.DATA, pipeline_constants.TEST
         )
 
+        if custom_test_dataset_present:
+            # there is no need to split the tagged_df into train and test since the custom_test_dataset will be used for evalution of trained model
+            # all of the datapoints from tagged_df can be used for training
+            train_split_percent = 100
+
         if train_split_percent < 100:
             # split into train and test
             logger.info(
@@ -302,7 +371,9 @@ def retrain_slu_from_repo(
                 # copy new dataset to new path
                 execute_cli(f"cp {tagged_data_path} {new_train_path}")
             # copy old test dataset to new path
-            execute_cli(f"cp {old_test_path} {new_test_path}")
+            execute_cli(
+                f"cp {old_test_path} {new_test_path}"
+            )  # if custom_test_dataset is present, new_test_path won't be used.
 
         # alias and filter on new train set
         alias_dataset(new_train_path, intent_alias_path)
@@ -311,6 +382,10 @@ def retrain_slu_from_repo(
         # apply filter on new test dataset
         filter_dataset(new_test_path, remove_intents)
         alias_dataset(new_test_path, intent_alias_path)
+
+        if custom_test_dataset_present:
+            filter_dataset(custom_test_tagged_data_path, remove_intents)
+            alias_dataset(custom_test_tagged_data_path, intent_alias_path)
 
         if validate_setup:
             if os.path.exists(pipeline_constants.OLD_DATA):
@@ -326,35 +401,18 @@ def retrain_slu_from_repo(
             f"run --no-capture-output -n {core_slu_repo_name} slu train --project {repo_name}",
             split=False,
         ).check_returncode()
-        if os.path.exists(new_test_path):
-            test_df = pd.read_csv(new_test_path)
-            if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
-                if "raw.intent" in test_df:
-                    test_df.rename(columns={"raw.intent": "intent"}).to_csv(
-                        new_test_path, index=False
-                    )
-                else:
-                    test_df["intent"] = ""
-                    test_df.to_csv(new_test_path, index=False)
-            execute_cli(
-                f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
-                f"conda run --no-capture-output -n {core_slu_repo_name} "
-                f"slu test --project {repo_name} ",
-                split=False,
-            ).check_returncode()
-            if classification_report_path := get_metrics_path(
-                pipeline_constants.CLASSIFICATION_REPORT
-            ):
-                execute_cli(
-                    f"cp {classification_report_path} {output_classification_report_path}"
-                )
 
-            if confusion_matrix_path := get_metrics_path(
-                pipeline_constants.FULL_CONFUSION_MATRIX
-            ):
-                execute_cli(
-                    f"cp {confusion_matrix_path} {output_confusion_matrix_path}"
-                )
+        # Testing
+        final_test_dataset_path = ""
+        if custom_test_dataset_present:
+            final_test_dataset_path = custom_test_tagged_data_path
+        elif os.path.exists(new_test_path):
+            final_test_dataset_path = new_test_path
+
+        # testing the model that was just trained
+        classification_report_path, confusion_matrix_path = evaluate(
+            final_test_dataset_path
+        )
 
         if os.path.exists(pipeline_constants.OLD_DATA):
             execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
@@ -373,6 +431,65 @@ def retrain_slu_from_repo(
         )
         repo.git.push("origin", new_branch)
 
+        # Setup Production model
+        success_extracting_production_metrics = False
+        prod_metrics_status_message = "Empty file"
+        try:
+            if not initial_training and os.path.exists("data.dvc"):
+                # if a model already exists (means this is not the first time training the model)
+                repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
+                    repo_name=repo_name,
+                    project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
+                    user=pipeline_constants.GITLAB_USER,
+                    token=pipeline_constants.GITLAB_PRIVATE_TOKEN,
+                )
+
+                # download the data folder from the production branch. The data folder will have the model
+                execute_cli(
+                    f"dvc get --rev {pipeline_constants.PRODUCTION_BRANCH_ON_CONFIG_REPO} {repo_url} data -o prod_data"
+                )
+
+                # remove the newly trained model. The model and its metrics are backed up to dvc and the git branch is already pushed.
+                execute_cli("rm -rf data/classification/models")
+
+                # replace the newly trained model with the model from production
+                execute_cli(
+                    "cp prod_data/classification/models/ data/classification/ -r"
+                )
+
+                # evluate the production model with the same test set and the same codebase as the newly trained model
+                prod_classification_report_path, prod_confusion_matrix_path = evaluate(
+                    final_test_dataset_path,
+                    production_classification_report_path,
+                    production_confusion_matrix_path,
+                )
+                success_extracting_production_metrics = True
+            else:
+                prod_metrics_status_message = "Skipping extracting metrics from Production model since this is initial training"
+                logger.info(prod_metrics_status_message)
+        except Exception as e:
+            prod_metrics_status_message = (
+                f"Error extracting metrics from production model: {e}"
+            )
+            logger.error(prod_metrics_status_message)
+
+        if not success_extracting_production_metrics:
+            # There was some issue with extracting metrics from the production model
+
+            prod_classification_report_path = "prod_classification_report.csv"
+            prod_confusion_matrix_path = "prod_confusion_matrix.csv"
+            pd.DataFrame([{"message": prod_metrics_status_message}]).to_csv(
+                prod_classification_report_path, index=False
+            )
+            pd.DataFrame([{"message": prod_metrics_status_message}]).to_csv(
+                prod_confusion_matrix_path, index=False
+            )
+            execute_cli(
+                f"cp {prod_classification_report_path} {production_classification_report_path}"
+            )
+            execute_cli(
+                f"cp {prod_confusion_matrix_path} {production_confusion_matrix_path}"
+            )
     except git.GitCommandError as e:
         logger.error(f"{e}: Given {branch=} doesn't exist in the repo")
 
