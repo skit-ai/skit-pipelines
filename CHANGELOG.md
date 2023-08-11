@@ -1,5 +1,8 @@
 # Changelog
 
+0.2.104
+- [x] Fixes issue with chrome browser and driver mismatch (#116)
+
 0.2.103
 - [x] Add retry for LS uploads in skit-labels (#22)
 
