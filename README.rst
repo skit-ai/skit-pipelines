@@ -1,39 +1,10 @@
-.. skit-pipelines documentation master file, created by
-   sphinx-quickstart on Tue May 31 17:16:39 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. skit-pipelines documentation master file. Updated on 17 August 2023.
+   You can adapt this file completely to your liking, but it conceptually must not be different from the source/index.rst file
 
 skit-pipelines
 ==============
 
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Pipelines
-
-   Random sample calls <./skit_pipelines.pipelines.fetch_calls_pipeline>
-   Random sample and tag calls <./skit_pipelines.pipelines.fetch_n_tag_calls>
-   Download tagged dataset <./skit_pipelines.pipelines.fetch_tagged_calls_dataset>
-   Upload for annotation <./skit_pipelines.pipelines.tag_calls>
-   Train XLMR model <./skit_pipelines.pipelines.train_voicebot_intent_model_xlmr>
-   XLMR Intent evaluation <./skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline>
-   Annotated Dataset Intent Evaluation <./skit_pipelines.pipelines.irr_from_tog>
-   Download tagged entity dataset <./skit_pipelines.pipelines.fetch_tagged_entity_dataset>
-   Annotated Dataset Entity Evaluation <./skit_pipelines.pipelines.eer_from_tog>
-   Retrain SLU <./skit_pipelines.pipelines.retrain_slu>
-   Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
-   Random sample and tag turns and calls <./skit_pipelines.pipelines.fetch_n_tag_turns_and_calls>
-
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Modules
-
-   modules.rst
-
-
-Reusable workflows for ml teams at skit.ai. Built using `kubeflow components <https://pypi.org/project/kfp/>`_. 
+Reusable workflows for ml teams at skit.ai. Built using `kubeflow components <https://pypi.org/project/kfp/>`_.
 
 [`Contribution guide <https://github.com/skit-ai/skit-pipelines/blob/main/CONTRIBUTING.md>`_]
 
@@ -65,35 +36,7 @@ Pipelines
 
 Pipelines are complex ML workflows that are required regularly like: training a model, sampling data, getting data annotated, producing metrics, etc.
 
-Here's a list of official pipelines, within these docs we share snippets for slack-bot invocations:
-
-+--+----------------------------------------------------------------------------------+
-|   | Pipelines                                                                       |
-+==+==================================================================================+
-| 1 | :ref:`Random sample and tag calls <p_fetch_n_tag_calls>`                        |
-+--+----------------------------------------------------------------------------------+
-| 2 | :ref:`Random sample calls <p_fetch_calls_pipeline>`                             |
-+--+----------------------------------------------------------------------------------+
-| 3 | :ref:`Download tagged dataset <p_fetch_tagged_calls_dataset>`                   |
-+--+----------------------------------------------------------------------------------+
-| 4 | :ref:`Upload for annotation <p_tag_calls>`                                      |
-+--+----------------------------------------------------------------------------------+
-| 5 | :ref:`Train XLMR model <p_train_voicebot_intent_model_xlmr>`                    |
-+--+----------------------------------------------------------------------------------+
-| 6 | :ref:`XLMR Intent evaluation <p_eval_voicebot_xlmr_pipeline>`                   |
-+--+----------------------------------------------------------------------------------+
-| 7 | :ref:`Annotated Dataset Intent Evaluation <p_irr_from_tog>`                     |
-+--+----------------------------------------------------------------------------------+
-| 8 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
-+--+----------------------------------------------------------------------------------+
-| 9 | :ref:`Annotated Dataset Entity Evaluation <p_eer_from_tog>`                     |
-+--+----------------------------------------------------------------------------------+
-| 10| :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
-+--+----------------------------------------------------------------------------------+
-| 11| :ref:`Retrain SLU <p_retrain_slu>`                                              |
-+--+----------------------------------------------------------------------------------+
-| 12| :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
-+--+----------------------------------------------------------------------------------+
+A list of official pipelines which are supported by Skit can be found `here <https://skit-ai.github.io/skit-pipelines/#pipelines>`_.
 
 
 Project strucuture
@@ -138,7 +81,7 @@ Once a new pipeline and its pre-requisite components are ready.
 
 1. Add an entry to the :code:`CHANGELOG.md`.
 2. Create a new tag with updated semver and push, our github actions take care of pushing the image to our private ECR.
-3. Run :code:`make all`. This will rebuild all the pipeline yamls. This will create a secrets dir. Doesn't work if you don't have s3 credentials.
+3. Run :code:`make all`. This will rebuild all the pipeline yamls and update the docs. This will create a secrets dir. Doesn't work if you don't have s3 credentials.
 4. Run :code:`source secrets/env.sh` You may not have this if you aren't part of skit.ai.
 5. Upload the yamls to `kubeflow ui <https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-1-compile-and-then-upload-in-ui>`_ or `use it via the sdk <https://www.kubeflow.org/docs/components/pipelines/sdk/build-pipeline/#option-2-run-the-pipeline-using-kubeflow-pipelines-sdk-client>`_.
 
@@ -237,12 +180,4 @@ Pending
          "webhook": true
       }
    }
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

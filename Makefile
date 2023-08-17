@@ -45,7 +45,6 @@ us_dev:
 docs:
 	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
-	@cp source/index.rst README.rst
 
 start_server:
 	@source secrets/env.sh && task serve
