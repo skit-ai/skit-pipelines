@@ -320,6 +320,23 @@ def retrain_slu(
         file_title="## Production Confusion Matrix",
     )
 
+    comparision_upload_cf = upload2s3_op(
+        path_on_disk=retrained_op.outputs["comparision_classification_report"],
+        reference=repo_name,
+        file_type="test_classification_report",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+    comparision_classification_report_markdown_file_op = (
+        file_contents_to_markdown_s3_op(
+            ext=CSV_FILE,
+            path_on_disk=retrained_op.outputs["comparision_classification_report"],
+            file_title="## Comparision Classification Report(latest,prod)",
+        )
+    )
+
+    # TODO create comparision_upload_cm and comparision_confusion_matrix_markdown_file_op
+
     mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
@@ -327,7 +344,8 @@ def retrain_slu(
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
-        s3_description_paths=f"{classification_report_markdown_file_op.output},{confusion_matrix_markdown_file_op.output},{prod_classification_report_markdown_file_op.output},{prod_confusion_matrix_markdown_file_op.output}",
+        # TODO add comparision_confusion_matrix_markdown_file_op.output to below line
+        s3_description_paths=f"{comparision_classification_report_markdown_file_op.output},{classification_report_markdown_file_op.output},{confusion_matrix_markdown_file_op.output},{prod_classification_report_markdown_file_op.output},{prod_confusion_matrix_markdown_file_op.output}",
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
