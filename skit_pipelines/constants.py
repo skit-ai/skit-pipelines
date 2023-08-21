@@ -76,6 +76,7 @@ INTENT = "intent"
 STATE = "state"
 DATA = "data"
 OLD_DATA = "old_data"
+PRODUCTION_BRANCH_ON_CONFIG_REPO = "master"
 
 START_TOKEN = "<s>"
 END_TOKEN = "</s>"

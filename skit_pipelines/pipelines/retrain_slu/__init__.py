@@ -32,6 +32,7 @@ def retrain_slu(
     repo_branch: str = "master",
     job_ids: str = "",
     dataset_path: str = "",
+    custom_test_dataset_path: str = "",
     labelstudio_project_ids: str = "",
     job_start_date: str = "",
     job_end_date: str = "",
@@ -116,6 +117,9 @@ def retrain_slu(
     :param dataset_path: The S3 URI or the S3 key for the tagged dataset (can be multiple - comma separated).
     :type dataset_path: str, optional
 
+    :param custom_test_dataset_path: The S3 URI or the S3 key for the tagged dataset to be used for model evaluation (can be multiple - comma separated).
+    :type custom_test_dataset_path: str, optional
+
     :param job_ids: The job ids as per tog. Optional if labestudio_project_ids is provided.
     :type job_ids: str
 
@@ -190,6 +194,13 @@ def retrain_slu(
         "P0D"  # disables caching
     )
 
+    custom_test_tagged_s3_data_op = download_csv_from_s3_op(
+        storage_path=custom_test_dataset_path, empty_possible=True
+    )
+    custom_test_tagged_s3_data_op.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
     downloaded_alias_yaml_op = download_yaml_op(
         git_host_name=pipeline_constants.GITLAB,
         yaml_path=alias_yaml_path,
@@ -197,6 +208,7 @@ def retrain_slu(
 
     validate_training_setup_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
+        custom_test_tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
@@ -221,6 +233,7 @@ def retrain_slu(
 
     retrained_op = retrain_slu_from_repo_op(
         tagged_s3_data_op.outputs["output"],
+        custom_test_tagged_s3_data_op.outputs["output"],
         tagged_job_data_op.outputs["output"],
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
@@ -276,6 +289,37 @@ def retrain_slu(
         file_title="## Confusion Matrix",
     )
 
+    prod_upload_cf = upload2s3_op(
+        path_on_disk=retrained_op.outputs["production_classification_report"],
+        reference=repo_name,
+        file_type="test_classification_report",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+
+    prod_upload_cm = upload2s3_op(
+        path_on_disk=retrained_op.outputs["production_confusion_matrix"],
+        reference=repo_name,
+        file_type="test_confusion_matrix",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+    prod_upload_cm.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
+    )
+
+    prod_classification_report_markdown_file_op = file_contents_to_markdown_s3_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs["production_classification_report"],
+        file_title="## Production Classification Report",
+    )
+
+    prod_confusion_matrix_markdown_file_op = file_contents_to_markdown_s3_op(
+        ext=CSV_FILE,
+        path_on_disk=retrained_op.outputs["production_confusion_matrix"],
+        file_title="## Production Confusion Matrix",
+    )
+
     mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
         repo_name=repo_name,
@@ -283,7 +327,7 @@ def retrain_slu(
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
-        s3_description_paths=f"{classification_report_markdown_file_op.output},{confusion_matrix_markdown_file_op.output}",
+        s3_description_paths=f"{classification_report_markdown_file_op.output},{confusion_matrix_markdown_file_op.output},{prod_classification_report_markdown_file_op.output},{prod_confusion_matrix_markdown_file_op.output}",
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
