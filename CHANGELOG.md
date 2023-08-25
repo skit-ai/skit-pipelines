@@ -1,4 +1,6 @@
 # Changelog
+0.2.105
+- [x] Functionality to compare new trained SLU model with live model on test data (#115)
 
 0.2.104
 - [x] Fixes issue with chrome browser and driver mismatch (#116)
