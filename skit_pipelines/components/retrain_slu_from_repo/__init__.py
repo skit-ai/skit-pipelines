@@ -23,16 +23,16 @@ def retrain_slu_from_repo(
     labelstudio_project_ids: str = "",
     s3_paths: str = "",
     validate_setup: bool = False,
-    output_classification_report_path: OutputPath(str),
-    production_classification_report_path: OutputPath(str),
-    comparision_classification_report_path: OutputPath(str),
-    output_confusion_matrix_path: OutputPath(str),
-    production_confusion_matrix_path: OutputPath(str),
-    # comparision_confusion_matrix_path: OutputPath(str), # TODO enable this
     customization_repo_name: str = "",
     customization_repo_branch: str = "",
     core_slu_repo_name: str = "",
     core_slu_repo_branch: str = "",
+    output_classification_report_path: OutputPath(str),
+    production_classification_report_path: OutputPath(str),
+    comparison_classification_report_path: OutputPath(str),
+    output_confusion_matrix_path: OutputPath(str),
+    production_confusion_matrix_path: OutputPath(str),
+    # comparison_confusion_matrix_path: OutputPath(str), # TODO enable this
 ) -> str:
     import os
     import glob
@@ -81,12 +81,12 @@ def retrain_slu_from_repo(
 
     def filter_dataset(
         dataset_path: str,
-        remove_intents: List[str],
+        remove_intents_list: List[str],
         intent_col: str = pipeline_constants.TAG,
     ) -> None:
-        logger.info(f"filtering: {dataset_path=}\nwhile {remove_intents=}")
+        logger.info(f"filtering: {dataset_path=}\nwhile {remove_intents_list=}")
         dataset = pd.read_csv(dataset_path)
-        dataset[~dataset[intent_col].isin(remove_intents)].to_csv(
+        dataset[~dataset[intent_col].isin(remove_intents_list)].to_csv(
             dataset_path, index=False
         )
 
@@ -176,21 +176,21 @@ def retrain_slu_from_repo(
             split=False,
         ).check_returncode()
 
-        classification_report_path = get_metrics_path(
+        dataset_classification_report_path = get_metrics_path(
             pipeline_constants.CLASSIFICATION_REPORT
         )
         execute_cli(
-            f"cp {classification_report_path} {kfp_volume_classification_report_path}"
+            f"cp {dataset_classification_report_path} {kfp_volume_classification_report_path}"
         )
 
-        confusion_matrix_path = get_metrics_path(
+        dataset_confusion_matrix_path = get_metrics_path(
             pipeline_constants.FULL_CONFUSION_MATRIX
         )
-        execute_cli(f"cp {confusion_matrix_path} {kfp_volumne_confusion_matrix_path}")
+        execute_cli(f"cp {dataset_confusion_matrix_path} {kfp_volumne_confusion_matrix_path}")
 
-        return classification_report_path, confusion_matrix_path
+        return dataset_classification_report_path, dataset_confusion_matrix_path
 
-    def create_comparision_classification_report(
+    def create_comparison_classification_report(
         report1_path: str, report2_path: str, output_path: str
     ):
         report1_df = pd.read_csv(report1_path)
@@ -239,12 +239,12 @@ def retrain_slu_from_repo(
             precision1 = report1_df["precision"][index1] if index1 is not None else None
             recall1 = report1_df["recall"][index1] if index1 is not None else None
             f1_score1 = report1_df["f1-score"][index1] if index1 is not None else None
-            support1 = report1_df["support"][index1] if index1 is not None else None
+            support1 = int(report1_df["support"][index1]) if index1 is not None else None
 
             precision2 = report2_df["precision"][index2] if index2 is not None else None
             recall2 = report2_df["recall"][index2] if index2 is not None else None
             f1_score2 = report2_df["f1-score"][index2] if index2 is not None else None
-            support2 = report2_df["support"][index2] if index2 is not None else None
+            support2 = int(report2_df["support"][index2]) if index2 is not None else None
 
             # Create tuples of values for each metric
             precision_tuple = (precision1, precision2)
@@ -324,6 +324,8 @@ def retrain_slu_from_repo(
         else ""
     )
 
+    new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+
     try:
         tagged_df = pd.read_csv(annotated_job_data_path)
         tagged_df[pipeline_constants.TAG] = tagged_df[pipeline_constants.TAG].apply(
@@ -372,7 +374,6 @@ def retrain_slu_from_repo(
             custom_test_s3_df.to_csv(custom_test_tagged_data_path, index=False)
             logger.info(f"saved custom dataset to {custom_test_tagged_data_path}")
         repo.git.checkout(branch)
-        new_branch = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
         # checkout to new branch
         repo.git.checkout("-b", new_branch)
 
@@ -458,25 +459,20 @@ def retrain_slu_from_repo(
                 f"cp {old_test_path} {new_test_path}"
             )  # if custom_test_dataset is present, new_test_path won't be used.
 
-        # alias and filter on new train set
-        alias_dataset(new_train_path, intent_alias_path)
-        filter_dataset(new_train_path, remove_intents)
-
-        # apply filter on new test dataset
-        filter_dataset(new_test_path, remove_intents)
-        alias_dataset(new_test_path, intent_alias_path)
-
-        if custom_test_dataset_present:
-            filter_dataset(custom_test_tagged_data_path, remove_intents)
-            alias_dataset(custom_test_tagged_data_path, intent_alias_path)
-
         if validate_setup:
             if os.path.exists(pipeline_constants.OLD_DATA):
                 execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
             _, validate_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
             execute_cli(f"cp {validate_path} {output_classification_report_path}")
             execute_cli(f"cp {validate_path} {output_confusion_matrix_path}")
+            execute_cli(f"cp {validate_path} {comparison_classification_report_path}")
+            execute_cli(f"cp {validate_path} {production_classification_report_path}")
+            execute_cli(f"cp {validate_path} {production_confusion_matrix_path}")
             return ""
+
+        # alias and filter the new train set
+        alias_dataset(new_train_path, intent_alias_path)
+        filter_dataset(new_train_path, remove_intents)
 
         # training begins
         execute_cli(
@@ -492,6 +488,10 @@ def retrain_slu_from_repo(
         elif os.path.exists(new_test_path):
             final_test_dataset_path = new_test_path
 
+        # alias and filter the new test dataset
+        filter_dataset(final_test_dataset_path, remove_intents)
+        alias_dataset(final_test_dataset_path, intent_alias_path)
+
         # testing the model that was just trained
         classification_report_path, confusion_matrix_path = evaluate(
             final_test_dataset_path
@@ -499,17 +499,17 @@ def retrain_slu_from_repo(
         _, merged_classification_report_path = tempfile.mkstemp(
             suffix=pipeline_constants.CSV_FILE
         )
-        create_comparision_classification_report(
+        create_comparison_classification_report(
             classification_report_path, "", merged_classification_report_path
         )
 
-        # create the comparision report between metrics from latest model and an empty metrics file
+        # create the comparison report between metrics from the latest model and an empty metrics file
         # this is the default when there is no prod model or there is an issue with extracting metrics from prod model
         execute_cli(
-            f"cp {merged_classification_report_path} {comparision_classification_report_path}"
+            f"cp {merged_classification_report_path} {comparison_classification_report_path}"
         )
-        # TODO create comparision for confusion matrix as well
-        # just like create_comparision_classification_report, another function needs to be implemented
+        # TODO create comparison for confusion matrix as well
+        # just like create_comparison_classification_report, another function needs to be implemented
 
         if os.path.exists(pipeline_constants.OLD_DATA):
             execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
@@ -518,7 +518,7 @@ def retrain_slu_from_repo(
         execute_cli("dvc push data")
 
         execute_cli(f"git status")
-        repo.git.add(all=True)
+        repo.git.add(["data.dvc"])
         execute_cli(f"git status")
 
         repo.index.commit(
@@ -554,24 +554,24 @@ def retrain_slu_from_repo(
                     "cp prod_data/classification/models/ data/classification/ -r"
                 )
 
-                # evluate the production model with the same test set and the same codebase as the newly trained model
+                # evaluate the production model with the same test set and the same codebase as the newly trained model
                 prod_classification_report_path, prod_confusion_matrix_path = evaluate(
                     final_test_dataset_path,
                     production_classification_report_path,
                     production_confusion_matrix_path,
                 )
 
-                # once metrics from prod model are succesfully extracted, we recreate the comparision report.
+                # once metrics from prod model are succesfully extracted, we recreate the comparison report.
                 # this time we do it between metrics from latest model and prod model
-                create_comparision_classification_report(
+                create_comparison_classification_report(
                     classification_report_path,
                     prod_classification_report_path,
                     merged_classification_report_path,
                 )
                 execute_cli(
-                    f"cp {merged_classification_report_path} {comparision_classification_report_path}"
+                    f"cp {merged_classification_report_path} {comparison_classification_report_path}"
                 )
-                # TODO re-create comparision for confusion matrix as well
+                # TODO re-create comparison for confusion matrix as well
 
                 success_extracting_production_metrics = True
             else:
