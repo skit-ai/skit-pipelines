@@ -10,6 +10,7 @@ from jsoncomment import JsonComment
 from loguru import logger
 
 import skit_pipelines.constants as const
+from skit_pipelines.api.validate_input import  ValidateInput
 
 json = JsonComment()
 CommandType = Union[str, None]
@@ -91,6 +92,13 @@ def run_pipeline(
     if "channel" not in payload:
         payload["channel"] = channel_id
         payload["slack_thread"] = message_ts
+
+    errors = ValidateInput(payload, pipeline_name).validate_input_params()
+    if len(errors) > 0:
+        return f"""Please address the following errors in the input params and try again:
+        ```
+        {" ".join(errors)}
+        ```""".strip()
 
     payload["notify"] = (
         user if "notify" not in payload else f"{payload['notify']} ,{user}"
