@@ -10,7 +10,7 @@ from jsoncomment import JsonComment
 from loguru import logger
 
 import skit_pipelines.constants as const
-from skit_pipelines.api.validate_input import  ValidateInput
+from skit_pipelines.api.validate_input import ValidateInput
 
 json = JsonComment()
 CommandType = Union[str, None]

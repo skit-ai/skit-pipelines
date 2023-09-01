@@ -1,9 +1,9 @@
 import datetime
 
-ALLOWED_PAST_DATE = 180
+ALLOWED_PAST_DATE = 270
 
 # TODO: Ideally this list should come from a universal source and not be hard-coded
-SUPPORTED_LANG_CODES = ["en-US", "hi", "ta", "te", "ma", "gu"]
+SUPPORTED_LANG_CODES = ["en-US", "en", "hi", "ta", "te", "ma", "gu"]
 
 """
     Collection of checks for input parameters that are passed to various skit-pipelines.
@@ -48,7 +48,7 @@ class ValidateInput():
         if self.payload["lang"] not in SUPPORTED_LANG_CODES:
             self.errors.append(f"Support for language code {self.payload['lang']} is not present currently.\n")
 
-    def _validate_repo_name_for_retrain_slu(self):
+    def _validate_repo_for_retrain_slu(self):
         if self.pipeline_name == "retrain_slu" and "repo_name" not in self.payload:
             self.errors.append(f"Parameter repo_name is required for slu_retraining to happen.\n")
 
@@ -59,5 +59,5 @@ class ValidateInput():
         self._validate_lang_support()
 
         # Pipeline specific checks
-        self._validate_repo_name_for_retrain_slu()
+        self._validate_repo_for_retrain_slu()
         return self.errors
