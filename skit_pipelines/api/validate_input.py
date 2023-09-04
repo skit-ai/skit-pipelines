@@ -17,7 +17,7 @@ SUPPORTED_LANG_CODES = ["en-US", "en", "hi", "ta", "te", "ma", "gu"]
 """
 
 
-class ValidateInput():
+class ValidateInput:
     def __init__(self, payload, pipeline_name):
         self.payload = payload
         self.pipeline_name = pipeline_name

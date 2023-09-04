@@ -1,9 +1,9 @@
-.. skit-pipelines documentation master file, created by
-   sphinx-quickstart on Tue May 31 17:16:39 2022.
+.. skit_pipelines documentation master file, created by
+   sphinx-quickstart on Mon Sep  4 15:11:40 2023.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-skit-pipelines
+Skit-pipelines
 ==============
 
 .. toctree::
@@ -15,22 +15,11 @@ skit-pipelines
    Random sample and tag calls <./skit_pipelines.pipelines.fetch_n_tag_calls>
    Download tagged dataset <./skit_pipelines.pipelines.fetch_tagged_calls_dataset>
    Upload for annotation <./skit_pipelines.pipelines.tag_calls>
-   Train XLMR model <./skit_pipelines.pipelines.train_voicebot_intent_model_xlmr>
-   XLMR Intent evaluation <./skit_pipelines.pipelines.eval_voicebot_xlmr_pipeline>
-   Annotated Dataset Intent Evaluation <./skit_pipelines.pipelines.irr_from_tog>
    Download tagged entity dataset <./skit_pipelines.pipelines.fetch_tagged_entity_dataset>
-   Annotated Dataset Entity Evaluation <./skit_pipelines.pipelines.eer_from_tog>
    Retrain SLU <./skit_pipelines.pipelines.retrain_slu>
+   Publish Complaince Breaches <./skit_pipelines.pipelines.publish_compliance_breaches>
    Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
    Random sample and tag turns and calls <./skit_pipelines.pipelines.fetch_n_tag_turns_and_calls>
-
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Modules
-
-   modules.rst
 
 
 Reusable workflows for ml teams at skit.ai. Built using `kubeflow components <https://pypi.org/project/kfp/>`_. 
@@ -78,21 +67,15 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 +--+----------------------------------------------------------------------------------+
 | 4 | :ref:`Upload for annotation <p_tag_calls>`                                      |
 +--+----------------------------------------------------------------------------------+
-| 5 | :ref:`Train XLMR model <p_train_voicebot_intent_model_xlmr>`                    |
+| 5 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
 +--+----------------------------------------------------------------------------------+
-| 6 | :ref:`XLMR Intent evaluation <p_eval_voicebot_xlmr_pipeline>`                   |
+| 6 | :ref:`Publish Compliance breaches <p_publish_compliance_breaches>`              |
 +--+----------------------------------------------------------------------------------+
-| 7 | :ref:`Annotated Dataset Intent Evaluation <p_irr_from_tog>`                     |
+| 7 | :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
 +--+----------------------------------------------------------------------------------+
-| 8 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
+| 8 | :ref:`Retrain SLU <p_retrain_slu>`                                              |
 +--+----------------------------------------------------------------------------------+
-| 9 | :ref:`Annotated Dataset Entity Evaluation <p_eer_from_tog>`                     |
-+--+----------------------------------------------------------------------------------+
-| 10| :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
-+--+----------------------------------------------------------------------------------+
-| 11| :ref:`Retrain SLU <p_retrain_slu>`                                              |
-+--+----------------------------------------------------------------------------------+
-| 12| :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
+| 9 | :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
 +--+----------------------------------------------------------------------------------+
 
 
@@ -245,4 +228,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

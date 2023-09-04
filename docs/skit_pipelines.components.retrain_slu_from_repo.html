@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>skit_pipelines.components.retrain_slu_from_repo package &#8212; skit_pipelines  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="skit-pipelines-components-retrain-slu-from-repo-package">
+<h1>skit_pipelines.components.retrain_slu_from_repo package<a class="headerlink" href="#skit-pipelines-components-retrain-slu-from-repo-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-skit_pipelines.components.retrain_slu_from_repo.utils">
+<span id="skit-pipelines-components-retrain-slu-from-repo-utils-module"></span><h2>skit_pipelines.components.retrain_slu_from_repo.utils module<a class="headerlink" href="#module-skit_pipelines.components.retrain_slu_from_repo.utils" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-skit_pipelines.components.retrain_slu_from_repo">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skit_pipelines.components.retrain_slu_from_repo" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo">
+<span class="sig-name descname"><span class="pre">retrain_slu_from_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_data_path:</span> <span class="pre">&lt;kfp.components._python_op.InputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079e4550&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_test_s3_data_path:</span> <span class="pre">&lt;kfp.components._python_op.InputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079e4ac0&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotated_job_data_path:</span> <span class="pre">&lt;kfp.components._python_op.InputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079e4fa0&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intent_alias_path:</span> <span class="pre">&lt;kfp.components._python_op.InputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079e4460&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_intents:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_previous_dataset:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_split_percent:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_training:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_ids:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_paths:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_setup:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_branch:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core_slu_repo_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core_slu_repo_branch:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_classification_report_path:</span> <span class="pre">&lt;kfp.components._python_op.OutputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079f8b50&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">production_classification_report_path:</span> <span class="pre">&lt;kfp.components._python_op.OutputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079f8bb0&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparison_classification_report_path:</span> <span class="pre">&lt;kfp.components._python_op.OutputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079f8c10&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_confusion_matrix_path:</span> <span class="pre">&lt;kfp.components._python_op.OutputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079f8c70&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">production_confusion_matrix_path:</span> <span class="pre">&lt;kfp.components._python_op.OutputPath</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x1079f8cd0&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skit_pipelines/components/retrain_slu_from_repo.html#retrain_slu_from_repo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo_op">
+<span class="sig-name descname"><span class="pre">retrain_slu_from_repo_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_test_s3_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotated_job_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intent_alias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_intents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_previous_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'True'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_split_percent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'85'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'False'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'10'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_training</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'False'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelstudio_project_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'False'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customization_repo_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core_slu_repo_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core_slu_repo_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo_op" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrain slu from repo</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">skit_pipelines</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/skit_pipelines.components.retrain_slu_from_repo.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
