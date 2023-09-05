@@ -50,7 +50,7 @@ def retrain_slu_from_repo(
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.download_repo import download_repo
-    from skit_pipelines.components.preprocess.create_true_intent_column.utils import (
+    from skit_pipelines.components.retrain_slu_from_repo.utils import (
         pick_1st_tag,
     )
     from skit_pipelines.utils.normalize import comma_sep_str
