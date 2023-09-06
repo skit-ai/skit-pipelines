@@ -5,271 +5,55 @@ from skit_pipelines import constants as pipeline_constants
 
 
 def retrain_slu_from_repo(
-    *,
-    s3_data_path: InputPath(str),
-    custom_test_s3_data_path: InputPath(str),
-    annotated_job_data_path: InputPath(str),
-    intent_alias_path: InputPath(str),
-    bucket: str,
-    repo_name: str,
-    branch: str,
-    remove_intents: str = "",
-    use_previous_dataset: bool = True,
-    train_split_percent: int = 85,
-    stratify: bool = False,
-    epochs: int = 10,
-    initial_training: bool = False,
-    job_ids: str = "",
-    labelstudio_project_ids: str = "",
-    s3_paths: str = "",
-    validate_setup: bool = False,
-    customization_repo_name: str = "",
-    customization_repo_branch: str = "",
-    core_slu_repo_name: str = "",
-    core_slu_repo_branch: str = "",
-    output_classification_report_path: OutputPath(str),
-    production_classification_report_path: OutputPath(str),
-    comparison_classification_report_path: OutputPath(str),
-    output_confusion_matrix_path: OutputPath(str),
-    production_confusion_matrix_path: OutputPath(str),
-    # comparison_confusion_matrix_path: OutputPath(str), # TODO enable this
+        *,
+        s3_data_path: InputPath(str),
+        custom_test_s3_data_path: InputPath(str),
+        annotated_job_data_path: InputPath(str),
+        intent_alias_path: InputPath(str),
+        bucket: str,
+        repo_name: str,
+        branch: str,
+        remove_intents: str = "",
+        use_previous_dataset: bool = True,
+        train_split_percent: int = 85,
+        stratify: bool = False,
+        epochs: int = 10,
+        initial_training: bool = False,
+        job_ids: str = "",
+        labelstudio_project_ids: str = "",
+        s3_paths: str = "",
+        validate_setup: bool = False,
+        customization_repo_name: str = "",
+        customization_repo_branch: str = "",
+        core_slu_repo_name: str = "",
+        core_slu_repo_branch: str = "",
+        output_classification_report_path: OutputPath(str),
+        production_classification_report_path: OutputPath(str),
+        comparison_classification_report_path: OutputPath(str),
+        output_confusion_matrix_path: OutputPath(str),
+        production_confusion_matrix_path: OutputPath(str),
+        # comparison_confusion_matrix_path: OutputPath(str), # TODO enable this
 ) -> str:
     import os
-    import glob
-    import subprocess
     import tempfile
     from datetime import datetime
-    from tabulate import tabulate
-
-    from typing import Dict, List
 
     import git
     import pandas as pd
-    import yaml
     from loguru import logger
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.download_repo import download_repo
     from skit_pipelines.components.retrain_slu_from_repo.utils import (
-        pick_1st_tag,
+        pick_1st_tag, filter_dataset, alias_dataset, evaluate, setup_utility_repo, create_dataset_path, execute_cli
     )
+    from skit_pipelines.components.retrain_slu_from_repo.comparision_report_generator import \
+        comparison_classification_report
     from skit_pipelines.utils.normalize import comma_sep_str
-
-    execute_cli = lambda cmd, split=True: subprocess.run(
-        cmd.split() if split else cmd, shell=not split
-    )
-    create_dataset_path = lambda data_type, dataset_type: os.path.join(
-        data_type,
-        "classification/datasets",
-        dataset_type + pipeline_constants.CSV_FILE,
-    )
-
-    def get_metrics_path(metric_type: str, data_type: str = pipeline_constants.DATA):
-        metrics_dir = os.path.join(data_type, "classification/metrics")
-        latest_date_dir = max(glob.glob(metrics_dir + "/*"), key=os.path.getctime)
-        latest_metrics_dir = max(
-            glob.glob(latest_date_dir + "/*"), key=os.path.getctime
-        )
-        return os.path.join(
-            latest_metrics_dir,
-            metric_type + pipeline_constants.CSV_FILE,
-        )
 
     remove_intents = comma_sep_str(remove_intents)
     no_annotated_job = False
     custom_test_dataset_present = True
-
-    def filter_dataset(
-        dataset_path: str,
-        remove_intents_list: List[str],
-        intent_col: str = pipeline_constants.TAG,
-    ) -> None:
-        logger.info(f"filtering: {dataset_path=}\nwhile {remove_intents_list=}")
-        dataset = pd.read_csv(dataset_path)
-        dataset[~dataset[intent_col].isin(remove_intents_list)].to_csv(
-            dataset_path, index=False
-        )
-
-    def alias_dataset(
-        dataset_path: str,
-        alias_yaml_path: str,
-        intent_col: str = pipeline_constants.TAG,
-    ) -> None:
-        reverse_alias_config = {}
-        with open(alias_yaml_path, "r") as yaml_file:
-            alias_config = yaml.safe_load(yaml_file)
-        for map_to, map_from_values in alias_config.items():
-            for map_from in map_from_values:
-                reverse_alias_config[map_from] = map_to
-        logger.info(f"aliasing: {dataset_path=} with config={reverse_alias_config}")
-        dataset = pd.read_csv(dataset_path)
-        dataset.replace({intent_col: reverse_alias_config}).to_csv(
-            dataset_path, index=False
-        )
-
-    def setup_utility_repo(
-        repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None
-    ):
-        repo_local_path = tempfile.mkdtemp()
-        download_repo(
-            git_host_name=pipeline_constants.GITLAB,
-            repo_name=repo_name,
-            project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
-            repo_path=repo_local_path,
-        )
-        os.chdir(repo_local_path)
-        repo = git.Repo(".")
-        repo.config_writer().set_value(
-            "user", "name", pipeline_constants.GITLAB_USER
-        ).release()
-        repo.config_writer().set_value(
-            "user", "email", pipeline_constants.GITLAB_USER_EMAIL
-        ).release()
-
-        try:
-            repo.git.checkout(repo_branch)
-            execute_cli(
-                f"conda create -n {repo_name} -m python=3.8 -y",
-            )
-            os.system(". /conda/etc/profile.d/conda.sh")
-            execute_cli(
-                f"conda run -n {repo_name} "
-                + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
-                split=False,
-            )
-            execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
-            if run_dir:
-                os.chdir(run_dir)
-            if run_cmd:
-                command = f"{runtime_env_var if runtime_env_var else ''} conda run -n {repo_name} {run_cmd} &"
-                logger.info(f"running command {command}")
-                execute_cli(command, split=False)
-            execute_cli("ps aux | grep task", split=False)
-
-            return repo_local_path
-
-        except Exception as exc:
-            raise exc
-
-    def preprocess_test_dataset(test_df, test_dataset_path):
-        if "intent" not in test_df:  # TODO: remove on phase 2 cicd release
-            if "raw.intent" in test_df:
-                test_df.rename(columns={"raw.intent": "intent"}).to_csv(
-                    test_dataset_path, index=False
-                )
-            else:
-                test_df["intent"] = ""
-                test_df.to_csv(test_dataset_path, index=False)
-
-    def evaluate(
-        test_dataset_path,
-        kfp_volume_classification_report_path=output_classification_report_path,
-        kfp_volumne_confusion_matrix_path=output_confusion_matrix_path,
-    ):
-        """To evaluate a model on a test set."""
-        test_df = pd.read_csv(test_dataset_path)
-        preprocess_test_dataset(test_df, test_dataset_path)
-        execute_cli(
-            f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')} "
-            f"conda run --no-capture-output -n {core_slu_repo_name} "
-            f"slu test --project {repo_name} --file {test_dataset_path}",  # when custom_test_s3_data_path is passed, --file option would be redundant
-            split=False,
-        ).check_returncode()
-
-        dataset_classification_report_path = get_metrics_path(
-            pipeline_constants.CLASSIFICATION_REPORT
-        )
-        execute_cli(
-            f"cp {dataset_classification_report_path} {kfp_volume_classification_report_path}"
-        )
-
-        dataset_confusion_matrix_path = get_metrics_path(
-            pipeline_constants.FULL_CONFUSION_MATRIX
-        )
-        execute_cli(f"cp {dataset_confusion_matrix_path} {kfp_volumne_confusion_matrix_path}")
-
-        return dataset_classification_report_path, dataset_confusion_matrix_path
-
-    def create_comparison_classification_report(
-        report1_path: str, report2_path: str, output_path: str
-    ):
-        report1_df = pd.read_csv(report1_path)
-
-        if not report2_path:
-            report2_df = pd.DataFrame(
-                columns=["Unnamed: 0", "precision", "recall", "f1-score", "support"],
-                index=range(len(report1_df)),
-            )
-        else:
-            report2_df = pd.read_csv(report2_path)
-
-        # Extract the class labels from both reports
-        classes1 = report1_df["Unnamed: 0"].tolist()
-        classes2 = report2_df["Unnamed: 0"].tolist()
-
-        # Create a set of all class labels
-        all_classes = classes1 + [x for x in classes2 if x not in classes1]
-        all_classes = [x for x in all_classes if not pd.isna(x)]
-
-        # Move "accuracy", "macro avg", and "weighted avg" to the end
-        special_rows = ["accuracy", "macro avg", "weighted avg"]
-        for special_row in special_rows:
-            if special_row in all_classes:
-                all_classes.remove(special_row)
-                all_classes.append(special_row)
-
-        # Initialize a dictionary to store the comparison data
-        comparison_data = {}
-
-        # Iterate through each class label
-        for class_label in all_classes:
-            # Get the row index for each class label
-            index1 = (
-                report1_df[report1_df["Unnamed: 0"] == class_label].index[0]
-                if class_label in classes1
-                else None
-            )
-            index2 = (
-                report2_df[report2_df["Unnamed: 0"] == class_label].index[0]
-                if class_label in classes2
-                else None
-            )
-
-            # Get the precision, recall, f1-score, and support values for each report
-            precision1 = report1_df["precision"][index1] if index1 is not None else None
-            recall1 = report1_df["recall"][index1] if index1 is not None else None
-            f1_score1 = report1_df["f1-score"][index1] if index1 is not None else None
-            support1 = int(report1_df["support"][index1]) if index1 is not None else None
-
-            precision2 = report2_df["precision"][index2] if index2 is not None else None
-            recall2 = report2_df["recall"][index2] if index2 is not None else None
-            f1_score2 = report2_df["f1-score"][index2] if index2 is not None else None
-            support2 = int(report2_df["support"][index2]) if index2 is not None else None
-
-            # Create tuples of values for each metric
-            precision_tuple = (precision1, precision2)
-            recall_tuple = (recall1, recall2)
-            f1_score_tuple = (f1_score1, f1_score2)
-            support_tuple = (support1, support2)
-
-            # Store the tuples in the comparison data dictionary
-            comparison_data[class_label] = (
-                precision_tuple,
-                recall_tuple,
-                f1_score_tuple,
-                support_tuple,
-            )
-
-        # Create a DataFrame from the comparison data
-        comparison_df = pd.DataFrame.from_dict(
-            comparison_data,
-            orient="index",
-            columns=["precision", "recall", "f1-score", "support"],
-        )
-
-        comparison_df.to_csv(output_path)
-        # Print the comparison report using tabulate for better formatting
-        print(tabulate(comparison_df, headers="keys", tablefmt="psql"))
 
     # Setup project config repo
     project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
@@ -425,12 +209,12 @@ def retrain_slu_from_repo(
             # split into train and test
             logger.info(
                 f"conda run -n {core_slu_repo_name} slu split-data "
-                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                f"--train-size {train_split_percent / 100}{' --stratify' if stratify else ''}"
                 f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
             )
             execute_cli(
                 f"conda run -n {core_slu_repo_name} slu split-data "
-                f"--train-size {train_split_percent/100}{' --stratify' if stratify else ''}"
+                f"--train-size {train_split_percent / 100}{' --stratify' if stratify else ''}"
                 f" --file {tagged_data_path} --project_config_path {project_config_local_path} --project {repo_name}"
             )
             if use_previous_dataset:
@@ -494,12 +278,15 @@ def retrain_slu_from_repo(
 
         # testing the model that was just trained
         classification_report_path, confusion_matrix_path = evaluate(
-            final_test_dataset_path
+            final_test_dataset_path, output_classification_report_path, output_confusion_matrix_path,
+            project_config_local_path,
+            core_slu_repo_name,
+            repo_name
         )
         _, merged_classification_report_path = tempfile.mkstemp(
             suffix=pipeline_constants.CSV_FILE
         )
-        create_comparison_classification_report(
+        comparison_classification_report(
             classification_report_path, "", merged_classification_report_path
         )
 
@@ -559,11 +346,14 @@ def retrain_slu_from_repo(
                     final_test_dataset_path,
                     production_classification_report_path,
                     production_confusion_matrix_path,
+                    project_config_local_path,
+                    core_slu_repo_name,
+                    repo_name
                 )
 
                 # once metrics from prod model are succesfully extracted, we recreate the comparison report.
                 # this time we do it between metrics from latest model and prod model
-                create_comparison_classification_report(
+                comparison_classification_report(
                     classification_report_path,
                     prod_classification_report_path,
                     merged_classification_report_path,
