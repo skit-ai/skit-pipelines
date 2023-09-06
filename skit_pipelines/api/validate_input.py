@@ -3,7 +3,7 @@ import datetime
 ALLOWED_PAST_DATE = 270
 
 # TODO: Ideally this list should come from a universal source and not be hard-coded
-SUPPORTED_LANG_CODES = ["en-US", "en", "hi", "ta", "te", "ma", "gu"]
+SUPPORTED_LANG_CODES = ["en-US", "en", "hi", "ta", "te", "ma", "gu", "mr"]
 
 """
     Collection of checks for input parameters that are passed to various skit-pipelines.
