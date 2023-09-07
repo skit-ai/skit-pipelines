@@ -19,7 +19,6 @@ def retrain_slu_from_repo(
         stratify: bool = False,
         epochs: int = 10,
         initial_training: bool = False,
-        job_ids: str = "",
         labelstudio_project_ids: str = "",
         s3_paths: str = "",
         validate_setup: bool = False,
@@ -27,12 +26,8 @@ def retrain_slu_from_repo(
         customization_repo_branch: str = "",
         core_slu_repo_name: str = "",
         core_slu_repo_branch: str = "",
-        output_classification_report_path: OutputPath(str),
-        production_classification_report_path: OutputPath(str),
         comparison_classification_report_path: OutputPath(str),
-        output_confusion_matrix_path: OutputPath(str),
-        production_confusion_matrix_path: OutputPath(str),
-        # comparison_confusion_matrix_path: OutputPath(str), # TODO enable this
+        comparison_confusion_matrix_path: OutputPath(str),
 ) -> str:
     import os
     import tempfile
@@ -45,15 +40,59 @@ def retrain_slu_from_repo(
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.download_repo import download_repo
     from skit_pipelines.components.retrain_slu_from_repo.utils import (
-        pick_1st_tag, filter_dataset, alias_dataset, evaluate, setup_utility_repo, create_dataset_path, execute_cli
+        pick_1st_tag, filter_dataset, alias_dataset, evaluate, create_dataset_path, execute_cli
     )
     from skit_pipelines.components.retrain_slu_from_repo.comparision_report_generator import \
-        comparison_classification_report
+        comparison_classification_report, comparison_confusion_report
     from skit_pipelines.utils.normalize import comma_sep_str
 
     remove_intents = comma_sep_str(remove_intents)
     no_annotated_job = False
     custom_test_dataset_present = True
+
+    def setup_utility_repo(
+            repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None
+    ):
+        repo_local_path = tempfile.mkdtemp()
+        download_repo(
+            git_host_name=pipeline_constants.GITLAB,
+            repo_name=repo_name,
+            project_path=pipeline_constants.GITLAB_SLU_PROJECT_PATH,
+            repo_path=repo_local_path,
+        )
+        os.chdir(repo_local_path)
+        repo = git.Repo(".")
+        repo.config_writer().set_value(
+            "user", "name", pipeline_constants.GITLAB_USER
+        ).release()
+        repo.config_writer().set_value(
+            "user", "email", pipeline_constants.GITLAB_USER_EMAIL
+        ).release()
+
+        try:
+            repo.git.checkout(repo_branch)
+            execute_cli(
+                f"conda create -n {repo_name} -m python=3.8 -y",
+            )
+            os.system(". /conda/etc/profile.d/conda.sh")
+            execute_cli(
+                f"conda run -n {repo_name} "
+                + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+                split=False,
+            )
+            execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
+            if run_dir:
+                os.chdir(run_dir)
+            if run_cmd:
+                command = f"{runtime_env_var if runtime_env_var else ''} conda run -n {repo_name} {run_cmd} &"
+                logger.info(f"running command {command}")
+                execute_cli(command, split=False)
+            execute_cli("ps aux | grep task", split=False)
+
+            return repo_local_path
+
+        except Exception as exc:
+            raise exc
 
     # Setup project config repo
     project_config_local_path = os.path.join(tempfile.mkdtemp(), repo_name)
@@ -99,9 +138,7 @@ def retrain_slu_from_repo(
     logger.info("core slu repo setup successfully")
 
     data_info = (
-        f"{job_ids=}"
-        if job_ids
-        else "" + f" {labelstudio_project_ids=}"
+        f" {labelstudio_project_ids=}"
         if labelstudio_project_ids
         else "" + f" {s3_paths=}"
         if s3_paths
@@ -247,11 +284,8 @@ def retrain_slu_from_repo(
             if os.path.exists(pipeline_constants.OLD_DATA):
                 execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
             _, validate_path = tempfile.mkstemp(suffix=pipeline_constants.CSV_FILE)
-            execute_cli(f"cp {validate_path} {output_classification_report_path}")
-            execute_cli(f"cp {validate_path} {output_confusion_matrix_path}")
             execute_cli(f"cp {validate_path} {comparison_classification_report_path}")
-            execute_cli(f"cp {validate_path} {production_classification_report_path}")
-            execute_cli(f"cp {validate_path} {production_confusion_matrix_path}")
+            execute_cli(f"cp {validate_path} {comparison_confusion_matrix_path}")
             return ""
 
         # alias and filter the new train set
@@ -278,7 +312,7 @@ def retrain_slu_from_repo(
 
         # testing the model that was just trained
         classification_report_path, confusion_matrix_path = evaluate(
-            final_test_dataset_path, output_classification_report_path, output_confusion_matrix_path,
+            final_test_dataset_path,
             project_config_local_path,
             core_slu_repo_name,
             repo_name
@@ -286,16 +320,21 @@ def retrain_slu_from_repo(
         _, merged_classification_report_path = tempfile.mkstemp(
             suffix=pipeline_constants.CSV_FILE
         )
-        comparison_classification_report(
-            classification_report_path, "", merged_classification_report_path
+        _, merged_confusion_report_path = tempfile.mkstemp(
+            suffix=pipeline_constants.CSV_FILE
         )
-
         # create the comparison report between metrics from the latest model and an empty metrics file
         # this is the default when there is no prod model or there is an issue with extracting metrics from prod model
+        comparison_classification_report(classification_report_path, "", merged_classification_report_path)
+
         execute_cli(
             f"cp {merged_classification_report_path} {comparison_classification_report_path}"
         )
-        # TODO create comparison for confusion matrix as well
+
+        comparison_confusion_report(confusion_matrix_path, "", merged_confusion_report_path)
+        execute_cli(
+            f"cp {merged_confusion_report_path} {comparison_confusion_matrix_path}"
+        )
         # just like create_comparison_classification_report, another function needs to be implemented
 
         if os.path.exists(pipeline_constants.OLD_DATA):
@@ -316,8 +355,6 @@ def retrain_slu_from_repo(
         repo.git.push("origin", new_branch)
 
         # Setup Production model
-        success_extracting_production_metrics = False
-        prod_metrics_status_message = "Empty file"
         try:
             if not initial_training and os.path.exists("data.dvc"):
                 # if a model already exists (means this is not the first time training the model)
@@ -344,8 +381,6 @@ def retrain_slu_from_repo(
                 # evaluate the production model with the same test set and the same codebase as the newly trained model
                 prod_classification_report_path, prod_confusion_matrix_path = evaluate(
                     final_test_dataset_path,
-                    production_classification_report_path,
-                    production_confusion_matrix_path,
                     project_config_local_path,
                     core_slu_repo_name,
                     repo_name
@@ -353,17 +388,17 @@ def retrain_slu_from_repo(
 
                 # once metrics from prod model are succesfully extracted, we recreate the comparison report.
                 # this time we do it between metrics from latest model and prod model
-                comparison_classification_report(
-                    classification_report_path,
-                    prod_classification_report_path,
-                    merged_classification_report_path,
-                )
+                comparison_classification_report(classification_report_path, prod_classification_report_path,
+                                                 merged_classification_report_path)
                 execute_cli(
                     f"cp {merged_classification_report_path} {comparison_classification_report_path}"
                 )
-                # TODO re-create comparison for confusion matrix as well
 
-                success_extracting_production_metrics = True
+                comparison_confusion_report(confusion_matrix_path, prod_confusion_matrix_path,
+                                            merged_confusion_report_path)
+                execute_cli(
+                    f"cp {merged_confusion_report_path} {merged_confusion_report_path}"
+                )
             else:
                 prod_metrics_status_message = "Skipping extracting metrics from Production model since this is initial training"
                 logger.info(prod_metrics_status_message)
@@ -373,23 +408,6 @@ def retrain_slu_from_repo(
             )
             logger.error(prod_metrics_status_message)
 
-        if not success_extracting_production_metrics:
-            # There was some issue with extracting metrics from the production model
-
-            prod_classification_report_path = "prod_classification_report.csv"
-            prod_confusion_matrix_path = "prod_confusion_matrix.csv"
-            pd.DataFrame([{"message": prod_metrics_status_message}]).to_csv(
-                prod_classification_report_path, index=False
-            )
-            pd.DataFrame([{"message": prod_metrics_status_message}]).to_csv(
-                prod_confusion_matrix_path, index=False
-            )
-            execute_cli(
-                f"cp {prod_classification_report_path} {production_classification_report_path}"
-            )
-            execute_cli(
-                f"cp {prod_confusion_matrix_path} {production_confusion_matrix_path}"
-            )
     except git.GitCommandError as e:
         logger.error(f"{e}: Given {branch=} doesn't exist in the repo")
 

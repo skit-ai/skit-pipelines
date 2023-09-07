@@ -4,7 +4,6 @@ from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
     create_mr_op,
     download_csv_from_s3_op,
-    download_repo_op,
     download_yaml_op,
     fetch_tagged_dataset_op,
     file_contents_to_markdown_s3_op,
@@ -220,7 +219,6 @@ def retrain_slu(
         stratify=stratify,
         epochs=epochs,
         initial_training=initial_training,
-        job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
         validate_setup=True,
@@ -245,7 +243,6 @@ def retrain_slu(
         stratify=stratify,
         epochs=epochs,
         initial_training=initial_training,
-        job_ids=job_ids,
         labelstudio_project_ids=labelstudio_project_ids,
         s3_paths=dataset_path,
         customization_repo_name=customization_repo_name,
@@ -257,75 +254,15 @@ def retrain_slu(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
     )
 
-    # upload test set metrics.
-    upload_cf = upload2s3_op(
-        path_on_disk=retrained_op.outputs["output_classification_report"],
-        reference=repo_name,
-        file_type="test_classification_report",
-        bucket=BUCKET,
-        ext=CSV_FILE,
-    )
-
-    upload_cm = upload2s3_op(
-        path_on_disk=retrained_op.outputs["output_confusion_matrix"],
-        reference=repo_name,
-        file_type="test_confusion_matrix",
-        bucket=BUCKET,
-        ext=CSV_FILE,
-    )
-    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    classification_report_markdown_file_op = file_contents_to_markdown_s3_op(
-        ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs["output_classification_report"],
-        file_title="## Trained model Classification Report",
-    )
-
-    confusion_matrix_markdown_file_op = file_contents_to_markdown_s3_op(
-        ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs["output_confusion_matrix"],
-        file_title="## Trained model Confusion Matrix",
-    )
-
-    prod_upload_cf = upload2s3_op(
-        path_on_disk=retrained_op.outputs["production_classification_report"],
-        reference=repo_name,
-        file_type="test_classification_report",
-        bucket=BUCKET,
-        ext=CSV_FILE,
-    )
-
-    prod_upload_cm = upload2s3_op(
-        path_on_disk=retrained_op.outputs["production_confusion_matrix"],
-        reference=repo_name,
-        file_type="test_confusion_matrix",
-        bucket=BUCKET,
-        ext=CSV_FILE,
-    )
-    prod_upload_cm.execution_options.caching_strategy.max_cache_staleness = (
-        "P0D"  # disables caching
-    )
-
-    prod_classification_report_markdown_file_op = file_contents_to_markdown_s3_op(
-        ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs["production_classification_report"],
-        file_title="## Production Classification Report",
-    )
-
-    prod_confusion_matrix_markdown_file_op = file_contents_to_markdown_s3_op(
-        ext=CSV_FILE,
-        path_on_disk=retrained_op.outputs["production_confusion_matrix"],
-        file_title="## Production Confusion Matrix",
-    )
-
     comparison_upload_cf = upload2s3_op(
         path_on_disk=retrained_op.outputs["comparison_classification_report"],
         reference=repo_name,
         file_type="comparison_classification_report",
         bucket=BUCKET,
         ext=CSV_FILE,
+    )
+    comparison_upload_cf.execution_options.caching_strategy.max_cache_staleness = (
+        "P0D"  # disables caching
     )
     comparison_classification_report_markdown_file_op = (
         file_contents_to_markdown_s3_op(
@@ -335,7 +272,20 @@ def retrain_slu(
         )
     )
 
-    # TODO create comparison_upload_cm and comparison_confusion_matrix_markdown_file_op
+    comparison_upload_cm = upload2s3_op(
+        path_on_disk=retrained_op.outputs["comparison_classification_report"],
+        reference=repo_name,
+        file_type="comparison_classification_report",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+    comparison_confusion_report_markdown_file_op = (
+        file_contents_to_markdown_s3_op(
+            ext=CSV_FILE,
+            path_on_disk=retrained_op.outputs["comparison_classification_report"],
+            file_title="## Comparison Classification Report(latest,prod)",
+        )
+    )
 
     mr_response_op = create_mr_op(
         git_host_name=pipeline_constants.GITLAB,
@@ -344,8 +294,7 @@ def retrain_slu(
         target_branch=target_mr_branch,
         source_branch=retrained_op.outputs["output"],
         mr_title="Auto retrained changes",
-        # TODO add comparison_confusion_matrix_markdown_file_op.output to below line
-        s3_description_paths=f"{comparison_classification_report_markdown_file_op.output},{classification_report_markdown_file_op.output},{confusion_matrix_markdown_file_op.output},{prod_classification_report_markdown_file_op.output},{prod_confusion_matrix_markdown_file_op.output}",
+        s3_description_paths=f"{comparison_classification_report_markdown_file_op.output}, {comparison_confusion_report_markdown_file_op.output}",
     )
 
     with kfp.dsl.Condition(notify != "", "notify").after(retrained_op, mr_response_op):
@@ -361,10 +310,10 @@ def retrain_slu(
         )
 
     with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_cf, upload_cm
+        comparison_upload_cf, comparison_upload_cm
     ):
         notification_text = f"Here's the IRR report."
-        code_block = f"aws s3 cp {upload_cf.output} ."
+        code_block = f"aws s3 cp {comparison_upload_cf.output} ."
         irr_notif = slack_notification_op(
             notification_text,
             channel=channel,
@@ -377,7 +326,7 @@ def retrain_slu(
         )
 
         notification_text = f"Here's the confusion matrix."
-        code_block = f"aws s3 cp {upload_cm.output} ."
+        code_block = f"aws s3 cp {comparison_upload_cm.output} ."
         cm_notif = slack_notification_op(
             notification_text,
             channel=channel,
