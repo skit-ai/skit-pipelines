@@ -1,6 +1,12 @@
 import pandas as pd
 from tabulate import tabulate
 
+"""
+    This file contains functionality for combining classification report and confusion matrix from two different
+    models and provide a unified file that makes it easier to compare the model performances. Each function takes
+    2 input Csv file paths and outputs the path to a single Csv file containing the comparison.
+"""
+
 
 def _get_index(df, column_name):
     if column_name in df["Unnamed: 0"].values:

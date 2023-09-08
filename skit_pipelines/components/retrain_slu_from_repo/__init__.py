@@ -50,6 +50,7 @@ def retrain_slu_from_repo(
     no_annotated_job = False
     custom_test_dataset_present = True
 
+    "Download a SLU repo and install all necessary dependencies (using conda) as found in its dockerfile"
     def setup_utility_repo(
             repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None
     ):
