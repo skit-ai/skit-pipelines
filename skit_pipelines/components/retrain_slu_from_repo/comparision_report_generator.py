@@ -16,7 +16,7 @@ def _get_index(df, column_name):
 
 def _get_value(df, column_name, index):
     if column_name in df and index:
-        return df[column_name][index]
+        return df.loc[index, column_name]
     return None
 
 
