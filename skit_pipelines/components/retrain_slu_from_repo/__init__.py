@@ -328,6 +328,10 @@ def retrain_slu_from_repo(
     if os.path.exists(pipeline_constants.OLD_DATA):
         execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
 
+    execute_cli("dvc config core.no_scm true")
+    execute_cli("dvc config core.hardlink_lock true")
+    repo.git.add([".dvc/config"])
+  
     execute_cli("dvc add data")
     execute_cli("dvc push data")
 
