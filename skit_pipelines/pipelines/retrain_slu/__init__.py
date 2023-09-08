@@ -268,22 +268,22 @@ def retrain_slu(
         file_contents_to_markdown_s3_op(
             ext=CSV_FILE,
             path_on_disk=retrained_op.outputs["comparison_classification_report"],
-            file_title="## Comparison Classification Report(latest,prod)",
+            file_title="## Comparison Classification Report (latest,prod)",
         )
     )
 
     comparison_upload_cm = upload2s3_op(
-        path_on_disk=retrained_op.outputs["comparison_classification_report"],
+        path_on_disk=retrained_op.outputs["comparison_confusion_matrix"],
         reference=repo_name,
-        file_type="comparison_classification_report",
+        file_type="comparison_confusion_matrix",
         bucket=BUCKET,
         ext=CSV_FILE,
     )
     comparison_confusion_report_markdown_file_op = (
         file_contents_to_markdown_s3_op(
             ext=CSV_FILE,
-            path_on_disk=retrained_op.outputs["comparison_classification_report"],
-            file_title="## Comparison Classification Report(latest,prod)",
+            path_on_disk=retrained_op.outputs["comparison_confusion_matrix"],
+            file_title="## Comparison Confusion Matrix (latest, prod)",
         )
     )
 

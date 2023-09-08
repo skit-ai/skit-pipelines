@@ -33,6 +33,8 @@ def create_mr(
             download_file_from_s3(storage_path=s3_path, output_path=save_path)
             with open(save_path, "r") as f:
                 description += f.read()
+        description += "\n\n Note: If it is first training or production model couldn't be found, then all prod " \
+                       "values will be marked as None."
         return description
 
     if git_host_name == const.GITLAB:

@@ -3,7 +3,7 @@ from tabulate import tabulate
 
 
 def _get_index(df, column_name):
-    if column_name in df.columns:
+    if column_name in df["Unnamed: 0"].values:
         return df[df["Unnamed: 0"] == column_name].index[0]
     return None
 
@@ -32,7 +32,7 @@ def comparison_classification_report(
     classes2 = report2_df["Unnamed: 0"].tolist()
 
     # Create a set of all class labels
-    all_classes = classes1 + [x for x in classes2 if x not in classes1]
+    all_classes = list(set(classes1).union(classes2))
     all_classes = [x for x in all_classes if not pd.isna(x)]
 
     # Move "accuracy", "macro avg", and "weighted avg" to the end
@@ -81,7 +81,7 @@ def comparison_confusion_report(
         latest_model_path: str, prod_model_path: str, output_path: str
 ):
     latest_df = pd.read_csv(latest_model_path)
-    prod_df = pd.read_csv(prod_model_path) if prod_model_path else pd.DataFrame()
+    prod_df = pd.read_csv(prod_model_path) if prod_model_path else pd.DataFrame(columns=["Unnamed: 0"])
 
     labels_latest = latest_df['Unnamed: 0'].to_list()
     labels_prod = prod_df['Unnamed: 0'].to_list() if 'Unnamed: 0' in prod_df.columns else []
