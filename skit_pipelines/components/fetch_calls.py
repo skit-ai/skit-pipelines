@@ -98,8 +98,10 @@ def fetch_calls(
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     if not maybe_df.size:
         raise ValueError("No calls found for the above parameters")
+
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
+    logger.info(f"Obtained {len(maybe_df)} calls from FSM Db before removing empty audios")
 
     def empty_audios_remover(df: pd.DataFrame, df_path: str):
         audios_dir_path = tempfile.mkdtemp()
@@ -109,22 +111,23 @@ def fetch_calls(
             audio_sample_rate="8k",
             audio_download_workers=40,
         )
-        if not df.size:
-            raise ValueError("No calls found for the above parameters")
 
         df = df[~df.audio_url.isna()]
-
         # to keep the audio uuids as wav file name
         df["audio_filename"] = df.audio_url.apply(
             lambda url: url.split("/")[-1].split(".")[0] + pipeline_constants.WAV_FILE
         )
         # to get a set of valid wav audio files
         unique_valid_audio_files = set(path_ for path_ in os.listdir(audios_dir_path))
-        df[
+        df_final = df[
             df["audio_filename"].apply(
                 lambda file_name: file_name in unique_valid_audio_files
             )
-        ].drop("audio_filename", axis=1).to_csv(df_path, index=False)
+        ].drop("audio_filename", axis=1)
+        if not df_final.size:
+            raise ValueError("No calls found for the above parameters")
+        logger.info(f"Obtained {len(df_final)} calls after removing empty audios")
+        df_final.to_csv(df_path, index=False)
 
     if remove_empty_audios:
         empty_audios_remover(df=maybe_df, df_path=file_path)
