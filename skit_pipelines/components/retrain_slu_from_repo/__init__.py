@@ -331,7 +331,8 @@ def retrain_slu_from_repo(
     execute_cli("dvc config core.no_scm true")
     execute_cli("dvc config core.hardlink_lock true")
     repo.git.add([".dvc/config"])
-  
+    execute_cli("rm .dvc/tmp/lock")
+
     execute_cli("dvc add data")
     execute_cli("dvc push data")
 
