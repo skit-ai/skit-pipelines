@@ -1162,22 +1162,20 @@ test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.3.0)", "databases[sqlite] (
 
 [[package]]
 name = "filelock"
-version = "3.12.3"
+version = "3.12.4"
 description = "A platform independent file lock."
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "filelock-3.12.3-py3-none-any.whl", hash = "sha256:f067e40ccc40f2b48395a80fcbd4728262fab54e232e090a4063ab804179efeb"},
-    {file = "filelock-3.12.3.tar.gz", hash = "sha256:0ecc1dd2ec4672a10c8550a8182f1bd0c0a5088470ecd5a125e45f49472fac3d"},
+    {file = "filelock-3.12.4-py3-none-any.whl", hash = "sha256:08c21d87ded6e2b9da6728c3dff51baf1dcecf973b768ef35bcbc3447edb9ad4"},
+    {file = "filelock-3.12.4.tar.gz", hash = "sha256:2e6f249f1f3654291606e046b09f1fd5eac39b360664c27f5aad072012f8bcbd"},
 ]
-
-[package.dependencies]
-typing-extensions = {version = ">=4.7.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
 docs = ["furo (>=2023.7.26)", "sphinx (>=7.1.2)", "sphinx-autodoc-typehints (>=1.24)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.3)", "diff-cover (>=7.7)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)", "pytest-timeout (>=2.1)"]
+typing = ["typing-extensions (>=4.7.1)"]
 
 [[package]]
 name = "fire"
@@ -3969,14 +3967,14 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.44"
+version = "0.2.45"
 description = "Library to fetch calls from a given environment."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_calls-0.2.44-py3-none-any.whl", hash = "sha256:61610da4caa449402c3e799be7a68fd4a881214df583cf13d8b0284ec5f79115"},
-    {file = "skit_calls-0.2.44.tar.gz", hash = "sha256:b89507af44064d82a798f65ba26600907641f06f8d40a8b3f55d07c79e3a8f5f"},
+    {file = "skit_calls-0.2.45-py3-none-any.whl", hash = "sha256:567310f22e47a43bb8c94f289cdf90f209662820c860c2855f9e80be57c3ff40"},
+    {file = "skit_calls-0.2.45.tar.gz", hash = "sha256:c7a2651b61a9f8f70d74b55d6e568518e785304ac1d07b0a79856d7950dd80f3"},
 ]
 
 [package.dependencies]
@@ -5409,4 +5407,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "5621f2d1202dce2871661789aacdcabb1206cc50577541efbc8069fb52933417"
+content-hash = "3d8dad04160ccc0d3c50b80ad46193a6ba8d37e35ad2d97b2b4b0920ef76d459"
