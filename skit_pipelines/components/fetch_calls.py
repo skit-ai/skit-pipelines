@@ -101,7 +101,7 @@ def fetch_calls(
 
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
-    logger.info(f"Obtained {len(maybe_df)} calls from FSM Db before removing empty audios")
+    logger.info(f"Obtained {maybe_df.shape[0]} calls from FSM Db before removing empty audios")
 
     def empty_audios_remover(df: pd.DataFrame, df_path: str):
         audios_dir_path = tempfile.mkdtemp()
@@ -126,7 +126,7 @@ def fetch_calls(
         ].drop("audio_filename", axis=1)
         if not df_final.size:
             raise ValueError("No calls found for the above parameters")
-        logger.info(f"Obtained {len(df_final)} calls after removing empty audios")
+        logger.info(f"Obtained {df_final.shape[0]} calls after removing empty audios")
         df_final.to_csv(df_path, index=False)
 
     if remove_empty_audios:
