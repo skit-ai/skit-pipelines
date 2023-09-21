@@ -1,4 +1,16 @@
 # Changelog
+1.0.6
+- [x] Bugfix: update skit-calls version
+
+1.0.4
+- [x] Bugfix: Dvc config updated only for new SKU repos
+
+1.0.2
+- [x] Add support for obtaining comparision confusion matrix while retraining SLU
+
+1.0.0
+- [x] Remove deprecated pipelines
+
 0.2.105
 - [x] Functionality to compare new trained SLU model with live model on test data (#115)
 
