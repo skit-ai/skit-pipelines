@@ -11,3 +11,4 @@ from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.retrain_slu_old import retrain_slu_old
 from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline
+from skit_pipelines.pipelines.evaluation_report import evalution_report

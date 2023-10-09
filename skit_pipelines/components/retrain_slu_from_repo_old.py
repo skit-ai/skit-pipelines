@@ -41,7 +41,7 @@ def retrain_slu_from_repo(
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.download_repo import download_repo
-    from skit_pipelines.components.retrain_slu_from_repo.utils import pick_1st_tag
+    from skit_pipelines.components.evalution_slu_from_repo.utils import pick_1st_tag
     from skit_pipelines.utils.normalize import comma_sep_str
 
     execute_cli = lambda cmd, split=True: subprocess.run(
