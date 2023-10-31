@@ -21,9 +21,7 @@ def evaluate_slu_from_repo(
         core_slu_repo_name: str = "",
         core_slu_repo_branch: str = "",
         output_classification_report_path: OutputPath(str),
-        output_confusion_matrix_path: OutputPath(str),
-        comparison_classification_report_path: OutputPath(str),
-        comparison_confusion_matrix_path: OutputPath(str)
+        output_confusion_matrix_path: OutputPath(str)
 ) -> str:
     import os
     import tempfile
@@ -151,9 +149,6 @@ def evaluate_slu_from_repo(
         core_slu_repo_name,
         repo_name
     )
-
-    comparison_classification_report(classification_report_path, "", comparison_classification_report_path)
-    comparison_confusion_report(confusion_matrix_path, "", comparison_confusion_matrix_path)
 
     execute_cli(
         f"cp {classification_report_path} {output_classification_report_path}"
