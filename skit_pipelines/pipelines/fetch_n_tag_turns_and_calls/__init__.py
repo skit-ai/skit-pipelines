@@ -16,7 +16,7 @@ REMOVE_EMPTY_AUDIOS = False if USE_FSM_URL else True
 
 @kfp.dsl.pipeline(
     name="Fetch and push for tagging turns & calls pipeline",
-    description="fetches calls from production db with respective arguments and uploads turns & calls to labelstudio for tagging intent, entities, slots & call metrics.",
+    description="fetches calls from production db (or an s3_path) with respective arguments and uploads turns & calls to labelstudio for tagging intent, entities, slots & call metrics.",
 )
 def fetch_n_tag_turns_and_calls(
     org_id: str,
@@ -25,7 +25,6 @@ def fetch_n_tag_turns_and_calls(
     data_label: str = "",
     start_date: str = "",
     end_date: str = "",
-    job_ids: str = "",
     labelstudio_project_id: str = "",
     call_project_id: str = "",
     ignore_callers: str = "",
@@ -43,6 +42,7 @@ def fetch_n_tag_turns_and_calls(
     end_date_offset: int = 0,
     start_time_offset: int = 0,
     end_time_offset: int = 0,
+    calls_file_s3_path: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = "",
@@ -96,9 +96,6 @@ def fetch_n_tag_turns_and_calls(
 
     :param org_id: The organization id as per api-gateway.
     :type org_id: str
-
-    :param job_ids: The job ids as per tog. Optional if labestudio project id is provided.
-    :type job_ids: str
 
     :param labelstudio_project_id: The labelstudio project id for turn level tagging (intent & entities) (this is a number) since this is optional, defaults to "".
     :type labelstudio_project_id: str
@@ -157,6 +154,9 @@ def fetch_n_tag_turns_and_calls(
     :param end_time_offset: Offset the end time by an integer value, defaults to 0
     :type end_time_offset: int, optional
 
+    :param calls_file_s3_path: The s3_path to upload the turns from instead of querying from FSM_db, defaults to ""
+    :type calls_file_s3_path: str, optional
+
     :param call_quantity: Number of calls to sample, defaults to 200
     :type call_quantity: int, optional
 
@@ -201,6 +201,7 @@ def fetch_n_tag_turns_and_calls(
         asr_provider=asr_provider,
         intents=intents,
         states=states,
+        calls_file_s3_path=calls_file_s3_path,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
         remove_empty_audios=remove_empty_audios,
     )
@@ -222,10 +223,7 @@ def fetch_n_tag_turns_and_calls(
     # uploads data for turn level intent, entity & transcription tagging
     tag_turns_output = tag_calls_op(
         input_file=gpt_response_path.output,
-        job_ids=job_ids,
         project_id=labelstudio_project_id,
-        token=auth_token.output,
-        org_id=org_id,
         data_label=data_label,
     )
 
@@ -240,10 +238,6 @@ def fetch_n_tag_turns_and_calls(
     # uploads data for call & slot level tagging to labelstudio
     tag_calls_output = tag_calls_op(
         input_file=fetch_slot_and_calls_output.output,
-        job_ids="",
-        project_id="",
-        token=auth_token.output,
-        org_id=org_id,
         call_project_id=call_project_id,
         data_label=data_label,
     )
@@ -253,7 +247,7 @@ def fetch_n_tag_turns_and_calls(
         errors = tag_turns_output.outputs["errors"]
 
         notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {job_ids=} or {labelstudio_project_id=}."""
+        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {labelstudio_project_id=}."""
         notification_text += f"\nErrors: {errors}" if errors else ""
 
         task_no_cache = slack_notification_op(
