@@ -5,7 +5,6 @@ from skit_pipelines.components import (
     fetch_calls_op,
     fetch_gpt_intent_prediction_op,
     org_auth_token_op,
-    read_json_key_op,
     slack_notification_op,
     tag_calls_op,
 )
@@ -213,10 +212,7 @@ def fetch_n_tag_calls(
 
     tag_calls_output = tag_calls_op(
         input_file=gpt_response_path.output,
-        job_ids=job_ids,
         project_id=labelstudio_project_id,
-        token=auth_token.output,
-        org_id=org_id,
         data_label=data_label,
     )
 
@@ -224,7 +220,8 @@ def fetch_n_tag_calls(
         df_sizes = tag_calls_output.outputs["df_sizes"]
         errors = tag_calls_output.outputs["errors"]
 
-        notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
+        notification_text = f"""This pipeline has been deprecated. Please use fetch_n_tag_turns_and_calls with the same parameters.
+        Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
         Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {job_ids=}."""
         notification_text += f"\nErrors: {errors}" if errors else ""
 

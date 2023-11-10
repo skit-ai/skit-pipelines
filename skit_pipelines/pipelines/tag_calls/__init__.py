@@ -3,7 +3,6 @@ import kfp
 from skit_pipelines.components import (
     fetch_calls_for_slots_op,
     org_auth_token_op,
-    read_json_key_op,
     slack_notification_op,
     tag_calls_op,
 )
@@ -92,10 +91,7 @@ def tag_calls(
     )
     tag_turns_output = tag_calls_op(
         input_file=s3_path,
-        job_ids=job_ids,
         project_id=labelstudio_project_id,
-        token=auth_token.output,
-        org_id=org_id,
         data_label=data_label,
     )
 
@@ -111,10 +107,7 @@ def tag_calls(
         )
         tag_calls_output = tag_calls_op(
             input_file=calls_s3_path.output,
-            job_ids="",
             project_id="",
-            token=auth_token.output,
-            org_id=org_id,
             call_project_id=call_project_id,
             data_label=data_label,
         )
@@ -122,7 +115,8 @@ def tag_calls(
     with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output) as check2:
         df_sizes = tag_turns_output.outputs["df_sizes"]
         errors = tag_turns_output.outputs["errors"]
-        notification_text = f"Uploaded {s3_path} ({df_sizes}, {org_id=}) for tagging to {job_ids=}.\nErrors: {errors}"
+        notification_text = f"""This pipeline has been deprecated. Please use fetch_n_tag_turns_and_calls with the same parameters.
+        Uploaded {s3_path} ({df_sizes}, {org_id=}) for tagging to {job_ids=}.\nErrors: {errors}"""
         code_block = f"aws s3 cp {s3_path} ."
 
         task_no_cache = slack_notification_op(

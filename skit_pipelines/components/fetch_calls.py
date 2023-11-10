@@ -27,6 +27,7 @@ def fetch_calls(
     asr_provider: Optional[str] = None,
     intents: Optional[str] = None,
     states: Optional[str] = None,
+    calls_file_s3_path: Optional[str] = None,
     use_fsm_url: bool = False,
     remove_empty_audios: bool = True,
 ) -> str:
@@ -59,6 +60,10 @@ def fetch_calls(
         timezone=timezone or pipeline_constants.TIMEZONE,
     )
     validate_date_ranges(start_date, end_date)
+
+    # If calls_file_s3_path is provided, no need to fetch calls from FSM Db. Directly return the same file
+    if calls_file_s3_path:
+        return calls_file_s3_path
 
     if not call_quantity:
         call_quantity = const.DEFAULT_CALL_QUANTITY
