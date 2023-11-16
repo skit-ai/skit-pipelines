@@ -47,6 +47,7 @@ def fetch_n_tag_calls(
     slack_thread: str = "",
     use_fsm_url: bool = False,
     use_assisted_annotation: bool = False,
+    flow_ids: str = ""
 ):
     """
     A pipeline to randomly sample calls and upload for annotation.
@@ -171,6 +172,9 @@ def fetch_n_tag_calls(
 
     :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
     :type use_assisted_annotation: bool, optional
+    
+    :param flow_id: Id for a whole/part of a voicebot conversation flow, defaults to ""
+    :type flow_id: str, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -194,6 +198,7 @@ def fetch_n_tag_calls(
         states=states,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
         remove_empty_audios=remove_empty_audios,
+        flow_ids=flow_ids
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

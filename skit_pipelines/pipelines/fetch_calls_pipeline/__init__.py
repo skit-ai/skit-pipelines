@@ -32,6 +32,7 @@ def fetch_calls_pipeline(
     channel: str = "",
     slack_thread: str = "",
     use_fsm_url: bool = False,
+    flow_ids: str = "",
 ):
     """
     A pipeline to randomly sample calls for a given voice-bot project.
@@ -94,7 +95,10 @@ def fetch_calls_pipeline(
     :type slack_thread: str, optional
     :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False
     :type use_fsm_url: bool, optional
+    :param flow_id: Id for a whole/part of a voicebot conversation flow, defaults to ""
+    :type flow_id: str, optional
     """
+    
     calls = fetch_calls_op(
         client_id=client_id,
         start_date=start_date,
@@ -113,6 +117,7 @@ def fetch_calls_pipeline(
         states=states,
         remove_empty_audios=remove_empty_audios,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
+        flow_ids=flow_ids
     )
     calls.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
