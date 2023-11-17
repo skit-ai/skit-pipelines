@@ -1,4 +1,7 @@
 # Changelog
+1.0.8
+- [x] Add support for multiple flow ids for fetch call related pipelines
+
 1.0.6
 - [x] Bugfix: update skit-calls version
 
