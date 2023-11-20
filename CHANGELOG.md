@@ -1,5 +1,8 @@
 # Changelog
 1.0.7
+- [x] Update credentials for accessing fsm DB
+
+1.0.7
 - [x] Add support for multiple flow ids for fetch call related pipelines
 
 1.0.6

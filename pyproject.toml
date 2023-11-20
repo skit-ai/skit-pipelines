@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skit-pipelines"
-version = "1.0.7"
+version = "1.0.8"
 description = "Kubeflow components for ml workflows at skit.ai."
 authors = ["ltbringer <amresh.venugopal@gmail.com>"]
 license = "MIT"
@@ -30,7 +30,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.5"
 GitPython = "^3.1.27"
 google-auth-oauthlib = "0.4.6"
-skit-calls = "0.2.48"
+skit-calls = "0.2.49"
 SQLAlchemy = "1.4.42"
 openai = "^0.27.2"
 polars = "^0.17.15"
