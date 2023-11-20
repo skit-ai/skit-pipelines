@@ -49,6 +49,7 @@ def fetch_n_tag_turns_and_calls(
     use_fsm_url: bool = False,
     remove_empty_audios: bool = REMOVE_EMPTY_AUDIOS,
     use_assisted_annotation: bool = False,
+    flow_ids: str = ""
 ):
     """
     A pipeline to randomly sample calls and upload for annotating turns for intents & entities and annotating calls for slots & call level metrics.
@@ -180,6 +181,9 @@ def fetch_n_tag_turns_and_calls(
 
     :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
     :type use_assisted_annotation: bool, optional
+    
+    :param flow_id: Id for a whole/part of a voicebot conversation flow, defaults to ""
+    :type flow_id: str, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,
@@ -204,6 +208,7 @@ def fetch_n_tag_turns_and_calls(
         calls_file_s3_path=calls_file_s3_path,
         use_fsm_url=USE_FSM_URL or use_fsm_url,
         remove_empty_audios=remove_empty_audios,
+        flow_ids=flow_ids
     )
 
     calls.execution_options.caching_strategy.max_cache_staleness = (

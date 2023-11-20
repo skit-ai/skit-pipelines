@@ -30,6 +30,7 @@ def fetch_calls(
     calls_file_s3_path: Optional[str] = None,
     use_fsm_url: bool = False,
     remove_empty_audios: bool = True,
+    flow_ids: str = None,
 ) -> str:
     import os
     import tempfile
@@ -78,7 +79,8 @@ def fetch_calls(
     states = comma_sep_str(states) if states else states
     intents = comma_sep_str(intents) if intents else intents
     client_id = comma_sep_str(client_id) if client_id else client_id
-    print("client_ids", client_id)
+    flow_ids = comma_sep_str(flow_ids, int) if flow_ids else []
+    logger.info(f"Flow ids: {flow_ids}")
     maybe_df = calls.sample(
         start_date,
         end_date,
@@ -99,6 +101,7 @@ def fetch_calls(
         on_disk=False,
         use_fsm_url=use_fsm_url,
         timezone=timezone or pipeline_constants.TIMEZONE,
+        flow_ids=flow_ids
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
     if not maybe_df.size:
