@@ -28,6 +28,7 @@ def evaluate_slu(
     *,
     repo_name: str,
     repo_branch: str = "master",
+    compare_branch: str = "",
     job_ids: str = "",
     test_dataset_path: str = "",
     labelstudio_project_ids: str = "",
@@ -59,7 +60,7 @@ def evaluate_slu(
             {
                 "repo_name": "slu_repo_name",
                 "labelstudio_project_ids": "10,13",
-                "test_dataset_path":"s3://vernacular-ml/deepak/idfc_without_ccg.csv"
+                "test_dataset_path":"s3://bucket/data.csv"
             }
 
 
@@ -161,6 +162,7 @@ def evaluate_slu(
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
+        compare_branch=compare_branch,
         branch=repo_branch,
         remove_intents=remove_intents,
         labelstudio_project_ids=labelstudio_project_ids,
@@ -179,6 +181,7 @@ def evaluate_slu(
         downloaded_alias_yaml_op.outputs["output"],
         bucket=BUCKET,
         repo_name=repo_name,
+        compare_branch=compare_branch,
         branch=repo_branch,
         remove_intents=remove_intents,
         labelstudio_project_ids=labelstudio_project_ids,
@@ -192,31 +195,30 @@ def evaluate_slu(
         label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
     )
 
-    # upload test set metrics.
-    upload_cf = upload2s3_op(
-        path_on_disk=evaluate_op.outputs["output_classification_report"],
+    comparison_upload_cf = upload2s3_op(
+        path_on_disk=evaluate_op.outputs["comparison_classification_report"],
         reference=repo_name,
-        file_type="test_classification_report",
+        file_type="comparison_classification_report",
         bucket=BUCKET,
         ext=CSV_FILE,
     )
-
-    upload_cm = upload2s3_op(
-        path_on_disk=evaluate_op.outputs["output_confusion_matrix"],
-        reference=repo_name,
-        file_type="test_confusion_matrix",
-        bucket=BUCKET,
-        ext=CSV_FILE,
-    )
-    upload_cm.execution_options.caching_strategy.max_cache_staleness = (
+    comparison_upload_cf.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
 
+    comparison_upload_cm = upload2s3_op(
+        path_on_disk=evaluate_op.outputs["comparison_confusion_matrix"],
+        reference=repo_name,
+        file_type="comparison_confusion_matrix",
+        bucket=BUCKET,
+        ext=CSV_FILE,
+    )
+
     with kfp.dsl.Condition(notify != "", name="slack_notify").after(
-        upload_cf, upload_cm
+        comparison_upload_cf, comparison_upload_cm
     ):
         notification_text = f"Here's the IRR report."
-        code_block = f"aws s3 cp {upload_cf.output} ."
+        code_block = f"aws s3 cp {comparison_upload_cf.output} ."
         irr_notif = slack_notification_op(
             notification_text,
             channel=channel,
@@ -229,7 +231,7 @@ def evaluate_slu(
         )
 
         notification_text = f"Here's the confusion matrix."
-        code_block = f"aws s3 cp {upload_cm.output} ."
+        code_block = f"aws s3 cp {comparison_upload_cm.output} ."
         cm_notif = slack_notification_op(
             notification_text,
             channel=channel,
@@ -240,5 +242,6 @@ def evaluate_slu(
         cm_notif.execution_options.caching_strategy.max_cache_staleness = (
             "P0D"  # disables caching
         )
+
 
 __all__ = ["evaluate_slu"]
