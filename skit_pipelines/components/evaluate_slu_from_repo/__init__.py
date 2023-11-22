@@ -14,8 +14,6 @@ def evaluate_slu_from_repo(
         compare_branch: str,
         branch: str,
         remove_intents: str = "",
-        labelstudio_project_ids: str = "",
-        s3_paths: str = "",
         validate_setup: bool = False,
         customization_repo_name: str = "",
         customization_repo_branch: str = "",
@@ -93,7 +91,7 @@ def evaluate_slu_from_repo(
     if os.path.exists(tagged_data_path):
         final_test_dataset_path = tagged_data_path
 
-    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare, compare_branch)
+    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare_branch)
 
     return ""
 

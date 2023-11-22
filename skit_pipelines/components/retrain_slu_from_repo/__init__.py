@@ -45,7 +45,6 @@ def retrain_slu_from_repo(
     from skit_pipelines.components.utils_slu import setup_repo, setup_project_config_repo, data_handler, prepare_data, process_custom_test_dataset, handle_dvc_and_data_paths, testing
 
     remove_intents = comma_sep_str(remove_intents)
-    compare = True if not initial_training else False
     data_info = (
         f" {labelstudio_project_ids=}"
         if labelstudio_project_ids
@@ -155,7 +154,7 @@ def retrain_slu_from_repo(
     elif os.path.exists(new_test_path):
         final_test_dataset_path = new_test_path
 
-    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare)
+    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path)
 
     return new_branch
 

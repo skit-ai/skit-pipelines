@@ -210,7 +210,7 @@ def handle_dvc_and_data_paths(repo, project_config_local_path, bucket, repo_name
     return use_previous_dataset
 
 
-def testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare=True, compare_branch="master"):
+def testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare_branch="master"):
     
     # alias and filter the new test dataset
     filter_dataset(final_test_dataset_path, remove_intents)
@@ -227,7 +227,7 @@ def testing(repo_name, project_config_local_path, final_test_dataset_path, remov
     comparison_classification_report(classification_report_path, "", comparison_classification_report_path)
     comparison_confusion_report(confusion_matrix_path, "", comparison_confusion_matrix_path)
 
-    if compare:
+    if compare_branch:
         if os.path.exists("data.dvc"):
             repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
                 repo_name=repo_name,
