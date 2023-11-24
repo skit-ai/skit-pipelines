@@ -1,4 +1,11 @@
 # Changelog
+
+# 1.1.0
+- [x] add: Added evaluate_slu pipeline in the repo to test the slu
+- [x] add: Added features of comparing repo while testing
+- [x] fix: created multiple component to reduce the retendency and complaxity of repo.
+- [x] fix: Moved common funtions in seperate utils files for retrain and evaluate slu.
+
 1.0.6
 - [x] Bugfix: update skit-calls version
 
