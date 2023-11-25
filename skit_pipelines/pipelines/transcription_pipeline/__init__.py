@@ -8,6 +8,7 @@ from skit_pipelines.components import (
     download_csv_from_s3_op,
     download_file_from_s3_op,
     overlay_transcription_csv_op,
+    re_presign_s3_urls_op,
     slack_notification_op,
     upload2s3_op,
 )
@@ -63,13 +64,20 @@ def transcription_pipeline(
     original_data_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
     config_data_op = download_file_from_s3_op(storage_path=config_s3_path)
     config_data_op.execution_options.caching_strategy.max_cache_staleness = (
         "P0D"  # disables caching
     )
+
+    # re-presign the s3 links present in .csv, so that they are accessible
+    # does presigning again only if the links are expired
+    re_presigned_op = re_presign_s3_urls_op(original_data_op["output"])
+    re_presigned_op.execution_options.caching_strategy.max_cache_staleness = ("P0D")
+
     # Download audio files from CSV
     audio_wavs_op = download_audio_wavs_op(
-        original_data_op.outputs["output"], audio_sample_rate, audio_download_workers
+        re_presigned_op.outputs["output"], audio_sample_rate, audio_download_workers
     )
 
     # Transcribing
