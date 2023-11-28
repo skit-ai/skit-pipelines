@@ -72,7 +72,7 @@ def transcription_pipeline(
 
     # re-presign the s3 links present in .csv, so that they are accessible
     # does presigning again only if the links are expired
-    re_presigned_op = re_presign_s3_urls_op(original_data_op["output"])
+    re_presigned_op = re_presign_s3_urls_op(original_data_op.outputs["output"])
     re_presigned_op.execution_options.caching_strategy.max_cache_staleness = ("P0D")
 
     # Download audio files from CSV
