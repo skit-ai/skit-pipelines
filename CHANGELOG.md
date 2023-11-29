@@ -6,6 +6,10 @@
 - [x] fix: created multiple component to reduce the retendency and complaxity of repo.
 - [x] fix: Moved common funtions in seperate utils files for retrain and evaluate slu.
 
+1.0.7
+- [x] Update credentials for accessing fsm DB
+- [x] Add support for multiple flow ids for fetch call related pipelines
+
 1.0.6
 - [x] Bugfix: update skit-calls version
 

@@ -52,6 +52,11 @@ class ValidateInput:
         if self.pipeline_name == "retrain_slu" and "repo_name" not in self.payload:
             self.errors.append(f"Parameter repo_name is required for slu_retraining to happen.\n")
 
+    def _validate_label_studio_ids_for_fetch_n_tag_turns_calls(self):
+        if self.pipeline_name == "fetch_n_tag_turns_and_calls" and \
+                ("labelstudio_project_id" not in self.payload and "call_project_id" not in self.payload):
+            self.errors.append(f"At least one of labelstudio_project_id or call_project_id must be provided.\n")
+
     def validate_input_params(self):
         # Universal checks
         self._validate_start_date()
@@ -60,4 +65,5 @@ class ValidateInput:
 
         # Pipeline specific checks
         self._validate_repo_for_retrain_slu()
+        self._validate_label_studio_ids_for_fetch_n_tag_turns_calls()
         return self.errors
