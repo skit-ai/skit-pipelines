@@ -20,18 +20,17 @@ def _get_value(df, column_name, index):
     return None
 
 
-def comparison_classification_report(
-        report1_path: str, report2_path: str, output_path: str
-):
+def comparison_classification_report(report1_path: str, report2_path: str, output_path: str):
     report1_df = pd.read_csv(report1_path)
 
     if not report2_path:
-        report2_df = pd.DataFrame(
-            columns=["Unnamed: 0", "precision", "recall", "f1-score", "support"],
-            index=range(len(report1_df)),
-        )
-    else:
-        report2_df = pd.read_csv(report2_path)
+        # If report2_path is empty, generate a report only for the first dataset
+        comparison_df = pd.DataFrame(report1_df)
+        comparison_df.to_csv(output_path, index=False)
+        print(tabulate(comparison_df, headers="keys", tablefmt="psql"))
+        return
+
+    report2_df = pd.read_csv(report2_path)
 
     # Extract the class labels from both reports
     classes1 = report1_df["Unnamed: 0"].tolist()
@@ -78,7 +77,7 @@ def comparison_classification_report(
         columns=["precision", "recall", "f1-score", "support"],
     )
 
-    comparison_df.to_csv(output_path)
+    comparison_df.to_csv(output_path, index=False)
     # Print the comparison report using tabulate for better formatting
     print(tabulate(comparison_df, headers="keys", tablefmt="psql"))
 

@@ -9,5 +9,6 @@ from skit_pipelines.pipelines.fetch_tagged_entity_dataset import fetch_tagged_en
 from skit_pipelines.pipelines.publish_compliance_breaches import publish_compliance_breaches
 from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.retrain_slu_old import retrain_slu_old
+from skit_pipelines.pipelines.evaluate_slu import evaluate_slu
 from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline

@@ -50,6 +50,7 @@ from skit_pipelines.components.push_compliance_report_to_postgres import (
 )
 from skit_pipelines.components.read_json_key import read_json_key_op
 from skit_pipelines.components.retrain_slu_from_repo import retrain_slu_from_repo_op
+from skit_pipelines.components.evaluate_slu_from_repo import evalution_slu_from_repo_op
 from skit_pipelines.components.retrain_slu_from_repo_old import (
     retrain_slu_from_repo_op_old,
 )
