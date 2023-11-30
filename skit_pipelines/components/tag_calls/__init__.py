@@ -8,11 +8,8 @@ from skit_pipelines.types.tag_calls import TaggingResponseType
 
 def tag_calls(
     input_file: str,
-    token: str = "",
-    job_ids: str = "",
     data_label: str = "",
     project_id: Optional[str] = None,
-    org_id: Optional[str] = None,
     call_project_id: Optional[str] = None,
 ) -> TaggingResponseType:
     import argparse
@@ -24,22 +21,12 @@ def tag_calls(
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.tag_calls.labelstudio import upload2labelstudio
-    from skit_pipelines.components.tag_calls.tog import upload2tog
     from skit_pipelines.types.tag_calls import TaggingResponse
     from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
     error_string = ""
-    df_size_string = ""
-    errors = []
-    df_sizes = []
-    org_id = int(org_id) if org_id else org_id
-
-    job_ids = comma_sep_str(job_ids)
-    if not job_ids and not project_id and not call_project_id:
-        raise ValueError(
-            "At least one of job_ids, project_id, call_project_id must be provided"
-        )
+    errors, df_sizes = [], []
 
     data_label = data_label or pipeline_constants.DATA_LABEL_DEFAULT
     try:
@@ -51,9 +38,6 @@ def tag_calls(
 
     print(f"{project_id=}")
     print(f"{call_project_id=}")
-
-    if job_ids:
-        errors, df_sizes = upload2tog(input_file, token, job_ids, data_label)
 
     if project_id:
         project_ids = comma_sep_str(project_id)
@@ -76,7 +60,7 @@ def tag_calls(
     response = TaggingResponse(error_string, df_size_string)
 
     if not response.df_sizes:
-        raise ValueError(f"Nothing was uploaded.")
+        logger.warning(f"No calls were uploaded for tagging. Please check your provided parameters")
 
     logger.info(f"{response.df_sizes} rows in the dataset")
     logger.info(f"{response.errors=}")
