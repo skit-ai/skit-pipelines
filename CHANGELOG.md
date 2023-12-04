@@ -1,6 +1,11 @@
 # Changelog
 
-# 1.1.0
+1.1.1
+- [x] add: Added re_presign_s3_urls component, which can re-presign publis s3 http urls in transcription_pipeline.
+- [x] fix: join on dataframes bug fix at merge_transcription component.
+
+
+1.1.0
 - [x] add: Added evaluate_slu pipeline in the repo to test the slu
 - [x] add: Added features of comparing repo while testing
 - [x] fix: created multiple component to reduce the retendency and complaxity of repo.
