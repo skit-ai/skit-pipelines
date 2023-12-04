@@ -1,5 +1,8 @@
 # Changelog
 
+1.1.2
+- [x] add environment variables in CI
+
 1.1.1
 - [x] add: Added re_presign_s3_urls component, which can re-presign publis s3 http urls in transcription_pipeline.
 - [x] fix: join on dataframes bug fix at merge_transcription component.
