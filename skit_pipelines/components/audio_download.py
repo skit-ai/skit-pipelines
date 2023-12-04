@@ -20,3 +20,6 @@ def download_audio_wavs(
 download_audio_wavs_op = kfp.components.create_component_from_func(
     download_audio_wavs, base_image=pipeline_constants.BASE_IMAGE
 )
+
+# if __name__ == "__main__":
+#     download_audio_wavs("./lohith_newly_signed.csv", "8k", 30, "./wav_audios")
