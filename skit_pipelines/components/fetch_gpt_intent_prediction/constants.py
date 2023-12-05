@@ -1,7 +1,9 @@
 INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
-PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
+
+def get_prompt_text():
+    return """In the below conversation turn between a debt collection bot and a user:
 
 STATE: COF
 [Bot]: <speak><prosody rate="102%">Hello. Am I speaking with stephanie brown-stewart?</prosody></speak> \n [User]: yes

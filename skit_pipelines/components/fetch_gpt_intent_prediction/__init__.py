@@ -18,6 +18,7 @@ def fetch_gpt_intent_prediction(
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components import upload2s3
     from skit_pipelines.components.download_from_s3 import download_csv_from_s3
+    from skit_pipelines.components.fetch_gpt_intent_prediction.constants import get_prompt_text
 
     # from skit_pipelines.components.fetch_gpt_intent_prediction import constants as gpt_constants
 
@@ -71,7 +72,7 @@ def fetch_gpt_intent_prediction(
                 "[Bot]: " + bot_response + "  \n " + "[User]: " + user_utterance
             )
 
-            input_text = pipeline_constants.PROMPT_TEXT
+            input_text = get_prompt_text()
             input_text = input_text.replace(
                 "{{conversation_context}}", conversation_context
             )

@@ -1,5 +1,8 @@
 # Changelog
 
+1.1.3
+- [x] Update node selector to match node groups in US
+
 1.1.2
 - [x] add environment variables in CI
 

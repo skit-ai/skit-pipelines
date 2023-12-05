@@ -182,8 +182,8 @@ def fetch_n_tag_turns_and_calls(
     :param use_assisted_annotation: Whether to use GPT for intent prediction, only applicable to US collections, defaults to False
     :type use_assisted_annotation: bool, optional
     
-    :param flow_id: Id for a whole/part of a voicebot conversation flow, defaults to ""
-    :type flow_id: str, optional
+    :param flow_ids: Id for a whole/part of a voicebot conversation flow, defaults to ""
+    :type flow_ids: str, optional
     """
     calls = fetch_calls_op(
         client_id=client_id,

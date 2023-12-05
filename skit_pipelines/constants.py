@@ -146,93 +146,6 @@ FILTER_LIST = [
 ]
 
 REFERENCE_URL = "https://metabase.skit.ai/question/2403-tagged-data?job_id="
-# for pushing eevee intent metrics to intent_metrics table.
-ML_INTENT_METRICS_INSERT_SQL_QUERY = """
-INSERT INTO intent_metrics 
-(
-    slu_name,
-    dataset_job_id,
-    language,
-    metric_name,
-    n_calls,
-    n_turns,
-    precision,
-    recall,
-    f1,
-    support,
-    created_at,  
-    calls_from_date,
-    calls_to_date,
-    tagged_from_date,
-    tagged_to_date,
-    reference_url,
-    raw
-)
-VALUES
-(
-    %(slu_name)s,
-    %(dataset_job_id)s,
-    %(language)s,
-    %(metric_name)s,
-    %(n_calls)s,
-    %(n_turns)s,
-    %(precision)s,
-    %(recall)s,
-    %(f1)s,
-    %(support)s,
-    %(created_at)s,  
-    %(calls_from_date)s,
-    %(calls_to_date)s,
-    %(tagged_from_date)s,
-    %(tagged_to_date)s,
-    %(reference_url)s,
-    %(raw)s
-)
-"""
-
-# for pushing eevee entity metrics to entity_metrics table.
-ML_ENTITY_METRICS_INSERT_SQL_QUERY = """
-INSERT INTO entity_metrics 
-(
-    slu_name,
-    dataset_job_id,
-    language,
-    metric_name,
-    n_calls,
-    n_turns,
-    false_positive_rate,
-    false_negative_rate,
-    mismatch_rate,
-    support,
-    negatives,
-    created_at,  
-    calls_from_date,
-    calls_to_date,
-    tagged_from_date,
-    tagged_to_date,
-    raw
-)
-VALUES
-(
-    %(slu_name)s,
-    %(dataset_job_id)s,
-    %(language)s,
-    %(metric_name)s,
-    %(n_calls)s,
-    %(n_turns)s,
-    %(false_positive_rate)s,
-    %(false_negative_rate)s,
-    %(mismatch_rate)s,
-    %(support)s,
-    %(negatives)s,
-    %(created_at)s,  
-    %(calls_from_date)s,
-    %(calls_to_date)s,
-    %(tagged_from_date)s,
-    %(tagged_to_date)s,
-    %(raw)s
-)
-"""
 
 PERSONAL_ACCESS_TOKEN_GITHUB = os.environ["PERSONAL_ACCESS_TOKEN_GITHUB"]
 EEVEE_RAW_FILE_GITHUB_REPO_URL = (
@@ -243,7 +156,7 @@ DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
 # K8s
 POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
-CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6i.2xlarge"
+CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6a.2xlarge"
 GPU_NODE_LABEL = "g4dn.xlarge"
 
 # Bots
@@ -285,44 +198,3 @@ INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
 OPENAI_COMPLIANCE_BREACHES_KEY = os.environ["OPENAI_COMPLIANCE_BREACHES_KEY"]
-
-PROMPT_TEXT = """In the below conversation turn between a debt collection bot and a user:
-
-STATE: COF
-[Bot]: <speak><prosody rate="102%">Hello. Am I speaking with stephanie brown-stewart?</prosody></speak> \n [User]: yes
-
-Answer "_confirm_" if the user is confirming;
-Answer "_cancel_" if the user is denying;
-Answer "Other" if the user says anything else.
-
-Answer: _confirm_
-
-In the below conversation turn between a debt collection bot and a user:
-
-STATE: {{state}}
-{{conversation_context}}
-
-Answer "_confirm_" if the user is giving the bot a positive response or confirming what the bot says (yep, yeah, or similar expressions are taken to mean "yes");
-Answer "_cancel_" if the user is refuting what the bot says;
-Answer "_maybe_" if the user is undecided or provides an ambiguous response, such as possibly;
-Answer "_identity_" if the user asks who the bot is, where it is calling from, or why it is calling;
-Answer "other_language" if the user appears to not speak English, does not feel at ease speaking English, or requests that we speak to them in an other language, such as Spanish;
-Answer "_greeting_" if the user is greeting the bot or saying hello;
-Answer "ask_for_agent" if the user prefers to communicate with a human agent or operator rather than a machine or robot;
-Answer "wrong_number" if the user says that the bot called the wrong number or the wrong person;
-Answer "_repeat_" if the user asks the bot to repeat something;
-Answer "_what_" if the user looks to be having problems understanding the bot or if they are asking a question;
-Answer "dispute_debt" if it appears that the user is disputing the debt or insisting they owe nothing;
-Answer "cease_desit" if the user requests that we stop calling them, remove them from our call list, stop bothering them, or threatens to sue us;
-Answer 'put_on_hold' if it looks that the user is asking the bot to wait or hold for a moment;
-Answer "inform_phone_number" if the user appears to be providing a number when the bot asks for their mobile number;
-Answer 'wont_pay' if the user refuses to pay or if they are unwilling to make a payment;
-Answer "inform_fund_shortage" if it appears that the user is attempting to indicate that they are currently short on funds or have recently made a significant expenditure;
-Answer "ask_for_installment" if the user mentions a figure that is less than the amount owed or indicates they would like to pay in smaller amounts;
-Answer "_callback_" if the user later requests a callback from the bot;
-Answer "inform_pay_later" if it appears that the user intends to pay later;
-Answer "date_entity_only" if it appears that the user is providing a date;
-Answer "inform already paid" if the user appears to have already made a payment;
-Answer "Other" if the user says anything else or if you are unsure of what they are saying.
-
-Answer:"""
