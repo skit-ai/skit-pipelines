@@ -64,6 +64,29 @@
 <dd></dd></dl>
 
 </section>
+<section id="module-skit_pipelines.utils.helpers">
+<span id="skit-pipelines-utils-helpers-module"></span><h2>skit_pipelines.utils.helpers module<a class="headerlink" href="#module-skit_pipelines.utils.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.utils.helpers.convert_audiourl_to_filename">
+<span class="sig-name descname"><span class="pre">convert_audiourl_to_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audiourl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skit_pipelines/utils/helpers.html#convert_audiourl_to_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.helpers.convert_audiourl_to_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts s3 http turn audio url into the actual filename with .wav extension.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.utils.helpers.get_unix_epoch_timestamp_from_s3_presigned_url">
+<span class="sig-name descname"><span class="pre">get_unix_epoch_timestamp_from_s3_presigned_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3_http_turn_audio_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/skit_pipelines/utils/helpers.html#get_unix_epoch_timestamp_from_s3_presigned_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.helpers.get_unix_epoch_timestamp_from_s3_presigned_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns unix epoch timestamp present in URL which is assumed to be in seconds</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skit_pipelines.utils.helpers.re_presign_audio_url_if_required">
+<span class="sig-name descname"><span class="pre">re_presign_audio_url_if_required</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s3_http_turn_audio_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skit_pipelines/utils/helpers.html#re_presign_audio_url_if_required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skit_pipelines.utils.helpers.re_presign_audio_url_if_required" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if the s3 http url for turn audio is valid or not - for downloading purposes only
+if not re-presign URLs using s3 client, for the next 7 days.</p>
+<p>this is highly specific to US, since the bucket is private there.</p>
+</dd></dl>
+
+</section>
 <section id="module-skit_pipelines.utils.k8s">
 <span id="skit-pipelines-utils-k8s-module"></span><h2>skit_pipelines.utils.k8s module<a class="headerlink" href="#module-skit_pipelines.utils.k8s" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
@@ -246,7 +269,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/skit_pipelines.utils.rst.txt"

@@ -12,6 +12,14 @@ skit\_pipelines.utils.cookies module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.utils.helpers module
+------------------------------------
+
+.. automodule:: skit_pipelines.utils.helpers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.utils.k8s module
 --------------------------------
 

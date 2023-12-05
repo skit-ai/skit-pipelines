@@ -66,6 +66,8 @@
             <span class="n">download_file_from_s3</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">description</span> <span class="o">+=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2"> Note: If it is first training or production model couldn&#39;t be found, then all prod &quot;</span> \
+                       <span class="s2">&quot;values will be marked as None.&quot;</span>
         <span class="k">return</span> <span class="n">description</span>
 
     <span class="k">if</span> <span class="n">git_host_name</span> <span class="o">==</span> <span class="n">const</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">:</span>
@@ -124,6 +126,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -164,7 +167,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

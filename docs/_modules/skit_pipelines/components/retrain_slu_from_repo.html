@@ -38,308 +38,68 @@
 
 
 <div class="viewcode-block" id="retrain_slu_from_repo"><a class="viewcode-back" href="../../../skit_pipelines.components.retrain_slu_from_repo.html#skit_pipelines.components.retrain_slu_from_repo.retrain_slu_from_repo">[docs]</a><span class="k">def</span> <span class="nf">retrain_slu_from_repo</span><span class="p">(</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">s3_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">custom_test_s3_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">annotated_job_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">intent_alias_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">remove_intents</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">use_previous_dataset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">train_split_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">85</span><span class="p">,</span>
-    <span class="n">stratify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">initial_training</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">job_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">labelstudio_project_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">s3_paths</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">validate_setup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">customization_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">customization_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">core_slu_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">core_slu_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">output_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">production_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">comparison_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">output_confusion_matrix_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="n">production_confusion_matrix_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-    <span class="c1"># comparison_confusion_matrix_path: OutputPath(str), # TODO enable this</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">s3_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">custom_test_s3_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">annotated_job_data_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">intent_alias_path</span><span class="p">:</span> <span class="n">InputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">remove_intents</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">use_previous_dataset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">train_split_percent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">85</span><span class="p">,</span>
+        <span class="n">stratify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">initial_training</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">labelstudio_project_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">s3_paths</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">validate_setup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">customization_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">customization_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">core_slu_repo_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">core_slu_repo_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">comparison_classification_report_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">comparison_confusion_matrix_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">glob</span>
     <span class="kn">import</span> <span class="nn">os</span>
-    <span class="kn">import</span> <span class="nn">subprocess</span>
     <span class="kn">import</span> <span class="nn">tempfile</span>
     <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
     <span class="kn">import</span> <span class="nn">git</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-    <span class="kn">import</span> <span class="nn">yaml</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-    <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_repo</span> <span class="kn">import</span> <span class="n">download_repo</span>
-    <span class="kn">from</span> <span class="nn">skit_pipelines.components.preprocess.create_true_intent_column.utils</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">pick_1st_tag</span><span class="p">,</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.utils</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">filter_dataset</span><span class="p">,</span> <span class="n">alias_dataset</span><span class="p">,</span> <span class="n">execute_cli</span>
     <span class="p">)</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
-
-    <span class="n">execute_cli</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-        <span class="n">cmd</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">split</span> <span class="k">else</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="ow">not</span> <span class="n">split</span>
-    <span class="p">)</span>
-    <span class="n">create_dataset_path</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">dataset_type</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="n">data_type</span><span class="p">,</span>
-        <span class="s2">&quot;classification/datasets&quot;</span><span class="p">,</span>
-        <span class="n">dataset_type</span> <span class="o">+</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">get_metrics_path</span><span class="p">(</span><span class="n">metric_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">):</span>
-        <span class="n">metrics_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="s2">&quot;classification/metrics&quot;</span><span class="p">)</span>
-        <span class="n">latest_date_dir</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">metrics_dir</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">)</span>
-        <span class="n">latest_metrics_dir</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">latest_date_dir</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">latest_metrics_dir</span><span class="p">,</span>
-            <span class="n">metric_type</span> <span class="o">+</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.utils_slu</span> <span class="kn">import</span> <span class="n">setup_repo</span><span class="p">,</span> <span class="n">setup_project_config_repo</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">,</span> <span class="n">prepare_data</span><span class="p">,</span> <span class="n">process_custom_test_dataset</span><span class="p">,</span> <span class="n">handle_dvc_and_data_paths</span><span class="p">,</span> <span class="n">testing</span>
 
     <span class="n">remove_intents</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">remove_intents</span><span class="p">)</span>
-    <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">custom_test_dataset_present</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">def</span> <span class="nf">filter_dataset</span><span class="p">(</span>
-        <span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">remove_intents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="n">intent_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filtering: </span><span class="si">{</span><span class="n">dataset_path</span><span class="si">=}</span><span class="se">\n</span><span class="s2">while </span><span class="si">{</span><span class="n">remove_intents_list</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span>
-        <span class="n">dataset</span><span class="p">[</span><span class="o">~</span><span class="n">dataset</span><span class="p">[</span><span class="n">intent_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">remove_intents_list</span><span class="p">)]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">alias_dataset</span><span class="p">(</span>
-        <span class="n">dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">alias_yaml_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">intent_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">reverse_alias_config</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">alias_yaml_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yaml_file</span><span class="p">:</span>
-            <span class="n">alias_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">map_to</span><span class="p">,</span> <span class="n">map_from_values</span> <span class="ow">in</span> <span class="n">alias_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">map_from</span> <span class="ow">in</span> <span class="n">map_from_values</span><span class="p">:</span>
-                <span class="n">reverse_alias_config</span><span class="p">[</span><span class="n">map_from</span><span class="p">]</span> <span class="o">=</span> <span class="n">map_to</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;aliasing: </span><span class="si">{</span><span class="n">dataset_path</span><span class="si">=}</span><span class="s2"> with config=</span><span class="si">{</span><span class="n">reverse_alias_config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">)</span>
-        <span class="n">dataset</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="n">intent_col</span><span class="p">:</span> <span class="n">reverse_alias_config</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">setup_utility_repo</span><span class="p">(</span>
-        <span class="n">repo_name</span><span class="p">,</span> <span class="n">repo_branch</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">runtime_env_var</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
-        <span class="n">repo_local_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-        <span class="n">download_repo</span><span class="p">(</span>
-            <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
-            <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
-            <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
-            <span class="n">repo_path</span><span class="o">=</span><span class="n">repo_local_path</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">repo_local_path</span><span class="p">)</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
-            <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
-            <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">repo_branch</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda create -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> -m python=3.8 -y&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;. /conda/etc/profile.d/conda.sh&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= &#39;{print $2}&#39;)&quot;</span><span class="p">,</span>
-                <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> poetry install&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">run_dir</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">run_cmd</span><span class="p">:</span>
-                <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">runtime_env_var</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">runtime_env_var</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">run_cmd</span><span class="si">}</span><span class="s2"> &amp;&quot;</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;running command </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">execute_cli</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;ps aux | grep task&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">repo_local_path</span>
-
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">exc</span>
-
-    <span class="k">def</span> <span class="nf">preprocess_test_dataset</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_dataset_path</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;intent&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>  <span class="c1"># TODO: remove on phase 2 cicd release</span>
-            <span class="k">if</span> <span class="s2">&quot;raw.intent&quot;</span> <span class="ow">in</span> <span class="n">test_df</span><span class="p">:</span>
-                <span class="n">test_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;raw.intent&quot;</span><span class="p">:</span> <span class="s2">&quot;intent&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-                    <span class="n">test_dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                <span class="n">test_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">test_dataset_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span>
-        <span class="n">test_dataset_path</span><span class="p">,</span>
-        <span class="n">kfp_volume_classification_report_path</span><span class="o">=</span><span class="n">output_classification_report_path</span><span class="p">,</span>
-        <span class="n">kfp_volumne_confusion_matrix_path</span><span class="o">=</span><span class="n">output_confusion_matrix_path</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;To evaluate a model on a test set.&quot;&quot;&quot;</span>
-        <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">test_dataset_path</span><span class="p">)</span>
-        <span class="n">preprocess_test_dataset</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">test_dataset_path</span><span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;conda run --no-capture-output -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;slu test --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> --file </span><span class="si">{</span><span class="n">test_dataset_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># when custom_test_s3_data_path is passed, --file option would be redundant</span>
-            <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
-
-        <span class="n">dataset_classification_report_path</span> <span class="o">=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CLASSIFICATION_REPORT</span>
-        <span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">dataset_classification_report_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">kfp_volume_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">dataset_confusion_matrix_path</span> <span class="o">=</span> <span class="n">get_metrics_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">FULL_CONFUSION_MATRIX</span>
-        <span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">dataset_confusion_matrix_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">kfp_volumne_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">dataset_classification_report_path</span><span class="p">,</span> <span class="n">dataset_confusion_matrix_path</span>
-
-    <span class="k">def</span> <span class="nf">create_comparison_classification_report</span><span class="p">(</span>
-        <span class="n">report1_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">report2_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="p">):</span>
-        <span class="n">report1_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">report1_path</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">report2_path</span><span class="p">:</span>
-            <span class="n">report2_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;recall&quot;</span><span class="p">,</span> <span class="s2">&quot;f1-score&quot;</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">],</span>
-                <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">report1_df</span><span class="p">)),</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">report2_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">report2_path</span><span class="p">)</span>
-
-        <span class="c1"># Extract the class labels from both reports</span>
-        <span class="n">classes1</span> <span class="o">=</span> <span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="n">classes2</span> <span class="o">=</span> <span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-        <span class="c1"># Create a set of all class labels</span>
-        <span class="n">all_classes</span> <span class="o">=</span> <span class="n">classes1</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">classes2</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes1</span><span class="p">]</span>
-        <span class="n">all_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_classes</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
-
-        <span class="c1"># Move &quot;accuracy&quot;, &quot;macro avg&quot;, and &quot;weighted avg&quot; to the end</span>
-        <span class="n">special_rows</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;macro avg&quot;</span><span class="p">,</span> <span class="s2">&quot;weighted avg&quot;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">special_row</span> <span class="ow">in</span> <span class="n">special_rows</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">special_row</span> <span class="ow">in</span> <span class="n">all_classes</span><span class="p">:</span>
-                <span class="n">all_classes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">special_row</span><span class="p">)</span>
-                <span class="n">all_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">special_row</span><span class="p">)</span>
-
-        <span class="c1"># Initialize a dictionary to store the comparison data</span>
-        <span class="n">comparison_data</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="c1"># Iterate through each class label</span>
-        <span class="k">for</span> <span class="n">class_label</span> <span class="ow">in</span> <span class="n">all_classes</span><span class="p">:</span>
-            <span class="c1"># Get the row index for each class label</span>
-            <span class="n">index1</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">report1_df</span><span class="p">[</span><span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">class_label</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">class_label</span> <span class="ow">in</span> <span class="n">classes1</span>
-                <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
-            <span class="n">index2</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">report2_df</span><span class="p">[</span><span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">class_label</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">class_label</span> <span class="ow">in</span> <span class="n">classes2</span>
-                <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
-
-            <span class="c1"># Get the precision, recall, f1-score, and support values for each report</span>
-            <span class="n">precision1</span> <span class="o">=</span> <span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">][</span><span class="n">index1</span><span class="p">]</span> <span class="k">if</span> <span class="n">index1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">recall1</span> <span class="o">=</span> <span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;recall&quot;</span><span class="p">][</span><span class="n">index1</span><span class="p">]</span> <span class="k">if</span> <span class="n">index1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">f1_score1</span> <span class="o">=</span> <span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;f1-score&quot;</span><span class="p">][</span><span class="n">index1</span><span class="p">]</span> <span class="k">if</span> <span class="n">index1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">support1</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">report1_df</span><span class="p">[</span><span class="s2">&quot;support&quot;</span><span class="p">][</span><span class="n">index1</span><span class="p">])</span> <span class="k">if</span> <span class="n">index1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
-
-            <span class="n">precision2</span> <span class="o">=</span> <span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">][</span><span class="n">index2</span><span class="p">]</span> <span class="k">if</span> <span class="n">index2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">recall2</span> <span class="o">=</span> <span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;recall&quot;</span><span class="p">][</span><span class="n">index2</span><span class="p">]</span> <span class="k">if</span> <span class="n">index2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">f1_score2</span> <span class="o">=</span> <span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;f1-score&quot;</span><span class="p">][</span><span class="n">index2</span><span class="p">]</span> <span class="k">if</span> <span class="n">index2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">support2</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">report2_df</span><span class="p">[</span><span class="s2">&quot;support&quot;</span><span class="p">][</span><span class="n">index2</span><span class="p">])</span> <span class="k">if</span> <span class="n">index2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
-
-            <span class="c1"># Create tuples of values for each metric</span>
-            <span class="n">precision_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">precision1</span><span class="p">,</span> <span class="n">precision2</span><span class="p">)</span>
-            <span class="n">recall_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">recall1</span><span class="p">,</span> <span class="n">recall2</span><span class="p">)</span>
-            <span class="n">f1_score_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1_score1</span><span class="p">,</span> <span class="n">f1_score2</span><span class="p">)</span>
-            <span class="n">support_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">support1</span><span class="p">,</span> <span class="n">support2</span><span class="p">)</span>
-
-            <span class="c1"># Store the tuples in the comparison data dictionary</span>
-            <span class="n">comparison_data</span><span class="p">[</span><span class="n">class_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">precision_tuple</span><span class="p">,</span>
-                <span class="n">recall_tuple</span><span class="p">,</span>
-                <span class="n">f1_score_tuple</span><span class="p">,</span>
-                <span class="n">support_tuple</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="c1"># Create a DataFrame from the comparison data</span>
-        <span class="n">comparison_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
-            <span class="n">comparison_data</span><span class="p">,</span>
-            <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">,</span>
-            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">,</span> <span class="s2">&quot;recall&quot;</span><span class="p">,</span> <span class="s2">&quot;f1-score&quot;</span><span class="p">,</span> <span class="s2">&quot;support&quot;</span><span class="p">],</span>
-        <span class="p">)</span>
-
-        <span class="n">comparison_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
-        <span class="c1"># Print the comparison report using tabulate for better formatting</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">comparison_df</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;psql&quot;</span><span class="p">))</span>
+    <span class="n">data_info</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">labelstudio_project_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">labelstudio_project_ids</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">s3_paths</span><span class="si">=}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">s3_paths</span>
+        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># Setup project config repo</span>
-    <span class="n">project_config_local_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">repo_name</span><span class="p">)</span>
-    <span class="n">download_repo</span><span class="p">(</span>
-        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
-        <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
-        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span><span class="p">,</span>
-        <span class="n">repo_path</span><span class="o">=</span><span class="n">project_config_local_path</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Cloned repo contents </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span>
+    <span class="n">project_config_local_path</span> <span class="o">=</span> <span class="n">setup_project_config_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
     <span class="n">author</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Actor</span><span class="p">(</span>
         <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span>
     <span class="p">)</span>
     <span class="n">committer</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Actor</span><span class="p">(</span>
         <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span>
     <span class="p">)</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
-        <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span>
-        <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
-    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
-
-    <span class="c1"># Setup utility services</span>
-    <span class="n">customization_repo_local_path</span> <span class="o">=</span> <span class="n">setup_utility_repo</span><span class="p">(</span>
+    <span class="c1"># Setup customization repo</span>
+    <span class="n">setup_repo</span><span class="p">(</span>
         <span class="n">customization_repo_name</span><span class="p">,</span>
         <span class="n">customization_repo_branch</span><span class="p">,</span>
         <span class="n">run_dir</span><span class="o">=</span><span class="s2">&quot;custom_slu&quot;</span><span class="p">,</span>
@@ -347,299 +107,87 @@
         <span class="n">runtime_env_var</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;customization repo setup successfully&quot;</span><span class="p">)</span>
-    <span class="n">core_slu_repo_local_path</span> <span class="o">=</span> <span class="n">setup_utility_repo</span><span class="p">(</span>
+
+    <span class="c1"># Setup core slu repo</span>
+    <span class="n">setup_repo</span><span class="p">(</span>
         <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">core_slu_repo_branch</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;core slu repo setup successfully&quot;</span><span class="p">)</span>
 
-    <span class="n">data_info</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">job_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">job_ids</span>
-        <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">labelstudio_project_ids</span><span class="si">=}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">labelstudio_project_ids</span>
-        <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">s3_paths</span><span class="si">=}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">s3_paths</span>
-        <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-    <span class="p">)</span>
-
     <span class="n">new_branch</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">annotated_job_data_path</span><span class="p">)</span>
-        <span class="n">tagged_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">tagged_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="n">pick_1st_tag</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="s2">&quot;No data found in given annotated jobs, check if data is tagged or job_ids are missing!&quot;</span>
-        <span class="p">)</span>
-        <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">s3_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">s3_data_path</span><span class="p">)</span>
-        <span class="n">s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="n">pick_1st_tag</span>
-        <span class="p">)</span>
-        <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">s3_df</span> <span class="k">if</span> <span class="n">no_annotated_job</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">tagged_df</span><span class="p">,</span> <span class="n">s3_df</span><span class="p">])</span>
-    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No csv file from S3 found!&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">no_annotated_job</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Either data from job_ids or s3_path has to be available for retraining to continue.&quot;</span>
-            <span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">custom_test_s3_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">custom_test_s3_data_path</span><span class="p">)</span>
-        <span class="n">custom_test_s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_test_s3_df</span><span class="p">[</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pick_1st_tag</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-            <span class="s2">&quot;No custom test dataset from S3 found! While it is allowed to not pass a custom test dataset (holdout dataset),&quot;</span>
-            <span class="s2">&quot;passing it is highly recommended&quot;</span>
-        <span class="p">)</span>
-        <span class="n">custom_test_dataset_present</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Get data from s3 and tagged</span>
+    <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">data_handler</span><span class="p">(</span><span class="n">annotated_job_data_path</span><span class="p">,</span> <span class="n">s3_data_path</span><span class="p">)</span>
+
+    <span class="n">custom_test_dataset_present</span><span class="p">,</span> <span class="n">custom_test_s3_df</span> <span class="o">=</span> <span class="n">process_custom_test_dataset</span><span class="p">(</span><span class="n">custom_test_s3_data_path</span><span class="p">)</span>
 
     <span class="c1"># Change directory just to make sure</span>
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">tagged_data_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
-        <span class="n">tagged_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tagged_data_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">tagged_data_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
+    <span class="n">tagged_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tagged_data_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">custom_test_tagged_data_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span>
-                <span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span>
-            <span class="p">)</span>
-            <span class="n">custom_test_s3_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">custom_test_tagged_data_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved custom dataset to </span><span class="si">{</span><span class="n">custom_test_tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
-        <span class="c1"># checkout to new branch</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc init&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dvc add </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;dvc remote add -d s3remote s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/clients/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">/&quot;</span>
-            <span class="p">)</span>
-            <span class="n">use_previous_dataset</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">initial_training</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">):</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># TODO: fix this</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Discrepancy between setting </span><span class="si">{</span><span class="n">initial_training</span><span class="si">=}</span><span class="s2"> and repo containing data.dvc&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">old_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
-        <span class="p">)</span>
-        <span class="n">old_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
-        <span class="p">)</span>
-
-        <span class="n">new_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
-        <span class="p">)</span>
-        <span class="n">new_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
-            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
-            <span class="c1"># there is no need to split the tagged_df into train and test since the custom_test_dataset will be used for evalution of trained model</span>
-            <span class="c1"># all of the datapoints from tagged_df can be used for training</span>
-            <span class="n">train_split_percent</span> <span class="o">=</span> <span class="mi">100</span>
-
-        <span class="k">if</span> <span class="n">train_split_percent</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
-            <span class="c1"># split into train and test</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="o">/</span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
-                <span class="c1"># combine with older train set</span>
-                <span class="n">execute_cli</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">old_test_path</span><span class="p">):</span>
-                    <span class="c1"># combine with older test set</span>
-                    <span class="n">execute_cli</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># don&#39;t split dataset - use all as train set</span>
-            <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
-                <span class="c1"># combine with older train dataset</span>
-                <span class="n">execute_cli</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># copy new dataset to new path</span>
-                <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="c1"># copy old test dataset to new path</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">old_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>  <span class="c1"># if custom_test_dataset is present, new_test_path won&#39;t be used.</span>
-
-        <span class="k">if</span> <span class="n">validate_setup</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">):</span>
-                <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -Rf </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">validate_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">comparison_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">production_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">production_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="c1"># alias and filter the new train set</span>
-        <span class="n">alias_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
-        <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
-
-        <span class="c1"># training begins</span>
-        <span class="n">execute_cli</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> conda &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;run --no-capture-output -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu train --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
-
-        <span class="c1"># Testing</span>
-        <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
-            <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="n">custom_test_tagged_data_path</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">):</span>
-            <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="n">new_test_path</span>
-
-        <span class="c1"># alias and filter the new test dataset</span>
-        <span class="n">filter_dataset</span><span class="p">(</span><span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
-        <span class="n">alias_dataset</span><span class="p">(</span><span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
-
-        <span class="c1"># testing the model that was just trained</span>
-        <span class="n">classification_report_path</span><span class="p">,</span> <span class="n">confusion_matrix_path</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
-            <span class="n">final_test_dataset_path</span>
-        <span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">merged_classification_report_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span>
+    <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">custom_test_tagged_data_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span>
             <span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span>
         <span class="p">)</span>
-        <span class="n">create_comparison_classification_report</span><span class="p">(</span>
-            <span class="n">classification_report_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">merged_classification_report_path</span>
-        <span class="p">)</span>
+        <span class="n">custom_test_s3_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">custom_test_tagged_data_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;saved custom dataset to </span><span class="si">{</span><span class="n">custom_test_tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># create the comparison report between metrics from the latest model and an empty metrics file</span>
-        <span class="c1"># this is the default when there is no prod model or there is an issue with extracting metrics from prod model</span>
-        <span class="n">execute_cli</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">merged_classification_report_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">comparison_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-        <span class="c1"># TODO create comparison for confusion matrix as well</span>
-        <span class="c1"># just like create_comparison_classification_report, another function needs to be implemented</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+    <span class="c1"># checkout to new branch</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
 
+    <span class="c1"># Setup DVC and data path for new repo or pull dvc for old repo</span>
+    <span class="n">use_previous_dataset</span> <span class="o">=</span> <span class="n">handle_dvc_and_data_paths</span><span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">,</span> <span class="n">initial_training</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">use_previous_dataset</span><span class="p">)</span>
+    
+    <span class="c1"># Create final test and train data set</span>
+    <span class="n">new_train_path</span><span class="p">,</span> <span class="n">new_test_path</span> <span class="o">=</span> <span class="n">prepare_data</span><span class="p">(</span><span class="n">tagged_data_path</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">,</span> <span class="n">custom_test_dataset_present</span><span class="p">,</span> <span class="n">use_previous_dataset</span><span class="p">,</span> <span class="n">train_split_percent</span><span class="p">,</span> <span class="n">stratify</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">validate_setup</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">):</span>
             <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -Rf </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">validate_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">comparison_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">validate_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">comparison_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc add data&quot;</span><span class="p">)</span>
-        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc push data&quot;</span><span class="p">)</span>
+    <span class="c1"># alias and filter the new train set</span>
+    <span class="n">alias_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
+    <span class="n">filter_dataset</span><span class="p">(</span><span class="n">new_train_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
 
-        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">])</span>
-        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
+    <span class="c1"># training begins</span>
+    <span class="n">execute_cli</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;PROJECT_DATA_PATH=</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> conda &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;run --no-capture-output -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu train --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
 
-        <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Trained XLMR model using </span><span class="si">{</span><span class="n">data_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
-            <span class="n">committer</span><span class="o">=</span><span class="n">committer</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">):</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm -Rf </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Setup Production model</span>
-        <span class="n">success_extracting_production_metrics</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">prod_metrics_status_message</span> <span class="o">=</span> <span class="s2">&quot;Empty file&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">initial_training</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">):</span>
-                <span class="c1"># if a model already exists (means this is not the first time training the model)</span>
-                <span class="n">repo_url</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GET_GITLAB_REPO_URL</span><span class="p">(</span>
-                    <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
-                    <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span><span class="p">,</span>
-                    <span class="n">user</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">,</span>
-                    <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_PRIVATE_TOKEN</span><span class="p">,</span>
-                <span class="p">)</span>
+    <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc add data&quot;</span><span class="p">)</span>
+    <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc push data&quot;</span><span class="p">)</span>
 
-                <span class="c1"># download the data folder from the production branch. The data folder will have the model</span>
-                <span class="n">execute_cli</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;dvc get --rev </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">PRODUCTION_BRANCH_ON_CONFIG_REPO</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">repo_url</span><span class="si">}</span><span class="s2"> data -o prod_data&quot;</span>
-                <span class="p">)</span>
+    <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">])</span>
+    <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git status&quot;</span><span class="p">)</span>
 
-                <span class="c1"># remove the newly trained model. The model and its metrics are backed up to dvc and the git branch is already pushed.</span>
-                <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;rm -rf data/classification/models&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Trained XLMR model using </span><span class="si">{</span><span class="n">data_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">,</span>
+        <span class="n">committer</span><span class="o">=</span><span class="n">committer</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="n">new_branch</span><span class="p">)</span>
 
-                <span class="c1"># replace the newly trained model with the model from production</span>
-                <span class="n">execute_cli</span><span class="p">(</span>
-                    <span class="s2">&quot;cp prod_data/classification/models/ data/classification/ -r&quot;</span>
-                <span class="p">)</span>
+    <span class="c1"># Testing</span>
+    <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
+        <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="n">custom_test_tagged_data_path</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_test_path</span><span class="p">):</span>
+        <span class="n">final_test_dataset_path</span> <span class="o">=</span> <span class="n">new_test_path</span>
 
-                <span class="c1"># evaluate the production model with the same test set and the same codebase as the newly trained model</span>
-                <span class="n">prod_classification_report_path</span><span class="p">,</span> <span class="n">prod_confusion_matrix_path</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
-                    <span class="n">final_test_dataset_path</span><span class="p">,</span>
-                    <span class="n">production_classification_report_path</span><span class="p">,</span>
-                    <span class="n">production_confusion_matrix_path</span><span class="p">,</span>
-                <span class="p">)</span>
-
-                <span class="c1"># once metrics from prod model are succesfully extracted, we recreate the comparison report.</span>
-                <span class="c1"># this time we do it between metrics from latest model and prod model</span>
-                <span class="n">create_comparison_classification_report</span><span class="p">(</span>
-                    <span class="n">classification_report_path</span><span class="p">,</span>
-                    <span class="n">prod_classification_report_path</span><span class="p">,</span>
-                    <span class="n">merged_classification_report_path</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">execute_cli</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">merged_classification_report_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">comparison_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-                <span class="c1"># TODO re-create comparison for confusion matrix as well</span>
-
-                <span class="n">success_extracting_production_metrics</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">prod_metrics_status_message</span> <span class="o">=</span> <span class="s2">&quot;Skipping extracting metrics from Production model since this is initial training&quot;</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">prod_metrics_status_message</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">prod_metrics_status_message</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error extracting metrics from production model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">prod_metrics_status_message</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">success_extracting_production_metrics</span><span class="p">:</span>
-            <span class="c1"># There was some issue with extracting metrics from the production model</span>
-
-            <span class="n">prod_classification_report_path</span> <span class="o">=</span> <span class="s2">&quot;prod_classification_report.csv&quot;</span>
-            <span class="n">prod_confusion_matrix_path</span> <span class="o">=</span> <span class="s2">&quot;prod_confusion_matrix.csv&quot;</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">prod_metrics_status_message</span><span class="p">}])</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-                <span class="n">prod_classification_report_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
-            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">prod_metrics_status_message</span><span class="p">}])</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-                <span class="n">prod_confusion_matrix_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">prod_classification_report_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">production_classification_report_path</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="n">execute_cli</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">prod_confusion_matrix_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">production_confusion_matrix_path</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-    <span class="k">except</span> <span class="n">git</span><span class="o">.</span><span class="n">GitCommandError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: Given </span><span class="si">{</span><span class="n">branch</span><span class="si">=}</span><span class="s2"> doesn&#39;t exist in the repo&quot;</span><span class="p">)</span>
+    <span class="n">testing</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">comparison_classification_report_path</span><span class="p">,</span> <span class="n">comparison_confusion_matrix_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_branch</span></div>
 
@@ -673,6 +221,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -713,7 +262,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

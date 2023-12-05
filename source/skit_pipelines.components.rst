@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   skit_pipelines.components.evaluate_slu_from_repo
    skit_pipelines.components.fetch_gpt_intent_prediction
    skit_pipelines.components.fetch_tagged_data_label_store
    skit_pipelines.components.identify_compliance_breaches_llm
@@ -147,6 +148,14 @@ skit\_pipelines.components.push\_compliance\_report\_to\_postgres module
    :undoc-members:
    :show-inheritance:
 
+skit\_pipelines.components.re\_presign\_s3\_urls module
+-------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.re_presign_s3_urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 skit\_pipelines.components.read\_json\_key module
 -------------------------------------------------
 
@@ -167,6 +176,22 @@ skit\_pipelines.components.upload2s3 module
 -------------------------------------------
 
 .. automodule:: skit_pipelines.components.upload2s3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.utils module
+---------------------------------------
+
+.. automodule:: skit_pipelines.components.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.utils\_slu module
+--------------------------------------------
+
+.. automodule:: skit_pipelines.components.utils_slu
    :members:
    :undoc-members:
    :show-inheritance:

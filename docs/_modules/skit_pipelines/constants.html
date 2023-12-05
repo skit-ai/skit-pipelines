@@ -80,6 +80,11 @@
 <span class="n">ML_METRICS_DB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_USER&quot;</span><span class="p">]</span>
 <span class="n">ML_METRICS_DB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;ML_METRICS_DB_PASSWORD&quot;</span><span class="p">]</span>
 
+<span class="n">S3_US_PRODUCTION_TURN_RECORDINGS_BUCKET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span>
+    <span class="s2">&quot;S3_US_PRODUCTION_TURN_RECORDINGS_BUCKET&quot;</span>
+<span class="p">]</span>
+
+
 <span class="n">KF_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;skit&quot;</span>
 <span class="n">DEFAULT_EXPERIMENT_NAME</span> <span class="o">=</span> <span class="s2">&quot;Default&quot;</span>
 
@@ -174,93 +179,6 @@
 <span class="p">]</span>
 
 <span class="n">REFERENCE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://metabase.skit.ai/question/2403-tagged-data?job_id=&quot;</span>
-<span class="c1"># for pushing eevee intent metrics to intent_metrics table.</span>
-<span class="n">ML_INTENT_METRICS_INSERT_SQL_QUERY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">INSERT INTO intent_metrics </span>
-<span class="s2">(</span>
-<span class="s2">    slu_name,</span>
-<span class="s2">    dataset_job_id,</span>
-<span class="s2">    language,</span>
-<span class="s2">    metric_name,</span>
-<span class="s2">    n_calls,</span>
-<span class="s2">    n_turns,</span>
-<span class="s2">    precision,</span>
-<span class="s2">    recall,</span>
-<span class="s2">    f1,</span>
-<span class="s2">    support,</span>
-<span class="s2">    created_at,  </span>
-<span class="s2">    calls_from_date,</span>
-<span class="s2">    calls_to_date,</span>
-<span class="s2">    tagged_from_date,</span>
-<span class="s2">    tagged_to_date,</span>
-<span class="s2">    reference_url,</span>
-<span class="s2">    raw</span>
-<span class="s2">)</span>
-<span class="s2">VALUES</span>
-<span class="s2">(</span>
-<span class="s2">    </span><span class="si">%(slu_name)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(dataset_job_id)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(language)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(metric_name)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(n_calls)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(n_turns)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(precision)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(recall)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(f1)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(support)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(created_at)s</span><span class="s2">,  </span>
-<span class="s2">    </span><span class="si">%(calls_from_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(calls_to_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(tagged_from_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(tagged_to_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(reference_url)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(raw)s</span>
-<span class="s2">)</span>
-<span class="s2">&quot;&quot;&quot;</span>
-
-<span class="c1"># for pushing eevee entity metrics to entity_metrics table.</span>
-<span class="n">ML_ENTITY_METRICS_INSERT_SQL_QUERY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">INSERT INTO entity_metrics </span>
-<span class="s2">(</span>
-<span class="s2">    slu_name,</span>
-<span class="s2">    dataset_job_id,</span>
-<span class="s2">    language,</span>
-<span class="s2">    metric_name,</span>
-<span class="s2">    n_calls,</span>
-<span class="s2">    n_turns,</span>
-<span class="s2">    false_positive_rate,</span>
-<span class="s2">    false_negative_rate,</span>
-<span class="s2">    mismatch_rate,</span>
-<span class="s2">    support,</span>
-<span class="s2">    negatives,</span>
-<span class="s2">    created_at,  </span>
-<span class="s2">    calls_from_date,</span>
-<span class="s2">    calls_to_date,</span>
-<span class="s2">    tagged_from_date,</span>
-<span class="s2">    tagged_to_date,</span>
-<span class="s2">    raw</span>
-<span class="s2">)</span>
-<span class="s2">VALUES</span>
-<span class="s2">(</span>
-<span class="s2">    </span><span class="si">%(slu_name)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(dataset_job_id)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(language)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(metric_name)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(n_calls)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(n_turns)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(false_positive_rate)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(false_negative_rate)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(mismatch_rate)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(support)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(negatives)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(created_at)s</span><span class="s2">,  </span>
-<span class="s2">    </span><span class="si">%(calls_from_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(calls_to_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(tagged_from_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(tagged_to_date)s</span><span class="s2">,</span>
-<span class="s2">    </span><span class="si">%(raw)s</span>
-<span class="s2">)</span>
-<span class="s2">&quot;&quot;&quot;</span>
 
 <span class="n">PERSONAL_ACCESS_TOKEN_GITHUB</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PERSONAL_ACCESS_TOKEN_GITHUB&quot;</span><span class="p">]</span>
 <span class="n">EEVEE_RAW_FILE_GITHUB_REPO_URL</span> <span class="o">=</span> <span class="p">(</span>
@@ -271,7 +189,7 @@
 
 <span class="c1"># K8s</span>
 <span class="n">POD_NODE_SELECTOR_LABEL</span> <span class="o">=</span> <span class="s2">&quot;beta.kubernetes.io/instance-type&quot;</span>
-<span class="n">CPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;m5.xlarge&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;r6i.2xlarge&quot;</span>
+<span class="n">CPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;m5.xlarge&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;r6a.2xlarge&quot;</span>
 <span class="n">GPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;g4dn.xlarge&quot;</span>
 
 <span class="c1"># Bots</span>
@@ -313,47 +231,6 @@
 <span class="n">ALLOWED_INTENTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_confirm_&quot;</span><span class="p">,</span> <span class="s2">&quot;_cancel_&quot;</span><span class="p">]</span>
 
 <span class="n">OPENAI_COMPLIANCE_BREACHES_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OPENAI_COMPLIANCE_BREACHES_KEY&quot;</span><span class="p">]</span>
-
-<span class="n">PROMPT_TEXT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;In the below conversation turn between a debt collection bot and a user:</span>
-
-<span class="s2">STATE: COF</span>
-<span class="s2">[Bot]: &lt;speak&gt;&lt;prosody rate=&quot;102%&quot;&gt;Hello. Am I speaking with stephanie brown-stewart?&lt;/prosody&gt;&lt;/speak&gt; </span><span class="se">\n</span><span class="s2"> [User]: yes</span>
-
-<span class="s2">Answer &quot;_confirm_&quot; if the user is confirming;</span>
-<span class="s2">Answer &quot;_cancel_&quot; if the user is denying;</span>
-<span class="s2">Answer &quot;Other&quot; if the user says anything else.</span>
-
-<span class="s2">Answer: _confirm_</span>
-
-<span class="s2">In the below conversation turn between a debt collection bot and a user:</span>
-
-<span class="s2">STATE: {{state}}</span>
-<span class="s2">{{conversation_context}}</span>
-
-<span class="s2">Answer &quot;_confirm_&quot; if the user is giving the bot a positive response or confirming what the bot says (yep, yeah, or similar expressions are taken to mean &quot;yes&quot;);</span>
-<span class="s2">Answer &quot;_cancel_&quot; if the user is refuting what the bot says;</span>
-<span class="s2">Answer &quot;_maybe_&quot; if the user is undecided or provides an ambiguous response, such as possibly;</span>
-<span class="s2">Answer &quot;_identity_&quot; if the user asks who the bot is, where it is calling from, or why it is calling;</span>
-<span class="s2">Answer &quot;other_language&quot; if the user appears to not speak English, does not feel at ease speaking English, or requests that we speak to them in an other language, such as Spanish;</span>
-<span class="s2">Answer &quot;_greeting_&quot; if the user is greeting the bot or saying hello;</span>
-<span class="s2">Answer &quot;ask_for_agent&quot; if the user prefers to communicate with a human agent or operator rather than a machine or robot;</span>
-<span class="s2">Answer &quot;wrong_number&quot; if the user says that the bot called the wrong number or the wrong person;</span>
-<span class="s2">Answer &quot;_repeat_&quot; if the user asks the bot to repeat something;</span>
-<span class="s2">Answer &quot;_what_&quot; if the user looks to be having problems understanding the bot or if they are asking a question;</span>
-<span class="s2">Answer &quot;dispute_debt&quot; if it appears that the user is disputing the debt or insisting they owe nothing;</span>
-<span class="s2">Answer &quot;cease_desit&quot; if the user requests that we stop calling them, remove them from our call list, stop bothering them, or threatens to sue us;</span>
-<span class="s2">Answer &#39;put_on_hold&#39; if it looks that the user is asking the bot to wait or hold for a moment;</span>
-<span class="s2">Answer &quot;inform_phone_number&quot; if the user appears to be providing a number when the bot asks for their mobile number;</span>
-<span class="s2">Answer &#39;wont_pay&#39; if the user refuses to pay or if they are unwilling to make a payment;</span>
-<span class="s2">Answer &quot;inform_fund_shortage&quot; if it appears that the user is attempting to indicate that they are currently short on funds or have recently made a significant expenditure;</span>
-<span class="s2">Answer &quot;ask_for_installment&quot; if the user mentions a figure that is less than the amount owed or indicates they would like to pay in smaller amounts;</span>
-<span class="s2">Answer &quot;_callback_&quot; if the user later requests a callback from the bot;</span>
-<span class="s2">Answer &quot;inform_pay_later&quot; if it appears that the user intends to pay later;</span>
-<span class="s2">Answer &quot;date_entity_only&quot; if it appears that the user is providing a date;</span>
-<span class="s2">Answer &quot;inform already paid&quot; if the user appears to have already made a payment;</span>
-<span class="s2">Answer &quot;Other&quot; if the user says anything else or if you are unsure of what they are saying.</span>
-
-<span class="s2">Answer:&quot;&quot;&quot;</span>
 </pre></div>
 
           </div>
@@ -380,6 +257,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -420,7 +298,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

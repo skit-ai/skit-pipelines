@@ -65,6 +65,7 @@
     <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">slack_thread</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">use_fsm_url</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">flow_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A pipeline to randomly sample calls for a given voice-bot project.</span>
@@ -127,7 +128,10 @@
 <span class="sd">    :type slack_thread: str, optional</span>
 <span class="sd">    :param use_fsm_url: Whether to use turn audio url from fsm or s3 path., defaults to False</span>
 <span class="sd">    :type use_fsm_url: bool, optional</span>
+<span class="sd">    :param flow_id: Id for a whole/part of a voicebot conversation flow, defaults to &quot;&quot;</span>
+<span class="sd">    :type flow_id: str, optional</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">calls</span> <span class="o">=</span> <span class="n">fetch_calls_op</span><span class="p">(</span>
         <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
         <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
@@ -146,6 +150,7 @@
         <span class="n">states</span><span class="o">=</span><span class="n">states</span><span class="p">,</span>
         <span class="n">remove_empty_audios</span><span class="o">=</span><span class="n">remove_empty_audios</span><span class="p">,</span>
         <span class="n">use_fsm_url</span><span class="o">=</span><span class="n">USE_FSM_URL</span> <span class="ow">or</span> <span class="n">use_fsm_url</span><span class="p">,</span>
+        <span class="n">flow_ids</span><span class="o">=</span><span class="n">flow_ids</span>
     <span class="p">)</span>
     <span class="n">calls</span><span class="o">.</span><span class="n">execution_options</span><span class="o">.</span><span class="n">caching_strategy</span><span class="o">.</span><span class="n">max_cache_staleness</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;P0D&quot;</span>  <span class="c1"># disables caching</span>
@@ -193,6 +198,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -233,7 +239,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

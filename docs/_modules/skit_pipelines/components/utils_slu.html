@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>skit_pipelines.components.utils_slu &#8212; skit_pipelines  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skit_pipelines.components.utils_slu</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">git</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.components.download_repo</span> <span class="kn">import</span> <span class="n">download_repo</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.components.retrain_slu_from_repo.comparision_report_generator</span> <span class="kn">import</span> <span class="n">comparison_classification_report</span><span class="p">,</span> <span class="n">comparison_confusion_report</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines.components.utils</span> <span class="kn">import</span> <span class="n">alias_dataset</span><span class="p">,</span> <span class="n">evaluate</span><span class="p">,</span> <span class="n">filter_dataset</span><span class="p">,</span> <span class="n">pick_1st_tag</span><span class="p">,</span> <span class="n">create_dataset_path</span><span class="p">,</span> <span class="n">execute_cli</span>
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="setup_project_config_repo"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.setup_project_config_repo">[docs]</a><span class="k">def</span> <span class="nf">setup_project_config_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Setup project config repo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">project_config_local_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="n">repo_name</span><span class="p">)</span>
+    <span class="n">download_repo</span><span class="p">(</span>
+        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span><span class="p">,</span>
+        <span class="n">repo_path</span><span class="o">=</span><span class="n">project_config_local_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cloned repo contents </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">project_config_local_path</span><span class="p">)</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">project_config_local_path</span></div>
+
+
+<div class="viewcode-block" id="setup_repo"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.setup_repo">[docs]</a><span class="k">def</span> <span class="nf">setup_repo</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">repo_branch</span><span class="p">,</span> <span class="n">run_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run_cmd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">runtime_env_var</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download a SLU repo and install all necessary dependencies (using conda) as found in its dockerfile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">repo_local_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+    <span class="n">download_repo</span><span class="p">(</span>
+        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_PATH</span><span class="p">,</span>
+        <span class="n">repo_path</span><span class="o">=</span><span class="n">repo_local_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">repo_local_path</span><span class="p">)</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">config_writer</span><span class="p">()</span><span class="o">.</span><span class="n">set_value</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER_EMAIL</span><span class="p">)</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">repo_branch</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda create -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> -m python=3.8 -y&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;. /conda/etc/profile.d/conda.sh&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= &#39;{print $2}&#39;)&quot;</span><span class="p">,</span>
+                <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> poetry install&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_returncode</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">run_dir</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">run_cmd</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">runtime_env_var</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">runtime_env_var</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2"> conda run -n </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">run_cmd</span><span class="si">}</span><span class="s2"> &amp;&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;running command </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;ps aux | grep task&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">repo_local_path</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exc</span></div>
+
+
+<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="n">tagged_data_path</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">,</span> <span class="n">custom_test_dataset_present</span><span class="p">,</span> <span class="n">use_previous_dataset</span><span class="p">,</span> <span class="n">train_split_percent</span><span class="p">,</span> <span class="n">stratify</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prepare training and testing datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">old_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+        <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
+    <span class="p">)</span>
+    <span class="n">old_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+        <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
+    <span class="p">)</span>
+
+    <span class="n">new_train_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+        <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TRAIN</span>
+    <span class="p">)</span>
+    <span class="n">new_test_path</span> <span class="o">=</span> <span class="n">create_dataset_path</span><span class="p">(</span>
+        <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="p">,</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TEST</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">custom_test_dataset_present</span><span class="p">:</span>
+        <span class="n">train_split_percent</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">if</span> <span class="n">train_split_percent</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="c1"># split into train and test</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu split-data &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;--train-size </span><span class="si">{</span><span class="n">train_split_percent</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">100</span><span class="si">}{</span><span class="s1">&#39; --stratify&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">stratify</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; --file </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
+            <span class="c1"># combine with older train set</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">old_test_path</span><span class="p">):</span>
+                <span class="c1"># combine with older test set</span>
+                <span class="n">execute_cli</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># don&#39;t split dataset - use all as train set</span>
+        <span class="k">if</span> <span class="n">use_previous_dataset</span><span class="p">:</span>
+            <span class="c1"># combine with older train dataset</span>
+            <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu combine-data --out </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">old_train_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># copy new dataset to new path</span>
+            <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">tagged_data_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_train_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># copy old test dataset to new path</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cp </span><span class="si">{</span><span class="n">old_test_path</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">new_test_path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>  <span class="c1"># if custom_test_dataset is present, new_test_path won&#39;t be used.</span>
+    <span class="k">return</span> <span class="n">new_train_path</span><span class="p">,</span> <span class="n">new_test_path</span></div>
+
+
+<div class="viewcode-block" id="data_handler"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.data_handler">[docs]</a><span class="k">def</span> <span class="nf">data_handler</span><span class="p">(</span><span class="n">annotated_job_data_path</span><span class="p">,</span> <span class="n">s3_data_path</span><span class="p">):</span>
+    <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">annotated_job_data_path</span><span class="p">)</span>
+        <span class="n">tagged_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">tagged_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="n">pick_1st_tag</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;No data found in given annotated jobs, check if data is tagged or job_ids are missing!&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_annotated_job</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s3_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">s3_data_path</span><span class="p">)</span>
+        <span class="n">s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="n">pick_1st_tag</span>
+        <span class="p">)</span>
+        <span class="n">tagged_df</span> <span class="o">=</span> <span class="n">s3_df</span> <span class="k">if</span> <span class="n">no_annotated_job</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">tagged_df</span><span class="p">,</span> <span class="n">s3_df</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No csv file from S3 found!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">no_annotated_job</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Either data from job_ids or s3_path has to be available for retraining to continue.&quot;</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">tagged_df</span></div>
+
+
+<div class="viewcode-block" id="process_custom_test_dataset"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.process_custom_test_dataset">[docs]</a><span class="k">def</span> <span class="nf">process_custom_test_dataset</span><span class="p">(</span><span class="n">custom_test_s3_data_path</span><span class="p">):</span>
+    <span class="n">custom_test_dataset_present</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">custom_test_s3_df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">custom_test_s3_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">custom_test_s3_data_path</span><span class="p">)</span>
+        <span class="n">custom_test_s3_df</span><span class="p">[</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_test_s3_df</span><span class="p">[</span>
+            <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TAG</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pick_1st_tag</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;No custom test dataset from S3 found! While it is allowed to not pass a custom test dataset (holdout dataset),&quot;</span>
+            <span class="s2">&quot;passing it is highly recommended&quot;</span>
+        <span class="p">)</span>
+        <span class="n">custom_test_dataset_present</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">custom_test_dataset_present</span><span class="p">,</span> <span class="n">custom_test_s3_df</span></div>
+
+
+<div class="viewcode-block" id="handle_dvc_and_data_paths"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.handle_dvc_and_data_paths">[docs]</a><span class="k">def</span> <span class="nf">handle_dvc_and_data_paths</span><span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">,</span> <span class="n">initial_training</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">use_previous_dataset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">initial_training</span><span class="p">:</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc init&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc config core.no_scm true&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc config core.hardlink_lock true&quot;</span><span class="p">)</span>
+
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dvc add </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;dvc remote add -d s3remote s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/clients/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">/&quot;</span>
+        <span class="p">)</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s2">&quot;.dvc/config&quot;</span><span class="p">])</span>
+        <span class="n">use_previous_dataset</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">initial_training</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">):</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;dvc pull data.dvc&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DATA</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OLD_DATA</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">core_slu_repo_name</span><span class="si">}</span><span class="s2"> slu setup-dirs --project_config_path </span><span class="si">{</span><span class="n">project_config_local_path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Discrepancy between setting </span><span class="si">{</span><span class="n">initial_training</span><span class="si">=}</span><span class="s2"> and repo containing data.dvc&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">use_previous_dataset</span></div>
+
+
+<div class="viewcode-block" id="testing"><a class="viewcode-back" href="../../../skit_pipelines.components.html#skit_pipelines.components.utils_slu.testing">[docs]</a><span class="k">def</span> <span class="nf">testing</span><span class="p">(</span><span class="n">repo_name</span><span class="p">,</span> <span class="n">project_config_local_path</span><span class="p">,</span> <span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">,</span> <span class="n">core_slu_repo_name</span><span class="p">,</span> <span class="n">comparison_classification_report_path</span><span class="p">,</span> <span class="n">comparison_confusion_matrix_path</span><span class="p">,</span> <span class="n">compare_branch</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">):</span>
+    
+    <span class="c1"># alias and filter the new test dataset</span>
+    <span class="n">filter_dataset</span><span class="p">(</span><span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">remove_intents</span><span class="p">)</span>
+    <span class="n">alias_dataset</span><span class="p">(</span><span class="n">final_test_dataset_path</span><span class="p">,</span> <span class="n">intent_alias_path</span><span class="p">)</span>
+
+    <span class="c1"># testing the model that was just trained</span>
+    <span class="n">classification_report_path</span><span class="p">,</span> <span class="n">confusion_matrix_path</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
+        <span class="n">final_test_dataset_path</span><span class="p">,</span>
+        <span class="n">project_config_local_path</span><span class="p">,</span>
+        <span class="n">core_slu_repo_name</span><span class="p">,</span>
+        <span class="n">repo_name</span>
+    <span class="p">)</span>
+
+    <span class="n">comparison_classification_report</span><span class="p">(</span><span class="n">classification_report_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">comparison_classification_report_path</span><span class="p">)</span>
+    <span class="n">comparison_confusion_report</span><span class="p">(</span><span class="n">confusion_matrix_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">comparison_confusion_matrix_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">compare_branch</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data.dvc&quot;</span><span class="p">):</span>
+            <span class="n">repo_url</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GET_GITLAB_REPO_URL</span><span class="p">(</span>
+                <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+                <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_SLU_PROJECT_CONFIG_PATH</span><span class="p">,</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">,</span>
+                <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_PRIVATE_TOKEN</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">execute_cli</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;dvc get --rev </span><span class="si">{</span><span class="n">compare_branch</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">repo_url</span><span class="si">}</span><span class="s2"> data -o prod_data&quot;</span>
+                <span class="p">)</span>
+                <span class="n">execute_cli</span><span class="p">(</span><span class="s2">&quot;rm -rf data/classification/models&quot;</span><span class="p">)</span>
+                <span class="n">execute_cli</span><span class="p">(</span>
+                    <span class="s2">&quot;cp prod_data/classification/models/ data/classification/ -r&quot;</span>
+                <span class="p">)</span>
+
+                <span class="n">prod_classification_report_path</span><span class="p">,</span> <span class="n">prod_confusion_matrix_path</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
+                    <span class="n">final_test_dataset_path</span><span class="p">,</span>
+                    <span class="n">project_config_local_path</span><span class="p">,</span>
+                    <span class="n">core_slu_repo_name</span><span class="p">,</span>
+                    <span class="n">repo_name</span>
+                <span class="p">)</span>
+
+                <span class="n">comparison_classification_report</span><span class="p">(</span><span class="n">classification_report_path</span><span class="p">,</span> <span class="n">prod_classification_report_path</span><span class="p">,</span>
+                                                <span class="n">comparison_classification_report_path</span><span class="p">)</span>
+                <span class="n">comparison_confusion_report</span><span class="p">(</span><span class="n">confusion_matrix_path</span><span class="p">,</span> <span class="n">prod_confusion_matrix_path</span><span class="p">,</span>
+                                            <span class="n">comparison_confusion_matrix_path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">prod_metrics_status_message</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Error extracting metrics from production model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">prod_metrics_status_message</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prod_metrics_status_message</span> <span class="o">=</span> <span class="s2">&quot;Skipping extracting metrics from Production model since this is initial training&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">prod_metrics_status_message</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">skit_pipelines</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

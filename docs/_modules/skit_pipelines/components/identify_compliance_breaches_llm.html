@@ -37,7 +37,7 @@
 
 
 <div class="viewcode-block" id="identify_compliance_breaches_llm"><a class="viewcode-back" href="../../../skit_pipelines.components.identify_compliance_breaches_llm.html#skit_pipelines.components.identify_compliance_breaches_llm.identify_compliance_breaches_llm">[docs]</a><span class="k">def</span> <span class="nf">identify_compliance_breaches_llm</span><span class="p">(</span>
-    <span class="n">s3_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">s3_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Groups turns into calls and pushes them to an LLM (uses openai chatComplete functionality) to identify</span>
@@ -56,7 +56,7 @@
     <span class="kn">import</span> <span class="nn">openai</span>
     <span class="kn">import</span> <span class="nn">polars</span> <span class="k">as</span> <span class="nn">pl</span>
     <span class="kn">import</span> <span class="nn">spacy</span>
-    <span class="kn">from</span> <span class="nn">presidio_analyzer</span> <span class="kn">import</span> <span class="n">AnalyzerEngine</span><span class="p">,</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">PatternRecognizer</span>
+    <span class="kn">from</span> <span class="nn">presidio_analyzer</span> <span class="kn">import</span> <span class="n">AnalyzerEngine</span><span class="p">,</span> <span class="n">PatternRecognizer</span><span class="p">,</span> <span class="n">Pattern</span>
     <span class="kn">from</span> <span class="nn">presidio_anonymizer</span> <span class="kn">import</span> <span class="n">AnonymizerEngine</span>
     <span class="kn">from</span> <span class="nn">presidio_anonymizer.entities</span> <span class="kn">import</span> <span class="n">OperatorConfig</span>
 
@@ -78,24 +78,20 @@
     <span class="n">anonymizer</span> <span class="o">=</span> <span class="n">AnonymizerEngine</span><span class="p">()</span>
 
     <span class="n">credit_number_pattern</span> <span class="o">=</span> <span class="n">Pattern</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;numbers_pattern&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="s2">&quot;\d</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">number_recognizer</span> <span class="o">=</span> <span class="n">PatternRecognizer</span><span class="p">(</span>
-        <span class="n">supported_entity</span><span class="o">=</span><span class="s2">&quot;NUMBER&quot;</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="n">credit_number_pattern</span><span class="p">]</span>
-    <span class="p">)</span>
+    <span class="n">number_recognizer</span> <span class="o">=</span> <span class="n">PatternRecognizer</span><span class="p">(</span><span class="n">supported_entity</span><span class="o">=</span><span class="s2">&quot;NUMBER&quot;</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="p">[</span><span class="n">credit_number_pattern</span><span class="p">])</span>
     <span class="n">analyzer</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">add_recognizer</span><span class="p">(</span><span class="n">number_recognizer</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">anonymize_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
-            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;PHONE_NUMBER&quot;</span><span class="p">,</span> <span class="s2">&quot;NUMBER&quot;</span><span class="p">],</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span>
-        <span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                                   <span class="n">entities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;PHONE_NUMBER&quot;</span><span class="p">,</span> <span class="s2">&quot;NUMBER&quot;</span><span class="p">],</span>
+                                   <span class="n">language</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">)</span>
 
-        <span class="n">anonymized_text</span> <span class="o">=</span> <span class="n">anonymizer</span><span class="o">.</span><span class="n">anonymize</span><span class="p">(</span>
-            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
-            <span class="n">analyzer_results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
-            <span class="n">operators</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;PHONE_NUMBER&quot;</span><span class="p">:</span> <span class="n">OperatorConfig</span><span class="p">(</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;new_value&quot;</span><span class="p">:</span> <span class="s2">&quot;5555555555&quot;</span><span class="p">}),</span>
-                <span class="s2">&quot;NUMBER&quot;</span><span class="p">:</span> <span class="n">OperatorConfig</span><span class="p">(</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;new_value&quot;</span><span class="p">:</span> <span class="s2">&quot;1111&quot;</span><span class="p">}),</span>
-            <span class="p">},</span>
-        <span class="p">)</span>
+        <span class="n">anonymized_text</span> <span class="o">=</span> <span class="n">anonymizer</span><span class="o">.</span><span class="n">anonymize</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">analyzer_results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
+                                               <span class="n">operators</span><span class="o">=</span><span class="p">{</span>
+                                                   <span class="s2">&quot;PHONE_NUMBER&quot;</span><span class="p">:</span> <span class="n">OperatorConfig</span><span class="p">(</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                                                                                  <span class="p">{</span><span class="s2">&quot;new_value&quot;</span><span class="p">:</span> <span class="s2">&quot;5555555555&quot;</span><span class="p">}),</span>
+                                                   <span class="s2">&quot;NUMBER&quot;</span><span class="p">:</span> <span class="n">OperatorConfig</span><span class="p">(</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;new_value&quot;</span><span class="p">:</span> <span class="s2">&quot;1111&quot;</span><span class="p">})</span>
+                                               <span class="p">})</span>
         <span class="k">return</span> <span class="n">anonymized_text</span><span class="o">.</span><span class="n">text</span>
 
     <span class="k">if</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">OPENAI_COMPLIANCE_BREACHES_KEY</span> <span class="o">==</span> <span class="s2">&quot;KEY_NOT_SET&quot;</span><span class="p">:</span>
@@ -145,13 +141,8 @@
 
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">total_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;Time required to obtain compliance breaches from openai for &quot;</span>
-        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">calls</span><span class="p">))</span>
-        <span class="o">+</span> <span class="s2">&quot; calls was &quot;</span>
-        <span class="o">+</span> <span class="n">total_time</span>
-        <span class="o">+</span> <span class="s2">&quot; seconds&quot;</span>
-    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time required to obtain compliance breaches from openai for &quot;</span> <span class="o">+</span>
+          <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">calls</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; calls was &quot;</span> <span class="o">+</span> <span class="n">total_time</span> <span class="o">+</span> <span class="s2">&quot; seconds&quot;</span><span class="p">)</span>
     <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;call_id&quot;</span><span class="p">,</span>
         <span class="s2">&quot;call_uuid&quot;</span><span class="p">,</span>
@@ -163,7 +154,7 @@
         <span class="s2">&quot;is_breach&quot;</span><span class="p">,</span>
         <span class="s2">&quot;compliance_output&quot;</span><span class="p">,</span>
         <span class="s2">&quot;tokens_consumed&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;call_information&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;call_information&quot;</span>
     <span class="p">]</span>
     <span class="n">df_output</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
     <span class="n">fd_upload</span><span class="p">,</span> <span class="n">upload_file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
@@ -211,6 +202,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -251,7 +243,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

@@ -9,6 +9,7 @@ Subpackages
 
    skit_pipelines.pipelines.asr_tune
    skit_pipelines.pipelines.eval_asr_pipeline
+   skit_pipelines.pipelines.evaluate_slu
    skit_pipelines.pipelines.fetch_calls_pipeline
    skit_pipelines.pipelines.fetch_n_tag_calls
    skit_pipelines.pipelines.fetch_n_tag_turns_and_calls

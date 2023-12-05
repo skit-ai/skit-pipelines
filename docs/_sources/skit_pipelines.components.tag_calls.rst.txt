@@ -12,14 +12,6 @@ skit\_pipelines.components.tag\_calls.labelstudio module
    :undoc-members:
    :show-inheritance:
 
-skit\_pipelines.components.tag\_calls.tog module
-------------------------------------------------
-
-.. automodule:: skit_pipelines.components.tag_calls.tog
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

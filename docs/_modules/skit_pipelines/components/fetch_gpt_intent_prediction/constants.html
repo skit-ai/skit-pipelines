@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>skit_pipelines.components.fetch_gpt_intent_prediction.constants &#8212; skit_pipelines  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skit_pipelines.components.fetch_gpt_intent_prediction.constants</h1><div class="highlight"><pre>
+<span></span><span class="n">INTENT_MODEL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text-davinci-003&quot;</span>
+<span class="n">ALLOWED_INTENTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_confirm_&quot;</span><span class="p">,</span> <span class="s2">&quot;_cancel_&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="get_prompt_text"><a class="viewcode-back" href="../../../../skit_pipelines.components.fetch_gpt_intent_prediction.html#skit_pipelines.components.fetch_gpt_intent_prediction.constants.get_prompt_text">[docs]</a><span class="k">def</span> <span class="nf">get_prompt_text</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;&quot;In the below conversation turn between a debt collection bot and a user:</span>
+
+<span class="s2">STATE: COF</span>
+<span class="s2">[Bot]: &lt;speak&gt;&lt;prosody rate=&quot;102%&quot;&gt;Hello. Am I speaking with stephanie brown-stewart?&lt;/prosody&gt;&lt;/speak&gt; </span><span class="se">\n</span><span class="s2"> [User]: yes</span>
+
+<span class="s2">Answer &quot;_confirm_&quot; if the user is confirming;</span>
+<span class="s2">Answer &quot;_cancel_&quot; if the user is denying;</span>
+<span class="s2">Answer &quot;Other&quot; if the user says anything else.</span>
+
+<span class="s2">Answer: _confirm_</span>
+
+<span class="s2">In the below conversation turn between a debt collection bot and a user:</span>
+
+<span class="s2">{{state}}</span>
+<span class="s2">{{conversation_context}}</span>
+
+<span class="s2">Answer &quot;_confirm_&quot; if the user is giving the bot a positive response or confirming what the bot says (yep, yeah, or similar expressions are taken to mean &quot;yes&quot;);</span>
+<span class="s2">Answer &quot;_cancel_&quot; if the user is refuting what the bot says;</span>
+<span class="s2">Answer &quot;_maybe_&quot; if the user is undecided or provides an ambiguous response, such as possibly;</span>
+<span class="s2">Answer &quot;_identity_&quot; if the user asks who the bot is, where it is calling from, or why it is calling;</span>
+<span class="s2">Answer &quot;other_language&quot; if the user appears to not speak English, does not feel at ease speaking English, or requests that we speak to them in an other language, such as Spanish;</span>
+<span class="s2">Answer &quot;_greeting_&quot; if the user is greeting the bot or saying hello;</span>
+<span class="s2">Answer &quot;ask_for_agent&quot; if the user prefers to communicate with a human agent or operator rather than a machine or robot;</span>
+<span class="s2">Answer &quot;wrong_number&quot; if the user says that the bot called the wrong number or the wrong person;</span>
+<span class="s2">Answer &quot;_repeat_&quot; if the user asks the bot to repeat something;</span>
+<span class="s2">Answer &quot;_what_&quot; if the user looks to be having problems understanding the bot or if they are asking a question;</span>
+<span class="s2">Answer &quot;dispute_debt&quot; if it appears that the user is disputing the debt or insisting they owe nothing;</span>
+<span class="s2">Answer &quot;cease_desit&quot; if the user requests that we stop calling them, remove them from our call list, stop bothering them, or threatens to sue us;</span>
+<span class="s2">Answer &#39;put_on_hold&#39; if it looks that the user is asking the bot to wait or hold for a moment;</span>
+<span class="s2">Answer &quot;inform_phone_number&quot; if the user appears to be providing a number when the bot asks for their mobile number;</span>
+<span class="s2">Answer &#39;wont_pay&#39; if the user refuses to pay or if they are unwilling to make a payment;</span>
+<span class="s2">Answer &quot;inform_fund_shortage&quot; if it appears that the user is attempting to indicate that they are currently short on funds or have recently made a significant expenditure;</span>
+<span class="s2">Answer &quot;ask_for_installment&quot; if the user mentions a figure that is less than the amount owed or indicates they would like to pay in smaller amounts;</span>
+<span class="s2">Answer &quot;_callback_&quot; if the user later requests a callback from the bot;</span>
+<span class="s2">Answer &quot;inform_pay_later&quot; if it appears that the user intends to pay later;</span>
+<span class="s2">Answer &quot;date_entity_only&quot; if it appears that the user is providing a date;</span>
+<span class="s2">Answer &quot;inform already paid&quot; if the user appears to have already made a payment;</span>
+<span class="s2">Answer &quot;Other&quot; if the user says anything else or if you are unsure of what they are saying.</span>
+
+<span class="s2">Answer:&quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">skit_pipelines</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  <li><a href="../fetch_gpt_intent_prediction.html">skit_pipelines.components.fetch_gpt_intent_prediction</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

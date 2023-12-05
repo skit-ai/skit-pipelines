@@ -51,6 +51,7 @@
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components</span> <span class="kn">import</span> <span class="n">upload2s3</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_from_s3</span> <span class="kn">import</span> <span class="n">download_csv_from_s3</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.fetch_gpt_intent_prediction.constants</span> <span class="kn">import</span> <span class="n">get_prompt_text</span>
 
     <span class="c1"># from skit_pipelines.components.fetch_gpt_intent_prediction import constants as gpt_constants</span>
 
@@ -104,7 +105,7 @@
                 <span class="s2">&quot;[Bot]: &quot;</span> <span class="o">+</span> <span class="n">bot_response</span> <span class="o">+</span> <span class="s2">&quot;  </span><span class="se">\n</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot;[User]: &quot;</span> <span class="o">+</span> <span class="n">user_utterance</span>
             <span class="p">)</span>
 
-            <span class="n">input_text</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">PROMPT_TEXT</span>
+            <span class="n">input_text</span> <span class="o">=</span> <span class="n">get_prompt_text</span><span class="p">()</span>
             <span class="n">input_text</span> <span class="o">=</span> <span class="n">input_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
                 <span class="s2">&quot;{{conversation_context}}&quot;</span><span class="p">,</span> <span class="n">conversation_context</span>
             <span class="p">)</span>
@@ -175,6 +176,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
 </ul>
@@ -215,7 +217,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 
