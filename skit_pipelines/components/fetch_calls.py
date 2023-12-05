@@ -104,12 +104,12 @@ def fetch_calls(
         flow_ids=flow_ids
     )
     logger.info(f"Finished in {time.time() - start:.2f} seconds")
+    logger.info(f"Obtained {maybe_df.shape[0]} calls from FSM Db before removing empty audios")
     if not maybe_df.size:
-        raise ValueError("No calls found for the above parameters")
+        return ""
 
     _, file_path = tempfile.mkstemp(suffix=const.CSV_FILE)
     maybe_df.to_csv(file_path, index=False)
-    logger.info(f"Obtained {maybe_df.shape[0]} calls from FSM Db before removing empty audios")
 
     def empty_audios_remover(df: pd.DataFrame, df_path: str):
         audios_dir_path = tempfile.mkdtemp()
@@ -133,12 +133,14 @@ def fetch_calls(
             )
         ].drop("audio_filename", axis=1)
         if not df_final.size:
-            raise ValueError("No calls found for the above parameters")
+            return False
         logger.info(f"Obtained {df_final.shape[0]} calls after removing empty audios")
         df_final.to_csv(df_path, index=False)
+        return True
 
     if remove_empty_audios:
-        empty_audios_remover(df=maybe_df, df_path=file_path)
+        if not empty_audios_remover(df=maybe_df, df_path=file_path):
+            return ""
     client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
     s3_path = upload2s3(
         file_path,

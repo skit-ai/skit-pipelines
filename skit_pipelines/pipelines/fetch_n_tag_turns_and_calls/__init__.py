@@ -220,61 +220,74 @@ def fetch_n_tag_turns_and_calls(
         "P0D"  # disables caching
     )
 
-    # Get intent response from GPT for qualifying turns
-    gpt_response_path = fetch_gpt_intent_prediction_op(
-        s3_file_path=calls.output, use_assisted_annotation=use_assisted_annotation
-    )
-
-    # uploads data for turn level intent, entity & transcription tagging
-    tag_turns_output = tag_calls_op(
-        input_file=gpt_response_path.output,
-        project_id=labelstudio_project_id,
-        data_label=data_label,
-    )
-
-    fetch_slot_and_calls_output = fetch_calls_for_slots_op(
-        untagged_records_path=calls.output,
-        org_id=org_id,
-        language_code=lang,
-        start_date=start_date,
-        end_date=end_date,
-    )
-
-    # uploads data for call & slot level tagging to labelstudio
-    tag_calls_output = tag_calls_op(
-        input_file=fetch_slot_and_calls_output.output,
-        call_project_id=call_project_id,
-        data_label=data_label,
-    )
-
-    with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output) as check1:
-        df_sizes = tag_turns_output.outputs["df_sizes"]
-        errors = tag_turns_output.outputs["errors"]
-
-        notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {labelstudio_project_id=}."""
-        notification_text += f"\nErrors: {errors}" if errors else ""
-
-        task_no_cache = slack_notification_op(
-            notification_text, channel=channel, cc=notify, thread_id=slack_thread
-        )
-        task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
+    with kfp.dsl.Condition(calls.output != "", "calls_found").after(calls):
+        # Get intent response from GPT for qualifying turns
+        gpt_response_path = fetch_gpt_intent_prediction_op(
+            s3_file_path=calls.output, use_assisted_annotation=use_assisted_annotation
         )
 
-        df_sizes2 = tag_calls_output.outputs["df_sizes"]
-        errors2 = tag_calls_output.outputs["errors"]
-
-        notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
-        Uploaded {getattr(fetch_slot_and_calls_output, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {call_project_id=}."""
-        notification_text += f"\nErrors: {errors2}" if errors else ""
-
-        task_no_cache2 = slack_notification_op(
-            notification_text, channel=channel, cc=notify, thread_id=slack_thread
+        # uploads data for turn level intent, entity & transcription tagging
+        tag_turns_output = tag_calls_op(
+            input_file=gpt_response_path.output,
+            project_id=labelstudio_project_id,
+            data_label=data_label,
         )
-        task_no_cache2.execution_options.caching_strategy.max_cache_staleness = (
-            "P0D"  # disables caching
+
+        fetch_slot_and_calls_output = fetch_calls_for_slots_op(
+            untagged_records_path=calls.output,
+            org_id=org_id,
+            language_code=lang,
+            start_date=start_date,
+            end_date=end_date,
         )
+
+        # uploads data for call & slot level tagging to labelstudio
+        tag_calls_output = tag_calls_op(
+            input_file=fetch_slot_and_calls_output.output,
+            call_project_id=call_project_id,
+            data_label=data_label,
+        )
+
+        with kfp.dsl.Condition(notify != "", "notify").after(tag_turns_output):
+            df_sizes = tag_turns_output.outputs["df_sizes"]
+            errors = tag_turns_output.outputs["errors"]
+
+            notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
+            Uploaded {getattr(calls, 'output')} ({df_sizes}, {org_id=}) for tagging to {labelstudio_project_id=}."""
+            notification_text += f"\nErrors: {errors}" if errors else ""
+
+            task_no_cache = slack_notification_op(
+                notification_text, channel=channel, cc=notify, thread_id=slack_thread
+            )
+            task_no_cache.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+            df_sizes2 = tag_calls_output.outputs["df_sizes"]
+            errors2 = tag_calls_output.outputs["errors"]
+
+            notification_text = f"""Finished a request for {call_quantity} calls. Fetched from {start_date} to {end_date} for {client_id=}.
+            Uploaded {getattr(fetch_slot_and_calls_output, 'output')} ({df_sizes2}, {org_id=}) for call & slot tagging to {call_project_id=}."""
+            notification_text += f"\nErrors: {errors2}" if errors else ""
+
+            task_no_cache2 = slack_notification_op(
+                notification_text, channel=channel, cc=notify, thread_id=slack_thread
+            )
+            task_no_cache2.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
+
+    with kfp.dsl.Condition(calls.output == "", "no_calls").after(calls):
+        with kfp.dsl.Condition(notify != "", "notify").after(calls):
+            notification_text = f"""No calls could be found from {start_date} to {end_date} for {client_id=}.
+                        Please verify the parameters you have used or refer to the debugging guide on Notion."""
+
+            task_no_cache2 = slack_notification_op(
+                notification_text, channel=channel, cc=notify, thread_id=slack_thread
+            )
+            task_no_cache2.execution_options.caching_strategy.max_cache_staleness = (
+                "P0D"  # disables caching
+            )
 
 
 __all__ = ["fetch_n_tag_turns_and_calls"]
