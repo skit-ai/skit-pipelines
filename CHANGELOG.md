@@ -1,5 +1,8 @@
 # Changelog
 
+1.1.4
+- [x] fix: Intent list was not coming in comprision file while training or evaluate slu.
+
 1.1.3
 - [x] Update node selector to match node groups in US
 
