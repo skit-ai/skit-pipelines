@@ -77,7 +77,7 @@ def comparison_classification_report(report1_path: str, report2_path: str, outpu
         columns=["precision", "recall", "f1-score", "support"],
     )
 
-    comparison_df.to_csv(output_path, index=False)
+    comparison_df.to_csv(output_path)
     # Print the comparison report using tabulate for better formatting
     print(tabulate(comparison_df, headers="keys", tablefmt="psql"))
 
