@@ -1,5 +1,8 @@
 # Changelog
 
+1.1.5
+- [x] fix: No calls found from FSM shouldnt fail data_fetch pipelines
+
 1.1.4
 - [x] fix: Intent list was not coming in comprision file while training or evaluate slu.
 
