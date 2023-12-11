@@ -29,6 +29,9 @@ def create_dir_name(org_id: str, dir_type: str) -> str:
     )
 
 
+def generate_generic_dir_name(name: str)-> str:
+    return os.path.join(name, datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
+
 class SlackBlockFactory:
     def __init__(self, content) -> None:
         self.body = {"text": "", "blocks": []}

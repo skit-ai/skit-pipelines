@@ -12,3 +12,4 @@ from skit_pipelines.pipelines.retrain_slu_old import retrain_slu_old
 from skit_pipelines.pipelines.evaluate_slu import evaluate_slu
 from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline
+from skit_pipelines.pipelines.generate_prompts import generate_prompts

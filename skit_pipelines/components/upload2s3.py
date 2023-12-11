@@ -25,7 +25,8 @@ def upload2s3(
     from loguru import logger
 
     from skit_pipelines.api.models import StorageOptions
-    from skit_pipelines.utils import create_file_name
+    from skit_pipelines.utils import create_file_name, generate_generic_dir_name
+    from datetime import datetime
 
     def upload_s3_folder(s3_resource, bucket, path_on_disk, upload_path):
         for root, dirs, files in os.walk(path_on_disk):
@@ -40,9 +41,9 @@ def upload2s3(
                 logger.debug(
                     f"Uploaded ({os.path.join(root, file)}) to ({os.path.join(upload_path, middle_part, file)})"
                 )
-
+    
     s3_resource = boto3.client("s3")
-
+    
     if upload_as_directory and ext:
         raise ValueError("`upload_as_directory` can not be set with a non-empty `ext`")
 
@@ -60,6 +61,7 @@ def upload2s3(
     if not upload_as_directory:
         s3_resource.upload_file(path_on_disk, bucket, upload_path)
     else:
+        upload_path = output_path or generate_generic_dir_name(reference)
         upload_s3_folder(s3_resource, bucket, path_on_disk, upload_path)
 
     s3_path = f"s3://{bucket}/{upload_path}"
