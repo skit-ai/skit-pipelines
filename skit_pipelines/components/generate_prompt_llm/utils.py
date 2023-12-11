@@ -1,4 +1,3 @@
-# your_calling_script.py
 import subprocess
 from loguru import logger
 import os
