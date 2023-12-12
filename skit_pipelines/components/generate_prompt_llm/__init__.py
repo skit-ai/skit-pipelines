@@ -16,7 +16,7 @@ def generate_prompt_llm(
         temperature: float = 0.99,
         model: str = 'gpt-4',
         llm_trainer_repo_name: str = "LLMtrainer" ,
-        llm_trainer_repo_branch: str = "generate_prompt_refactor"
+        llm_trainer_repo_branch: str = "main"
     ):
     """
     

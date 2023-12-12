@@ -22,7 +22,7 @@ def generate_prompts(
     output_dir: str = "",
     filename: str = "",
     llm_trainer_repo_name: str = "LLMtrainer",
-    llm_trainer_repo_branch: str = "generate_prompt_refactor",
+    llm_trainer_repo_branch: str = "main",
     model: str = 'gpt-4',
     n_iter: int = 1,
     n_choice: int = 2,
