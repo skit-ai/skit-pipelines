@@ -61,4 +61,4 @@ from skit_pipelines.components.upload_for_call_and_slot_tagging import (
     fetch_calls_for_slots_op,
 )
 from skit_pipelines.components.generate_prompt_llm import generate_prompt_llm_op
-from skit_pipelines.components.zip_file_or_folder import zip_file_or_folder_op
+from skit_pipelines.components.zip_files_and_notify import zip_file_and_notify_op
