@@ -11,9 +11,6 @@ def slack_notification(
     thread_id: str = "",
     file_title: str = "",
     file_content: str = "",
-    file_path: str = "",
-    file_name: str = "",
-    file_type: str = ""
 ) -> None:
     """
     Send a message on any channel.
@@ -50,18 +47,6 @@ def slack_notification(
                 filetype="auto",
                 thread_ts=thread_id or None,
             )
-            
-        elif file_path:
-            client.files_upload(
-            channels=channel,
-            file=file_path,
-            filename=file_name,
-            initial_comment=message,
-            title=file_title,
-            thread_ts=thread_id or None,
-            filetype = file_type
-            )
-            
         else:
             client.chat_postMessage(
                 channel=channel,

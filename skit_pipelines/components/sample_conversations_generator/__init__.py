@@ -4,19 +4,18 @@ from kfp.components import OutputPath
 from skit_pipelines import constants as pipeline_constants
 from typing import List
 
-
-def generate_prompt_llm(
+def sample_conversations_generator(
         output_path: OutputPath(str),
         situation: List[str],
         output_dir: str,
         filename: str,
         prompt: str,
-        n_iter: int = 1,
-        n_choice: int = 2,
-        temperature: float = 0.99,
-        model: str = 'gpt-4',
-        llm_trainer_repo_name: str = "LLMtrainer" ,
-        llm_trainer_repo_branch: str = "main"
+        n_iter: int,
+        n_choice: int,
+        temperature: float ,
+        model: str,
+        llm_trainer_repo_name: str,
+        llm_trainer_repo_branch: str
     ):
     """
     
@@ -58,13 +57,10 @@ def generate_prompt_llm(
 
     import git
     from loguru import logger
-    import json
-    import sys
-    import time
     from skit_pipelines.components.download_repo import download_repo
-    from skit_pipelines.components.generate_prompt_llm.utils import execute_cli, run_conda_python_command
-    from skit_pipelines.components import upload2s3
+    from skit_pipelines.components.sample_conversations_generator.utils import run_conda_python_command
     from skit_pipelines import constants as pipeline_constants
+    from skit_pipelines.components.utils import execute_cli
     
     def generate_command(situation_list=None, output_dir=None, filename=None, model=None, prompt=None, n_iter=None, n_choice=None, temperature=None):
         """
@@ -92,17 +88,19 @@ def generate_prompt_llm(
         n_choice_cmd = f'--n-choice {n_choice}' if n_choice else ""
         temperature_cmd = f'--temperature {temperature}' if temperature else ""
 
-        command = f"python data_gen_cli.py {situation_list_cmd} {output_dir_cmd} {filename_cmd} {model_cmd} {prompt_cmd} {n_iter_cmd} {n_choice_cmd} {temperature_cmd}"
+        command = f"""python data_gen_cli.py {situation_list_cmd} {output_dir_cmd} {filename_cmd} {model_cmd} {prompt_cmd} {n_iter_cmd} {n_choice_cmd} {temperature_cmd} --save_prompts_to_disk"""
         return command.strip()
-
+    
     
     if not situation:
         logger.debug(f"Situations is not passed. situations: {situation}")
         return None
     
+    
     run_dir = 'data_generation/'
     
     repo_local_path = tempfile.mkdtemp()
+    
     download_repo(
         git_host_name=pipeline_constants.GITHUB,
         repo_name=llm_trainer_repo_name,
@@ -115,14 +113,14 @@ def generate_prompt_llm(
         repo.git.checkout(llm_trainer_repo_branch)
         os.chdir(run_dir)
         execute_cli(
-            f"conda create -n {llm_trainer_repo_name} -m python=3.9 -y",
-        )
+                f"conda create -n {llm_trainer_repo_name} -m python=3.9 -y",
+            )
         os.system(". /conda/etc/profile.d/conda.sh")
         execute_cli(
-            f"conda run -n {llm_trainer_repo_name} "
-            + "conda install openai",
-            split=False,
-        )
+                f"conda run -n {llm_trainer_repo_name} "
+                + "conda install openai",
+                split=False,
+            )
         
         os.mkdir(output_path)
         
@@ -138,18 +136,20 @@ def generate_prompt_llm(
         n_choice=n_choice,
         temperature=temperature)
         
-        command  = f"conda run -n {llm_trainer_repo_name} " + generated_command
+        print(f"Generated command : {generated_command}")
         
+        command  = f"conda run -n {llm_trainer_repo_name} " + generated_command
         print(f"The final command : {command}")
         
         run_conda_python_command(command)
         
         return output_path
+    
     except Exception as exc:
         logger.error(f"Error : {exc}")
         raise exc
 
 
-generate_prompt_llm_op = kfp.components.create_component_from_func(
-    generate_prompt_llm, base_image=pipeline_constants.BASE_IMAGE
+sample_conversations_generator_op = kfp.components.create_component_from_func(
+    sample_conversations_generator, base_image=pipeline_constants.BASE_IMAGE
 )

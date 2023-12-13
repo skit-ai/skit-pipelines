@@ -4,7 +4,7 @@ from typing import List
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
-    generate_prompt_llm_op,
+    sample_conversations_generator_op,
     upload2s3_op,
     zip_file_and_notify_op,
     slack_notification_op
@@ -12,10 +12,10 @@ from skit_pipelines.components import (
 
 
 @kfp.dsl.pipeline(
-    name="Generate prompts for LLM",
-    description="Generate prompts based on the situation data provided",
+    name="Generate sample conversations",
+    description="Generate sample conversations based on the situation data provided",
 )
-def generate_prompts(
+def generate_sample_conversations(
     *,
     situation: List[str],
     prompt: str = "",
@@ -33,15 +33,15 @@ def generate_prompts(
     storage_options: str = '{"type": "s3","bucket": "kubeflow-skit"}'
     ):
     """
-    A pipeline to generate prompts given a situation
+    A pipeline to sample conversations given a situation
     
-    .. _p_generate_prompts:
+    .. generato_sample_conversations:
 
     Example payload to invoke via slack integrations:
 
     A minimal example:
 
-        @charon run generate_prompts
+        @charon run generate_sample_conversations
 
         .. code-block:: python
 
@@ -54,7 +54,7 @@ def generate_prompts(
 
     A full available parameters example:
 
-        @charon run retrain_slu
+        @charon run generate_sample_conversations
 
         .. code-block:: python
 
@@ -105,7 +105,7 @@ def generate_prompts(
 
     """
 
-    prompt_generation = generate_prompt_llm_op(
+    prompt_generation = sample_conversations_generator_op(
         situation=situation,
         llm_trainer_repo_name=llm_trainer_repo_name,
         llm_trainer_repo_branch=llm_trainer_repo_branch,
@@ -156,4 +156,4 @@ def generate_prompts(
         )
 
 
-__all__ = ["generate_prompts"]
+__all__ = ["generate_sample_conversations"]

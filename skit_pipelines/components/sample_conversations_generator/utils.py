@@ -1,10 +1,5 @@
 import subprocess
 from loguru import logger
-import os
-
-execute_cli = lambda cmd, split=True: subprocess.run(
-    cmd.split() if split else cmd, shell=not split
-)
 
 def run_conda_python_command(command):
     try:
