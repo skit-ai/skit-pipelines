@@ -6,7 +6,7 @@ from typing import List
 
 def sample_conversations_generator(
         output_path: OutputPath(str),
-        situation: List[str],
+        scenarios: List[str],
         output_dir: str,
         filename: str,
         prompt: str,
@@ -19,35 +19,35 @@ def sample_conversations_generator(
     ):
     """
     
-    param situation: Situation list
-    type situation: str, Optional
+    :param scenarios: scenarios list
+    :type scenarios: str, Optional
     
-    param output_dir: The output directory where the generated prompts gets stored
-    type output_dir: str
+    :param output_dir: The output directory where the generated conversations gets stored
+    :type output_dir: str
     
-    param filename: Acts as a prefix to the default naming used for file
-    type filename: str
+    :param filename: Acts as a prefix to the default naming used for file
+    :type filename: str
     
-    param prompt: Prompt to the model for data generation
-    type prompt: str
+    :param prompt: Prompt to the model for data generation
+    :type prompt: str
     
-    param n_iter: No of times we make iterate on situation list to generate conversations
-    type n_iter: int
+    :param n_iter: No of times we make iterate on scenarios list to generate conversations
+    :type n_iter: int
     
-    param n_choice: No of convs generated in a single time from a situation.
-    type n_choice: int
+    :param n_choice: No of convs generated in a single time from a scenario.
+    :type n_choice: int
     
-    param temperature: Temperature
-    type temperature: float
+    :param temperature: Temperature
+    :type temperature: float
     
-    param model: Model to be used for generating data 
-    type model: str
+    :param model: Model to be used for generating data 
+    t:ype model: str
     
-    param llm_trainer_repo_name: Csv file containing turns for calls obtained from fsm Db
-    type llm_trainer_repo_name: str
+    :param llm_trainer_repo_name: The conversation generation repo name in Github.
+    :type llm_trainer_repo_name: str
     
-    param llm_trainer_repo_branch: Csv file containing turns for calls obtained from fsm Db
-    type llm_trainer_repo_branch: str
+    :param llm_trainer_repo_branch: The branch name in the conversation generation repo to use , defaults to main.
+    :type llm_trainer_repo_branch: str, optional
     
     output: path of the txt file where conversations is stored
     """
@@ -92,8 +92,8 @@ def sample_conversations_generator(
         return command.strip()
     
     
-    if not situation:
-        logger.debug(f"Situations is not passed. situations: {situation}")
+    if not scenarios:
+        logger.debug(f"Scenarios is not passed, scenarios: {scenarios}")
         return None
     
     
@@ -127,7 +127,7 @@ def sample_conversations_generator(
         output_dir = output_path
         
         generated_command = generate_command(
-        situation_list=situation,
+        situation_list=scenarios,
         output_dir=output_dir,
         filename=filename,
         model=model,
