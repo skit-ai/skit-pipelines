@@ -1,5 +1,8 @@
 # Changelog
 
+1.1.6
+- [x] add: Pipeline for generating sample conversations
+
 1.1.5
 - [x] fix: No calls found from FSM shouldnt fail data_fetch pipelines
 
