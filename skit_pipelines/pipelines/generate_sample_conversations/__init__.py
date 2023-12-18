@@ -1,6 +1,6 @@
 import kfp
 from kfp.components import OutputPath
-from typing import List
+from typing import Optional
 
 from skit_pipelines import constants as pipeline_constants
 from skit_pipelines.components import (
@@ -17,7 +17,7 @@ from skit_pipelines.components import (
 )
 def generate_sample_conversations(
     *,
-    scenarios: List[str],
+    scenarios: Optional[str],
     prompt: str = "",
     output_dir: str = "",
     filename: str = "",
