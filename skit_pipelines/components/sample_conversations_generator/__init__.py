@@ -2,11 +2,11 @@ import kfp
 from kfp.components import OutputPath
 
 from skit_pipelines import constants as pipeline_constants
-from typing import Optional
+from typing import List
 
 def sample_conversations_generator(
         output_path: OutputPath(str),
-        scenarios: Optional[str],
+        scenarios: List[str],
         output_dir: str,
         filename: str,
         prompt: str,
@@ -98,9 +98,6 @@ def sample_conversations_generator(
     
     
     run_dir = 'data_generation/'
-    scenarios = [val.strip() for val in scenarios.split('::')]
-
-    logger.info(f"Scenarios : {scenarios}")
     
     repo_local_path = tempfile.mkdtemp()
     
