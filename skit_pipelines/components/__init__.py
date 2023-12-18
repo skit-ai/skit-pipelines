@@ -60,3 +60,5 @@ from skit_pipelines.components.upload2s3 import upload2s3, upload2s3_op
 from skit_pipelines.components.upload_for_call_and_slot_tagging import (
     fetch_calls_for_slots_op,
 )
+from skit_pipelines.components.sample_conversations_generator import sample_conversations_generator_op
+from skit_pipelines.components.zip_files_and_notify import zip_file_and_notify_op

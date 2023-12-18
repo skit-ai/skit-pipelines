@@ -68,6 +68,7 @@ TRAIN = "train"
 TEST = "test"
 LABELS = "labels"
 CSV_FILE = ".csv"
+TEXT_FILE = ".txt"
 WAV_FILE = ".wav"
 UTTERANCES = "utterances"
 ALTERNATIVES = "alternatives"
@@ -172,6 +173,8 @@ GITLAB_USER = "automation"
 GITLAB_USER_EMAIL = "automation@skit.ai"
 GITLAB_PRIVATE_TOKEN = os.environ["PERSONAL_ACCESS_TOKEN_GITLAB"]
 
+GITHUB = "github.com"
+GITHUB_PROJECT_PATH = "skit-ai/"
 
 def GET_GITLAB_REPO_URL(
     repo_name: str, project_path: str, user: str, token: str
@@ -179,8 +182,10 @@ def GET_GITLAB_REPO_URL(
     return f"https://{user}:{token}@{GITLAB}/{project_path}/{repo_name}.git"
 
 
-GITHUB = "github.com"
-
+def GET_GITHUB_REPO_URL(
+    repo_name: str, project_path: str,token: str
+) -> str:
+    return f"https://{token}@{GITHUB}/{project_path}/{repo_name}.git"
 
 CLASSIFICATION_REPORT = "classification_report"
 FULL_CONFUSION_MATRIX = "full_confusion_matrix"
