@@ -1,6 +1,6 @@
 # Changelog
 1.1.7
-- [x] fix: the handling of the scenario input format
+- [x] fix: the handling of the format of scenario param in generate sample conversations pipeline
 
 1.1.6
 - [x] add: Pipeline for generating sample conversations
