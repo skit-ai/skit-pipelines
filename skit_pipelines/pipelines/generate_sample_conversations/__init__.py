@@ -149,6 +149,8 @@ def generate_sample_conversations(
                     thread_id = slack_thread,
                     file_title = 'generated_conversations',
                     file_name = 'generated_conversations.zip',
+                    notify = notify,
+                    display_sample = True,
                     ).after(prompt_s3_notif)
         
         zip_file_and_notify.execution_options.caching_strategy.max_cache_staleness = (
