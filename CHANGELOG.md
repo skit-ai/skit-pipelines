@@ -1,4 +1,7 @@
 # Changelog
+1.1.8
+- [x] add: support for displaying a sample of the conversation generated
+
 1.1.7
 - [x] fix: the handling of the format of scenario param in generate sample conversations pipeline
 
