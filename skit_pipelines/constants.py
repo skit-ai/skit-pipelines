@@ -156,8 +156,12 @@ EEVEE_RAW_FILE_GITHUB_REPO_URL = (
 DUCKLING_HOST = os.environ["DUCKLING_HOST"]
 
 # K8s
-POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
-CPU_NODE_LABEL = "m5.xlarge" if REGION == AP_SOUTH_1 else "r6a.2xlarge"
+if REGION == AP_SOUTH_1:
+    POD_NODE_SELECTOR_LABEL = "beta.kubernetes.io/instance-type"
+    CPU_NODE_LABEL = "m5.xlarge"
+else:
+    POD_NODE_SELECTOR_LABEL = "component"
+    CPU_NODE_LABEL = "kubeflow"
 GPU_NODE_LABEL = "g4dn.xlarge"
 
 # Bots

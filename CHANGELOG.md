@@ -1,4 +1,7 @@
 # Changelog
+1.1.9
+- [x] add: Change node selector in US
+
 1.1.8
 - [x] add: support for displaying a sample of the conversation generated
 
