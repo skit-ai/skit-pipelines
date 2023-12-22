@@ -1,4 +1,7 @@
 # Changelog
+1.1.11
+- [x] Bugfix: fix issue with retrain_slu_old pipeline
+
 1.1.10
 - [x] Bugfix: update skit-calls version
 
