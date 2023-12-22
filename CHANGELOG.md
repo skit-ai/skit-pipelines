@@ -1,4 +1,7 @@
 # Changelog
+1.1.10
+- [x] Bugfix: update skit-calls version
+
 1.1.9
 - [x] add: Change node selector in US
 
