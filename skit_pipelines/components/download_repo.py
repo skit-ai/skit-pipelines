@@ -11,6 +11,8 @@ def download_repo(
 
     import git
     from loguru import logger
+    from skit_pipelines import constants as pipeline_constants
+    
     if git_host_name == pipeline_constants.GITLAB:
         repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
             repo_name=repo_name,
