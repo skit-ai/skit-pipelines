@@ -1,4 +1,7 @@
 # Changelog
+1.1.12
+- [x] Bugfix: fix issue with fetch_calls pipeline
+
 1.1.11
 - [x] Bugfix: fix issue with retrain_slu_old pipeline
 
