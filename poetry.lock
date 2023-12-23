@@ -1845,13 +1845,13 @@ files = [
 
 [[package]]
 name = "importlib-metadata"
-version = "7.0.0"
+version = "7.0.1"
 description = "Read metadata from Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "importlib_metadata-7.0.0-py3-none-any.whl", hash = "sha256:d97503976bb81f40a193d41ee6570868479c69d5068651eb039c40d850c59d67"},
-    {file = "importlib_metadata-7.0.0.tar.gz", hash = "sha256:7fc841f8b8332803464e5dc1c63a2e59121f46ca186c0e2e182e80bf8c1319f7"},
+    {file = "importlib_metadata-7.0.1-py3-none-any.whl", hash = "sha256:4805911c3a4ec7c3966410053e9ec6a1fecd629117df5adee56dfc9432a1081e"},
+    {file = "importlib_metadata-7.0.1.tar.gz", hash = "sha256:f238736bb06590ae52ac1fab06a3a9ef1d8dce2b7a35b5ab329371d6c8f5d2cc"},
 ]
 
 [package.dependencies]
@@ -3839,13 +3839,13 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.50"
+version = "0.2.52"
 description = "Library to fetch calls from a given environment."
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_calls-0.2.50-py3-none-any.whl", hash = "sha256:3162b55ce5b7208e04f56ba73739e5f85fe0bbfc05a3b100cc0fd8069e554a15"},
-    {file = "skit_calls-0.2.50.tar.gz", hash = "sha256:2a5bc13f7446ff7d312db79e635b70dfec44b4c4971f52613ffdb2e3d2e50bbe"},
+    {file = "skit_calls-0.2.52-py3-none-any.whl", hash = "sha256:7fc9274650cd26456e7627ca3140f78238825b79b616ced16e5081adc93e6627"},
+    {file = "skit_calls-0.2.52.tar.gz", hash = "sha256:d9e2513b639ee7e47343bea22e4b9d0c258416d588576eef8952d0cff1b1488a"},
 ]
 
 [package.dependencies]
@@ -5275,4 +5275,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "f2c87109d63008757a2df28b0688269c72df149a540d13e6bb303ceb4daac906"
+content-hash = "eebe954ac45e36513c299e275296b6111cc7c3a056ab305a12e2fbebf56804f5"

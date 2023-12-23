@@ -78,7 +78,7 @@ def fetch_calls(
     start = time.time()
     states = comma_sep_str(states) if states else states
     intents = comma_sep_str(intents) if intents else intents
-    client_id = comma_sep_str(client_id) if client_id else client_id
+    client_id = comma_sep_str(client_id, int) if client_id else []
     flow_ids = comma_sep_str(flow_ids, int) if flow_ids else []
     logger.info(f"Flow ids: {flow_ids}")
     maybe_df = calls.sample(
@@ -141,6 +141,8 @@ def fetch_calls(
     if remove_empty_audios:
         if not empty_audios_remover(df=maybe_df, df_path=file_path):
             return ""
+    if client_id and isinstance(client_id, list):
+        client_id  = [str(id) for id in client_id]
     client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
     s3_path = upload2s3(
         file_path,
