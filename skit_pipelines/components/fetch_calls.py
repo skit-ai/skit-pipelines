@@ -141,12 +141,20 @@ def fetch_calls(
     if remove_empty_audios:
         if not empty_audios_remover(df=maybe_df, df_path=file_path):
             return ""
+    
+    file_name_prefix = ''
+    
     if client_id and isinstance(client_id, list):
         client_id  = [str(id) for id in client_id]
-    client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
+        client_id_string = "-".join(client_id) if isinstance(client_id, list) else client_id
+        file_name_prefix = client_id_string
+        
+    elif template_id:
+        file_name_prefix = template_id
+        
     s3_path = upload2s3(
         file_path,
-        reference=f"{client_id_string}-{start_date}-{end_date}",
+        reference=f"{file_name_prefix}-{start_date}-{end_date}",
         file_type=f"{lang}-untagged",
         bucket=pipeline_constants.BUCKET,
         ext=".csv",
