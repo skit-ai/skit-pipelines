@@ -17,8 +17,8 @@ from skit_pipelines.components import (
 )
 def generate_sample_conversations(
     *,
-    scenarios: Optional[str],
-    prompt: str = "",
+    situations: Optional[str],
+    s3_links_to_prompts: str = "",
     output_dir: str = "",
     filename: str = "",
     llm_trainer_repo_name: str = "LLMtrainer",
@@ -29,8 +29,7 @@ def generate_sample_conversations(
     temperature: float = 0.99,
     notify: str = "",
     channel: str = "",
-    slack_thread: str = "",
-    storage_options: str = '{"type": "s3","bucket": "kubeflow-skit"}'
+    slack_thread: str = ""
     ):
     """
     A pipeline to sample conversations given a situation
@@ -46,7 +45,7 @@ def generate_sample_conversations(
         .. code-block:: python
 
             {
-                "scenarios": ["The user wants to talk to a human agent, so the agent transfers the call"],
+                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
                 "llm_trainer_repo_name": "LLMtrainer",
                 "llm_trainer_repo_branch": "main"
                 }
@@ -59,13 +58,13 @@ def generate_sample_conversations(
         .. code-block:: python
 
             {
-                "scenarios": ["The user wants to talk to a human agent, so the agent transfers the call"],
+                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
                 "llm_trainer_repo_name": "LLMtrainer",
                 "llm_trainer_repo_branch": "main",
             }
 
-    :param scenarios: The scenarios for generating the conversations
-    :type scenarios: optional
+    :param situations: The situations for generating the conversations
+    :type situations: optional
     
     :param prompt: Prompt to the model for data generation
     type prompt: str
@@ -85,7 +84,7 @@ def generate_sample_conversations(
     :param model: Optional model to be used for generating data 
     :type model: str
     
-    :param n_iter: No of times we make iterate on scenarios list to generate conversations
+    :param n_iter: No of times we make iterate on sub_scenarios list to generate conversations
     type n_iter: int
     
     :param n_choice: No of convs generated in a single time from a scenario.
@@ -104,15 +103,16 @@ def generate_sample_conversations(
     :type slack_thread: str, optional
 
     """
-
+    from skit_pipelines import constants as pipeline_constants
+    
     prompt_generation = sample_conversations_generator_op(
-        scenarios=scenarios,
+        situations=situations,
         llm_trainer_repo_name=llm_trainer_repo_name,
         llm_trainer_repo_branch=llm_trainer_repo_branch,
         output_dir=output_dir,
         filename=filename,
         model=model,
-        prompt=prompt,
+        prompt_file_path=s3_links_to_prompts,
         n_iter=n_iter,
         n_choice=n_choice,
         temperature=temperature
@@ -121,7 +121,7 @@ def generate_sample_conversations(
     prompt_s3_upload = upload2s3_op(
             path_on_disk=prompt_generation.outputs["output"],
             reference = 'pipeline_uploads/generated_conversations/',
-            storage_options=storage_options,
+            bucket=pipeline_constants.KUBEFLOW_BUCKET,
             upload_as_directory=True,
             ext=""
         )

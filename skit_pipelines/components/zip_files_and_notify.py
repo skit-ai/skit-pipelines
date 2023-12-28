@@ -42,7 +42,11 @@ def zip_file_and_notify(
     
     def get_random_file_content(folder_path):
         all_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-        all_files.remove('prompt_and_scenario_info.txt')
+        all_files = [file for file in all_files if not file.endswith('.csv')]
+        if 'prompt.txt' in all_files:
+            all_files.remove('prompt.txt')
+        if 'situation.txt' in all_files:
+            all_files.remove('situation.txt')
         random.shuffle(all_files)
         
         selected_file = all_files[0]
