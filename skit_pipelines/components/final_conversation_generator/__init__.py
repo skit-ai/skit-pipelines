@@ -48,34 +48,36 @@ def final_conversation_generator(
     import tempfile
 
     from loguru import logger
+    import json
     from skit_pipelines.components.download_from_s3 import download_file_from_s3
     from skit_pipelines.components.sample_conversations_generator import sample_conversations_generator
     
+    prompt_path  = ""
+    output_dir = output_path
+    situation_save_path  = tempfile.mkstemp(suffix=".json")
+    situation_dict = {}
+    if s3_links_to_prompts != '':
+        _, prompt_path = tempfile.mkstemp(suffix=".txt")
+        download_file_from_s3(storage_path=s3_links_to_prompts, output_path=prompt_path)
+        
     for data in situation_info_list:
-        situation_id = data['situation_id']
-        situation = data['situation']
-        file_name = situation_id
-        output_dir = output_path
-        
-        logger.info(f"situation_id is {situation_id} for situation : {situation}")
-        logger.info(f"File name : {file_name}")
-        prompt_path  = ""
-        if s3_links_to_prompts != '':
-            _, prompt_path = tempfile.mkstemp(suffix=".txt")
-            download_file_from_s3(storage_path=s3_links_to_prompts, output_path=prompt_path)
-        
+        situation_dict[data['situation_id']] = data['situation']
+        with open(situation_save_path, 'w') as json_file:
+            json.dump(situation_dict, json_file, indent=2)
+
         sample_conversations_generator(
-        situations=situation,
+        situations='',
         llm_trainer_repo_name=llm_trainer_repo_name,
         llm_trainer_repo_branch=llm_trainer_repo_branch,
         output_path=output_path,
         output_dir=output_path,
-        filename=file_name,
+        filename='',
         model=model,
         prompt_file_path=prompt_path,
         n_iter=n_iter,
         n_choice=n_choice,
-        temperature=temperature
+        temperature=temperature,
+        situation_file_path=situation_save_path,
         )
     
     return output_dir

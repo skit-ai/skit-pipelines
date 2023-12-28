@@ -15,7 +15,8 @@ def sample_conversations_generator(
         temperature: float ,
         model: str,
         llm_trainer_repo_name: str,
-        llm_trainer_repo_branch: str
+        llm_trainer_repo_branch: str,
+        situation_file_path: str = '',
     ):
     """
     
@@ -63,7 +64,7 @@ def sample_conversations_generator(
     from skit_pipelines.components.utils import execute_cli
     from skit_pipelines.components.download_from_s3 import download_file_from_s3
     
-    def generate_command(situation_list=None, output_dir=None, filename=None, model=None, prompt_file_path=None, n_iter=None, n_choice=None, temperature=None):
+    def generate_command(situation_list=None, output_dir=None, filename=None, model=None, prompt_file_path=None, n_iter=None, n_choice=None, temperature=None, situation_file_path=None):
         """
         Generate a command string based on the provided parameters.
 
@@ -88,14 +89,9 @@ def sample_conversations_generator(
         n_iter_cmd = f'--n-iter {n_iter}' if n_iter else ""
         n_choice_cmd = f'--n-choice {n_choice}' if n_choice else ""
         temperature_cmd = f'--temperature {temperature}' if temperature else ""
-
+        situation_file_path = f'--situation_file_path "{situation_file_path}"' if situation_file_path else ""
         command = f"""python data_gen_cli.py {situation_list_cmd} {output_dir_cmd} {filename_cmd} {model_cmd} {prompt_file_cmd} {n_iter_cmd} {n_choice_cmd} {temperature_cmd} --save_prompts_to_disk"""
         return command.strip()
-    
-    
-    if not situations:
-        logger.debug(f"Situations is not passed, situations: {situations}")
-        return None
     
     
     run_dir = 'data_generation/'
@@ -144,7 +140,8 @@ def sample_conversations_generator(
         prompt_file_path=prompt_save_path,
         n_iter=n_iter,
         n_choice=n_choice,
-        temperature=temperature)
+        temperature=temperature,
+        situation_file_path=situation_file_path)
         
         print(f"Generated command : {generated_command}")
         
