@@ -7,12 +7,10 @@ from skit_pipelines.components import (
     upload2s3_op,
     zip_file_and_notify_op,
     slack_notification_op,
-    download_directory_from_s3_op,
     validate_and_add_situations_to_db_op,
     final_conversation_generator_op,
     upload_conv_to_label_studio_op,
     upload_conversation_data_to_metrics_db_op,
-    get_file_path_from_folder_op
 )
 
 
@@ -25,7 +23,6 @@ def generate_and_tag_conversations(
     situations: str = "",
     scenario: str = "",
     scenario_category: str = "",
-    s3_links_to_generated_conversations: str = "",
     s3_links_to_prompts: str = "",
     llm_trainer_repo_name: str = "LLMtrainer",
     llm_trainer_repo_branch: str = "main",
@@ -82,9 +79,6 @@ def generate_and_tag_conversations(
     :param scenario_category: The scenarios category
     :type scenario_category: optional
     
-    :param s3_links_to_generated_conversations: s3 links to earlier conversations generated
-    :type s3_links_to_generated_conversations: str
-    
     :param prompt: Prompt to the model for data generation
     type prompt: str
     
@@ -139,42 +133,30 @@ def generate_and_tag_conversations(
     situations_id_info = validate_situations.outputs['situation_mapping_info']
     conv_s3_dir_name  = f'pipeline_uploads/generated_conversations/{client_id}_{template_id}'
     
-    with kfp.dsl.Condition(s3_links_to_generated_conversations == ''):
-        conv_generation_output= final_conversation_generator_op(situation_info_list=situations_id_info,
-                                                            s3_links_to_prompts = s3_links_to_prompts,
-                                                            n_iter=n_iter,
-                                                            n_choice=n_choice,
-                                                            temperature=temperature,
-                                                            model=model,
-                                                            llm_trainer_repo_name=llm_trainer_repo_name,
-                                                            llm_trainer_repo_branch=llm_trainer_repo_branch,
-                                                        )
-        conversations_dir = conv_generation_output.outputs["output"]
+    conv_generation_output= final_conversation_generator_op(situation_info_list=situations_id_info,
+                                                        s3_links_to_prompts = s3_links_to_prompts,
+                                                        n_iter=n_iter,
+                                                        n_choice=n_choice,
+                                                        temperature=temperature,
+                                                        model=model,
+                                                        llm_trainer_repo_name=llm_trainer_repo_name,
+                                                        llm_trainer_repo_branch=llm_trainer_repo_branch,
+                                                    )
+    conversations_dir = conv_generation_output.outputs["output"]
         
-    with kfp.dsl.Condition(s3_links_to_generated_conversations != ''):
-        generated_conversations_op = download_directory_from_s3_op(storage_path=s3_links_to_generated_conversations)
-        conversations_dir = generated_conversations_op.outputs["output"]
-    
-    with kfp.dsl.Condition(s3_links_to_prompts == ''):
-        file_path_local_op = get_file_path_from_folder_op(generated_conversations_op.outputs["output"], 'prompt.txt')
-        
-        prompt_file_upload = upload2s3_op(
-            path_on_disk=file_path_local_op.outputs["output"],
-            reference = conv_s3_dir_name ,
-            bucket=pipeline_constants.KUBEFLOW_BUCKET,
-            ext=".txt"
-        )
-        s3_links_to_prompts = {prompt_file_upload.output}
-    
     conversation_s3_upload = upload2s3_op(
-            path_on_disk=conv_generation_output.outputs["output"],
+            path_on_disk=conversations_dir,
             reference = conv_s3_dir_name ,
             bucket=pipeline_constants.KUBEFLOW_BUCKET,
             upload_as_directory=True,
             ext=""
         )
+
+    tag_calls_output = upload_conv_to_label_studio_op(project_id=labelstudio_project_id, 
+                                                      conversations_dir= conversations_dir, 
+                                                      data_label=data_label, 
+                                                      situations_id_info=situations_id_info)
     
-    tag_calls_output = upload_conv_to_label_studio_op(labelstudio_project_id, conversations_dir, data_label, situations_id_info)
     
     upload_df_sizes = tag_calls_output.outputs["df_sizes"]
     upload_errors = tag_calls_output.outputs["errors"] 
@@ -227,7 +209,8 @@ def generate_and_tag_conversations(
     with kfp.dsl.Condition(upload_errors == [], "upload_to_metrics_db").after(tag_calls_output) as check3:
         upload_to_metrics_db_op = upload_conversation_data_to_metrics_db_op(situations_id_info=situations_id_info, client_id=client_id,
                                                                             template_id=template_id, generated_conversations_s3_link=conversations_dir,
-                                                                            prompt_links_in_s3=s3_links_to_prompts)
+                                                                            prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir,
+                                                                            conv_s3_dir_name=conv_s3_dir_name)
         notification_text = f"""Data is successfully inserted to the generated_conversations table"""
         task_no_cache = slack_notification_op(
             notification_text, channel=channel, cc=notify, thread_id=slack_thread

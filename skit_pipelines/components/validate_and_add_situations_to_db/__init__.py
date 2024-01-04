@@ -9,24 +9,20 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
     """
     Check if the situation exists in db, if exists return the id else insert the situation to db and return the id
     """
-    from skit_pipelines.utils.db_utils import get_connections
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.validate_and_add_situations_to_db.queries import CREATE_SITUATIONS_MAPPING_TABLE_QUERY, SEARCH_SITUATION_QUERY, INSERT_SITUATION_QUERY
     
     from skit_pipelines.types.situation_mapping_info import SituationMappingInfo
     from loguru import logger
+    import psycopg2
     
     situations = [val.strip() for val in situations.split('::')]
     logger.info(f"Situations: {situations}")
     logger.info(f"scenario: {scenario}")
     logger.info(f"scenario_category: {scenario_category}")
     
-    print("Dbname",pipeline_constants.ML_METRICS_DB_NAME)
-    print("user",pipeline_constants.ML_METRICS_DB_USER )
-    print("password",pipeline_constants.ML_METRICS_DB_PASSWORD )
-    print("host",pipeline_constants.ML_METRICS_DB_HOST )
-    print("port",pipeline_constants.ML_METRICS_DB_PORT )
-    conn = get_connections(pipeline_constants.ML_METRICS_DB_NAME ,
+
+    conn = psycopg2.connect(pipeline_constants.ML_METRICS_DB_NAME ,
                            pipeline_constants.ML_METRICS_DB_USER, 
                            pipeline_constants.ML_METRICS_DB_PASSWORD, 
                            pipeline_constants.ML_METRICS_DB_HOST, 
@@ -60,6 +56,7 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
             cur.execute(INSERT_SITUATION_QUERY, query_parameters)
             id = cur.lastrowid
             id_val = id 
+            logger.info("Successfully inserted the situation data to db")
             
         situation_info['situation_id'] = id_val
         situation_info['situation'] = situation

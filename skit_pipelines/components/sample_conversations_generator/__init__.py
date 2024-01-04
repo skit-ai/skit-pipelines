@@ -6,8 +6,6 @@ from typing import Optional
 
 def sample_conversations_generator(
         output_path: OutputPath(str),
-        situations: Optional[str],
-        output_dir: str,
         filename: str,
         prompt_file_path: str,
         n_iter: int,
@@ -17,6 +15,7 @@ def sample_conversations_generator(
         llm_trainer_repo_name: str,
         llm_trainer_repo_branch: str,
         situation_file_path: str = '',
+        situations: str = None,
     ):
     """
     
@@ -81,7 +80,11 @@ def sample_conversations_generator(
         Returns:
             str: Generated command string.
         """
-        situation_list_cmd = "--situation " +  " ".join([f"'{situation}'" for situation in situation_list]) if situation_list else ""
+        if situation_list:
+            situation_list_cmd = "--situation " +  " ".join([f"'{situation}'" for situation in situation_list]) 
+        else:
+            situation_list_cmd = ''
+            
         output_dir_cmd = f'--output_dir "{output_dir}"' if output_dir else ""
         filename_cmd = f'--filename "{filename}"' if filename else ""
         model_cmd = f'--model "{model}"' if model else ""
@@ -89,13 +92,18 @@ def sample_conversations_generator(
         n_iter_cmd = f'--n-iter {n_iter}' if n_iter else ""
         n_choice_cmd = f'--n-choice {n_choice}' if n_choice else ""
         temperature_cmd = f'--temperature {temperature}' if temperature else ""
-        situation_file_path = f'--situation_file_path "{situation_file_path}"' if situation_file_path else ""
-        command = f"""python data_gen_cli.py {situation_list_cmd} {output_dir_cmd} {filename_cmd} {model_cmd} {prompt_file_cmd} {n_iter_cmd} {n_choice_cmd} {temperature_cmd} --save_prompts_to_disk"""
+        situation_file_path_cmd = f'--situation_file_path "{situation_file_path}"' if situation_file_path else ""
+        command = f"""python data_gen_cli.py {situation_list_cmd} {output_dir_cmd} {filename_cmd} {model_cmd} {prompt_file_cmd} {n_iter_cmd} {n_choice_cmd} {temperature_cmd} {situation_file_path_cmd} --save_prompts_to_disk"""
+        
         return command.strip()
     
+    logger.info(f"situation_file_path in sample_conversations_generator: {situation_file_path}")
     
     run_dir = 'data_generation/'
-    situations = [val.strip() for val in situations.split('::')]
+    logger.info(f"Situations data: {situations}")
+    
+    if situations:
+        situations = [val.strip() for val in situations.split('::')]
     
     prompt_save_path = ''
     if prompt_file_path:
@@ -130,18 +138,17 @@ def sample_conversations_generator(
         
         os.mkdir(output_path)
         
-        output_dir = output_path
-        
         generated_command = generate_command(
         situation_list=situations,
-        output_dir=output_dir,
+        output_dir=output_path,
         filename=filename,
         model=model,
         prompt_file_path=prompt_save_path,
         n_iter=n_iter,
         n_choice=n_choice,
         temperature=temperature,
-        situation_file_path=situation_file_path)
+        situation_file_path=situation_file_path
+        )
         
         print(f"Generated command : {generated_command}")
         

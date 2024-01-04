@@ -54,7 +54,7 @@ def final_conversation_generator(
     
     prompt_path  = ""
     output_dir = output_path
-    situation_save_path  = tempfile.mkstemp(suffix=".json")
+    _, situation_save_path  = tempfile.mkstemp(suffix=".json")
     situation_dict = {}
     if s3_links_to_prompts != '':
         _, prompt_path = tempfile.mkstemp(suffix=".txt")
@@ -65,20 +65,19 @@ def final_conversation_generator(
         with open(situation_save_path, 'w') as json_file:
             json.dump(situation_dict, json_file, indent=2)
 
-        sample_conversations_generator(
-        situations='',
-        llm_trainer_repo_name=llm_trainer_repo_name,
-        llm_trainer_repo_branch=llm_trainer_repo_branch,
-        output_path=output_path,
-        output_dir=output_path,
-        filename='',
-        model=model,
-        prompt_file_path=prompt_path,
-        n_iter=n_iter,
-        n_choice=n_choice,
-        temperature=temperature,
-        situation_file_path=situation_save_path,
-        )
+    sample_conversations_generator(
+    situations='',
+    llm_trainer_repo_name=llm_trainer_repo_name,
+    llm_trainer_repo_branch=llm_trainer_repo_branch,
+    output_path=output_path,
+    filename='',
+    model=model,
+    prompt_file_path=prompt_path,
+    n_iter=n_iter,
+    n_choice=n_choice,
+    temperature=temperature,
+    situation_file_path=situation_save_path,
+    )
     
     return output_dir
     

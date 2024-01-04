@@ -19,7 +19,6 @@ def generate_sample_conversations(
     *,
     situations: Optional[str],
     s3_links_to_prompts: str = "",
-    output_dir: str = "",
     filename: str = "",
     llm_trainer_repo_name: str = "LLMtrainer",
     llm_trainer_repo_branch: str = "main",
@@ -68,9 +67,6 @@ def generate_sample_conversations(
     
     :param prompt: Prompt to the model for data generation
     type prompt: str
-    
-    :param output_dir: The output directory where the generated conversations gets stored
-    :type output_dir: str
 
     :param filename: Acts as a prfix to the default naming used
     :type filename: str
@@ -109,7 +105,6 @@ def generate_sample_conversations(
         situations=situations,
         llm_trainer_repo_name=llm_trainer_repo_name,
         llm_trainer_repo_branch=llm_trainer_repo_branch,
-        output_dir=output_dir,
         filename=filename,
         model=model,
         prompt_file_path=s3_links_to_prompts,
