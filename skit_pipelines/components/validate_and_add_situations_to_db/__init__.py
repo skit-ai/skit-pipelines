@@ -54,7 +54,9 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
     
             query_parameters = {"situation": situation, "scenario": scenario,  "scenario_category" :scenario_category}
             cur.execute(INSERT_SITUATION_QUERY, query_parameters)
-            id = cur.lastrowid
+            conn.commit()
+            
+            id = cur.fetchone()[0]
             id_val = id 
             logger.info("Successfully inserted the situation data to db")
             
@@ -65,7 +67,6 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
         situation_info_list.append(situation_info)
         
     logger.info(f"situation_info: {situation_info_list}")
-    conn.commit()
     cur.close()
     conn.close()
         

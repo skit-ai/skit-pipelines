@@ -42,7 +42,9 @@ INSERT_GENERATED_CONVERSATIONS_QUERY  = """INSERT INTO generated_conversations
         %(template_id)s,
         %(prompt_id)s,
         %(generated_conversations_s3_link)s
-    ) """
+    ) 
+    RETURNING id;
+    """
 
 
 INSERT_PROMPT_DATA  = """INSERT INTO prompt_details 
@@ -56,7 +58,9 @@ INSERT_PROMPT_DATA  = """INSERT INTO prompt_details
         %(client_id)s,
         %(template_id)s,
         %(links_to_prompt_in_s3)s
-    ) """    
+    )
+    RETURNING id;
+    """    
 
 
 SEARCH_PROMPT_QUERY = """SELECT id FROM prompt_details WHERE 

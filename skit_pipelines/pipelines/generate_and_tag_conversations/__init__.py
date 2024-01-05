@@ -211,9 +211,6 @@ def generate_and_tag_conversations(
                                                                             template_id=template_id, 
                                                                             generated_conversations_s3_link=conversation_s3_upload.output,
                                                                             prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir)
-        notification_text = f"""Data is successfully inserted to the generated_conversations table"""
-        task_no_cache = slack_notification_op(
-            notification_text, channel=channel, cc=notify, thread_id=slack_thread
-        )
+    
 
 __all__ = ["generate_and_tag_conversations"]

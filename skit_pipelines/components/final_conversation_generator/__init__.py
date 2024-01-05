@@ -52,13 +52,9 @@ def final_conversation_generator(
     from skit_pipelines.components.download_from_s3 import download_file_from_s3
     from skit_pipelines.components.sample_conversations_generator import sample_conversations_generator
     
-    prompt_path  = ""
     _, situation_save_path  = tempfile.mkstemp(suffix=".json")
     situation_dict = {}
-    if s3_links_to_prompts != '':
-        _, prompt_path = tempfile.mkstemp(suffix=".txt")
-        download_file_from_s3(storage_path=s3_links_to_prompts, output_path=prompt_path)
-        
+    
     for data in situation_info_list:
         situation_dict[data['situation_id']] = data['situation']
         with open(situation_save_path, 'w') as json_file:
@@ -71,7 +67,7 @@ def final_conversation_generator(
     output_path=output_path,
     filename='',
     model=model,
-    prompt_file_path=prompt_path,
+    prompt_file_path=s3_links_to_prompts,
     n_iter=n_iter,
     n_choice=n_choice,
     temperature=temperature,

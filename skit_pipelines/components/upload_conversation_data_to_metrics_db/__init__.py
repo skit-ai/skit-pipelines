@@ -83,7 +83,8 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
         query_parameters_1 = {"client_id": client_id,"template_id": template_id, "links_to_prompt_in_s3" :prompt_s3_path}
         cur.execute(INSERT_PROMPT_DATA ,query_parameters_1)
         conn.commit()
-        prompt_id = cur.lastrowid
+        prompt_id = cur.fetchone()[0]
+        
     logger.info(f"Records inserted to Prompt details table. Auto id : {prompt_id} ")
 
 
@@ -98,7 +99,8 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
                                 }
         cur.execute(INSERT_GENERATED_CONVERSATIONS_QUERY ,query_parameters_2)
         conn.commit()
-        generated_conv_id = cur.lastrowid
+        generated_conv_id = cur.fetchone()[0]
+        
         logger.info(f"Records inserted to generated_conversations table. Auto id : {generated_conv_id} ")
         
     cur.close()
