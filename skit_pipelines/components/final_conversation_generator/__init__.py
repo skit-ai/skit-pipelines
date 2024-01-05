@@ -53,7 +53,6 @@ def final_conversation_generator(
     from skit_pipelines.components.sample_conversations_generator import sample_conversations_generator
     
     prompt_path  = ""
-    output_dir = output_path
     _, situation_save_path  = tempfile.mkstemp(suffix=".json")
     situation_dict = {}
     if s3_links_to_prompts != '':
@@ -79,7 +78,7 @@ def final_conversation_generator(
     situation_file_path=situation_save_path,
     )
     
-    return output_dir
+    return output_path
     
 final_conversation_generator_op = kfp.components.create_component_from_func(
     final_conversation_generator, base_image=pipeline_constants.BASE_IMAGE

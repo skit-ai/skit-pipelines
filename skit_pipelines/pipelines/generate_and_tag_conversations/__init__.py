@@ -208,9 +208,9 @@ def generate_and_tag_conversations(
 
     with kfp.dsl.Condition(upload_errors == [], "upload_to_metrics_db").after(tag_calls_output) as check3:
         upload_to_metrics_db_op = upload_conversation_data_to_metrics_db_op(situations_id_info=situations_id_info, client_id=client_id,
-                                                                            template_id=template_id, generated_conversations_s3_link=conversations_dir,
-                                                                            prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir,
-                                                                            conv_s3_dir_name=conv_s3_dir_name)
+                                                                            template_id=template_id, 
+                                                                            generated_conversations_s3_link=conversation_s3_upload.output,
+                                                                            prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir)
         notification_text = f"""Data is successfully inserted to the generated_conversations table"""
         task_no_cache = slack_notification_op(
             notification_text, channel=channel, cc=notify, thread_id=slack_thread
