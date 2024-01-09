@@ -5,6 +5,9 @@
 1.1.15
 - [x] add: Pipeline to generate conversations and upload it for tagging
 
+1.1.14
+- [x] Update github access token in secrets
+
 1.1.12
 - [x] Bugfix: fix issue with fetch_calls pipeline
 
