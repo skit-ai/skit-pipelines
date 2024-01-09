@@ -13,3 +13,4 @@ from skit_pipelines.pipelines.evaluate_slu import evaluate_slu
 from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline
 from skit_pipelines.pipelines.generate_sample_conversations import generate_sample_conversations
+from skit_pipelines.pipelines.generate_and_tag_conversations import generate_and_tag_conversations
