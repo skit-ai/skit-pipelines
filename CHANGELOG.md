@@ -1,4 +1,7 @@
 # Changelog
+1.1.16
+- [x] Bugfix: Fix db connection issue
+
 1.1.15
 - [x] add: Pipeline to generate conversations and upload it for tagging
 
