@@ -12,16 +12,11 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
     """
     Upload the conversation data to metrics DB
     """
-    import skit_pipelines.constants as const
     from skit_pipelines.components.upload_conversation_data_to_metrics_db.queries import CREATE_GENERATED_CONVERSATIONS_QUERY, CREATE_PROMPT_TABLE_QUERY, SEARCH_PROMPT_QUERY, INSERT_PROMPT_DATA,  INSERT_GENERATED_CONVERSATIONS_QUERY
     from loguru import logger
     import psycopg2
     from skit_pipelines.components.upload_conversation_data_to_metrics_db.utils import get_file_path_from_folder
     from skit_pipelines import constants as pipeline_constants
-    import boto3
-    
-
-        
 
     def upload_file_to_s3(
         path_on_disk: InputPath(str),
@@ -40,11 +35,13 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
         return s3_path
 
     
-    conn = psycopg2.connect(const.ML_METRICS_DB_NAME ,
-                           const.ML_METRICS_DB_USER, 
-                           const.ML_METRICS_DB_PASSWORD, 
-                           const.ML_METRICS_DB_HOST, 
-                           const.ML_METRICS_DB_PORT)
+    conn = psycopg2.connect(
+        dbname=pipeline_constants.ML_METRICS_DB_NAME,
+        user=pipeline_constants.ML_METRICS_DB_USER,
+        password=pipeline_constants.ML_METRICS_DB_PASSWORD,
+        host=pipeline_constants.ML_METRICS_DB_HOST,
+        port=pipeline_constants.ML_METRICS_DB_PORT,
+    )
     
     prompt_s3_path = None
     s3_prompt_dir_name  = f'pipeline_uploads/prompt/global_prompt.txt'

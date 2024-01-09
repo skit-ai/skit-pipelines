@@ -22,11 +22,13 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
     logger.info(f"scenario_category: {scenario_category}")
     
 
-    conn = psycopg2.connect(pipeline_constants.ML_METRICS_DB_NAME ,
-                           pipeline_constants.ML_METRICS_DB_USER, 
-                           pipeline_constants.ML_METRICS_DB_PASSWORD, 
-                           pipeline_constants.ML_METRICS_DB_HOST, 
-                           pipeline_constants.ML_METRICS_DB_PORT)
+    conn = psycopg2.connect(
+        dbname=pipeline_constants.ML_METRICS_DB_NAME,
+        user=pipeline_constants.ML_METRICS_DB_USER,
+        password=pipeline_constants.ML_METRICS_DB_PASSWORD,
+        host=pipeline_constants.ML_METRICS_DB_HOST,
+        port=pipeline_constants.ML_METRICS_DB_PORT,
+    )
     
     id_val = ''
     situation_info_list = []
