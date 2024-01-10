@@ -10,12 +10,17 @@ Subpackages
    skit_pipelines.components.evaluate_slu_from_repo
    skit_pipelines.components.fetch_gpt_intent_prediction
    skit_pipelines.components.fetch_tagged_data_label_store
+   skit_pipelines.components.final_conversation_generator
    skit_pipelines.components.identify_compliance_breaches_llm
    skit_pipelines.components.modify_entities
    skit_pipelines.components.preprocess
    skit_pipelines.components.retrain_slu_from_repo
+   skit_pipelines.components.sample_conversations_generator
    skit_pipelines.components.tag_calls
+   skit_pipelines.components.upload_conv_to_labelstudio
+   skit_pipelines.components.upload_conversation_data_to_metrics_db
    skit_pipelines.components.upload_for_call_and_slot_tagging
+   skit_pipelines.components.validate_and_add_situations_to_db
 
 Submodules
 ----------
@@ -192,6 +197,14 @@ skit\_pipelines.components.utils\_slu module
 --------------------------------------------
 
 .. automodule:: skit_pipelines.components.utils_slu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+skit\_pipelines.components.zip\_files\_and\_notify module
+---------------------------------------------------------
+
+.. automodule:: skit_pipelines.components.zip_files_and_notify
    :members:
    :undoc-members:
    :show-inheritance:
