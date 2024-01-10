@@ -18,7 +18,6 @@ def fetch_tagged_dataset(
     end_date_offset: Optional[int] = None,
     empty_possible: bool = False,
 ):
-    import asyncio
     import time
 
     import pandas as pd
@@ -27,21 +26,12 @@ def fetch_tagged_dataset(
     from skit_calls.cli import process_date_filters
     from skit_labels import constants as const
     from skit_labels import utils
-    from skit_labels.commands import (
-        download_dataset_from_db,
-        download_dataset_from_labelstudio,
-    )
+    from skit_labels.commands import download_dataset_from_db
 
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.utils.normalize import comma_sep_str
 
     utils.configure_logger(7)
-
-    host = pipeline_constants.DB_HOST
-    port = pipeline_constants.DB_PORT
-    password = pipeline_constants.DB_PASSWORD
-    user = pipeline_constants.DB_USER
-
     if not timezone:
         timezone = pipeline_constants.TIMEZONE
 
@@ -66,10 +56,10 @@ def fetch_tagged_dataset(
                 timezone=pytz.timezone(timezone) if timezone else None,
                 start_date=start_date or None,
                 end_date=end_date or None,
-                host=host,
-                port=port,
-                password=password,
-                user=user,
+                host=pipeline_constants.DB_HOST,
+                port=pipeline_constants.DB_PORT,
+                password=pipeline_constants.DB_PASSWORD,
+                user=pipeline_constants.DB_USER,
                 db=const.LABELSTUIO_DB if project_id else "tog",
             )
             df_paths.append(df_path)

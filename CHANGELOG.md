@@ -1,5 +1,8 @@
 # Changelog
 1.1.16
+- [x] Update skit-labels version
+
+1.1.16
 - [x] Bugfix: Fix db connection issue
 
 1.1.15
