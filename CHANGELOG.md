@@ -1,5 +1,8 @@
 # Changelog
-1.1.16
+1.1.18
+- [x] Bugfix: fix issue with sample conversation display
+
+1.1.17
 - [x] Update skit-labels version
 
 1.1.16
