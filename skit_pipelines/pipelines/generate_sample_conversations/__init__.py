@@ -33,7 +33,7 @@ def generate_sample_conversations(
     """
     A pipeline to sample conversations given a situation
     
-    .. generato_sample_conversations:
+    .. _p_generate_sample_conversations:
 
     Example payload to invoke via slack integrations:
 
@@ -44,7 +44,7 @@ def generate_sample_conversations(
         .. code-block:: python
 
             {
-                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
+                "situations": "The user wants to talk to a human agent, so the agent transfers the call",
                 "llm_trainer_repo_name": "LLMtrainer",
                 "llm_trainer_repo_branch": "main"
                 }
@@ -57,7 +57,7 @@ def generate_sample_conversations(
         .. code-block:: python
 
             {
-                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
+                "situations": "The user disputes the debt, so the agent transfers the call to the agent :: The user cannot pay any amount as they have a difficult situation, so the agent hangs up the call. "
                 "llm_trainer_repo_name": "LLMtrainer",
                 "llm_trainer_repo_branch": "main",
             }

@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>skit_pipelines.components.sample_conversations_generator &#8212; skit_pipelines  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skit_pipelines.components.sample_conversations_generator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">kfp</span>
+<span class="kn">from</span> <span class="nn">kfp.components</span> <span class="kn">import</span> <span class="n">OutputPath</span>
+
+<span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<div class="viewcode-block" id="sample_conversations_generator"><a class="viewcode-back" href="../../../skit_pipelines.components.sample_conversations_generator.html#skit_pipelines.components.sample_conversations_generator.sample_conversations_generator">[docs]</a><span class="k">def</span> <span class="nf">sample_conversations_generator</span><span class="p">(</span>
+        <span class="n">output_path</span><span class="p">:</span> <span class="n">OutputPath</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">prompt_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">n_choice</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">llm_trainer_repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">llm_trainer_repo_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">situation_file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">situations</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    :param situations: situations list</span>
+<span class="sd">    :type situations: str, Optional</span>
+<span class="sd">    </span>
+<span class="sd">    :param output_dir: The output directory where the generated conversations gets stored</span>
+<span class="sd">    :type output_dir: str</span>
+<span class="sd">    </span>
+<span class="sd">    :param filename: Acts as a prefix to the default naming used for file</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    </span>
+<span class="sd">    :param prompt_file_path: Path to the file where prompt for data generation exists</span>
+<span class="sd">    :type prompt_file_path: str</span>
+<span class="sd">    </span>
+<span class="sd">    :param n_iter: No of times we make iterate on scenarios list to generate conversations</span>
+<span class="sd">    :type n_iter: int</span>
+<span class="sd">    </span>
+<span class="sd">    :param n_choice: No of convs generated in a single time from a scenario.</span>
+<span class="sd">    :type n_choice: int</span>
+<span class="sd">    </span>
+<span class="sd">    :param temperature: Temperature</span>
+<span class="sd">    :type temperature: float</span>
+<span class="sd">    </span>
+<span class="sd">    :param model: Model to be used for generating data </span>
+<span class="sd">    t:ype model: str</span>
+<span class="sd">    </span>
+<span class="sd">    :param llm_trainer_repo_name: The conversation generation repo name in Github.</span>
+<span class="sd">    :type llm_trainer_repo_name: str</span>
+<span class="sd">    </span>
+<span class="sd">    :param llm_trainer_repo_branch: The branch name in the conversation generation repo to use , defaults to main.</span>
+<span class="sd">    :type llm_trainer_repo_branch: str, optional</span>
+<span class="sd">    </span>
+<span class="sd">    output: path of the txt file where conversations is stored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">import</span> <span class="nn">tempfile</span>
+
+    <span class="kn">import</span> <span class="nn">git</span>
+    <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_repo</span> <span class="kn">import</span> <span class="n">download_repo</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.sample_conversations_generator.utils</span> <span class="kn">import</span> <span class="n">run_conda_python_command</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.utils</span> <span class="kn">import</span> <span class="n">execute_cli</span>
+    <span class="kn">from</span> <span class="nn">skit_pipelines.components.download_from_s3</span> <span class="kn">import</span> <span class="n">download_file_from_s3</span>
+    
+    <span class="k">def</span> <span class="nf">generate_command</span><span class="p">(</span><span class="n">situation_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prompt_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_choice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">situation_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a command string based on the provided parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            situation_list (list or None): List of situations.</span>
+<span class="sd">            output_dir (str or None): Output directory.</span>
+<span class="sd">            filename (str or None): Filename.</span>
+<span class="sd">            model (str or None): Model name.</span>
+<span class="sd">            prompt (str or None): Prompt text.</span>
+<span class="sd">            n_iter (int or None): Number of iterations.</span>
+<span class="sd">            n_choice (int or None): Number of choices.</span>
+<span class="sd">            temperature (float): Temperature.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Generated command string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">situation_list</span><span class="p">:</span>
+            <span class="n">situation_list_cmd</span> <span class="o">=</span> <span class="s2">&quot;--situation &quot;</span> <span class="o">+</span>  <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">situation</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">situation</span> <span class="ow">in</span> <span class="n">situation_list</span><span class="p">])</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">situation_list_cmd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            
+        <span class="n">output_dir_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--output_dir &quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">output_dir</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">filename_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--filename &quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">filename</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">model_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--model &quot;</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">model</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">prompt_file_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--prompt_file_path &quot;</span><span class="si">{</span><span class="n">prompt_file_path</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">prompt_file_path</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">n_iter_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--n-iter </span><span class="si">{</span><span class="n">n_iter</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">n_iter</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">n_choice_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--n-choice </span><span class="si">{</span><span class="n">n_choice</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">n_choice</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">temperature_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--temperature </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">temperature</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">situation_file_path_cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;--situation_file_path &quot;</span><span class="si">{</span><span class="n">situation_file_path</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">situation_file_path</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;python data_gen_cli.py </span><span class="si">{</span><span class="n">situation_list_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output_dir_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">filename_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">model_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">prompt_file_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_iter_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n_choice_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">temperature_cmd</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">situation_file_path_cmd</span><span class="si">}</span><span class="s2"> --save_prompts_to_disk&quot;&quot;&quot;</span>
+        
+        <span class="k">return</span> <span class="n">command</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;situation_file_path in sample_conversations_generator: </span><span class="si">{</span><span class="n">situation_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="n">run_dir</span> <span class="o">=</span> <span class="s1">&#39;data_generation/&#39;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Situations data: </span><span class="si">{</span><span class="n">situations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">situations</span><span class="p">:</span>
+        <span class="n">situations</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">situations</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)]</span>
+    
+    <span class="n">prompt_save_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">prompt_file_path</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">prompt_save_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+        <span class="n">download_file_from_s3</span><span class="p">(</span><span class="n">storage_path</span><span class="o">=</span><span class="n">prompt_file_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">prompt_save_path</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloaded prompts at path : </span><span class="si">{</span><span class="n">prompt_save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Situations : </span><span class="si">{</span><span class="n">situations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="n">repo_local_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+    
+    <span class="n">download_repo</span><span class="p">(</span>
+        <span class="n">git_host_name</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITHUB</span><span class="p">,</span>
+        <span class="n">repo_name</span><span class="o">=</span><span class="n">llm_trainer_repo_name</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITHUB_PROJECT_PATH</span><span class="p">,</span>
+        <span class="n">repo_path</span><span class="o">=</span><span class="n">repo_local_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">repo_local_path</span><span class="p">)</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">repo</span><span class="o">.</span><span class="n">git</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="n">llm_trainer_repo_branch</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">run_dir</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda create -n </span><span class="si">{</span><span class="n">llm_trainer_repo_name</span><span class="si">}</span><span class="s2"> -m python=3.9 -y&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;. /conda/etc/profile.d/conda.sh&quot;</span><span class="p">)</span>
+        <span class="n">execute_cli</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">llm_trainer_repo_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;conda install openai&quot;</span><span class="p">,</span>
+                <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+        
+        <span class="n">generated_command</span> <span class="o">=</span> <span class="n">generate_command</span><span class="p">(</span>
+        <span class="n">situation_list</span><span class="o">=</span><span class="n">situations</span><span class="p">,</span>
+        <span class="n">output_dir</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">prompt_file_path</span><span class="o">=</span><span class="n">prompt_save_path</span><span class="p">,</span>
+        <span class="n">n_iter</span><span class="o">=</span><span class="n">n_iter</span><span class="p">,</span>
+        <span class="n">n_choice</span><span class="o">=</span><span class="n">n_choice</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+        <span class="n">situation_file_path</span><span class="o">=</span><span class="n">situation_file_path</span>
+        <span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated command : </span><span class="si">{</span><span class="n">generated_command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">command</span>  <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;conda run -n </span><span class="si">{</span><span class="n">llm_trainer_repo_name</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">generated_command</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The final command : </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">run_conda_python_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">output_path</span>
+    
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error : </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">exc</span></div>
+
+
+<span class="n">sample_conversations_generator_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
+    <span class="n">sample_conversations_generator</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
+<span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">skit_pipelines</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

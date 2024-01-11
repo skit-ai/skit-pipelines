@@ -20,6 +20,8 @@ Skit-pipelines
    Publish Complaince Breaches <./skit_pipelines.pipelines.publish_compliance_breaches>
    Transcribe Dataset <./skit_pipelines.pipelines.transcription_pipeline>
    Random sample and tag turns and calls <./skit_pipelines.pipelines.fetch_n_tag_turns_and_calls>
+   Generate sample conversations for LLMs <./skit_pipelines.pipelines.generate_sample_conversations>
+   Generate conversations for LLMS and upload it for tagging <./skit_pipelines.pipelines.generate_and_tag_conversations>
 
 
 Reusable workflows for ml teams at skit.ai. Built using `kubeflow components <https://pypi.org/project/kfp/>`_. 
@@ -77,7 +79,10 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 +--+----------------------------------------------------------------------------------+
 | 9 | :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
 +--+----------------------------------------------------------------------------------+
-
+| 10 | :ref:`Generate sample conversations <p_generate_sample_conversations>`         |
++--+----------------------------------------------------------------------------------+
+| 11 | :ref:`Generate and upload conversations <p_generate_and_tag_conversations>`    |
++--+----------------------------------------------------------------------------------+
 
 Project strucuture
 ------------------

@@ -41,7 +41,7 @@ def generate_and_tag_conversations(
     """
     A pipeline to generate and tag conversations given a situation
     
-    .. generate_and_tag_conversations:
+    .. _p_generate_and_tag_conversations:
 
     Example payload to invoke via slack integrations:
 
@@ -51,11 +51,16 @@ def generate_and_tag_conversations(
 
         .. code-block:: python
 
-            {
-                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
-                "llm_trainer_repo_name": "LLMtrainer",
-                "llm_trainer_repo_branch": "main"
-                }
+            {   "situations" : "The user disputes the debt, so the agent transfers the call to the agent :: The user cannot pay any amount as they have a difficult situation, so the agent hangs up the call. ",
+                "scenario" : "Test scenario",
+                "scenario_category" : "Test scenario category",
+                "llm_trainer_repo_branch" : "refactor-data-gen-script",
+                "client_id" : "85",
+                "template_id" : "0",
+                "labelstudio_project_id" : "95",
+                "s3_links_to_prompts": "s3://kubeflow-us-cluster/pipeline_uploads/prompt/test_prompt.txt",
+                "data_label" : "UAT"
+            }
 
 
     A full available parameters example:
@@ -64,13 +69,18 @@ def generate_and_tag_conversations(
 
         .. code-block:: python
 
-            {
-                "situations": ["The user wants to talk to a human agent, so the agent transfers the call"],
-                "llm_trainer_repo_name": "LLMtrainer",
-                "llm_trainer_repo_branch": "main",
+            {   "situations" : "The user disputes the debt, so the agent transfers the call to the agent :: The user cannot pay any amount as they have a difficult situation, so the agent hangs up the call. ",
+                "scenario" : "Test scenario",
+                "scenario_category" : "Test scenario category",
+                "llm_trainer_repo_branch" : "refactor-data-gen-script",
+                "client_id" : "85",
+                "template_id" : "0",
+                "labelstudio_project_id" : "95",
+                "s3_links_to_prompts": "s3://kubeflow-us-cluster/pipeline_uploads/prompt/test_prompt.txt",
+                "data_label" : "UAT"
             }
     
-    :param situations: The situations for generating the conversations
+    :param situations: The situations for generating the conversations, use delimiter :: to pass multiple situations
     :type situations: optional
 
     :param scenarios: The scenarios linked to the situation
