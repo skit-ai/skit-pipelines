@@ -1,4 +1,7 @@
 # Changelog
+1.1.19
+- [x] add: previous_disposition is now being extracted as part of call-level tagging jobs
+
 1.1.18
 - [x] Bugfix: fix issue with sample conversation display
 
