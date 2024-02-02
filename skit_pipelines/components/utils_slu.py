@@ -90,7 +90,7 @@ def prepare_data(tagged_data_path, core_slu_repo_name, project_config_local_path
     new_test_path = create_dataset_path(
         pipeline_constants.DATA, pipeline_constants.TEST
     )
-
+    old_intent_threshold_path =  'old_data/classification/models/intent_threshold_map.yaml'
     if custom_test_dataset_present:
         train_split_percent = 100
 
@@ -116,6 +116,11 @@ def prepare_data(tagged_data_path, core_slu_repo_name, project_config_local_path
                 execute_cli(
                     f"conda run -n {core_slu_repo_name} slu combine-data --out {new_test_path} {old_test_path} {new_test_path}"
                 )
+                
+            if os.path.exists(old_intent_threshold_path):
+                logger.info("Intent threshold yaml exists for train_split_percent < 100")
+                new_intent_threshold_path =  'data/classification/models/intent_threshold_map.yaml'
+                execute_cli(f"cp {old_intent_threshold_path} {new_intent_threshold_path}")
 
     else:
         # don't split dataset - use all as train set
@@ -124,6 +129,11 @@ def prepare_data(tagged_data_path, core_slu_repo_name, project_config_local_path
             execute_cli(
                 f"conda run -n {core_slu_repo_name} slu combine-data --out {new_train_path} {old_train_path} {tagged_data_path}"
             )
+            
+            if os.path.exists(old_intent_threshold_path):
+                logger.info("Intent threshold yaml exists train_split_percent")
+                new_intent_threshold_path =  'data/classification/models/intent_threshold_map.yaml'
+                execute_cli(f"cp {old_intent_threshold_path} {new_intent_threshold_path}")
         else:
             # copy new dataset to new path
             execute_cli(f"cp {tagged_data_path} {new_train_path}")
