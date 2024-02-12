@@ -24,7 +24,7 @@ def filter_artifact_nodes(nodes: Dict[str, Any], **filter_map) -> List[Dict[str,
 
 def get_kf_object_uri(obj: Dict[str, Any], store="s3") -> str:
     key = obj[store][const.ARTIFACT_URI_KEY]
-    bucket = obj[store].get(const.OBJECT_BUCKET, const.KUBEFLOW_BUCKET)
+    bucket = obj[store].get(const.OBJECT_BUCKET, const.KUBEFLOW_SANDBOX_BUCKET)
     if store == "s3":
         return f"s3://{bucket}/{key}"
     else:

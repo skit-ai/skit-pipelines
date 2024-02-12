@@ -93,7 +93,7 @@ def fetch_tagged_calls_dataset(
         path_on_disk=tagged_df.outputs["output"],
         reference=f"{org_id}_{job_id}",
         file_type=f"tagged",
-        bucket=pipeline_constants.BUCKET,
+        bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
         ext=".csv",
     )
 

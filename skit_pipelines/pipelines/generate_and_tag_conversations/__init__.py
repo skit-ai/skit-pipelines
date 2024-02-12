@@ -136,12 +136,12 @@ def generate_and_tag_conversations(
 
     """
     
-    validate_situations =  validate_and_add_situations_to_db_op(situations=situations, 
+    validate_situations = validate_and_add_situations_to_db_op(situations=situations,
                                                          scenario=scenario ,  
                                                          scenario_category=scenario_category)
     
     situations_id_info = validate_situations.outputs['situation_mapping_info']
-    conv_s3_dir_name  = f'pipeline_uploads/generated_conversations/{client_id}_{template_id}'
+    conv_s3_dir_name = f'pipeline_uploads/generated_conversations/{client_id}_{template_id}'
     
     conv_generation_output= final_conversation_generator_op(situation_info_list=situations_id_info,
                                                         s3_links_to_prompts = s3_links_to_prompts,
@@ -156,8 +156,8 @@ def generate_and_tag_conversations(
         
     conversation_s3_upload = upload2s3_op(
             path_on_disk=conversations_dir,
-            reference = conv_s3_dir_name ,
-            bucket=pipeline_constants.KUBEFLOW_BUCKET,
+            reference=conv_s3_dir_name,
+            bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
             upload_as_directory=True,
             ext=""
         )
