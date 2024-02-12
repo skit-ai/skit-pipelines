@@ -81,7 +81,7 @@ def fetch_tagged_data_from_labelstore(
         path_on_disk=tagged_df.outputs["output"],
         reference=f"{flow_id}-{start_date}-{end_date}",
         file_type=f"annotations-with-call-context",
-        bucket=pipeline_constants.BUCKET,
+        bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
         ext=".csv",
     )
 
