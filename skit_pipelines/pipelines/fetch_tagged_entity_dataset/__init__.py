@@ -104,7 +104,7 @@ def fetch_tagged_entity_dataset(
         path_on_disk=modified_df.outputs["output"],
         reference=f"{org_id}_{job_id}",
         file_type=f"tagged_entity",
-        bucket=pipeline_constants.BUCKET,
+        bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
         ext=".csv",
     )
 

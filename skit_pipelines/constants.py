@@ -119,7 +119,6 @@ DOMAIN = "domain"
 COOKIES_PATH = "/tmp/kf_cookies.json"
 ACCESS_TOKEN_PATH = "/tmp/kfp_server_token.json"
 KUBEFLOW_GATEWAY_ENDPOINT = os.environ["KUBEFLOW_GATEWAY_ENDPOINT"]
-KUBEFLOW_BUCKET = "kubeflow-skit" if REGION == AP_SOUTH_1 else "kubeflow-us-cluster"
 COOKIE_0 = "AWSELBAuthSessionCookie-0"
 COOKIE_1 = "AWSELBAuthSessionCookie-1"
 COOKIE_DICT = {COOKIE_0: None, COOKIE_1: None}
@@ -131,6 +130,9 @@ LABELSTUDIO_SVC = (
 )
 LABELSTUDIO_TOKEN = os.environ["LABELSTUDIO_TOKEN"]
 
+"Kubeflow doesnt follow a staging/production cycle so a single implementation accesses all possible buckets"
+KUBEFLOW_BUCKET = "kubeflow-skit" if REGION == AP_SOUTH_1 else "kubeflow-us-cluster"
+KUBEFLOW_SANDBOX_BUCKET = "kubeflow-in-sandbox" if REGION == AP_SOUTH_1 else "kubeflow-us-sandbox"
 
 def CONSTRUCT_COOKIE_TOKEN(cookie_dict):
     return (
