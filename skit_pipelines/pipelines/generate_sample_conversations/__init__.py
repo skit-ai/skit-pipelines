@@ -115,7 +115,7 @@ def generate_sample_conversations(
 
     prompt_s3_upload = upload2s3_op(
             path_on_disk=prompt_generation.outputs["output"],
-            reference='pipeline_uploads/generated_conversations/',
+            reference='llm_artifacts/generated_conversations/',
             bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
             upload_as_directory=True,
             ext=""

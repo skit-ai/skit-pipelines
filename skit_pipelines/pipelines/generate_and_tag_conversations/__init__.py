@@ -141,7 +141,7 @@ def generate_and_tag_conversations(
                                                          scenario_category=scenario_category)
     
     situations_id_info = validate_situations.outputs['situation_mapping_info']
-    conv_s3_dir_name = f'pipeline_uploads/generated_conversations/{client_id}_{template_id}'
+    conv_s3_dir_name = f'llm_artifacts/generated_conversations/{client_id}_{template_id}'
     
     conv_generation_output= final_conversation_generator_op(situation_info_list=situations_id_info,
                                                         s3_links_to_prompts = s3_links_to_prompts,
