@@ -220,7 +220,8 @@ def handle_dvc_and_data_paths(repo, project_config_local_path, bucket, repo_name
     return use_previous_dataset
 
 
-def testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare_branch="master"):
+def testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, 
+            comparison_classification_report_path, comparison_confusion_matrix_path):
     
     # alias and filter the new test dataset
     filter_dataset(final_test_dataset_path, remove_intents)
@@ -236,43 +237,50 @@ def testing(repo_name, project_config_local_path, final_test_dataset_path, remov
 
     comparison_classification_report(classification_report_path, "", comparison_classification_report_path)
     comparison_confusion_report(confusion_matrix_path, "", comparison_confusion_matrix_path)
+    return classification_report_path, confusion_matrix_path
+    
+    
+def compare_data(repo_name, final_test_dataset_path, 
+                 project_config_local_path, core_slu_repo_name, classification_report_path,
+                 comparison_classification_report_path, confusion_matrix_path, comparison_confusion_matrix_path,
+                 compare_branch="master"):
+    
 
-    if compare_branch:
-        if os.path.exists("data.dvc"):
-            repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
-                repo_name=repo_name,
-                project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
-                user=pipeline_constants.GITLAB_USER,
-                token=pipeline_constants.GITLAB_PRIVATE_TOKEN,
+    if os.path.exists("data.dvc"):
+        repo_url = pipeline_constants.GET_GITLAB_REPO_URL(
+            repo_name=repo_name,
+            project_path=pipeline_constants.GITLAB_SLU_PROJECT_CONFIG_PATH,
+            user=pipeline_constants.GITLAB_USER,
+            token=pipeline_constants.GITLAB_PRIVATE_TOKEN,
+        )
+
+        try:
+            execute_cli(
+                f"dvc get --rev {compare_branch} {repo_url} data -o prod_data"
+            )
+            execute_cli("rm -rf data/classification/models")
+            execute_cli(
+                "cp prod_data/classification/models/ data/classification/ -r"
             )
 
-            try:
-                execute_cli(
-                    f"dvc get --rev {compare_branch} {repo_url} data -o prod_data"
-                )
-                execute_cli("rm -rf data/classification/models")
-                execute_cli(
-                    "cp prod_data/classification/models/ data/classification/ -r"
-                )
+            prod_classification_report_path, prod_confusion_matrix_path = evaluate(
+                final_test_dataset_path,
+                project_config_local_path,
+                core_slu_repo_name,
+                repo_name
+            )
 
-                prod_classification_report_path, prod_confusion_matrix_path = evaluate(
-                    final_test_dataset_path,
-                    project_config_local_path,
-                    core_slu_repo_name,
-                    repo_name
-                )
+            comparison_classification_report(classification_report_path, prod_classification_report_path,
+                                            comparison_classification_report_path)
+            comparison_confusion_report(confusion_matrix_path, prod_confusion_matrix_path,
+                                        comparison_confusion_matrix_path)
+        except Exception as e:
+            prod_metrics_status_message = (
+                f"Error extracting metrics from production model: {e}"
+            )
+            logger.error(prod_metrics_status_message)
 
-                comparison_classification_report(classification_report_path, prod_classification_report_path,
-                                                comparison_classification_report_path)
-                comparison_confusion_report(confusion_matrix_path, prod_confusion_matrix_path,
-                                            comparison_confusion_matrix_path)
-            except Exception as e:
-                prod_metrics_status_message = (
-                    f"Error extracting metrics from production model: {e}"
-                )
-                logger.error(prod_metrics_status_message)
-
-        else:
-            prod_metrics_status_message = "Skipping extracting metrics from Production model since this is initial training"
-            logger.info(prod_metrics_status_message)
+    else:
+        prod_metrics_status_message = "Skipping extracting metrics from Production model since this is initial training"
+        logger.info(prod_metrics_status_message)
 
