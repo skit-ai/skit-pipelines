@@ -1,4 +1,7 @@
 # Changelog
+1.1.20
+- [x] add: New s3_buckets for sandbox regions in India and US
+
 1.1.19
 - [x] add: previous_disposition is now being extracted as part of call-level tagging jobs
 
