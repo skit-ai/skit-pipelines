@@ -65,7 +65,7 @@ def generate_and_tag_conversations(
 
     A full available parameters example:
 
-        @charon run generate_sample_conversations
+        @charon run generate_and_tag_conversations
 
         .. code-block:: python
 
