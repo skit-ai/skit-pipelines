@@ -20,7 +20,8 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
     logger.info(f"Situations: {situations}")
     logger.info(f"scenario: {scenario}")
     logger.info(f"scenario_category: {scenario_category}")
-    
+    if not scenario or not scenario_category:
+        raise Exception(f"Either scenario or scenario_category is empty. Please pass in the values for the same")
 
     conn = psycopg2.connect(
         dbname=pipeline_constants.ML_METRICS_DB_NAME,
@@ -38,23 +39,24 @@ def validate_and_add_situations_to_db(situations: str, scenario: str , scenario_
     cur.execute(CREATE_SITUATIONS_MAPPING_TABLE_QUERY)
     conn.commit()
     
-    
     for situation in situations:
         situation_info = {}
         situation = situation.lower()
         cur = conn.cursor()
-        cur.execute(SEARCH_SITUATION_QUERY, (situation,))
+        scenario_category = scenario_category.upper()
+        scenario = scenario.lower()
+        query_parameters = {
+                            "situation": situation, 
+                            "scenario": scenario,  
+                            "scenario_category" :scenario_category
+                            }
+        cur.execute(SEARCH_SITUATION_QUERY, query_parameters)
         record = cur.fetchone()
         
         if record:
             id_val = record[0]
             logger.info(f"ID in table: {id_val}")
         else:
-            
-            scenario_category = scenario_category.upper()
-            scenario = scenario.lower()
-    
-            query_parameters = {"situation": situation, "scenario": scenario,  "scenario_category" :scenario_category}
             cur.execute(INSERT_SITUATION_QUERY, query_parameters)
             conn.commit()
             
