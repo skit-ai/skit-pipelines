@@ -1,4 +1,7 @@
 # Changelog
+1.1.21
+- [x] add: Pipeline to invalidate situations in DB for LLMs
+
 1.1.20
 - [x] add: New s3_buckets for sandbox regions in India and US
 

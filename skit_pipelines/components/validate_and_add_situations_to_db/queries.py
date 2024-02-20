@@ -26,5 +26,6 @@ INSERT_SITUATION_QUERY = """INSERT INTO situation_scenario_mapper
     """    
 
 SEARCH_SITUATION_QUERY = """SELECT id FROM situation_scenario_mapper WHERE 
-situation = %s;
+situation = %(situation)s and scenario = %(scenario)s and scenario_category = %(scenario_category)s 
+and is_valid = True;
 """

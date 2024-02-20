@@ -69,6 +69,10 @@ class ValidateInput:
                 self.errors.append(f"Parameter client_id required for generate_and_tag_conversations pipeline\n")
             if "labelstudio_project_id" not in self.payload:
                 self.errors.append(f"Parameter labelstudio_project_id required for generate_and_tag_conversations pipeline\n")
+            if "scenario" not in self.payload:
+                self.errors.append("Parameter scenario is mandatory for generate_and_tag_conversations pipeline\n")
+            if "scenario_category" not in self.payload:
+                self.errors.append("Parameter scenario_category is mandatory for generate_and_tag_conversations pipeline\n")
         
     def validate_input_params(self):
         # Universal checks

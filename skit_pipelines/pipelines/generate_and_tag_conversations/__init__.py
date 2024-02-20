@@ -47,7 +47,7 @@ def generate_and_tag_conversations(
 
     A minimal example:
 
-        @charon run generate_sample_conversations
+        @charon run generate_and_tag_conversations
 
         .. code-block:: python
 
@@ -65,7 +65,7 @@ def generate_and_tag_conversations(
 
     A full available parameters example:
 
-        @charon run generate_sample_conversations
+        @charon run generate_and_tag_conversations
 
         .. code-block:: python
 
@@ -83,8 +83,8 @@ def generate_and_tag_conversations(
     :param situations: The situations for generating the conversations, use delimiter :: to pass multiple situations
     :type situations: optional
 
-    :param scenarios: The scenarios linked to the situation
-    :type scenarios: optional
+    :param scenario: The scenario linked to the situation
+    :type scenario: optional
     
     :param scenario_category: The scenarios category
     :type scenario_category: optional

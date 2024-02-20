@@ -45,7 +45,7 @@ def zip_file_and_notify(
         all_files = [file for file in all_files if not file.endswith('.csv')]
         if 'prompt.txt' in all_files:
             all_files.remove('prompt.txt')
-        if 'situation.txt' in all_files:
+        if 'situation.json' in all_files:
             all_files.remove('situation.json')
         random.shuffle(all_files)
         
