@@ -148,8 +148,8 @@
 
     <span class="n">prompt_s3_upload</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
             <span class="n">path_on_disk</span><span class="o">=</span><span class="n">prompt_generation</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
-            <span class="n">reference</span> <span class="o">=</span> <span class="s1">&#39;pipeline_uploads/generated_conversations/&#39;</span><span class="p">,</span>
-            <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_BUCKET</span><span class="p">,</span>
+            <span class="n">reference</span><span class="o">=</span><span class="s1">&#39;llm_artifacts/generated_conversations/&#39;</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_SANDBOX_BUCKET</span><span class="p">,</span>
             <span class="n">upload_as_directory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
         <span class="p">)</span>

@@ -18,6 +18,7 @@ Subpackages
    skit_pipelines.pipelines.fetch_tagged_entity_dataset
    skit_pipelines.pipelines.generate_and_tag_conversations
    skit_pipelines.pipelines.generate_sample_conversations
+   skit_pipelines.pipelines.invalidate_llm_situations_in_db
    skit_pipelines.pipelines.publish_compliance_breaches
    skit_pipelines.pipelines.retrain_slu
    skit_pipelines.pipelines.retrain_slu_old

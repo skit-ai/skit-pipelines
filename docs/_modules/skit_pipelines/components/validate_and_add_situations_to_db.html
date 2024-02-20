@@ -53,7 +53,8 @@
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Situations: </span><span class="si">{</span><span class="n">situations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scenario: </span><span class="si">{</span><span class="n">scenario</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scenario_category: </span><span class="si">{</span><span class="n">scenario_category</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scenario</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">scenario_category</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Either scenario or scenario_category is empty. Please pass in the values for the same&quot;</span><span class="p">)</span>
 
     <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
         <span class="n">dbname</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">ML_METRICS_DB_NAME</span><span class="p">,</span>
@@ -71,23 +72,24 @@
     <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">CREATE_SITUATIONS_MAPPING_TABLE_QUERY</span><span class="p">)</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
     
-    
     <span class="k">for</span> <span class="n">situation</span> <span class="ow">in</span> <span class="n">situations</span><span class="p">:</span>
         <span class="n">situation_info</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">situation</span> <span class="o">=</span> <span class="n">situation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">SEARCH_SITUATION_QUERY</span><span class="p">,</span> <span class="p">(</span><span class="n">situation</span><span class="p">,))</span>
+        <span class="n">scenario_category</span> <span class="o">=</span> <span class="n">scenario_category</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">scenario</span> <span class="o">=</span> <span class="n">scenario</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">query_parameters</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s2">&quot;situation&quot;</span><span class="p">:</span> <span class="n">situation</span><span class="p">,</span> 
+                            <span class="s2">&quot;scenario&quot;</span><span class="p">:</span> <span class="n">scenario</span><span class="p">,</span>  
+                            <span class="s2">&quot;scenario_category&quot;</span> <span class="p">:</span><span class="n">scenario_category</span>
+                            <span class="p">}</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">SEARCH_SITUATION_QUERY</span><span class="p">,</span> <span class="n">query_parameters</span><span class="p">)</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
         
         <span class="k">if</span> <span class="n">record</span><span class="p">:</span>
             <span class="n">id_val</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID in table: </span><span class="si">{</span><span class="n">id_val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            
-            <span class="n">scenario_category</span> <span class="o">=</span> <span class="n">scenario_category</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-            <span class="n">scenario</span> <span class="o">=</span> <span class="n">scenario</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    
-            <span class="n">query_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;situation&quot;</span><span class="p">:</span> <span class="n">situation</span><span class="p">,</span> <span class="s2">&quot;scenario&quot;</span><span class="p">:</span> <span class="n">scenario</span><span class="p">,</span>  <span class="s2">&quot;scenario_category&quot;</span> <span class="p">:</span><span class="n">scenario_category</span><span class="p">}</span>
             <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">INSERT_SITUATION_QUERY</span><span class="p">,</span> <span class="n">query_parameters</span><span class="p">)</span>
             <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             
@@ -144,6 +146,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">

@@ -89,7 +89,24 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span> <span class="o">==</span> <span class="s2">&quot;fetch_n_tag_turns_and_calls&quot;</span> <span class="ow">and</span> \
                 <span class="p">(</span><span class="s2">&quot;labelstudio_project_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">and</span> <span class="s2">&quot;call_project_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;At least one of labelstudio_project_id or call_project_id must be provided.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
+    
+    <span class="k">def</span> <span class="nf">_validate_situation_present</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;generate_and_tag_conversations&quot;</span><span class="p">,</span> <span class="s2">&quot;generate_sample_conversations&quot;</span><span class="p">]</span>  <span class="ow">and</span> <span class="s2">&quot;situations&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;At least one situation must be provided.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_validate_generate_and_tag_conversations_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_name</span> <span class="o">==</span> <span class="s2">&quot;generate_and_tag_conversations&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;template_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter template_id required for generate_and_tag_conversations pipeline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;client_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter client_id required for generate_and_tag_conversations pipeline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;labelstudio_project_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter labelstudio_project_id required for generate_and_tag_conversations pipeline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;scenario&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Parameter scenario is mandatory for generate_and_tag_conversations pipeline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;scenario_category&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Parameter scenario_category is mandatory for generate_and_tag_conversations pipeline</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        
 <div class="viewcode-block" id="ValidateInput.validate_input_params"><a class="viewcode-back" href="../../../skit_pipelines.api.html#skit_pipelines.api.validate_input.ValidateInput.validate_input_params">[docs]</a>    <span class="k">def</span> <span class="nf">validate_input_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Universal checks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_start_date</span><span class="p">()</span>
@@ -99,6 +116,9 @@
         <span class="c1"># Pipeline specific checks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_repo_for_retrain_slu</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_label_studio_ids_for_fetch_n_tag_turns_calls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_situation_present</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_generate_and_tag_conversations_params</span><span class="p">()</span>
+        
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span></div></div>
 </pre></div>
 
@@ -129,6 +149,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">
