@@ -83,6 +83,8 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 +--+----------------------------------------------------------------------------------+
 | 11 | :ref:`Generate and upload conversations <p_generate_and_tag_conversations>`    |
 +--+----------------------------------------------------------------------------------+
+| 12 | :ref:`Invalidate situations in DB for LLMS <p_invalidate_llm_situations_in_db>` |
++--+----------------------------------------------------------------------------------+
 
 Project strucuture
 ------------------

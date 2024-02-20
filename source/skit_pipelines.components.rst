@@ -12,6 +12,7 @@ Subpackages
    skit_pipelines.components.fetch_tagged_data_label_store
    skit_pipelines.components.final_conversation_generator
    skit_pipelines.components.identify_compliance_breaches_llm
+   skit_pipelines.components.invalidate_situations_in_db
    skit_pipelines.components.modify_entities
    skit_pipelines.components.preprocess
    skit_pipelines.components.retrain_slu_from_repo

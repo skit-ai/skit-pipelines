@@ -51,7 +51,6 @@
     <span class="n">end_date_offset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">empty_possible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">asyncio</span>
     <span class="kn">import</span> <span class="nn">time</span>
 
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -60,21 +59,12 @@
     <span class="kn">from</span> <span class="nn">skit_calls.cli</span> <span class="kn">import</span> <span class="n">process_date_filters</span>
     <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">const</span>
     <span class="kn">from</span> <span class="nn">skit_labels</span> <span class="kn">import</span> <span class="n">utils</span>
-    <span class="kn">from</span> <span class="nn">skit_labels.commands</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">download_dataset_from_db</span><span class="p">,</span>
-        <span class="n">download_dataset_from_labelstudio</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">skit_labels.commands</span> <span class="kn">import</span> <span class="n">download_dataset_from_db</span>
 
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
     <span class="kn">from</span> <span class="nn">skit_pipelines.utils.normalize</span> <span class="kn">import</span> <span class="n">comma_sep_str</span>
 
     <span class="n">utils</span><span class="o">.</span><span class="n">configure_logger</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-
-    <span class="n">host</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_HOST</span>
-    <span class="n">port</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PORT</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PASSWORD</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_USER</span>
-
     <span class="k">if</span> <span class="ow">not</span> <span class="n">timezone</span><span class="p">:</span>
         <span class="n">timezone</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">TIMEZONE</span>
 
@@ -99,10 +89,10 @@
                 <span class="n">timezone</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">timezone</span><span class="p">)</span> <span class="k">if</span> <span class="n">timezone</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span>
-                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
-                <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                <span class="n">host</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_HOST</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PORT</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_PASSWORD</span><span class="p">,</span>
+                <span class="n">user</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">DB_USER</span><span class="p">,</span>
                 <span class="n">db</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">LABELSTUIO_DB</span> <span class="k">if</span> <span class="n">project_id</span> <span class="k">else</span> <span class="s2">&quot;tog&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">df_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_path</span><span class="p">)</span>
@@ -148,8 +138,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">
@@ -188,7 +181,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

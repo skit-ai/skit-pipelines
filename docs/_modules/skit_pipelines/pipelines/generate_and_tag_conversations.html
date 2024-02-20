@@ -80,7 +80,7 @@
 
 <span class="sd">    A minimal example:</span>
 
-<span class="sd">        @charon run generate_sample_conversations</span>
+<span class="sd">        @charon run generate_and_tag_conversations</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -98,7 +98,7 @@
 
 <span class="sd">    A full available parameters example:</span>
 
-<span class="sd">        @charon run generate_sample_conversations</span>
+<span class="sd">        @charon run generate_and_tag_conversations</span>
 
 <span class="sd">        .. code-block:: python</span>
 
@@ -116,8 +116,8 @@
 <span class="sd">    :param situations: The situations for generating the conversations, use delimiter :: to pass multiple situations</span>
 <span class="sd">    :type situations: optional</span>
 
-<span class="sd">    :param scenarios: The scenarios linked to the situation</span>
-<span class="sd">    :type scenarios: optional</span>
+<span class="sd">    :param scenario: The scenario linked to the situation</span>
+<span class="sd">    :type scenario: optional</span>
 <span class="sd">    </span>
 <span class="sd">    :param scenario_category: The scenarios category</span>
 <span class="sd">    :type scenario_category: optional</span>
@@ -169,12 +169,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="n">validate_situations</span> <span class="o">=</span>  <span class="n">validate_and_add_situations_to_db_op</span><span class="p">(</span><span class="n">situations</span><span class="o">=</span><span class="n">situations</span><span class="p">,</span> 
+    <span class="n">validate_situations</span> <span class="o">=</span> <span class="n">validate_and_add_situations_to_db_op</span><span class="p">(</span><span class="n">situations</span><span class="o">=</span><span class="n">situations</span><span class="p">,</span>
                                                          <span class="n">scenario</span><span class="o">=</span><span class="n">scenario</span> <span class="p">,</span>  
                                                          <span class="n">scenario_category</span><span class="o">=</span><span class="n">scenario_category</span><span class="p">)</span>
     
     <span class="n">situations_id_info</span> <span class="o">=</span> <span class="n">validate_situations</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;situation_mapping_info&#39;</span><span class="p">]</span>
-    <span class="n">conv_s3_dir_name</span>  <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;pipeline_uploads/generated_conversations/</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">template_id</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">conv_s3_dir_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;llm_artifacts/generated_conversations/</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">template_id</span><span class="si">}</span><span class="s1">&#39;</span>
     
     <span class="n">conv_generation_output</span><span class="o">=</span> <span class="n">final_conversation_generator_op</span><span class="p">(</span><span class="n">situation_info_list</span><span class="o">=</span><span class="n">situations_id_info</span><span class="p">,</span>
                                                         <span class="n">s3_links_to_prompts</span> <span class="o">=</span> <span class="n">s3_links_to_prompts</span><span class="p">,</span>
@@ -189,8 +189,8 @@
         
     <span class="n">conversation_s3_upload</span> <span class="o">=</span> <span class="n">upload2s3_op</span><span class="p">(</span>
             <span class="n">path_on_disk</span><span class="o">=</span><span class="n">conversations_dir</span><span class="p">,</span>
-            <span class="n">reference</span> <span class="o">=</span> <span class="n">conv_s3_dir_name</span> <span class="p">,</span>
-            <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_BUCKET</span><span class="p">,</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">conv_s3_dir_name</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_SANDBOX_BUCKET</span><span class="p">,</span>
             <span class="n">upload_as_directory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
         <span class="p">)</span>

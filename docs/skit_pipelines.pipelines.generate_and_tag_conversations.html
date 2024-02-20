@@ -43,7 +43,7 @@
 <p id="p-generate-and-tag-conversations">Example payload to invoke via slack integrations:</p>
 <p>A minimal example:</p>
 <blockquote>
-<div><p>&#64;charon run generate_sample_conversations</p>
+<div><p>&#64;charon run generate_and_tag_conversations</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="s2">&quot;situations&quot;</span> <span class="p">:</span> <span class="s2">&quot;The user disputes the debt, so the agent transfers the call to the agent :: The user cannot pay any amount as they have a difficult situation, so the agent hangs up the call. &quot;</span><span class="p">,</span>
     <span class="s2">&quot;scenario&quot;</span> <span class="p">:</span> <span class="s2">&quot;Test scenario&quot;</span><span class="p">,</span>
     <span class="s2">&quot;scenario_category&quot;</span> <span class="p">:</span> <span class="s2">&quot;Test scenario category&quot;</span><span class="p">,</span>
@@ -59,7 +59,7 @@
 </div></blockquote>
 <p>A full available parameters example:</p>
 <blockquote>
-<div><p>&#64;charon run generate_sample_conversations</p>
+<div><p>&#64;charon run generate_and_tag_conversations</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>   <span class="s2">&quot;situations&quot;</span> <span class="p">:</span> <span class="s2">&quot;The user disputes the debt, so the agent transfers the call to the agent :: The user cannot pay any amount as they have a difficult situation, so the agent hangs up the call. &quot;</span><span class="p">,</span>
     <span class="s2">&quot;scenario&quot;</span> <span class="p">:</span> <span class="s2">&quot;Test scenario&quot;</span><span class="p">,</span>
     <span class="s2">&quot;scenario_category&quot;</span> <span class="p">:</span> <span class="s2">&quot;Test scenario category&quot;</span><span class="p">,</span>
@@ -77,7 +77,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>situations</strong> (<em>optional</em>) – The situations for generating the conversations, use delimiter :: to pass multiple situations</p></li>
-<li><p><strong>scenarios</strong> (<em>optional</em>) – The scenarios linked to the situation</p></li>
+<li><p><strong>scenario</strong> (<em>optional</em>) – The scenario linked to the situation</p></li>
 <li><p><strong>scenario_category</strong> (<em>optional</em>) – The scenarios category</p></li>
 <li><p><strong>prompt</strong> – Prompt to the model for data generation</p></li>
 </ul>

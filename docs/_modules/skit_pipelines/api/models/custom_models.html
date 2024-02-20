@@ -57,7 +57,7 @@
 
 <div class="viewcode-block" id="get_kf_object_uri"><a class="viewcode-back" href="../../../../skit_pipelines.api.models.html#skit_pipelines.api.models.custom_models.get_kf_object_uri">[docs]</a><span class="k">def</span> <span class="nf">get_kf_object_uri</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">store</span><span class="o">=</span><span class="s2">&quot;s3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="n">store</span><span class="p">][</span><span class="n">const</span><span class="o">.</span><span class="n">ARTIFACT_URI_KEY</span><span class="p">]</span>
-    <span class="n">bucket</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="n">store</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">OBJECT_BUCKET</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">KUBEFLOW_BUCKET</span><span class="p">)</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="n">store</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">OBJECT_BUCKET</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">KUBEFLOW_SANDBOX_BUCKET</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">store</span> <span class="o">==</span> <span class="s2">&quot;s3&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">else</span><span class="p">:</span>
@@ -156,8 +156,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">
@@ -196,7 +199,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

@@ -101,6 +101,7 @@
 <span class="n">TEST</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
 <span class="n">LABELS</span> <span class="o">=</span> <span class="s2">&quot;labels&quot;</span>
 <span class="n">CSV_FILE</span> <span class="o">=</span> <span class="s2">&quot;.csv&quot;</span>
+<span class="n">TEXT_FILE</span> <span class="o">=</span> <span class="s2">&quot;.txt&quot;</span>
 <span class="n">WAV_FILE</span> <span class="o">=</span> <span class="s2">&quot;.wav&quot;</span>
 <span class="n">UTTERANCES</span> <span class="o">=</span> <span class="s2">&quot;utterances&quot;</span>
 <span class="n">ALTERNATIVES</span> <span class="o">=</span> <span class="s2">&quot;alternatives&quot;</span>
@@ -151,7 +152,6 @@
 <span class="n">COOKIES_PATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/kf_cookies.json&quot;</span>
 <span class="n">ACCESS_TOKEN_PATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/kfp_server_token.json&quot;</span>
 <span class="n">KUBEFLOW_GATEWAY_ENDPOINT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;KUBEFLOW_GATEWAY_ENDPOINT&quot;</span><span class="p">]</span>
-<span class="n">KUBEFLOW_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;kubeflow-skit&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;kubeflow-us-cluster&quot;</span>
 <span class="n">COOKIE_0</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-0&quot;</span>
 <span class="n">COOKIE_1</span> <span class="o">=</span> <span class="s2">&quot;AWSELBAuthSessionCookie-1&quot;</span>
 <span class="n">COOKIE_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="n">COOKIE_0</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">COOKIE_1</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
@@ -163,6 +163,9 @@
 <span class="p">)</span>
 <span class="n">LABELSTUDIO_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LABELSTUDIO_TOKEN&quot;</span><span class="p">]</span>
 
+<span class="s2">&quot;Kubeflow doesnt follow a staging/production cycle so a single implementation accesses all possible buckets&quot;</span>
+<span class="n">KUBEFLOW_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;kubeflow-skit&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;kubeflow-us-cluster&quot;</span>
+<span class="n">KUBEFLOW_SANDBOX_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;kubeflow-in-sandbox&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;kubeflow-us-sandbox&quot;</span>
 
 <div class="viewcode-block" id="CONSTRUCT_COOKIE_TOKEN"><a class="viewcode-back" href="../../skit_pipelines.html#skit_pipelines.constants.CONSTRUCT_COOKIE_TOKEN">[docs]</a><span class="k">def</span> <span class="nf">CONSTRUCT_COOKIE_TOKEN</span><span class="p">(</span><span class="n">cookie_dict</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -188,8 +191,12 @@
 <span class="n">DUCKLING_HOST</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DUCKLING_HOST&quot;</span><span class="p">]</span>
 
 <span class="c1"># K8s</span>
-<span class="n">POD_NODE_SELECTOR_LABEL</span> <span class="o">=</span> <span class="s2">&quot;beta.kubernetes.io/instance-type&quot;</span>
-<span class="n">CPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;m5.xlarge&quot;</span> <span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span> <span class="k">else</span> <span class="s2">&quot;r6a.2xlarge&quot;</span>
+<span class="k">if</span> <span class="n">REGION</span> <span class="o">==</span> <span class="n">AP_SOUTH_1</span><span class="p">:</span>
+    <span class="n">POD_NODE_SELECTOR_LABEL</span> <span class="o">=</span> <span class="s2">&quot;beta.kubernetes.io/instance-type&quot;</span>
+    <span class="n">CPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;m5.xlarge&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">POD_NODE_SELECTOR_LABEL</span> <span class="o">=</span> <span class="s2">&quot;component&quot;</span>
+    <span class="n">CPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;kubeflow&quot;</span>
 <span class="n">GPU_NODE_LABEL</span> <span class="o">=</span> <span class="s2">&quot;g4dn.xlarge&quot;</span>
 
 <span class="c1"># Bots</span>
@@ -205,6 +212,8 @@
 <span class="n">GITLAB_USER_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;automation@skit.ai&quot;</span>
 <span class="n">GITLAB_PRIVATE_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PERSONAL_ACCESS_TOKEN_GITLAB&quot;</span><span class="p">]</span>
 
+<span class="n">GITHUB</span> <span class="o">=</span> <span class="s2">&quot;github.com&quot;</span>
+<span class="n">GITHUB_PROJECT_PATH</span> <span class="o">=</span> <span class="s2">&quot;skit-ai/&quot;</span>
 
 <div class="viewcode-block" id="GET_GITLAB_REPO_URL"><a class="viewcode-back" href="../../skit_pipelines.html#skit_pipelines.constants.GET_GITLAB_REPO_URL">[docs]</a><span class="k">def</span> <span class="nf">GET_GITLAB_REPO_URL</span><span class="p">(</span>
     <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span>
@@ -212,8 +221,10 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">GITLAB</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">.git&quot;</span></div>
 
 
-<span class="n">GITHUB</span> <span class="o">=</span> <span class="s2">&quot;github.com&quot;</span>
-
+<div class="viewcode-block" id="GET_GITHUB_REPO_URL"><a class="viewcode-back" href="../../skit_pipelines.html#skit_pipelines.constants.GET_GITHUB_REPO_URL">[docs]</a><span class="k">def</span> <span class="nf">GET_GITHUB_REPO_URL</span><span class="p">(</span>
+    <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">GITHUB</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">project_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo_name</span><span class="si">}</span><span class="s2">.git&quot;</span></div>
 
 <span class="n">CLASSIFICATION_REPORT</span> <span class="o">=</span> <span class="s2">&quot;classification_report&quot;</span>
 <span class="n">FULL_CONFUSION_MATRIX</span> <span class="o">=</span> <span class="s2">&quot;full_confusion_matrix&quot;</span>
@@ -260,6 +271,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">

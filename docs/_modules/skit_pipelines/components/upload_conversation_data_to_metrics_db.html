@@ -84,7 +84,7 @@
         <span class="n">prompt_s3_path</span> <span class="o">=</span> <span class="n">upload_file_to_s3</span><span class="p">(</span>
                 <span class="n">path_on_disk</span><span class="o">=</span><span class="n">prompt_local_path</span><span class="p">,</span>
                 <span class="n">upload_path</span><span class="o">=</span><span class="n">s3_prompt_dir_name</span><span class="p">,</span>
-                <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_BUCKET</span><span class="p">,</span>
+                <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">KUBEFLOW_SANDBOX_BUCKET</span><span class="p">,</span>
             <span class="p">)</span>
         
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt local path: </span><span class="si">{</span><span class="n">prompt_local_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -169,6 +169,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">
