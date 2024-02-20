@@ -32,7 +32,9 @@ def invalidate_llm_situations_in_db(
         {
             "situation_id_list": "1, 3, 5"
         }
-        
+    
+    :param situation_id_list: A comma separated list of situation ids from the situation_scenario_mapper table: "1, 2" etc, defaults to ""
+    :type situation_id_list: str 
     :param notify: A comma separated list of slack ids: "@apples, @orange.fruit" etc, defaults to ""
     :type notify: str, optional
     :param channel: The slack channel to send the notification, defaults to ""
