@@ -140,7 +140,7 @@ def retrain_slu_from_repo(
         final_test_dataset_path = new_test_path
 
     classification_report_path, confusion_matrix_path = testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, 
-            comparison_classification_report_path, comparison_confusion_matrix_path, compare_branch=None)
+            comparison_classification_report_path, comparison_confusion_matrix_path)
     
     execute_cli("dvc add data")
     execute_cli("dvc push data")

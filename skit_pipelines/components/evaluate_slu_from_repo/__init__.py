@@ -93,14 +93,19 @@ def evaluate_slu_from_repo(
 
     classification_report_path, confusion_matrix_path = testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, 
                                                                 intent_alias_path, core_slu_repo_name, comparison_classification_report_path, 
-                                                                comparison_confusion_matrix_path, compare_branch)
-
+                                                                comparison_confusion_matrix_path)
+    if compare:
+        compare_branch = compare_branch 
+    else:
+        compare_branch = "master"
+        
     compare_data(repo_name, final_test_dataset_path, 
                  project_config_local_path, core_slu_repo_name, 
                  classification_report_path,
                  comparison_classification_report_path, 
                  confusion_matrix_path, 
-                 comparison_confusion_matrix_path)
+                 comparison_confusion_matrix_path,
+                 compare_branch)
     
     return ""
 

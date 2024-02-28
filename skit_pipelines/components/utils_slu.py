@@ -241,8 +241,11 @@ def testing(repo_name, project_config_local_path, final_test_dataset_path, remov
     
     
 def compare_data(repo_name, final_test_dataset_path, 
-                 project_config_local_path, core_slu_repo_name, classification_report_path,
-                 comparison_classification_report_path, confusion_matrix_path, comparison_confusion_matrix_path,
+                 project_config_local_path, core_slu_repo_name, 
+                 classification_report_path,
+                 comparison_classification_report_path, 
+                 confusion_matrix_path, 
+                 comparison_confusion_matrix_path,
                  compare_branch="master"):
     
 
