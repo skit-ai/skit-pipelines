@@ -158,6 +158,7 @@ def generate_and_tag_conversations(
             path_on_disk=conversations_dir,
             reference=conv_s3_dir_name,
             bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
+            region_name = pipeline_constants.SANDBOX_REGION,
             upload_as_directory=True,
             ext=""
         )

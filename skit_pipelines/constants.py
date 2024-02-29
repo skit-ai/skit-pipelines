@@ -209,3 +209,7 @@ INTENT_MODEL: str = "text-davinci-003"
 ALLOWED_INTENTS = ["_confirm_", "_cancel_"]
 
 OPENAI_COMPLIANCE_BREACHES_KEY = os.environ["OPENAI_COMPLIANCE_BREACHES_KEY"]
+
+AP_SOUTH_2 = 'ap-south-2'
+US_WEST_2 = 'us-west-2'
+SANDBOX_REGION = AP_SOUTH_2 if REGION == AP_SOUTH_1 else US_WEST_2

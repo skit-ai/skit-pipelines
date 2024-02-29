@@ -82,6 +82,7 @@ def fetch_tagged_data_from_labelstore(
         reference=f"{flow_id}-{start_date}-{end_date}",
         file_type=f"annotations-with-call-context",
         bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
+        region_name = pipeline_constants.SANDBOX_REGION,
         ext=".csv",
     )
 

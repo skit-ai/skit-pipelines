@@ -94,6 +94,7 @@ def fetch_tagged_calls_dataset(
         reference=f"datasets/{org_id}_{job_id}",
         file_type=f"tagged",
         bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
+        region_name = pipeline_constants.SANDBOX_REGION,
         ext=".csv",
     )
 

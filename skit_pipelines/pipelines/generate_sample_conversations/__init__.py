@@ -117,6 +117,7 @@ def generate_sample_conversations(
             path_on_disk=prompt_generation.outputs["output"],
             reference='llm_artifacts/generated_conversations/',
             bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
+            region_name = pipeline_constants.SANDBOX_REGION,
             upload_as_directory=True,
             ext=""
         )
