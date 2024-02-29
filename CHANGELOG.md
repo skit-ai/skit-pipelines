@@ -1,4 +1,7 @@
 # Changelog
+1.1.23
+- [x] Bugfix: Fix missing metrics folder and s3 upload region
+
 1.1.22
 - [x] add: blocking_disposition is now being extracted as part of call-level tagging jobs
 
