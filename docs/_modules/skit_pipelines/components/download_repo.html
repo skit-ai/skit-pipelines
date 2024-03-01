@@ -44,9 +44,8 @@
 
     <span class="kn">import</span> <span class="nn">git</span>
     <span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-
     <span class="kn">from</span> <span class="nn">skit_pipelines</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">pipeline_constants</span>
-
+    
     <span class="k">if</span> <span class="n">git_host_name</span> <span class="o">==</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB</span><span class="p">:</span>
         <span class="n">repo_url</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GET_GITLAB_REPO_URL</span><span class="p">(</span>
             <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
@@ -54,11 +53,18 @@
             <span class="n">user</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_USER</span><span class="p">,</span>
             <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITLAB_PRIVATE_TOKEN</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="o">.</span><span class="n">clone_from</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">repo_path</span><span class="p">)</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">repo_path</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cloned successfully!&quot;</span><span class="p">)</span></div>
-
+        
+    <span class="k">elif</span> <span class="n">git_host_name</span> <span class="o">==</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GITHUB</span> <span class="p">:</span>
+        <span class="n">repo_url</span> <span class="o">=</span> <span class="n">pipeline_constants</span><span class="o">.</span><span class="n">GET_GITHUB_REPO_URL</span><span class="p">(</span>
+            <span class="n">repo_name</span><span class="o">=</span><span class="n">repo_name</span><span class="p">,</span>
+            <span class="n">project_path</span><span class="o">=</span><span class="n">project_path</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">PERSONAL_ACCESS_TOKEN_GITHUB</span><span class="p">,</span>
+        <span class="p">)</span>
+        
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="o">.</span><span class="n">clone_from</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">repo_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">repo_path</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cloned successfully!&quot;</span><span class="p">)</span></div>
+        
 
 <span class="n">download_repo_op</span> <span class="o">=</span> <span class="n">kfp</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">create_component_from_func</span><span class="p">(</span>
     <span class="n">download_repo</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BASE_IMAGE</span>
@@ -84,13 +90,14 @@
 <p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">
@@ -129,7 +136,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

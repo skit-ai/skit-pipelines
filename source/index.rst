@@ -12,9 +12,7 @@ Skit-pipelines
    :caption: Pipelines
 
    Random sample calls <./skit_pipelines.pipelines.fetch_calls_pipeline>
-   Random sample and tag calls <./skit_pipelines.pipelines.fetch_n_tag_calls>
    Download tagged dataset <./skit_pipelines.pipelines.fetch_tagged_calls_dataset>
-   Upload for annotation <./skit_pipelines.pipelines.tag_calls>
    Download tagged entity dataset <./skit_pipelines.pipelines.fetch_tagged_entity_dataset>
    Retrain SLU <./skit_pipelines.pipelines.retrain_slu>
    Publish Complaince Breaches <./skit_pipelines.pipelines.publish_compliance_breaches>
@@ -61,29 +59,25 @@ Here's a list of official pipelines, within these docs we share snippets for sla
 +--+----------------------------------------------------------------------------------+
 |   | Pipelines                                                                       |
 +==+==================================================================================+
-| 1 | :ref:`Random sample and tag calls <p_fetch_n_tag_calls>`                        |
+| 1 | :ref:`Random sample calls <p_fetch_calls_pipeline>`                             |
 +--+----------------------------------------------------------------------------------+
-| 2 | :ref:`Random sample calls <p_fetch_calls_pipeline>`                             |
+| 2 | :ref:`Download tagged dataset <p_fetch_tagged_calls_dataset>`                   |
 +--+----------------------------------------------------------------------------------+
-| 3 | :ref:`Download tagged dataset <p_fetch_tagged_calls_dataset>`                   |
+| 3 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
 +--+----------------------------------------------------------------------------------+
-| 4 | :ref:`Upload for annotation <p_tag_calls>`                                      |
+| 4 | :ref:`Publish Compliance breaches <p_publish_compliance_breaches>`              |
 +--+----------------------------------------------------------------------------------+
-| 5 | :ref:`Download tagged entity dataset <p_fetch_tagged_entity_dataset>`           |
+| 5 | :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
 +--+----------------------------------------------------------------------------------+
-| 6 | :ref:`Publish Compliance breaches <p_publish_compliance_breaches>`              |
+| 6 | :ref:`Retrain SLU <p_retrain_slu>`                                              |
 +--+----------------------------------------------------------------------------------+
-| 7 | :ref:`Transcribe Dataset <p_transcription_pipeline>`                            |
+| 7 | :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
 +--+----------------------------------------------------------------------------------+
-| 8 | :ref:`Retrain SLU <p_retrain_slu>`                                              |
+| 8 | :ref:`Generate sample conversations <p_generate_sample_conversations>`          |
 +--+----------------------------------------------------------------------------------+
-| 9 | :ref:`Random sample and tag turns and calls <p_fetch_n_tag_turns_and_calls>`    |
+| 9 | :ref:`Generate and upload conversations <p_generate_and_tag_conversations>`     |
 +--+----------------------------------------------------------------------------------+
-| 10 | :ref:`Generate sample conversations <p_generate_sample_conversations>`         |
-+--+----------------------------------------------------------------------------------+
-| 11 | :ref:`Generate and upload conversations <p_generate_and_tag_conversations>`    |
-+--+----------------------------------------------------------------------------------+
-| 12 | :ref:`Invalidate situations in DB for LLMS <p_invalidate_llm_situations_in_db>` |
+| 10 | :ref:`Invalidate situations in DB for LLM  <p_invalidate_llm_situations_in_db>`|
 +--+----------------------------------------------------------------------------------+
 
 Project strucuture

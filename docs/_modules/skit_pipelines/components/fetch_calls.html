@@ -111,7 +111,7 @@
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">states</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">states</span><span class="p">)</span> <span class="k">if</span> <span class="n">states</span> <span class="k">else</span> <span class="n">states</span>
     <span class="n">intents</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">intents</span><span class="p">)</span> <span class="k">if</span> <span class="n">intents</span> <span class="k">else</span> <span class="n">intents</span>
-    <span class="n">client_id</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">client_id</span> <span class="k">else</span> <span class="n">client_id</span>
+    <span class="n">client_id</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">if</span> <span class="n">client_id</span> <span class="k">else</span> <span class="p">[]</span>
     <span class="n">flow_ids</span> <span class="o">=</span> <span class="n">comma_sep_str</span><span class="p">(</span><span class="n">flow_ids</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">if</span> <span class="n">flow_ids</span> <span class="k">else</span> <span class="p">[]</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Flow ids: </span><span class="si">{</span><span class="n">flow_ids</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">maybe_df</span> <span class="o">=</span> <span class="n">calls</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
@@ -137,12 +137,12 @@
         <span class="n">flow_ids</span><span class="o">=</span><span class="n">flow_ids</span>
     <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obtained </span><span class="si">{</span><span class="n">maybe_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> calls from FSM Db before removing empty audios&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">maybe_df</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No calls found for the above parameters&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="n">_</span><span class="p">,</span> <span class="n">file_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="n">const</span><span class="o">.</span><span class="n">CSV_FILE</span><span class="p">)</span>
     <span class="n">maybe_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obtained </span><span class="si">{</span><span class="n">maybe_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> calls from FSM Db before removing empty audios&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">empty_audios_remover</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">df_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">audios_dir_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
@@ -166,16 +166,28 @@
             <span class="p">)</span>
         <span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;audio_filename&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">df_final</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No calls found for the above parameters&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obtained </span><span class="si">{</span><span class="n">df_final</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> calls after removing empty audios&quot;</span><span class="p">)</span>
         <span class="n">df_final</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">df_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="n">remove_empty_audios</span><span class="p">:</span>
-        <span class="n">empty_audios_remover</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">maybe_df</span><span class="p">,</span> <span class="n">df_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
-    <span class="n">client_id_string</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">client_id</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">empty_audios_remover</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">maybe_df</span><span class="p">,</span> <span class="n">df_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    
+    <span class="n">file_name_prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="n">client_id</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">client_id</span>  <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">client_id</span><span class="p">]</span>
+        <span class="n">client_id_string</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">client_id</span>
+        <span class="n">file_name_prefix</span> <span class="o">=</span> <span class="n">client_id_string</span>
+        
+    <span class="k">elif</span> <span class="n">template_id</span><span class="p">:</span>
+        <span class="n">file_name_prefix</span> <span class="o">=</span> <span class="n">template_id</span>
+        
     <span class="n">s3_path</span> <span class="o">=</span> <span class="n">upload2s3</span><span class="p">(</span>
         <span class="n">file_path</span><span class="p">,</span>
-        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">client_id_string</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">reference</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name_prefix</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">file_type</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lang</span><span class="si">}</span><span class="s2">-untagged&quot;</span><span class="p">,</span>
         <span class="n">bucket</span><span class="o">=</span><span class="n">pipeline_constants</span><span class="o">.</span><span class="n">BUCKET</span><span class="p">,</span>
         <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
@@ -207,14 +219,14 @@
 <p class="caption" role="heading"><span class="caption-text">Pipelines</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_calls_pipeline.html">Random sample calls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_calls.html">Random sample and tag calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_calls_dataset.html">Download tagged dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.tag_calls.html">Upload for annotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_tagged_entity_dataset.html">Download tagged entity dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.retrain_slu.html">Retrain SLU</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.publish_compliance_breaches.html">Publish Complaince Breaches</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.transcription_pipeline.html">Transcribe Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.fetch_n_tag_turns_and_calls.html">Random sample and tag turns and calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_sample_conversations.html">Generate sample conversations for LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skit_pipelines.pipelines.generate_and_tag_conversations.html">Generate conversations for LLMS and upload it for tagging</a></li>
 </ul>
 
 <div class="relations">

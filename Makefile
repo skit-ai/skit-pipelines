@@ -43,7 +43,7 @@ us_dev:
 	@source pipeline_secrets/us_env.sh && ./us_docker_build_dev_image $(tag)
 
 docs:
-	@source secrets/env.sh && sphinx-apidoc -f -o source ./skit_pipelines
+	@source secrets/env.sh && sphinx-apidoc -f -a -o source ./skit_pipelines
 	@source secrets/env.sh && sphinx-build -b html source docs
 
 start_server:
