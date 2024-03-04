@@ -3874,13 +3874,13 @@ toml = ">=0.10.2,<0.11.0"
 
 [[package]]
 name = "skit-calls"
-version = "0.2.54"
+version = "0.2.55"
 description = "Library to fetch calls from a given environment."
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "skit_calls-0.2.54-py3-none-any.whl", hash = "sha256:3291cafe16cad4b112ef0a92add6c3e4ee7b24bb775c5c8e444501b56a3d2716"},
-    {file = "skit_calls-0.2.54.tar.gz", hash = "sha256:aefba6a84eed5dc233a3b715fff35cde97f34cece169100b0d48823353b14d1a"},
+    {file = "skit_calls-0.2.55-py3-none-any.whl", hash = "sha256:7bf2c69a2f61260efd7ef6473d18c747242f7f48e6c3ef19f9782968632d8f14"},
+    {file = "skit_calls-0.2.55.tar.gz", hash = "sha256:1c5f302ba0fdc688849937c3b0e98c7b1d8ac82b80f42f433b2517fc0eaa4a31"},
 ]
 
 [package.dependencies]
@@ -5310,4 +5310,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "533cff83e3d80ed9b133b6d89ea759c01952b80871d62f1c8178c9f60c153bc5"
+content-hash = "d3f9af3bf20eea5038edfb850e5d8a75095d2b23d3a8e69a713b6bd5f228bb29"
