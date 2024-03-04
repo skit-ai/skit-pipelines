@@ -8,7 +8,8 @@ from typing import List, Dict
 
 def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, str]], client_id: str ,template_id: str,  
                                            generated_conversations_s3_link: str, 
-                                           prompt_links_in_s3: str, conv_directory:  InputPath(str)) :
+                                           prompt_links_in_s3: str, conv_directory:  InputPath(str), 
+                                           project_name: str) :
     """
     Upload the conversation data to metrics DB
     """
@@ -92,7 +93,8 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
                                 "client_id": client_id, 
                                 "template_id": template_id,
                                 "prompt_id": prompt_id,
-                                "generated_conversations_s3_link" :generated_conversations_s3_link
+                                "generated_conversations_s3_link" :generated_conversations_s3_link,
+                                "project_name": project_name,
                                 }
         cur.execute(INSERT_GENERATED_CONVERSATIONS_QUERY ,query_parameters_2)
         conn.commit()

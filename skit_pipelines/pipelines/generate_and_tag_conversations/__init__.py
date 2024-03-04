@@ -34,6 +34,7 @@ def generate_and_tag_conversations(
     template_id: str,
     labelstudio_project_id: str,
     data_label: str = "",
+    project_name: str = "",
     notify: str = "",
     channel: str = "",
     slack_thread: str = ""
@@ -59,7 +60,8 @@ def generate_and_tag_conversations(
                 "template_id" : "0",
                 "labelstudio_project_id" : "95",
                 "s3_links_to_prompts": "s3://kubeflow-us-cluster/pipeline_uploads/prompt/test_prompt.txt",
-                "data_label" : "UAT"
+                "data_label" : "UAT",
+                "project_name" : "test project name"
             }
 
 
@@ -77,7 +79,8 @@ def generate_and_tag_conversations(
                 "template_id" : "0",
                 "labelstudio_project_id" : "95",
                 "s3_links_to_prompts": "s3://kubeflow-us-cluster/pipeline_uploads/prompt/test_prompt.txt",
-                "data_label" : "UAT"
+                "data_label" : "UAT",
+                "project_name" : "test project name"
             }
     
     :param situations: The situations for generating the conversations, use delimiter :: to pass multiple situations
@@ -124,6 +127,9 @@ def generate_and_tag_conversations(
     
     :param template_id: template id for which data is being generated
     :type template_id : str
+    
+    :param project_name: project name to distinguish between various experiments
+    :type project_name : str
     
     :param notify: Whether to send a slack notification, defaults to ""
     :type notify: str, optional
@@ -220,7 +226,8 @@ def generate_and_tag_conversations(
         upload_to_metrics_db_op = upload_conversation_data_to_metrics_db_op(situations_id_info=situations_id_info, client_id=client_id,
                                                                             template_id=template_id, 
                                                                             generated_conversations_s3_link=conversation_s3_upload.output,
-                                                                            prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir)
+                                                                            prompt_links_in_s3=s3_links_to_prompts, conv_directory=conversations_dir, 
+                                                                            project_name=project_name)
     
 
 __all__ = ["generate_and_tag_conversations"]
