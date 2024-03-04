@@ -14,9 +14,8 @@ def upload2s3(
     ext: str = ".csv",
     output_path: str = "",
     storage_options: str = "",
-    upload_as_directory: bool = False,
-    region_name: str = ""
-) -> str:
+    upload_as_directory: bool = False
+    ) -> str:
     import json
     import os
     import tarfile
@@ -44,10 +43,9 @@ def upload2s3(
                     f"Uploaded ({os.path.join(root, file)}) to ({os.path.join(upload_path, middle_part, file)})"
                 )
     
-    if not region_name:
-        region_name = pipeline_constants.REGION
+    region_name = pipeline_constants.BUCKET_REGIONS[bucket]
+    logger.info(f"Region name is : {region_name} for bucket {bucket}")
     
-    logger.info(f"Region name is : {region_name}")
     s3_resource = boto3.client("s3", region_name=region_name)
     
     if upload_as_directory and ext:

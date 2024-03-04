@@ -51,9 +51,8 @@ def upload_conversation_data_to_metrics_db(situations_id_info: List[Dict[str, st
         prompt_s3_path = upload_file_to_s3(
                 path_on_disk=prompt_local_path,
                 upload_path=s3_prompt_dir_name,
-                bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
-                region_name = pipeline_constants.SANDBOX_REGION
-            )
+                bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET
+                )
         
         logger.info(f"Prompt local path: {prompt_local_path}")
     else:

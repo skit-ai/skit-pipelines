@@ -212,4 +212,13 @@ OPENAI_COMPLIANCE_BREACHES_KEY = os.environ["OPENAI_COMPLIANCE_BREACHES_KEY"]
 
 AP_SOUTH_2 = 'ap-south-2'
 US_WEST_2 = 'us-west-2'
-SANDBOX_REGION = AP_SOUTH_2 if REGION == AP_SOUTH_1 else US_WEST_2
+
+BUCKET_REGIONS = {
+    "vernacular-ml": AP_SOUTH_1,
+    "kubeflow-skit": AP_SOUTH_1,
+    "kubeflow-in-sandbox": AP_SOUTH_2,
+    "kubeflow-us-sandbox": US_WEST_2,
+    "kubeflow-us-cluster": US_EAST_1,
+    "us-production-turn-recordings": US_EAST_1,
+    
+}

@@ -105,7 +105,6 @@ def fetch_tagged_entity_dataset(
         reference=f"{org_id}_{job_id}",
         file_type=f"tagged_entity",
         bucket=pipeline_constants.KUBEFLOW_SANDBOX_BUCKET,
-        region_name = pipeline_constants.SANDBOX_REGION,
         ext=".csv",
     )
 
