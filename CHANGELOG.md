@@ -1,4 +1,7 @@
 # Changelog
+1.1.24
+- [x] add: Support for a new column in conversations table
+
 1.1.23
 - [x] Bugfix: Fix missing metrics folder and s3 upload region
 
