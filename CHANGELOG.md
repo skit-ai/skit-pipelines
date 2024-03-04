@@ -1,4 +1,7 @@
 # Changelog
+1.1.22
+- [x] add: blocking_disposition is now being extracted as part of call-level tagging jobs
+
 1.1.21
 - [x] add: Pipeline to invalidate situations in DB for LLMs
 

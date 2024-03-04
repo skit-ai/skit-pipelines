@@ -27,6 +27,7 @@ def fetch_calls_for_slots(
             "call_end_status",
             "disposition",
             "previous_disposition",
+            "blocking_disposition",
             "flow_id",
             "flow_version",
             "flow_name",
