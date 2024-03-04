@@ -31,7 +31,7 @@ def evaluate_slu_from_repo(
     from skit_pipelines import constants as pipeline_constants
     from skit_pipelines.components.utils import (execute_cli)
     from skit_pipelines.utils.normalize import comma_sep_str
-    from skit_pipelines.components.utils_slu import setup_repo, setup_project_config_repo, data_handler, testing
+    from skit_pipelines.components.utils_slu import setup_repo, setup_project_config_repo, data_handler, testing, compare_data
 
     remove_intents = comma_sep_str(remove_intents)
     compare = True if compare_branch else False
@@ -91,8 +91,18 @@ def evaluate_slu_from_repo(
     if os.path.exists(tagged_data_path):
         final_test_dataset_path = tagged_data_path
 
-    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path, compare_branch)
-
+    classification_report_path, confusion_matrix_path = testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, 
+                                                                intent_alias_path, core_slu_repo_name, comparison_classification_report_path, 
+                                                                comparison_confusion_matrix_path)
+        
+    compare_data(repo_name, final_test_dataset_path, 
+                 project_config_local_path, core_slu_repo_name, 
+                 classification_report_path,
+                 comparison_classification_report_path, 
+                 confusion_matrix_path, 
+                 comparison_confusion_matrix_path,
+                 compare_branch)
+    
     return ""
 
 

@@ -28,7 +28,7 @@ def evaluate_slu(
     *,
     repo_name: str,
     repo_branch: str = "master",
-    compare_branch: str = "",
+    compare_branch: str = "master",
     job_ids: str = "",
     test_dataset_path: str = "",
     labelstudio_project_ids: str = "",

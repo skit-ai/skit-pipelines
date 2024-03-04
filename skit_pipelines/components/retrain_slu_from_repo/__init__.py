@@ -42,8 +42,7 @@ def retrain_slu_from_repo(
         filter_dataset, alias_dataset, execute_cli
     )
     from skit_pipelines.utils.normalize import comma_sep_str
-    from skit_pipelines.components.utils_slu import setup_repo, setup_project_config_repo, data_handler, prepare_data, process_custom_test_dataset, handle_dvc_and_data_paths, testing
-
+    from skit_pipelines.components.utils_slu import setup_repo, setup_project_config_repo, data_handler, prepare_data, process_custom_test_dataset, handle_dvc_and_data_paths, testing, compare_data
     remove_intents = comma_sep_str(remove_intents)
     data_info = (
         f" {labelstudio_project_ids=}"
@@ -133,20 +132,6 @@ def retrain_slu_from_repo(
     if os.path.exists(pipeline_constants.OLD_DATA):
         execute_cli(f"rm -Rf {pipeline_constants.OLD_DATA}")
 
-    execute_cli("dvc add data")
-    execute_cli("dvc push data")
-
-    execute_cli(f"git status")
-    repo.git.add(["data.dvc"])
-    execute_cli(f"git status")
-
-    repo.index.commit(
-        f"Trained XLMR model using {data_info}",
-        author=author,
-        committer=committer,
-    )
-    repo.git.push("origin", new_branch)
-
     # Testing
     final_test_dataset_path = ""
     if custom_test_dataset_present:
@@ -154,8 +139,29 @@ def retrain_slu_from_repo(
     elif os.path.exists(new_test_path):
         final_test_dataset_path = new_test_path
 
-    testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, comparison_classification_report_path, comparison_confusion_matrix_path)
+    classification_report_path, confusion_matrix_path = testing(repo_name, project_config_local_path, final_test_dataset_path, remove_intents, intent_alias_path, core_slu_repo_name, 
+            comparison_classification_report_path, comparison_confusion_matrix_path)
+    
+    execute_cli("dvc add data")
+    execute_cli("dvc push data")
 
+    execute_cli(f"git status")
+    repo.git.add(["data.dvc"])
+    execute_cli(f"git status")
+    
+    compare_data(repo_name, final_test_dataset_path, 
+                 project_config_local_path, core_slu_repo_name, 
+                 classification_report_path,
+                 comparison_classification_report_path, 
+                 confusion_matrix_path, 
+                 comparison_confusion_matrix_path)
+
+    repo.index.commit(
+        f"Trained XLMR model using {data_info}",
+        author=author,
+        committer=committer,
+    )
+    repo.git.push("origin", new_branch)
     return new_branch
 
 

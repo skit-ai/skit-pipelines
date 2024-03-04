@@ -14,8 +14,8 @@ def upload2s3(
     ext: str = ".csv",
     output_path: str = "",
     storage_options: str = "",
-    upload_as_directory: bool = False,
-) -> str:
+    upload_as_directory: bool = False
+    ) -> str:
     import json
     import os
     import tarfile
@@ -27,6 +27,7 @@ def upload2s3(
     from skit_pipelines.api.models import StorageOptions
     from skit_pipelines.utils import create_file_name, generate_generic_dir_name
     from datetime import datetime
+    from skit_pipelines import constants as pipeline_constants
 
     def upload_s3_folder(s3_resource, bucket, path_on_disk, upload_path):
         for root, dirs, files in os.walk(path_on_disk):
@@ -42,7 +43,10 @@ def upload2s3(
                     f"Uploaded ({os.path.join(root, file)}) to ({os.path.join(upload_path, middle_part, file)})"
                 )
     
-    s3_resource = boto3.client("s3")
+    region_name = pipeline_constants.BUCKET_REGIONS[bucket]
+    logger.info(f"Region name is : {region_name} for bucket {bucket}")
+    
+    s3_resource = boto3.client("s3", region_name=region_name)
     
     if upload_as_directory and ext:
         raise ValueError("`upload_as_directory` can not be set with a non-empty `ext`")
