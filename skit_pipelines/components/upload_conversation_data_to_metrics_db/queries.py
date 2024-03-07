@@ -33,7 +33,8 @@ INSERT_GENERATED_CONVERSATIONS_QUERY  = """INSERT INTO generated_conversations
         client_id,
         template_id,
         prompt_id,
-        generated_conversations_s3_link
+        generated_conversations_s3_link,
+        project_name
     )
     VALUES
     (
@@ -41,7 +42,8 @@ INSERT_GENERATED_CONVERSATIONS_QUERY  = """INSERT INTO generated_conversations
         %(client_id)s,
         %(template_id)s,
         %(prompt_id)s,
-        %(generated_conversations_s3_link)s
+        %(generated_conversations_s3_link)s,
+        %(project_name)s
     ) 
     RETURNING id;
     """
