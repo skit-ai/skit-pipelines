@@ -1,4 +1,7 @@
 # Changelog
+1.2.1
+- [x] remove: Remove support for fetch_n_tag_calls and tag_calls
+
 1.1.24
 - [x] add: Support for a new column in conversations table
 
