@@ -1,7 +1,6 @@
 from skit_pipelines.pipelines.asr_tune import asr_tune
 from skit_pipelines.pipelines.eval_asr_pipeline import eval_asr_pipeline
 from skit_pipelines.pipelines.fetch_calls_pipeline import fetch_calls_pipeline
-from skit_pipelines.pipelines.fetch_n_tag_calls import fetch_n_tag_calls
 from skit_pipelines.pipelines.fetch_n_tag_turns_and_calls import fetch_n_tag_turns_and_calls
 from skit_pipelines.pipelines.fetch_tagged_calls_dataset import fetch_tagged_calls_dataset
 from skit_pipelines.pipelines.fetch_tagged_data_from_labelstore import fetch_tagged_data_from_labelstore
@@ -10,7 +9,6 @@ from skit_pipelines.pipelines.publish_compliance_breaches import publish_complia
 from skit_pipelines.pipelines.retrain_slu import retrain_slu
 from skit_pipelines.pipelines.retrain_slu_old import retrain_slu_old
 from skit_pipelines.pipelines.evaluate_slu import evaluate_slu
-from skit_pipelines.pipelines.tag_calls import tag_calls
 from skit_pipelines.pipelines.transcription_pipeline import transcription_pipeline
 from skit_pipelines.pipelines.generate_sample_conversations import generate_sample_conversations
 from skit_pipelines.pipelines.generate_and_tag_conversations import generate_and_tag_conversations
