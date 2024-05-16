@@ -187,6 +187,9 @@ def evaluate_slu(
         core_slu_repo_name=core_slu_repo_name,
         core_slu_repo_branch=core_slu_repo_branch,
     ).after(validate_evaluation_setup_op)
+    evaluate_op.set_gpu_limit(1).add_node_selector_constraint(
+        label_name=NODESELECTOR_LABEL, value=GPU_NODE_LABEL
+    )
 
     comparison_upload_cf = upload2s3_op(
         path_on_disk=evaluate_op.outputs["comparison_classification_report"],
