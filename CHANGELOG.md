@@ -1,6 +1,6 @@
 # Changelog
 1.2.2
-- [x] remove: Update Gitlab personal token
+- [x] update: Update Gitlab personal token
 
 1.2.1
 - [x] remove: Remove support for fetch_n_tag_calls and tag_calls
