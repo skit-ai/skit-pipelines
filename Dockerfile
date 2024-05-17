@@ -1,7 +1,5 @@
 FROM gpuci/miniconda-cuda:10.2-runtime-ubuntu18.04
 
-ARG CHROME_VERSION="114.0.5735.90"
-
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub \
     && apt-get -y update \
     && apt-get install -y wget gcc libpq-dev
@@ -12,22 +10,34 @@ RUN conda install python=3.8 -y\
 
 WORKDIR /home/kfp
 
-RUN wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb \
-  && apt install -y /tmp/chrome.deb \
-  && rm /tmp/chrome.deb
+RUN apt-get update && apt-get install -y --fix-missing \
+    libxss1 libappindicator1 libindicator7 jq \
+    && rm -rf /var/lib/apt/lists/*
 
-# install chromedriver
-RUN apt-get install -yqq unzip
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/\
-    && rm /tmp/chromedriver.zip\
-    rm -rf /var/lib/apt/lists/*
+RUN LATEST_CHROME_RELEASE=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq '.channels.Stable') \
+    && LATEST_CHROME_URL=$(echo "$LATEST_CHROME_RELEASE" | jq -r '.downloads.chrome[] | select(.platform == "linux64") | .url') \
+    && wget -N "$LATEST_CHROME_URL" -P /root/ \
+    && unzip /root/chrome-linux64.zip -d /root/ \
+    && mv /root/chrome-linux64 /root/chrome \
+    && ln -s /root/chrome/chrome /usr/local/bin/chrome \
+    && chmod +x /root/chrome \
+    && rm /root/chrome-linux64.zip
+
+# Install Chromedriver
+RUN LATEST_CHROME_RELEASE=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq '.channels.Stable') \
+    && LATEST_CHROME_DRIVER_URL=$(echo "$LATEST_CHROME_RELEASE" | jq -r '.downloads.chromedriver[] | select(.platform == "linux64") | .url') \
+    && wget -N "$LATEST_CHROME_DRIVER_URL" -P /root/ \
+    && unzip /root/chromedriver-linux64.zip -d /root/ \
+    && mv /root/chromedriver-linux64 /root/chromedriver \
+    && ln -s /root/chromedriver /usr/local/bin/chromedriver \
+    && chmod +x /root/chromedriver \
+    && rm /root/chromedriver-linux64.zip
 
 # set display port to avoid crashgit
 ENV DISPLAY=:99
 
 RUN apt-get -y update\
-    && apt-get -y install libblas-dev liblapack-dev gfortran ffmpeg cmake
+    && apt-get -y --fix-missing install libblas-dev liblapack-dev gfortran ffmpeg cmake
 
 # install johnny.
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
