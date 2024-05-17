@@ -1,4 +1,7 @@
 # Changelog
+1.2.3
+- [x] fix: Chrome and chromedriver issue for image build
+
 1.2.2
 - [x] update: Update Gitlab personal token
 
