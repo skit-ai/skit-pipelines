@@ -14,26 +14,23 @@ RUN apt-get update && apt-get install -y --fix-missing \
     libxss1 libappindicator1 libindicator7 jq \
     && rm -rf /var/lib/apt/lists/*
 
-# Install latest Chrome
 RUN LATEST_CHROME_RELEASE=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq '.channels.Stable') \
-    && echo "LATEST_CHROME_RELEASE: $LATEST_CHROME_RELEASE" \
     && LATEST_CHROME_URL=$(echo "$LATEST_CHROME_RELEASE" | jq -r '.downloads.chrome[] | select(.platform == "linux64") | .url') \
-    && echo "LATEST_CHROME_URL: $LATEST_CHROME_URL" \
     && wget -N "$LATEST_CHROME_URL" -P /root/ \
     && unzip /root/chrome-linux64.zip -d /root/ \
     && mv /root/chrome-linux64 /root/chrome \
     && ln -s /root/chrome/chrome /usr/local/bin/chrome \
-    && chmod +x /usr/local/bin/chrome \
+    && chmod +x /root/chrome \
     && rm /root/chrome-linux64.zip
 
 # Install Chromedriver
 RUN LATEST_CHROME_RELEASE=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq '.channels.Stable') \
     && LATEST_CHROME_DRIVER_URL=$(echo "$LATEST_CHROME_RELEASE" | jq -r '.downloads.chromedriver[] | select(.platform == "linux64") | .url') \
-    && echo "LATEST_CHROME_DRIVER_URL: $LATEST_CHROME_DRIVER_URL" \
     && wget -N "$LATEST_CHROME_DRIVER_URL" -P /root/ \
     && unzip /root/chromedriver-linux64.zip -d /root/ \
-    && mv /root/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver \
-    && chmod +x /usr/local/bin/chromedriver \
+    && mv /root/chromedriver-linux64 /root/chromedriver \
+    && ln -s /root/chromedriver /usr/local/bin/chromedriver \
+    && chmod +x /root/chromedriver \
     && rm /root/chromedriver-linux64.zip
 
 # set display port to avoid crashgit
