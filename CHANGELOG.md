@@ -1,4 +1,7 @@
 # Changelog
+1.2.4
+- [x] fix: Upgrade Selenium version
+
 1.2.3
 - [x] fix: Chrome and chromedriver issue for image build
 
