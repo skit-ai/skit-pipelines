@@ -1,4 +1,7 @@
 # Changelog
+1.2.5
+- [x] fix: Missing dependency in chrome installation
+
 1.2.4
 - [x] fix: Upgrade Selenium version
 
