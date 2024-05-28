@@ -11,7 +11,7 @@ RUN conda install python=3.8 -y\
 WORKDIR /home/kfp
 
 RUN apt-get update && apt-get install -y --fix-missing \
-    libxss1 libappindicator1 libindicator7 jq \
+    libxss1 libappindicator1 libindicator7 libnss3 jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install latest Chrome
