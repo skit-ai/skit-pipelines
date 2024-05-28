@@ -8,14 +8,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
 
 import skit_pipelines.constants as const
 
 
 def simulate_selenium_connection(username, password) -> List[Dict[str, Any]]:
-    s = Service(ChromeDriverManager().install())
-
+    s = Service(executable_path='/usr/local/bin/chromedriver')
     options = ChromeOptions()
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
