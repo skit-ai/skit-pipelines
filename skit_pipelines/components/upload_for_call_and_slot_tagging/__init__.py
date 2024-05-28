@@ -41,15 +41,10 @@ def fetch_calls_for_slots(
 
     df["date"] = df["reftime"].apply(lambda x: parser.isoparse(x).strftime("%Y-%m-%d"))
 
-    if pipeline_constants.REGION == pipeline_constants.AP_SOUTH_1:
-        df["call_link"] = df["call_uuid"].apply(
-            lambda x: f"{pipeline_constants.CONSOLE_URL}/{org_id}/call-report/#/call?uuid={x}"
-        )
-    else:
-        df["call_link"] = df.apply(
-            lambda x: f"{pipeline_constants.STUDIO_URL}/clients/{x.client_uuid}/voice-agents/{x.flow_uuid}/calls/{x.call_uuid}",
-            axis=1,
-        )
+    df["call_link"] = df.apply(
+        lambda x: f"{pipeline_constants.STUDIO_URL}/clients/{x.client_uuid}/voice-agents/{x.flow_uuid}/calls/{x.call_uuid}",
+        axis=1,
+    )
 
     df["language"] = language_code
     print(df.head())
