@@ -1,4 +1,7 @@
 # Changelog
+1.2.6
+- [x] replace: Console links with Studio links in pipelines
+
 1.2.5
 - [x] fix: Missing dependency in chrome installation
 
