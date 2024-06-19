@@ -1,4 +1,7 @@
 # Changelog
+1.2.7
+- [x] update: DB user
+
 1.2.6
 - [x] replace: Console links with Studio links in pipelines
 
