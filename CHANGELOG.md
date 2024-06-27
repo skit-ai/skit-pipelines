@@ -1,4 +1,7 @@
 # Changelog
+1.2.8
+- [x] update: AWS credentials and GITHUB token
+
 1.2.7
 - [x] update: DB user
 
