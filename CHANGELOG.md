@@ -1,4 +1,7 @@
 # Changelog
+1.2.9
+- [x] update: GITLAB token
+
 1.2.8
 - [x] update: AWS credentials and GITHUB token
 
