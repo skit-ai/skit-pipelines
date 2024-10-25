@@ -4,7 +4,7 @@ RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/
     && apt-get -y update \
     && apt-get install -y wget gcc libpq-dev
 
-RUN conda install python=3.8 -y\ 
+RUN conda install python=3.9 -y\ 
     && conda install pip\
     && conda init bash
 
