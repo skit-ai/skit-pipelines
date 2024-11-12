@@ -32,7 +32,7 @@ def setup_project_config_repo(repo_name, branch):
     return project_config_local_path
 
 
-def setup_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None):
+def setup_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_var=None, python_version="3.8"):
     """
     Download a SLU repo and install all necessary dependencies (using conda) as found in its dockerfile.
     """
@@ -50,7 +50,7 @@ def setup_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_v
 
     try:
         repo.git.checkout(repo_branch)
-        execute_cli(f"conda create -n {repo_name} -m python=3.8 -y")
+        execute_cli(f"conda create -n {repo_name} -m python={python_version} -y")
         os.system(". /conda/etc/profile.d/conda.sh")
         execute_cli(
                 f"conda run -n {repo_name} "
