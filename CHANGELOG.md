@@ -1,4 +1,8 @@
 # Changelog
+
+1.2.10
+- [x] update: python version for slu repo conda environments
+
 1.2.9
 - [x] update: GITLAB token
 

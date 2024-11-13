@@ -149,3 +149,7 @@ docker_build_dev_image
 
 /pipeline_secrets
 /us_docker_build_dev_image
+.DS_Store
+.idea/
+.vscode/
+
