@@ -54,7 +54,7 @@ def evaluate_slu_from_repo(
     logger.info("customization repo setup successfully")
 
     setup_repo(
-        core_slu_repo_name, core_slu_repo_branch, python_version="3.10",
+        core_slu_repo_name, core_slu_repo_branch, python_version="3.9",
     )
     logger.info("core slu repo setup successfully")
 

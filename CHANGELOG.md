@@ -1,4 +1,6 @@
 # Changelog
+1.2.11
+- [x] update: python version to 3.9 for slu repo conda environments
 
 1.2.10
 - [x] update: python version for slu repo conda environments
