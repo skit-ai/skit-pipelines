@@ -71,7 +71,7 @@ def retrain_slu_from_repo(
         run_dir="custom_slu",
         run_cmd="task serve",
         runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}",
-        python_version="3.10",
+        python_version="3.9",
     )
     logger.info("customization repo setup successfully")
 
@@ -79,7 +79,7 @@ def retrain_slu_from_repo(
     setup_repo(
         core_slu_repo_name,
         core_slu_repo_branch,
-        python_version="3.10",
+        python_version="3.9",
     )
     logger.info("core slu repo setup successfully")
 
