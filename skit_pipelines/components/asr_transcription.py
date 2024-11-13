@@ -40,7 +40,7 @@ def audio_transcription(
         print_command=False,
     )
 
-    exec_shell("conda create -n condaenv python=3.11")
+    exec_shell("conda create -n condaenv python=3.8")
     exec_shell("echo 'conda activate condaenv' >> ~/.bashrc")
     # exec_shell("conda install python=3.6")
     exec_shell("source ~/.bashrc && conda install -n condaenv git pip")
