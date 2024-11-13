@@ -114,7 +114,7 @@ def retrain_slu_from_repo(
         try:
             repo.git.checkout(repo_branch)
             execute_cli(
-                "conda create -n customization -m python=3.8 -y",
+                "conda create -n customization -m python=3.10 -y",
             )
             os.system(". /conda/etc/profile.d/conda.sh")
             execute_cli(

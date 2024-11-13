@@ -51,12 +51,13 @@ def setup_repo(repo_name, repo_branch, run_dir=None, run_cmd=None, runtime_env_v
     try:
         repo.git.checkout(repo_branch)
         execute_cli(f"conda create -n {repo_name} -m python={python_version} -y")
+        logger.info(f"Running python version : {python_version}")
         os.system(". /conda/etc/profile.d/conda.sh")
         execute_cli(
-                f"conda run -n {repo_name} "
-                + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
-                split=False,
-            )
+            f"conda run -n {repo_name} "
+            + "pip install poetry==$(grep POETRY_VER Dockerfile | awk -F= '{print $2}')",
+            split=False,
+        )
         execute_cli(f"conda run -n {repo_name} poetry install").check_returncode()
         if run_dir:
             os.chdir(run_dir)
