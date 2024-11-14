@@ -4,9 +4,10 @@ RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/
     && apt-get -y update \
     && apt-get install -y wget gcc libpq-dev
 
-RUN conda install python=3.8 -y\ 
-    && conda install pip\
-    && conda init bash
+# Consolidate conda commands and explicitly set Python version
+RUN conda update -n base -c defaults conda && \
+    conda install python=3.9 pip git -y && \
+    conda init bash
 
 WORKDIR /home/kfp
 
@@ -36,13 +37,13 @@ RUN LATEST_CHROME_RELEASE=$(curl -s https://googlechromelabs.github.io/chrome-fo
     && chmod +x /usr/local/bin/chromedriver \
     && rm /root/chromedriver-linux64.zip
 
-# set display port to avoid crashgit
+# set display port to avoid crash
 ENV DISPLAY=:99
 
-RUN apt-get -y update\
+RUN apt-get -y update \
     && apt-get -y --fix-missing install libblas-dev liblapack-dev gfortran ffmpeg cmake
 
-# install johnny.
+# install johnny
 RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
     | grep "\"browser_download_url.*linux-amd64.tar.gz\"" \
     | cut -d : -f 2,3 | tr -d \" \
@@ -51,16 +52,18 @@ RUN curl -s https://api.github.com/repos/skit-ai/johnny/releases/latest \
     && pwd \
     && ls -lat .
 
-RUN conda install git pip
-RUN pip install git+https://github.com/skit-ai/eevee.git@1.3.0
-RUN pip install -U pip setuptools && pip install poetry==1.2.2 numpy==1.22.0 regex==2022.7.25 pygit2==1.10.0
+# Consolidated Python package installation
+RUN pip install --upgrade pip setuptools && \
+    pip install poetry==1.2.2 numpy==1.22.0 regex==2022.7.25 pygit2==1.10.0 && \
+    pip install git+https://github.com/skit-ai/eevee.git@1.3.0
+
 RUN poetry config virtualenvs.create false
 
 RUN conda install scipy
 
 COPY . .
 
-RUN poetry install --only main && poetry install --only main
+RUN poetry install --only main
 
 
 ARG BASE_IMAGE
