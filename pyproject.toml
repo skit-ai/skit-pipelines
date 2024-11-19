@@ -16,7 +16,7 @@ fastapi = "0.75.1"
 uvicorn = {extras = ["standard"], version = "0.17.6"}
 selenium = ">=4.21.0"
 typing-extensions = "^4.5.0"
-webdriver-manager = "4.0.2"
+webdriver-manager = "^4.0.2"
 dvc = {extras = ["s3"], version = "2.9.5"}
 gspread = "5.4.0"
 oauth2client = "4.1.3"
