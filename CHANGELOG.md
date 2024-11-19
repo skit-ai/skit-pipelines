@@ -1,4 +1,7 @@
 # Changelog
+1.2.12
+- [x] update: package dependencies for python 3.9
+
 1.2.11
 - [x] update: python version to 3.9 for slu repo conda environments
 
