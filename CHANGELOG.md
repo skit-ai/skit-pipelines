@@ -1,4 +1,7 @@
 # Changelog
+1.2.13
+- [x] fix: evaluation pipelines
+
 1.2.12
 - [x] update: package dependencies for python 3.9
 
