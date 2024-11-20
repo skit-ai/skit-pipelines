@@ -49,7 +49,7 @@ def evaluate_slu_from_repo(
         run_dir="custom_slu",
         run_cmd="task serve",
         runtime_env_var=f"PROJECT_DATA_PATH={os.path.join(project_config_local_path, '..')}",
-        python_version="3.10",
+        python_version="3.9",
     )
     logger.info("customization repo setup successfully")
 
